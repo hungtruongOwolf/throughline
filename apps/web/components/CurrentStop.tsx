@@ -10,6 +10,8 @@ export interface CurrentStopProps {
   peopleAhead: number;
   waitMinutes: number;
   lang: Language;
+  onShowWay?: () => void;
+  onImHere?: () => void;
 }
 
 /** The only large thing on the patient screen: where to go now and how long it will take. */
@@ -20,6 +22,8 @@ export function CurrentStop({
   peopleAhead,
   waitMinutes,
   lang,
+  onShowWay,
+  onImHere,
 }: CurrentStopProps) {
   const ahead =
     peopleAhead === 1
@@ -42,12 +46,14 @@ export function CurrentStop({
       <div className="mt-6 flex flex-col items-start gap-3">
         <button
           type="button"
+          onClick={onShowWay}
           className="min-h-12 rounded-[12px] bg-line px-5 text-[17px] font-bold text-paper"
         >
           {t(lang, "patient.show_way")}
         </button>
         <button
           type="button"
+          onClick={onImHere}
           className="min-h-12 rounded-[12px] px-1 text-[17px] font-bold text-line"
         >
           {t(lang, "patient.im_here")}

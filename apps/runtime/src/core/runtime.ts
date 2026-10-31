@@ -347,6 +347,32 @@ export class Runtime {
     );
   }
 
+  /**
+   * "Talk to a person" (spec 9.3): the patient asks for a human directly. Same outcome as a
+   * BLOCKING handoff: a handoff review, `handoff_open`, and a review request on the bus.
+   */
+  async openHandoff(journeyId: string, reason: "patient_asked" | "clinical_question") {
+    const journey = this.journey(journeyId);
+    if (!journey) return undefined;
+    const requested = this.append(
+      { type: "HandoffRequested", journey_id: journeyId, payload: { reason } },
+      0,
+    );
+    if (!requested) return undefined;
+    const review = this.openReview({
+      kind: "handoff",
+      capability: "handoff.request",
+      agent: "companion",
+      reason:
+        reason === "patient_asked" ? "Patient asked to talk to a person" : "Clinical question",
+      event: requested,
+    });
+    this.saveJourney({ ...(this.journey(journeyId) ?? journey), handoff_open: true });
+    this.requestReview(review, 0);
+    await this.deps.bus.idle();
+    return review;
+  }
+
   /** PRE_APPROVAL: park the event verbatim and hold the aggregate (spec 4.3 step 5). */
   private park(inv: Invocation, agent: Agent, event: DomainEvent, reason: string, depth: number) {
     const review = this.openReview({

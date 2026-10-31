@@ -7,6 +7,7 @@ import type { EventBus } from "./bus/event-bus";
 import type { ClockSpeed, SimClock } from "./bus/sim-clock";
 import type { RuntimeStore } from "./bus/store";
 import type { Runtime } from "./core/runtime";
+import { seedMariaVisitDay } from "./demo/visit-day";
 
 export interface AppContext {
   store: RuntimeStore;
@@ -147,5 +148,34 @@ export function createApp(ctx?: AppContext) {
     }),
   );
 
+  /** What the patient phone can do (spec 9.3). Each action becomes an event or a review. */
+  app.post("/api/journeys/:id/actions", async (c) => {
+    const id = c.req.param("id");
+    if (!runtime.journey(id)) return c.json({ error: "not found" }, 404);
+    const body = PatientAction.safeParse(await c.req.json().catch(() => ({})));
+    if (!body.success) return c.json({ error: body.error.issues }, 400);
+    if (body.data.action === "talk_to_person") {
+      const review = await runtime.openHandoff(id, "patient_asked");
+      return c.json({ review });
+    }
+    const event = await runtime.ingest({
+      type: "StopStarted",
+      journey_id: id,
+      payload: { order_id: body.data.order_id },
+    });
+    return event ? c.json({ event }) : c.json({ error: "not allowed now" }, 409);
+  });
+
+  /** Demo: Maria on Nov 17 after her CT (until the agents play the full scenario). */
+  app.post("/api/demo/visit-day", async (c) => {
+    await clock.advanceTo("2026-11-17T10:20:00-06:00");
+    return c.json(seedMariaVisitDay(runtime, clock.now()));
+  });
+
   return app;
 }
+
+const PatientAction = z.discriminatedUnion("action", [
+  z.object({ action: z.literal("im_here"), order_id: z.string().min(1) }),
+  z.object({ action: z.literal("talk_to_person") }),
+]);

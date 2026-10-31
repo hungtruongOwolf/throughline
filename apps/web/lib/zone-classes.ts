@@ -24,3 +24,11 @@ export const ZONE_TINT: Record<Zone, string> = {
   rose: "bg-zone-rose/12",
   violet: "bg-zone-violet/12",
 };
+
+export const ZONE_STROKE: Record<Zone, string> = {
+  blue: "stroke-zone-blue",
+  gold: "stroke-zone-gold",
+  green: "stroke-zone-green",
+  rose: "stroke-zone-rose",
+  violet: "stroke-zone-violet",
+};

@@ -1,4 +1,5 @@
-import { campus, type Zone } from "@throughline/hospital";
+import type { Zone } from "@throughline/hospital";
+import { campus, node } from "./campus";
 
 export interface StationDisplay {
   name: string;
@@ -9,10 +10,10 @@ export interface StationDisplay {
 /** Name, zone, and floor for a stop, from the campus file the engine also reads. */
 export function stationDisplay(stationId: string, nodeId?: string): StationDisplay {
   const station = campus.stations.find((s) => s.id === stationId);
-  const node = campus.nodes.find((n) => n.id === (nodeId ?? station?.nodes[0]));
+  const n = node(nodeId ?? station?.nodes[0] ?? "");
   return {
-    name: node?.kind === "station" ? node.label : (station?.name ?? stationId),
-    zone: node?.zone ?? "blue",
-    floor: node?.floor ?? 1,
+    name: n?.kind === "station" ? n.label : (station?.name ?? stationId),
+    zone: n?.zone ?? "blue",
+    floor: n?.floor ?? 1,
   };
 }

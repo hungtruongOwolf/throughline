@@ -5,7 +5,8 @@ import { ZONE_BG } from "../lib/zone-classes";
 export interface ThroughlineStop {
   key: string;
   zone?: Zone;
-  status: "done" | "current" | "future";
+  /** `note` is a message hanging off the line between stops; it gets a small mark. */
+  status: "done" | "current" | "future" | "note";
   /** What hangs off the line at this stop. */
   content: ReactNode;
 }
@@ -49,6 +50,7 @@ export function Throughline({
 }
 
 function Marker({ status }: { status: ThroughlineStop["status"] }) {
+  if (status === "note") return <span className="mt-1 size-2 bg-ink-soft" />;
   if (status === "current") return <span className="mt-[-4px] size-6 bg-line" />;
   if (status === "done") return <span className="size-4 bg-ink" />;
   return <span className="size-4 border-2 border-ink bg-paper" />;

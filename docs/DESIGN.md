@@ -140,3 +140,14 @@ Question it answers: do the line, stops, current stop, zone chip, and big number
 - Atkinson Hyperlegible's slashed zero shows in times ("10:15"); kept, it is part of why the face was chosen.
 - Compared with the generic default (a timeline component with circles, cards, and a shadow per stop): square stops, no cards, no shadow, one large block for the current stop only.
 - Screenshot: `docs/screens/dev-components.png` (1536 wide).
+
+### Patient phone, visit day `/p/[journeyId]` (D2-6)
+
+Question it answers: where do I go next and how long will it take?
+
+- One large block (the current stop); done stops are muted, future stops show "about 10:50". Today's messages hang off the line as plain text with a small square mark; the patient's own words align right. No bubbles, no avatars, no KPI tiles.
+- "Talk to a person" is pinned to the bottom edge so it is always in the same place, in view at 390×844 (checked by Playwright).
+- Directions open as a native `<dialog>` sheet: the corridor snippet (decorative, `aria-hidden`) and a numbered list, which is the accessible version. Consecutive walking legs merge into one step, so a wheelchair route from CT 1 to the lab reads as three steps: walk to Elevator A, take it to Level 1, walk to Lab Draw.
+- The sign-photo button sits inside the sheet. Until the companion agent lands (D2-4) the upload fails honestly with the "couldn't read the sign" copy.
+- Compared with the generic default (a chat thread with a map on top): the route is the screen, the map is a cropped corridor, and the conversation is secondary.
+- Screenshots: `docs/screens/patient-visit-390.png`, `docs/screens/patient-directions-390.png`. axe: no serious or critical violations on either.
