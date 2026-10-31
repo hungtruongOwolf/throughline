@@ -1,6 +1,7 @@
 {
   "name": "throughline",
   "private": true,
+  "type": "module",
   "version": "0.0.1",
   "description": "One thread through the whole hospital visit, run by a fleet of agents. Meta Global AI Developer Hackathon 2026.",
   "license": "MIT",
@@ -27,7 +28,6 @@
     "turbo": "^2.11.10",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.72.1",
-    "vite-tsconfig-paths": "^6.1.1",
     "vitest": "^5.0.5"
   }
 }

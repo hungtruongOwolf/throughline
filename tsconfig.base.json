@@ -22,6 +22,8 @@
       "@throughline/hospital/*": ["./packages/hospital/*"],
       "@throughline/engine": ["./packages/engine/src-ts/index.ts"],
       "@throughline/synthetic": ["./packages/synthetic/src/index.ts"]
-    }
+    },
+    "allowImportingTsExtensions": true,
+    "noEmit": true
   }
 }
