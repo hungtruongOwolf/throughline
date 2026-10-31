@@ -70,3 +70,77 @@ export function directionSteps(steps: RouteStep[], lang: Language): string[] {
         : t(lang, "directions.walk", { place: s.to_label, seconds: Math.round(s.seconds) }),
   );
 }
+
+/** Several outbound messages in one go; the disclosure (when due) goes before the first. */
+export function outboundMany(
+  journey: Journey,
+  texts: string[],
+  now: string,
+): { messages: Message[]; outbound: OutboundText[]; patch: (j: Journey) => Journey } {
+  const lang = journey.patient.language;
+  const first = outbound(journey, texts[0] ?? "", now);
+  const rest: Message[] = texts.slice(1).map((text) => ({
+    id: randomUUID(),
+    direction: "out",
+    channel: "sms_sim",
+    language: lang,
+    text,
+    disclaimer: false,
+    at: now,
+  }));
+  const messages = [...first.messages, ...rest];
+  return {
+    messages,
+    outbound: texts.map((text) => ({ text, language: lang })),
+    patch: (j) => ({ ...j, outreach_log: [...j.outreach_log, ...messages] }),
+  };
+}
+
+const WEEKDAYS: Record<Language, string[]> = {
+  en: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+  es: ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"],
+};
+const MONTHS: Record<Language, string[]> = {
+  en: [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ],
+  es: [
+    "enero",
+    "febrero",
+    "marzo",
+    "abril",
+    "mayo",
+    "junio",
+    "julio",
+    "agosto",
+    "septiembre",
+    "octubre",
+    "noviembre",
+    "diciembre",
+  ],
+};
+
+/** "Monday, November 17 at 9:00" / "lunes 17 de noviembre a las 9:00", in campus local time. */
+export function whenText(iso: string, lang: Language): string {
+  const m = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/.exec(iso);
+  if (!m) return iso;
+  const [, y, mo, d, h, mi] = m;
+  const date = new Date(Date.UTC(Number(y), Number(mo) - 1, Number(d)));
+  const weekday = WEEKDAYS[lang][date.getUTCDay()];
+  const month = MONTHS[lang][Number(mo) - 1];
+  const time = `${Number(h)}:${mi}`;
+  return lang === "es"
+    ? `${weekday} ${Number(d)} de ${month} a las ${time}`
+    : `${weekday}, ${month} ${Number(d)} at ${time}`;
+}

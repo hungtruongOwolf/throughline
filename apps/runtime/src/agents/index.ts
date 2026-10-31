@@ -7,6 +7,11 @@ import { createSensingAgent } from "./sensing/handler";
 import { createCompanionAgent } from "./companion/handler";
 import { createMessengerAgent } from "./messenger/handler";
 import { createResultsWatcherAgent } from "./results_watcher/handler";
+import { createReferralIntakeAgent } from "./referral_intake/handler";
+import { createEligibilityAgent } from "./eligibility/handler";
+import { createAuthorizationAgent } from "./authorization/handler";
+import { createSchedulerAgent } from "./scheduler/handler";
+import { createPrepAgent } from "./prep/handler";
 
 export interface AgentDeps {
   engine: Engine;
@@ -16,14 +21,19 @@ export interface AgentDeps {
   onApplied?: OpsDeps["onApplied"];
 }
 
-/** The registry's agents (spec 6). Model agents join as their clients land (D2-2, D2-4). */
+/** The registry's agents (spec 6). */
 export function createAgents(deps: AgentDeps): Agent[] {
   return [
+    createReferralIntakeAgent() as unknown as Agent,
+    createEligibilityAgent(),
+    createAuthorizationAgent() as unknown as Agent,
+    createSchedulerAgent(deps),
+    createPrepAgent(),
     createOpsAgent(deps),
     createItineraryAgent(deps),
     createSensingAgent(),
     createCompanionAgent(deps) as unknown as Agent,
-    createMessengerAgent(),
+    createMessengerAgent() as unknown as Agent,
     createResultsWatcherAgent(),
   ];
 }

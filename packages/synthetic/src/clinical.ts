@@ -48,6 +48,14 @@ export const ORDER_TEMPLATES: Record<"new_patient_med_onc" | "follow_up", OrderT
       depends_on: [{ key: "ct", kind: "after_auth" }],
     },
     {
+      key: "vitals",
+      kind: "visit",
+      code_as_written: "Vitals before the clinic visit",
+      station_id: "vitals",
+      duration_min: 5,
+      depends_on: [],
+    },
+    {
       key: "visit",
       kind: "visit",
       code_as_written: "New patient consult, medical oncology",
@@ -56,7 +64,8 @@ export const ORDER_TEMPLATES: Record<"new_patient_med_onc" | "follow_up", OrderT
       depends_on: [
         { key: "cbc", kind: "resulted_before", min_gap_minutes: 48 * 60 },
         { key: "cmp", kind: "resulted_before", min_gap_minutes: 48 * 60 },
-        { key: "ct", kind: "same_day_after" },
+        { key: "ct", kind: "same_day_after", min_gap_minutes: 30 },
+        { key: "vitals", kind: "same_day_after", min_gap_minutes: 0 },
       ],
     },
     {

@@ -131,4 +131,22 @@ export const es: Record<CopyKey, string> = {
   "review.approve_send": "Aprobar y enviar",
   "handoff.nurse":
     "No puedo ayudar con preguntas médicas, pero una enfermera sí. Le pedí a una enfermera que le llame. Todavía puedo ayudarle con direcciones y horarios.",
+  "prep.booked":
+    "Sus citas están reservadas: {list}. Responda SÍ para confirmar, o CAMBIAR para otro día.",
+  "prep.fasting": 'Antes de su cita en el laboratorio, como lo escribió su médico: "{text}"',
+  "prep.arrive":
+    "Entre por la {entrance}. Estacionamiento: {parking}. Calcule unos {minutes} minutos en el hospital.",
+  "prep.entrance": "Entrada Principal",
+  "prep.parking": "Garaje A, nivel 1, junto a la Entrada Principal",
+  "prep.wheelchair": "Una silla de ruedas le estará esperando en la entrada.",
+  "prep.bring": "Traiga su tarjeta del seguro y una identificación con foto.",
+  "reminder.72h":
+    "Recordatorio: su cita es en 3 días, {when}. Responda CAMBIAR si necesita otro día.",
+  "reminder.24h":
+    "Recordatorio: su cita es mañana, {when}. Responda ENFERMERA para preguntas médicas.",
+  "reply.confirmed":
+    "Gracias, su cita está confirmada. Le enviaremos un recordatorio antes de su visita.",
+  "reply.reschedule": "Buscaremos otro día y le enviaremos los nuevos horarios.",
+  "reply.noted_wheelchair":
+    "Anotado: tendremos una silla de ruedas lista para usted en la entrada.",
 };

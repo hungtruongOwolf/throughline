@@ -175,3 +175,18 @@ export function generateProviders(): SyntheticProvider[] {
     slot_minutes: 20,
   }));
 }
+
+/**
+ * Days and hours each patient can come in, by patient id (synthetic; spec 10.3: Maria's
+ * daughter drives her, so mornings and the days the daughter is free). Patients not listed
+ * have no constraint.
+ */
+export const PATIENT_AVAILABILITY: Record<string, { date: string; from: string; to: string }[]> = {
+  "pt-001": [
+    { date: "2026-11-14", from: "07:00", to: "12:00" },
+    { date: "2026-11-17", from: "07:00", to: "16:30" },
+    { date: "2026-11-18", from: "07:00", to: "16:30" },
+    { date: "2026-11-20", from: "07:00", to: "16:30" },
+    { date: "2026-11-24", from: "07:00", to: "16:30" },
+  ],
+};

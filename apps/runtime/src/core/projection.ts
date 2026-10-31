@@ -44,6 +44,22 @@ export function projectJourney(journey: Journey, event: DomainEvent): Journey {
     }
     case "PatientLost":
       return { ...journey, lost: true };
+    case "PriorAuthDecided": {
+      const { packet_id, decision, reason } = event.payload;
+      return {
+        ...journey,
+        auth_packets: journey.auth_packets.map((p) =>
+          p.id === packet_id
+            ? {
+                ...p,
+                status: decision,
+                decided_at: event.occurred_at,
+                ...(reason ? { denial_reason: reason } : {}),
+              }
+            : p,
+        ),
+      };
+    }
     case "PatientLocated": {
       // A check-in at the current stop's room or waiting area means "waiting here" (spec V4).
       const station = itinerary?.stops.find((s) => s.status !== "done" && s.status !== "skipped");

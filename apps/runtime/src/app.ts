@@ -7,7 +7,10 @@ import type { EventBus } from "./bus/event-bus";
 import type { ClockSpeed, SimClock } from "./bus/sim-clock";
 import type { RuntimeStore } from "./bus/store";
 import type { Runtime } from "./core/runtime";
+import { readFile } from "node:fs/promises";
+import { fileURLToPath } from "node:url";
 import { seedDemo } from "./demo/visit-day";
+import { seedReferral } from "./demo/referral";
 import { buildBoard, type SimBackground } from "./board";
 import { buildOverview } from "./ops-overview";
 import { locateFromPhoto } from "./locate";
@@ -295,6 +298,59 @@ export function createApp(ctx?: AppContext) {
     c.json({ started: scenario !== undefined, done: scenario?.done ?? false, now: clock.now() }),
   );
 
+  /** PRE (spec 10.3): Maria's referral fax arrives and the pre-visit agents take it from there. */
+  app.post("/api/demo/referral", async (c) => {
+    const journey = await seedReferral(ctx);
+    await bus.idle();
+    return c.json(runtime.journey(journey.id) ?? journey);
+  });
+
+  /** A coordinator answers an intake question (spec B1), e.g. the member id from the card. */
+  app.post("/api/journeys/:id/clarify", async (c) => {
+    const id = c.req.param("id");
+    if (!runtime.journey(id)) return c.json({ error: "not found" }, 404);
+    const body = Clarify.safeParse(await c.req.json().catch(() => ({})));
+    if (!body.success) return c.json({ error: body.error.issues }, 400);
+    await runtime.ingest({ type: "ClarificationAnswered", journey_id: id, payload: body.data });
+    await bus.idle();
+    return c.json(runtime.journey(id));
+  });
+
+  /** A patient's text reply on the simulated phone (spec B6). */
+  app.post("/api/journeys/:id/reply", async (c) => {
+    const id = c.req.param("id");
+    const journey = runtime.journey(id);
+    if (!journey) return c.json({ error: "not found" }, 404);
+    const body = Reply.safeParse(await c.req.json().catch(() => ({})));
+    if (!body.success) return c.json({ error: body.error.issues }, 400);
+    await runtime.ingest({
+      type: "PatientReplied",
+      journey_id: id,
+      payload: {
+        channel: body.data.channel,
+        text: body.data.text,
+        language: journey.patient.language,
+      },
+    });
+    await bus.idle();
+    return c.json(runtime.journey(id));
+  });
+
+  /** The synthetic intake documents (images and PDF only; the ground-truth file stays private). */
+  app.get("/api/documents/:name", async (c) => {
+    const name = c.req.param("name");
+    const m = /^[a-z0-9-]+\.(png|pdf)$/.exec(name);
+    if (!m) return c.json({ error: "not found" }, 404);
+    try {
+      const bytes = await readFile(fileURLToPath(new URL(name, DOCUMENTS_DIR)));
+      return c.body(new Uint8Array(bytes), 200, {
+        "content-type": m[1] === "pdf" ? "application/pdf" : "image/png",
+      });
+    } catch {
+      return c.json({ error: "not found" }, 404);
+    }
+  });
+
   /** Demo beats of Maria's Nov 17 (until the agents play the whole scenario). Resets state. */
   app.post("/api/demo/visit-day", async (c) => {
     const beat = c.req.query("beat") === "ct_outage" ? "ct_outage" : "lab";
@@ -305,6 +361,19 @@ export function createApp(ctx?: AppContext) {
 
   return app;
 }
+
+const DOCUMENTS_DIR = new URL("../../../fixtures/documents/", import.meta.url);
+
+const Clarify = z.object({
+  field: z.string().min(1),
+  value: z.string().min(1).max(64),
+  by: z.string().min(1),
+});
+
+const Reply = z.object({
+  text: z.string().min(1).max(500),
+  channel: z.enum(["sms_sim", "voice_sim", "kiosk"]).default("sms_sim"),
+});
 
 const ScenarioCommand = z.object({
   autopilot: z.boolean().default(true),

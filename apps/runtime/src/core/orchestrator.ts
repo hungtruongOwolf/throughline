@@ -55,6 +55,7 @@ export function route(
     case "VisitConfirmed":
       return one("noshow.score", "scheduler");
     case "WaitlistOffered":
+    case "ReminderSent":
       return one("message.send", "messenger");
     // VISIT
     case "PatientArrived":

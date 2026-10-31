@@ -127,6 +127,20 @@ export const en = {
   "review.approve_send": "Approve and send",
   "handoff.nurse":
     "I can't help with medical questions, but a nurse can. I've asked a nurse to call you. I can still help with directions and times.",
+  "prep.booked": "Your visits are booked: {list}. Reply YES to confirm, or CHANGE for another day.",
+  "prep.fasting": 'Before your lab appointment, as your doctor wrote: "{text}"',
+  "prep.arrive":
+    "Come in through the {entrance}. Parking: {parking}. Plan for about {minutes} minutes at the hospital.",
+  "prep.entrance": "Main Entrance",
+  "prep.parking": "Garage A, level 1, next to the Main Entrance",
+  "prep.wheelchair": "A wheelchair will be waiting for you at the entrance.",
+  "prep.bring": "Bring your insurance card and a photo ID.",
+  "reminder.72h":
+    "Reminder: your visit is in 3 days, {when}. Reply CHANGE if you need another day.",
+  "reminder.24h": "Reminder: your visit is tomorrow, {when}. Reply NURSE for medical questions.",
+  "reply.confirmed": "Thank you, you're confirmed. We'll send a reminder before your visit.",
+  "reply.reschedule": "We'll look for another day and text you the new times.",
+  "reply.noted_wheelchair": "Noted: a wheelchair will be ready for you at the entrance.",
 } as const;
 
 export type CopyKey = keyof typeof en;
@@ -141,4 +155,7 @@ export const PATIENT_SURFACE_PREFIXES = [
   "handoff.",
   "footer.",
   "ticket.",
+  "prep.",
+  "reminder.",
+  "reply.",
 ] as const;
