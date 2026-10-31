@@ -42,3 +42,25 @@ html {
     animation-duration: 0s !important;
   }
 }
+
+/* Wayfinding map: the route flows toward the destination; "you are here" breathes. */
+@keyframes route-flow {
+  to {
+    stroke-dashoffset: -8;
+  }
+}
+.route-flow {
+  animation: route-flow 0.8s linear infinite;
+}
+@keyframes here-pulse {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+.here-pulse {
+  animation: here-pulse 2s ease-in-out infinite;
+}

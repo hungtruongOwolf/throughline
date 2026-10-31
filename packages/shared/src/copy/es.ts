@@ -135,7 +135,7 @@ export const es: Record<CopyKey, string> = {
     "Sus citas están reservadas: {list}. Responda SÍ para confirmar, o CAMBIAR para otro día.",
   "prep.fasting": 'Antes de su cita en el laboratorio, como lo escribió su médico: "{text}"',
   "prep.arrive":
-    "Entre por la {entrance}. Estacionamiento: {parking}. Calcule unos {minutes} minutos en el hospital.",
+    "Entre por la {entrance}. Estacionamiento: {parking}. Calcule unos {duration} en el hospital.",
   "prep.entrance": "Entrada Principal",
   "prep.parking": "Garaje A, nivel 1, junto a la Entrada Principal",
   "prep.wheelchair": "Una silla de ruedas le estará esperando en la entrada.",

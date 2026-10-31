@@ -39,6 +39,14 @@ function minutesOnSite(appointments: Appointment[]): number {
   return Math.max(1, Math.round(longest + ARRIVE_EARLY_MIN));
 }
 
+/** 270 → "4½ hours" ("4½ horas"), 40 → "40 minutes". */
+function duration(minutes: number, lang: Journey["patient"]["language"]): string {
+  if (minutes < 90) return lang === "es" ? `${minutes} minutos` : `${minutes} minutes`;
+  const halves = Math.round(minutes / 30) / 2;
+  const text = `${Math.floor(halves)}${halves % 1 ? "½" : ""}`;
+  return lang === "es" ? `${text} horas` : `${text} hours`;
+}
+
 /** One line per appointment time; blood draws booked together appear once. */
 function bookedList(appointments: Appointment[], lang: Journey["patient"]["language"]): string {
   const seen = new Set<string>();
@@ -95,7 +103,11 @@ export function createPrepAgent(): DeterministicAgent {
       const texts = [
         t(lang, "prep.booked", { list: bookedList(booked, lang) }),
         ...(fasting ? [t(lang, "prep.fasting", { text: fasting })] : []),
-        t(lang, "prep.arrive", { entrance, parking: plan.parking, minutes }),
+        t(lang, "prep.arrive", {
+          entrance,
+          parking: plan.parking,
+          duration: duration(minutes, lang),
+        }),
         ...(wheelchair ? [t(lang, "prep.wheelchair")] : []),
         t(lang, "prep.bring"),
       ];

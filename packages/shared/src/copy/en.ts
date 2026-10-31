@@ -130,7 +130,7 @@ export const en = {
   "prep.booked": "Your visits are booked: {list}. Reply YES to confirm, or CHANGE for another day.",
   "prep.fasting": 'Before your lab appointment, as your doctor wrote: "{text}"',
   "prep.arrive":
-    "Come in through the {entrance}. Parking: {parking}. Plan for about {minutes} minutes at the hospital.",
+    "Come in through the {entrance}. Parking: {parking}. Plan for about {duration} at the hospital.",
   "prep.entrance": "Main Entrance",
   "prep.parking": "Garage A, level 1, next to the Main Entrance",
   "prep.wheelchair": "A wheelchair will be waiting for you at the entrance.",

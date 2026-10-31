@@ -119,3 +119,13 @@ export async function startScenario(autopilot: boolean, speed?: 10 | 60 | 600): 
     body: JSON.stringify({ autopilot, ...(speed ? { speed } : {}) }),
   });
 }
+
+/** A text reply from the patient's phone (the simulated SMS channel). */
+export async function postReply(journeyId: string, text: string): Promise<boolean> {
+  const res = await fetch(`${RUNTIME_URL}/api/journeys/${encodeURIComponent(journeyId)}/reply`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ text, channel: "sms_sim" }),
+  });
+  return res.ok;
+}
