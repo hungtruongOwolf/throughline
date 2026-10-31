@@ -129,3 +129,16 @@ export async function postReply(journeyId: string, text: string): Promise<boolea
   });
   return res.ok;
 }
+
+export interface JourneyEventView {
+  event: { id: string; type: string; occurred_at: string; payload: Record<string, unknown> };
+}
+
+/** A journey's audit log, oldest first; the portal dates its story from it. */
+export async function fetchJourneyEvents(journeyId: string): Promise<JourneyEventView[]> {
+  const res = await fetch(`${RUNTIME_URL}/api/journeys/${encodeURIComponent(journeyId)}/events`, {
+    cache: "no-store",
+  });
+  if (!res.ok) throw new Error(`events ${journeyId}: ${res.status}`);
+  return (await res.json()) as JourneyEventView[];
+}

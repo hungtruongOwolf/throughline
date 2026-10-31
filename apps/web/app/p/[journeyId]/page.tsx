@@ -1,8 +1,8 @@
-import { PatientPhone } from "./patient-phone";
+import { PatientPortal } from "./patient-portal";
 
-export const metadata = { title: "Your visit · Halden Medical Center" };
+export const metadata = { title: "Your care plan, Halden Medical Center" };
 
 export default async function PatientPage({ params }: { params: Promise<{ journeyId: string }> }) {
   const { journeyId } = await params;
-  return <PatientPhone journeyId={journeyId} />;
+  return <PatientPortal journeyId={journeyId} />;
 }
