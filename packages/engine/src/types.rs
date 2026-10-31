@@ -380,6 +380,112 @@ pub struct WhatIfResult {
     pub per_action: Vec<ActionEffect>,
 }
 
+#[derive(Debug, Clone, Deserialize)]
+pub struct OrderLite {
+    pub order_id: String,
+    pub station_id: String,
+    pub duration_min: f64,
+    /// E.g. the authorization decision for `after_auth` orders: never scheduled earlier.
+    #[serde(default)]
+    pub not_before: Option<String>,
+    /// Short words for the explanation facts ("Labs", "CT").
+    #[serde(default)]
+    pub label: Option<String>,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum DependencyKind {
+    /// `order` starts at least `min_gap_min` after `after` ends (results back in time).
+    ResultedBefore,
+    /// Same calendar day, `order` after `after` ends plus `min_gap_min`.
+    SameDayAfter,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct ScheduleDependency {
+    pub order: String,
+    pub after: String,
+    pub kind: DependencyKind,
+    #[serde(default)]
+    pub min_gap_min: f64,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct CalendarSlot {
+    pub start: String,
+    /// Remaining capacity in this 15-minute slot.
+    pub capacity: u32,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct StationCalendar {
+    pub station_id: String,
+    pub slots: Vec<CalendarSlot>,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct TimeWindow {
+    pub start: String,
+    pub end: String,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub enum TimeOfDay {
+    Morning,
+    Afternoon,
+}
+
+#[derive(Debug, Clone, Default, Deserialize)]
+pub struct SchedulePreferences {
+    #[serde(default)]
+    pub time_of_day: Option<TimeOfDay>,
+    #[serde(default)]
+    pub max_days_span: Option<u32>,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct ScheduleRequest {
+    pub orders: Vec<OrderLite>,
+    #[serde(default)]
+    pub dependencies: Vec<ScheduleDependency>,
+    pub calendars: Vec<StationCalendar>,
+    /// When the patient can come; empty means any time the stations are open.
+    #[serde(default)]
+    pub availability: Vec<TimeWindow>,
+    #[serde(default)]
+    pub preferences: SchedulePreferences,
+    pub earliest: String,
+    pub latest: String,
+}
+
+#[derive(Debug, Clone, Serialize, PartialEq)]
+pub struct ScheduledAppointment {
+    pub order_id: String,
+    pub station_id: String,
+    pub start: String,
+    pub end: String,
+}
+
+#[derive(Debug, Clone, Serialize, PartialEq)]
+pub struct SchedulePlan {
+    pub appointments: Vec<ScheduledAppointment>,
+    pub visit_days: Vec<String>,
+    pub span_days: u32,
+    /// Lower is better: visit days dominate, then span, then preference misses.
+    pub score: f64,
+    /// Plain statements the explanation model may restate.
+    pub facts: Vec<String>,
+}
+
+#[derive(Debug, Serialize, PartialEq)]
+pub struct ScheduleResult {
+    pub primary: SchedulePlan,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub alternative: Option<SchedulePlan>,
+}
+
 /// Every function is total: bad input comes back as `{ "error": { code, message } }`.
 #[derive(Debug, Serialize)]
 pub struct EngineError {

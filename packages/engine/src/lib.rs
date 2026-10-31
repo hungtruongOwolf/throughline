@@ -3,6 +3,7 @@
 pub mod campus;
 pub mod itinerary;
 pub mod queue;
+pub mod schedule;
 pub mod sim;
 pub mod time;
 pub mod types;
@@ -10,8 +11,8 @@ pub mod types;
 use wasm_bindgen::prelude::*;
 
 use crate::types::{
-    EngineError, FuseRequest, ItineraryRequest, ReplanRequest, SimRequest, WaitRequest,
-    WalkingMatrixRequest, WalkingRouteRequest, WhatIfRequest,
+    EngineError, FuseRequest, ItineraryRequest, ReplanRequest, ScheduleRequest, SimRequest,
+    WaitRequest, WalkingMatrixRequest, WalkingRouteRequest, WhatIfRequest,
 };
 
 /// Crate version, so the proof panel can say "engine: rust-wasm 0.x".
@@ -67,6 +68,13 @@ pub fn plan_itinerary(request_json: &str) -> String {
 pub fn replan_itinerary(request_json: &str) -> String {
     run(request_json, |req: ReplanRequest| {
         itinerary::replan(campus::campus()?, &req)
+    })
+}
+
+#[wasm_bindgen]
+pub fn schedule(request_json: &str) -> String {
+    run(request_json, |req: ScheduleRequest| {
+        schedule::schedule(&req)
     })
 }
 
@@ -131,6 +139,7 @@ mod tests {
             "planItinerary" => plan_itinerary(request),
             "replanItinerary" => replan_itinerary(request),
             "simulate" => simulate(request),
+            "schedule" => schedule(request),
             "whatIf" => what_if(request),
             other => panic!("unknown fixture function {other}"),
         }
@@ -143,6 +152,7 @@ mod tests {
             include_str!("../fixtures/routes.json"),
             include_str!("../fixtures/waits.json"),
             include_str!("../fixtures/itinerary.json"),
+            include_str!("../fixtures/schedule.json"),
         ] {
             let fixture: Value = serde_json::from_str(file).unwrap();
             for case in fixture["cases"].as_array().unwrap() {

@@ -31,7 +31,7 @@ function run(fn: EngineFunction, request: unknown): unknown {
   }
 }
 
-describe.each(["routes.json", "waits.json", "itinerary.json"])(
+describe.each(["routes.json", "waits.json", "itinerary.json", "schedule.json"])(
   "golden fixtures %s through the wrapper (tests 17, 19)",
   (file) => {
     it.each(load(file).map((c) => [c.name, c] as const))("%s", (_, c) => {
@@ -59,5 +59,29 @@ describe("itinerary performance (spec 7.3)", () => {
       best = Math.min(best, performance.now() - t);
     }
     expect(best).toBeLessThan(10);
+  });
+});
+
+describe("scheduler performance (spec 7.3)", () => {
+  it("six orders over a 30-day window in under 50 ms (CI fails above 2x)", () => {
+    const maria = load("schedule.json")[0]?.request as {
+      orders: { order_id: string; station_id: string; duration_min: number }[];
+      calendars: { station_id: string; slots: unknown[] }[];
+    };
+    const lab = maria.calendars.find((c) => c.station_id === "lab_draw");
+    const six = {
+      ...maria,
+      orders: [...maria.orders, { order_id: "o-repeat", station_id: "lab_draw", duration_min: 10 }],
+      calendars: maria.calendars.map((c) => (c === lab ? c : c)),
+      latest: "2026-12-09T18:00:00-06:00",
+    };
+    run("schedule", six);
+    let best = Infinity;
+    for (let i = 0; i < 10; i++) {
+      const t = performance.now();
+      run("schedule", six);
+      best = Math.min(best, performance.now() - t);
+    }
+    expect(best).toBeLessThan(100);
   });
 });

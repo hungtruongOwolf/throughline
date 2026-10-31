@@ -11,7 +11,7 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run && cargo test --quiet",
     "route": "tsx scripts/route.ts",
-    "gen:fixtures": "tsx scripts/gen-fixtures.ts && tsx scripts/gen-itinerary-fixtures.ts",
+    "gen:fixtures": "tsx scripts/gen-fixtures.ts && tsx scripts/gen-itinerary-fixtures.ts && tsx scripts/gen-schedule-fixture.ts",
     "plan": "tsx scripts/plan.ts",
     "sim": "tsx scripts/sim.ts"
   }

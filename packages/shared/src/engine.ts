@@ -261,3 +261,61 @@ export const WhatIfResult = z.object({
   ),
 });
 export type WhatIfResult = z.infer<typeof WhatIfResult>;
+
+export const ScheduleRequest = z.object({
+  orders: z
+    .array(
+      z.object({
+        order_id: z.string(),
+        station_id: StationId,
+        duration_min: z.number().positive(),
+        not_before: SimTime.optional(),
+        label: z.string().optional(),
+      }),
+    )
+    .min(1)
+    .max(12),
+  dependencies: z
+    .array(
+      z.object({
+        order: z.string(),
+        after: z.string(),
+        kind: z.enum(["resulted_before", "same_day_after"]),
+        min_gap_min: z.number().nonnegative().optional(),
+      }),
+    )
+    .optional(),
+  calendars: z.array(
+    z.object({
+      station_id: StationId,
+      slots: z.array(z.object({ start: SimTime, capacity: z.number().int().nonnegative() })),
+    }),
+  ),
+  availability: z.array(z.object({ start: SimTime, end: SimTime })).optional(),
+  preferences: z
+    .object({
+      time_of_day: z.enum(["morning", "afternoon"]).optional(),
+      max_days_span: z.number().int().positive().optional(),
+    })
+    .optional(),
+  earliest: SimTime,
+  latest: SimTime,
+});
+export type ScheduleRequest = z.infer<typeof ScheduleRequest>;
+
+export const SchedulePlan = z.object({
+  appointments: z.array(
+    z.object({ order_id: z.string(), station_id: StationId, start: SimTime, end: SimTime }),
+  ),
+  visit_days: z.array(z.iso.date()),
+  span_days: z.number().int().nonnegative(),
+  score: z.number(),
+  facts: z.array(z.string()),
+});
+export type SchedulePlan = z.infer<typeof SchedulePlan>;
+
+export const ScheduleResult = z.object({
+  primary: SchedulePlan,
+  alternative: SchedulePlan.optional(),
+});
+export type ScheduleResult = z.infer<typeof ScheduleResult>;

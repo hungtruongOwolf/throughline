@@ -7,6 +7,8 @@ import {
   ItineraryRequest,
   ReplanRequest,
   ReplanResult,
+  ScheduleRequest,
+  ScheduleResult,
   SimRequest,
   SimResult,
   WaitEstimate,
@@ -31,6 +33,7 @@ export interface RawEngine {
   replanItinerary(requestJson: string): string;
   simulate(requestJson: string): string;
   whatIf(requestJson: string): string;
+  schedule(requestJson: string): string;
 }
 
 export class EngineCallError extends Error {
@@ -55,6 +58,7 @@ export interface Engine {
   replanItinerary(req: ReplanRequest): ReplanResult;
   simulate(req: SimRequest): SimResult;
   whatIf(req: WhatIfRequest): WhatIfResult;
+  schedule(req: ScheduleRequest): ScheduleResult;
 }
 
 /** Function names usable by golden fixtures. */
@@ -66,7 +70,8 @@ export type EngineFunction =
   | "planItinerary"
   | "replanItinerary"
   | "simulate"
-  | "whatIf";
+  | "whatIf"
+  | "schedule";
 
 function call<Req, Res>(
   fn: (json: string) => string,
@@ -95,5 +100,6 @@ export function wrapEngine(raw: RawEngine): Engine {
     replanItinerary: (req) => call((j) => raw.replanItinerary(j), ReplanRequest, ReplanResult, req),
     simulate: (req) => call((j) => raw.simulate(j), SimRequest, SimResult, req),
     whatIf: (req) => call((j) => raw.whatIf(j), WhatIfRequest, WhatIfResult, req),
+    schedule: (req) => call((j) => raw.schedule(j), ScheduleRequest, ScheduleResult, req),
   };
 }
