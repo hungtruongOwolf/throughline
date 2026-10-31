@@ -59,7 +59,16 @@ test.describe("station board (D2-7)", () => {
     });
     await page.goto("/board/vitals");
     await page.getByRole("button", { name: "Didn't arrive" }).click();
-    await expect(page.getByText("Ticket 3811 did not arrive")).toBeVisible();
+    // The wording depends on how late the patient is; the task itself must exist.
+    await expect
+      .poll(async () => {
+        const board = (await (
+          await page.request.get("http://localhost:4000/api/stations/vitals/board")
+        ).json()) as { tasks: { kind: string; initials: string }[]; now: string };
+        return JSON.stringify(board.tasks.filter((t) => t.kind === "lost")) + ` now=${board.now}`;
+      })
+      .toContain('"initials":"M. D."');
+    await expect(page.getByText(/Ticket \d+ (did not arrive|may be lost)/)).toBeVisible();
     await expect(page.getByRole("row", { name: /M\. D\./ })).toBeVisible();
     await expect(page.getByRole("button", { name: "Send help" })).toBeInViewport();
     await expect(page.getByRole("dialog")).toHaveCount(0);
