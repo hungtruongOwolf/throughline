@@ -44,6 +44,9 @@ importers:
       '@hono/node-server':
         specifier: ^2.1.5
         version: 2.1.5(hono@4.13.14)
+      '@meta-sam/parser':
+        specifier: ^0.1.0
+        version: 0.1.0
       better-sqlite3:
         specifier: ^13.0.3
         version: 13.0.3
@@ -53,6 +56,9 @@ importers:
       hono:
         specifier: ^4.13.14
         version: 4.13.14
+      openai:
+        specifier: ^7.47.0
+        version: 7.47.0(ws@8.22.0)(zod@4.6.7)
       ws:
         specifier: ^8.22.0
         version: 8.22.0
@@ -879,6 +885,10 @@ packages:
 
   '@keyv/serialize@1.1.1':
     resolution: {integrity: sha512-dXn3FZhPv0US+7dtJsIi2R+c7qWYiReoEh5zUntWCf4oSpMNib8FDhSoed6m3QyZdx5hK7iLFkYk3rNxwt8vTA==}
+
+  '@meta-sam/parser@0.1.0':
+    resolution: {integrity: sha512-099xq4EhULxm7gV+kEllQ9WTaNgwYumGRvCX5WAT2bny/SEh+U9tVT9bAzN1mISOC7TO6mgOt3MJmZ2Mv2RTmw==}
+    engines: {node: ^20.17.0 || >=22.9.0}
 
   '@napi-rs/lzma-linux-x64-gnu@1.5.1':
     resolution: {integrity: sha512-oTXEIha4SsuXdTA4Iyskj0kpdx2yVXdhd75c2v3xGrHFfVMsbhTPZU/nMPL4sWKo4pBHm3aucLaqGlF696dTyQ==}
@@ -2730,6 +2740,33 @@ packages:
     resolution: {integrity: sha512-5vvB5+W7ePv+p3uqxi+RcW1XAzLW0/hxt3/4X4Lc4qHudzOhmBiBwOY6DRob4WnanAEGvNcLjF+KNOufrUoEQw==}
     engines: {node: '>=12.20.0'}
 
+  openai@7.47.0:
+    resolution: {integrity: sha512-BYa2RYgocAv9WjPUJmNu8fICuA1fFhkTBEpiR3sC5L1K6v8Hnhc8pcnQEhu8l/+W1XKA+JUaBa7HpT+AK1s77w==}
+    engines: {node: '>=22.0.0'}
+    peerDependencies:
+      '@aws-sdk/credential-provider-node': '>=3.972.0 <4'
+      '@smithy/hash-node': '>=4.3.0 <5'
+      '@smithy/signature-v4': '>=5.4.0 <6'
+      google-auth-library: '>=9.15.1 <12'
+      undici: '>=5 <9'
+      ws: ^8.21.0
+      zod: ^3.25 || ^4.0
+    peerDependenciesMeta:
+      '@aws-sdk/credential-provider-node':
+        optional: true
+      '@smithy/hash-node':
+        optional: true
+      '@smithy/signature-v4':
+        optional: true
+      google-auth-library:
+        optional: true
+      undici:
+        optional: true
+      ws:
+        optional: true
+      zod:
+        optional: true
+
   optionator@0.9.4:
     resolution: {integrity: sha512-6IpQ7mKUxRcZNLIObR0hz7lxsapSSIYNZJwXPGeF0mTVqGKFIXj1DQcMoT22S3ROcLyY/rz0PWaWZ9ayWmad9g==}
     engines: {node: '>= 0.8.0'}
@@ -3811,6 +3848,8 @@ snapshots:
       keyv: 5.6.0
 
   '@keyv/serialize@1.1.1': {}
+
+  '@meta-sam/parser@0.1.0': {}
 
   '@napi-rs/lzma-linux-x64-gnu@1.5.1':
     optional: true
@@ -5562,6 +5601,11 @@ snapshots:
       es-object-atoms: 1.1.2
 
   obug@3.0.0: {}
+
+  openai@7.47.0(ws@8.22.0)(zod@4.6.7):
+    optionalDependencies:
+      ws: 8.22.0
+      zod: 4.6.7
 
   optionator@0.9.4:
     dependencies:

@@ -10,6 +10,8 @@ import type { Runtime } from "./core/runtime";
 import { seedDemo } from "./demo/visit-day";
 import { buildBoard, type SimBackground } from "./board";
 import { buildOverview } from "./ops-overview";
+import type { ModelCache } from "./models/cache";
+import type { ModelConfig } from "./models/config";
 
 export interface AppContext {
   store: RuntimeStore;
@@ -17,6 +19,7 @@ export interface AppContext {
   clock: SimClock;
   runtime: Runtime;
   background: SimBackground;
+  models: { config: ModelConfig; cache: ModelCache };
 }
 
 const Resolve = z.object({
@@ -113,7 +116,20 @@ export function createApp(ctx?: AppContext) {
   });
 
   /** Proof panel data (spec 8.6): every model call, never message content. */
-  app.get("/api/proof", (c) => c.json({ calls: store.modelCalls() }));
+  app.get("/api/proof", (c) => {
+    const { config, cache } = ctx.models;
+    return c.json({
+      calls: store.modelCalls(),
+      config: {
+        meta_api: Boolean(config.metaApiKey),
+        tier_mode: config.tierMode,
+        // Until a private endpoint is configured, private payloads are served by the cloud tier.
+        private_tier: config.glimmer ? "configured" : "not configured (cloud_only in effect)",
+        cache_mode: cache.mode,
+        cached_responses: cache.size(),
+      },
+    });
+  });
 
   app.get("/api/clock", (c) =>
     c.json({

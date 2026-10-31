@@ -6,6 +6,9 @@ import { AgentRunner } from "./core/agent-runner";
 import { Runtime } from "./core/runtime";
 import { openDatabase } from "./db/index";
 import type { ModelGateway } from "./models/types";
+import { ModelCache } from "./models/cache";
+import { modelConfig } from "./models/config";
+import { MetaGateway } from "./models/meta";
 import type { AppContext } from "./app";
 import { loadEngine } from "@throughline/engine/node";
 import { SimRequest, type Journey } from "@throughline/shared";
@@ -31,9 +34,11 @@ export function createContext(
   const simDay = SimRequest.parse(day);
   const bus = new EventBus();
   const clock = new SimClock(env.SIM_START ?? "2026-11-10T08:00:00-06:00");
-  const runner = new AgentRunner(opts.gateway ?? unconfiguredGateway, (r) =>
-    store.recordModelCall(r),
-  );
+  const config = modelConfig(env);
+  const cache = new ModelCache(sqlite, config.cacheMode);
+  const gateway =
+    opts.gateway ?? (config.metaApiKey ? new MetaGateway(config, cache) : unconfiguredGateway);
+  const runner = new AgentRunner(gateway, (r) => store.recordModelCall(r));
   const runtime = new Runtime({
     store,
     bus,
@@ -52,5 +57,5 @@ export function createContext(
   });
   runtime.start();
   const background = new SimBackground(engine, simDay);
-  return { store, bus, clock, runtime, background };
+  return { store, bus, clock, runtime, background, models: { config, cache } };
 }

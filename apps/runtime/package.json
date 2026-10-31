@@ -9,7 +9,8 @@
     "start": "node --env-file-if-exists=../../.env dist/index.js",
     "typecheck": "tsc --noEmit",
     "test": "vitest run --passWithNoTests",
-    "seed": "tsx --env-file-if-exists=../../.env scripts/seed.ts"
+    "seed": "tsx --env-file-if-exists=../../.env scripts/seed.ts",
+    "smoke:models": "tsx --env-file-if-exists=../../.env scripts/smoke-models.ts"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^9.6.0",
@@ -19,9 +20,11 @@
   },
   "dependencies": {
     "@hono/node-server": "^2.1.5",
+    "@meta-sam/parser": "^0.1.0",
     "better-sqlite3": "^13.0.3",
     "drizzle-orm": "^0.45.4",
     "hono": "^4.13.14",
+    "openai": "^7.47.0",
     "ws": "^8.22.0",
     "zod": "^4.6.7"
   }
