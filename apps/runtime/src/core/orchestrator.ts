@@ -15,9 +15,12 @@ const one = (capability: Capability, agent: AgentName): Invocation[] => [{ capab
  * EVENT_TO_CAPABILITY plus state rules (spec 4.3 step 3): which capability, on which agent,
  * handles an event. Events that are outcomes (e.g. HandoffRequested) route nowhere.
  */
+/** Spec V3: a queue estimate this far from a journey's plan triggers a replan. */
+export const REPLAN_DEVIATION_MIN = 10;
+
 export function route(
   event: DomainEvent,
-  ctx: { journey?: Journey; station?: StationState },
+  ctx: { journey?: Journey; station?: StationState; journeys?: () => Journey[] },
 ): Invocation[] {
   switch (event.type) {
     // PRE
@@ -85,8 +88,26 @@ export function route(
     case "LogisticsCheckinAnswered":
       return one("logistics.checkin", "followup");
     // OPS
-    case "QueueStateUpdated":
-      return one("bottleneck.detect", "sensing");
+    case "QueueStateUpdated": {
+      const { queue } = event.payload;
+      // Journeys whose next stop is here and whose planned wait is now off by > 10 minutes.
+      const replans = (ctx.journeys?.() ?? []).flatMap((j) => {
+        const next = j.itinerary?.stops.find((s) => s.status !== "done" && s.status !== "skipped");
+        if (!next || next.station_id !== queue.station_id || next.status === "in_service")
+          return [];
+        const planned = next.est_wait_min ?? 0;
+        return Math.abs(queue.est_wait_min - planned) > REPLAN_DEVIATION_MIN
+          ? [
+              {
+                capability: "itinerary.replan" as const,
+                agent: "itinerary" as const,
+                journey_id: j.id,
+              },
+            ]
+          : [];
+      });
+      return [{ capability: "bottleneck.detect", agent: "sensing" }, ...replans];
+    }
     case "BottleneckDetected":
       return one("ops_action.propose", "ops");
     case "OpsActionProposed":

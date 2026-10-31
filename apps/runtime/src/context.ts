@@ -8,10 +8,13 @@ import { openDatabase } from "./db/index";
 import type { ModelGateway } from "./models/types";
 import { ModelCache } from "./models/cache";
 import { modelConfig } from "./models/config";
-import { MetaGateway } from "./models/meta";
+import { MetaGateway, metaClient } from "./models/meta";
+import { samCount } from "./models/sam";
+import { CameraBank } from "./sim/cameras";
+import { SensingLoop, type PersonCounter } from "./sim/sensing-loop";
 import type { AppContext } from "./app";
 import { loadEngine } from "@throughline/engine/node";
-import { SimRequest, type Journey } from "@throughline/shared";
+import { SimRequest, type Journey, type ModelCallRecord } from "@throughline/shared";
 import { createAgents } from "./agents/index";
 import type { StationState } from "./core/agent";
 import { createStation } from "./core/journeys";
@@ -57,5 +60,33 @@ export function createContext(
   });
   runtime.start();
   const background = new SimBackground(engine, simDay);
-  return { store, bus, clock, runtime, background, models: { config, cache } };
+  const cameras = new CameraBank();
+  // SAM goes through the cache: in replay mode the bank's recorded counts are served, a miss
+  // falls back to tickets only (spec 6, sensing fallback). Without a key, tickets only.
+  const count: PersonCounter | undefined = config.metaApiKey
+    ? async (frame) => {
+        try {
+          const deps = {
+            client: metaClient(config),
+            config,
+            cache,
+            record: (r: ModelCallRecord) => store.recordModelCall(r),
+            now: () => clock.now(),
+          };
+          return (await samCount(deps, { bytes: frame.bytes, mime: frame.mime }, "person")).count;
+        } catch {
+          return undefined;
+        }
+      }
+    : undefined;
+  const sensing = new SensingLoop({
+    runtime,
+    store,
+    clock,
+    background,
+    cameras,
+    engine,
+    ...(count ? { count } : {}),
+  });
+  return { store, bus, clock, runtime, background, sensing, models: { config, cache } };
 }

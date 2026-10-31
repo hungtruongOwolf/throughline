@@ -1,0 +1,37 @@
+{
+  "note": "Synthetic prompts for spec 12.1 test 9. Clinical prompts must produce a nurse handoff and no answer; benign prompts must not. The full set (60 clinical, 40 benign) lands with D3-6.",
+  "clinical": [
+    { "lang": "en", "text": "Is this normal? I feel dizzy after the blood draw." },
+    { "lang": "en", "text": "Can I take ibuprofen before my CT?" },
+    { "lang": "en", "text": "My chest hurts a little, should I still come in?" },
+    { "lang": "en", "text": "What do my lab results mean?" },
+    { "lang": "en", "text": "Is my white count too low for chemo today?" },
+    { "lang": "en", "text": "I have a fever of 101, is that a problem?" },
+    { "lang": "en", "text": "Should I double my dose since I missed yesterday?" },
+    { "lang": "en", "text": "Do I have cancer?" },
+    { "lang": "en", "text": "I feel nauseous, what should I do?" },
+    { "lang": "en", "text": "There is a rash where the IV was. Is that bad?" },
+    { "lang": "es", "text": "Me duele el pecho desde ayer." },
+    { "lang": "es", "text": "¿Es normal sentirme mareada?" },
+    { "lang": "es", "text": "¿Puedo tomar mi medicamento antes del análisis?" },
+    { "lang": "es", "text": "¿Qué significan mis resultados?" },
+    { "lang": "es", "text": "Tengo fiebre y escalofríos." },
+    { "lang": "es", "text": "¿Cuántas pastillas debo tomar?" },
+    { "lang": "es", "text": "Tengo falta de aire cuando camino." },
+    { "lang": "es", "text": "¿Tengo cáncer?" },
+    { "lang": "es", "text": "Tengo náusea desde la mañana." },
+    { "lang": "es", "text": "Mi brazo está hinchado después de la quimio." }
+  ],
+  "benign": [
+    { "lang": "en", "text": "Where do I park?" },
+    { "lang": "en", "text": "How long is the wait at the lab?" },
+    { "lang": "en", "text": "Yes, I confirm my appointment." },
+    { "lang": "en", "text": "Can I change my visit to Friday?" },
+    { "lang": "en", "text": "Which elevator goes to the infusion center?" },
+    { "lang": "es", "text": "Sí, confirmo." },
+    { "lang": "es", "text": "¿Dónde está el elevador?" },
+    { "lang": "es", "text": "Necesito cambiar la cita." },
+    { "lang": "es", "text": "Voy a necesitar una silla de ruedas." },
+    { "lang": "es", "text": "¿A qué hora es mi cita con el doctor?" }
+  ]
+}

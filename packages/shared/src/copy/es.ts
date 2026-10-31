@@ -28,6 +28,13 @@ export const es: Record<CopyKey, string> = {
   "patient.check_in_failed": "No pudimos registrarlo. Muestre esta pantalla en el mostrador.",
   "patient.you": "Usted",
   "patient.from_throughline": "Throughline",
+  "companion.next_stop": "Siguiente: {place}. {ahead} antes que usted, unos {minutes} minutos.",
+  "companion.replanned": "Su plan cambió: {place} ahora hacia las {time}.",
+  "companion.lost": "¿Va camino a {place}? Toque Ya llegué al llegar, o Hablar con una persona.",
+  "companion.result_ready":
+    "El laboratorio terminó con su muestra. Su siguiente parada puede continuar.",
+  "companion.directions": "Cómo llegar a {place}: {steps}",
+  "companion.done_for_today": "Esa fue su última parada de hoy. Gracias por venir.",
   "directions.title": "Cómo llegar a {place}",
   "directions.walk": "Vaya hasta {place}, unos {seconds} segundos.",
   "directions.elevator": "Tome el {place} al piso {floor}.",

@@ -10,8 +10,10 @@ import type { Runtime } from "./core/runtime";
 import { seedDemo } from "./demo/visit-day";
 import { buildBoard, type SimBackground } from "./board";
 import { buildOverview } from "./ops-overview";
+import { locateFromPhoto } from "./locate";
 import type { ModelCache } from "./models/cache";
 import type { ModelConfig } from "./models/config";
+import type { SensingLoop } from "./sim/sensing-loop";
 
 export interface AppContext {
   store: RuntimeStore;
@@ -19,6 +21,7 @@ export interface AppContext {
   clock: SimClock;
   runtime: Runtime;
   background: SimBackground;
+  sensing: SensingLoop;
   models: { config: ModelConfig; cache: ModelCache };
 }
 
@@ -183,6 +186,20 @@ export function createApp(ctx?: AppContext) {
       payload: { order_id: body.data.order_id },
     });
     return event ? c.json({ event }) : c.json({ error: "not allowed now" }, 409);
+  });
+
+  /** Sign photo from the phone (spec V5). The photo is read and dropped, never stored. */
+  app.post("/api/journeys/:id/locate", async (c) => {
+    const id = c.req.param("id");
+    if (!runtime.journey(id)) return c.json({ error: "not found" }, 404);
+    const form = await c.req.formData().catch(() => undefined);
+    const file = form?.get("photo");
+    if (!file || typeof file === "string") return c.json({ error: "photo required" }, 400);
+    const located = await locateFromPhoto(ctx, id, {
+      bytes: Buffer.from(await file.arrayBuffer()),
+      mime: file.type || "image/webp",
+    });
+    return located ? c.json(located) : c.json({ error: "sign not readable" }, 422);
   });
 
   /** Station board (spec 9.3): who is coming, who is waiting, tasks. */

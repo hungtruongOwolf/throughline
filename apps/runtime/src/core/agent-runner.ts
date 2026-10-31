@@ -33,6 +33,13 @@ export class AgentRunner {
       return { result: await agent.handle(ctx), usedFallback: false };
     }
     const modelAgent = agent as unknown as ModelAgent<unknown>;
+    if (
+      modelAgent.modelCapabilities &&
+      !modelAgent.modelCapabilities.includes(ctx.capability) &&
+      modelAgent.handle
+    ) {
+      return { result: await modelAgent.handle(ctx), usedFallback: false };
+    }
     let errorNote: string | undefined;
     for (let attempt = 0; attempt < 2; attempt++) {
       try {

@@ -32,6 +32,8 @@ const ALLOWED_WHEN_HELD = new Set<string>([
   "HandoffResolved",
   "OpsActionApproved",
   "OpsActionRejected",
+  // A station held for an ops approval keeps sensing; detection never double-proposes.
+  "QueueStateUpdated",
 ]);
 
 export interface RuntimeDeps {
@@ -189,7 +191,8 @@ export class Runtime {
       this.log("info", { msg: "dropped_while_held", type: event.type, event_id: event.id });
       return;
     }
-    for (const invocation of route(event, ctx)) {
+    const journeys = () => this.deps.store.listAggregates<Journey>("journey");
+    for (const invocation of route(event, { ...ctx, journeys })) {
       await this.invoke(invocation, event, depth);
     }
   }

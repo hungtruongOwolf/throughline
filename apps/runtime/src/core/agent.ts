@@ -19,6 +19,8 @@ export interface StationState {
   synthetic: true;
   queue?: QueueState;
   open_servers?: number;
+  /** The last few estimated waits, newest last (bottleneck detection, spec V8). */
+  recent_waits?: number[];
   ops_actions: OpsAction[];
   paused_for_review: boolean;
   version: number;
@@ -93,6 +95,12 @@ export interface ModelAgent<Args = unknown> extends AgentDescriptor {
   model: ModelSpec<Args>;
   /** Deterministic fallback when the model fails twice (spec 4.3 step 6). */
   fallback: (ctx: HandlerContext) => HandlerResult | Promise<HandlerResult>;
+  /**
+   * Capabilities that use the model; the agent's other capabilities run `handle` directly
+   * (e.g. the companion writes messages with the model but computes directions in code).
+   */
+  modelCapabilities?: readonly Capability[];
+  handle?: (ctx: HandlerContext) => HandlerResult | Promise<HandlerResult>;
 }
 
 export type Agent = DeterministicAgent | ModelAgent<never>;

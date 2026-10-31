@@ -11,6 +11,7 @@ import {
 import { MARIA, ORGS } from "@throughline/synthetic";
 import mariaRequest from "../../../../packages/engine/fixtures/maria-request.json";
 import type { SimBackground } from "../board";
+import type { SensingLoop } from "../sim/sensing-loop";
 import type { SimClock } from "../bus/sim-clock";
 import type { RuntimeStore } from "../bus/store";
 import { createJourney } from "../core/journeys";
@@ -131,10 +132,16 @@ function mariaJourney(statuses: Stop["status"][], lastNode: string, now: string)
 }
 
 export async function seedDemo(
-  ctx: { runtime: Runtime; store: RuntimeStore; clock: SimClock; background: SimBackground },
+  ctx: {
+    runtime: Runtime;
+    store: RuntimeStore;
+    clock: SimClock;
+    background: SimBackground;
+    sensing: SensingLoop;
+  },
   beat: DemoBeat,
 ): Promise<Journey> {
-  const { runtime, store, clock, background } = ctx;
+  const { runtime, store, clock, sensing } = ctx;
   store.reset();
   if (beat === "lab") {
     clock.reset(at("10:20"));
@@ -143,7 +150,7 @@ export async function seedDemo(
     );
   }
 
-  clock.reset(at("09:46"));
+  clock.reset(at("09:43"));
   const journey = runtime.saveJourney(
     mariaJourney(
       ["waiting", "pending", "pending", "pending", "pending"],
@@ -151,27 +158,11 @@ export async function seedDemo(
       clock.now(),
     ),
   );
-  // CT 1 has been down since 09:40; counts come from the simulated day (source "sim").
-  const snapshot = [...background.get().snapshots]
-    .reverse()
-    .find((s) => s.station_id === "imaging_ct" && s.at <= clock.now());
-  const count = (snapshot?.count ?? 0) + 1;
-  runtime.saveStation({
-    ...runtime.station("imaging_ct"),
-    open_servers: 1,
-    queue: {
-      station_id: "imaging_ct",
-      at: clock.now(),
-      count_fused: count,
-      est_wait_min: count * 25,
-      source: "sim",
-    },
-  });
-  // Sensing would raise this after three samples over threshold (spec V3, V8).
-  await runtime.ingest({
-    type: "BottleneckDetected",
-    station_id: "imaging_ct",
-    payload: { severity: "high", minutes: count * 25 },
-  });
+  // CT 1 has been down since 09:40 (in the simulated day). Sensing runs each minute; three
+  // samples over the threshold raise the bottleneck, and the ops agent proposes (spec V3, V8).
+  for (const minute of ["09:44", "09:45", "09:46"]) {
+    await clock.advanceTo(at(minute));
+    await sensing.tick(clock.now());
+  }
   return runtime.journey(journey.id) ?? journey;
 }
