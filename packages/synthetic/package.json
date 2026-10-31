@@ -8,10 +8,12 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "gen:day": "tsx scripts/gen-day.ts"
+    "gen:day": "tsx scripts/gen-day.ts",
+    "gen:documents": "tsx scripts/gen-documents.ts"
   },
   "dependencies": {
     "@resvg/resvg-js": "^2.6.2",
+    "pdf-lib": "^1.17.1",
     "sharp": "^0.35.5",
     "zod": "^4.6.7"
   }
