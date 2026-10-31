@@ -67,7 +67,10 @@ export function directionSteps(steps: RouteStep[], lang: Language): string[] {
       ? t(lang, "directions.elevator", { place: s.to_label, floor: s.floor ?? "" })
       : s.kind === "stairs"
         ? t(lang, "directions.stairs", { floor: s.floor ?? "" })
-        : t(lang, "directions.walk", { place: s.to_label, seconds: Math.round(s.seconds) }),
+        : t(lang, "directions.walk", {
+            place: s.to_label,
+            minutes: Math.max(1, Math.round(s.seconds / 60)),
+          }),
   );
 }
 

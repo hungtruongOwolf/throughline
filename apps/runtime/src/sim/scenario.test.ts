@@ -8,7 +8,7 @@ describe("visit-day scenario (D2-9)", () => {
   it("plays 09:12 to checkout with the outage, one approval, a lost nudge, a sign photo, results, and a handoff", async () => {
     const ctx = createContext({}, { databasePath: ":memory:" });
     const scenario = new VisitDayScenario({ ...ctx, engine: loadEngine() }, { autopilot: true });
-    scenario.start();
+    await scenario.start();
     await ctx.clock.advanceTo("2026-11-17T16:00:00-06:00");
     await ctx.bus.idle();
 

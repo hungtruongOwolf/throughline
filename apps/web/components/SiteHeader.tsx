@@ -1,12 +1,8 @@
 import Link from "next/link";
 
 export const NAV = [
-  { href: "/journey/maria-001", label: "Maria's journey" },
-  { href: "/p/maria-001", label: "Patient" },
-  { href: "/coordinator", label: "Coordinator" },
-  { href: "/board/imaging_ct", label: "Station" },
+  { href: "/story", label: "Maria's journey" },
   { href: "/map", label: "Find your way" },
-  { href: "/ops", label: "Operations" },
 ] as const;
 
 /** One header for every staff and judge surface, so people always know where they are. */

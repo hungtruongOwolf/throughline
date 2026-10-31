@@ -35,7 +35,7 @@ export const en = {
   "companion.directions": "Directions to {place}: {steps}",
   "companion.done_for_today": "That was your last stop today. Thank you for coming in.",
   "directions.title": "Directions to {place}",
-  "directions.walk": "Walk to {place}, about {seconds} seconds.",
+  "directions.walk": "Walk to {place}, about {minutes} min.",
   "directions.elevator": "Take {place} to Level {floor}.",
   "directions.stairs": "Use the stairs to Level {floor}.",
   "directions.total": "About {minutes} minutes in total.",

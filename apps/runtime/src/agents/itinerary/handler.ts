@@ -1,4 +1,5 @@
 import type { Engine } from "@throughline/engine/node";
+import { campus } from "@throughline/hospital";
 import type {
   Constraint,
   ItineraryPlan,
@@ -125,14 +126,31 @@ export function createItineraryAgent(deps: ItineraryDeps): DeterministicAgent {
   };
 }
 
-/** On arrival there is no itinerary yet: today's stops come from the orders (spec V2). */
+/**
+ * On arrival there is no itinerary yet: today's stops come from the orders (spec V2). Blood
+ * drawn together (same station, same booked time) is one stop, and a booked stop starts in
+ * the station's first room, where the appointment was made.
+ */
 function stopsFromOrders(journey: Journey, now: string): Stop[] {
+  const today = now.slice(0, 10);
+  const booked = (id: string) => journey.appointments.find((a) => a.order_id === id);
+  const seen = new Set<string>();
   return journey.orders
     .filter((o) => o.status !== "resulted" && o.status !== "acknowledged")
+    .filter((o) => {
+      const appt = booked(o.id);
+      if (appt && !appt.start.startsWith(today)) return false;
+      const key = `${o.station_id}|${appt?.start ?? o.id}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    })
     .map((o) => ({
       order_id: o.id,
       station_id: o.station_id,
-      node_id: "",
+      node_id: booked(o.id)
+        ? (campus.stations.find((s) => s.id === o.station_id)?.nodes[0] ?? "")
+        : "",
       status: "pending" as const,
       eta_start: now,
       eta_end: now,

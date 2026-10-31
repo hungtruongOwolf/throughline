@@ -16,7 +16,7 @@ import {
 import { stationDisplay } from "../../../lib/stations";
 import { guideFor, type Guide } from "../../../lib/visit-guide";
 
-type Phase = "before" | "visit" | "after";
+export type Phase = "before" | "visit" | "after";
 
 // ---- formatting ------------------------------------------------------------------------
 
@@ -45,6 +45,13 @@ function amPm(iso: string, shift = 0): string {
   if (!m) return iso;
   const h = (((Number(m[1]) + shift) % 24) + 24) % 24;
   return `${h % 12 === 0 ? 12 : h % 12}:${m[2]} ${h < 12 ? "am" : "pm"}`;
+}
+
+/** When to stop eating: 8 hours before a blood draw, "midnight" rather than "1:00 am". */
+function fastFrom(labStart: string): string {
+  const m = /T(\d{2})/.exec(labStart);
+  const h = m ? (Number(m[1]) + 16) % 24 : 0;
+  return h >= 0 && h < 5 ? "midnight" : amPm(labStart, -8);
 }
 
 function hours(minutes: number): string {
@@ -98,8 +105,11 @@ function dated(events: JourneyEventView[], type: string): string | undefined {
   return at ? shortDay(at) : undefined;
 }
 
+/** Checked out is the end of the visit day for the system, but "after" for the patient. */
 function phaseOf(journey: Journey): Phase {
-  return journey.phase === "PRE" ? "before" : journey.phase === "VISIT" ? "visit" : "after";
+  if (journey.phase === "PRE") return "before";
+  if (journey.phase === "VISIT" && journey.state !== "CHECKED_OUT") return "visit";
+  return "after";
 }
 
 // ---- pieces ----------------------------------------------------------------------------
@@ -243,7 +253,7 @@ function Before({
 }: {
   journey: Journey;
   events: JourneyEventView[];
-  onConfirm: () => void;
+  onConfirm?: () => void;
 }) {
   const list = appointments(journey);
   const byTrip = trips(list);
@@ -271,13 +281,15 @@ function Before({
               Please confirm your {byTrip.length === 1 ? "visit" : `${byTrip.length} trips`}:{" "}
               {byTrip.map((t) => longDay(t.day)).join(" and ")}.
             </p>
-            <button
-              type="button"
-              onClick={onConfirm}
-              className="mt-4 min-h-12 rounded-[12px] bg-line px-6 text-[17px] font-bold text-white"
-            >
-              Confirm my visits
-            </button>
+            {onConfirm && (
+              <button
+                type="button"
+                onClick={onConfirm}
+                className="mt-4 min-h-12 rounded-[12px] bg-line px-6 text-[17px] font-bold text-white"
+              >
+                Confirm my visits
+              </button>
+            )}
           </>
         ) : next ? (
           <>
@@ -287,7 +299,7 @@ function Before({
             </p>
             {lab && next.key === lab.key && (
               <p className="mt-2 text-[18px]">
-                Nothing to eat or drink except water after {amPm(lab.start, -8)} the night before.
+                Nothing to eat or drink except water after {fastFrom(lab.start)} the night before.
               </p>
             )}
           </>
@@ -449,7 +461,11 @@ function VisitDay({
         >
           <p className="font-bold text-held">Your plan changed</p>
           <p className="mt-1">
-            {journey.itinerary?.reason[0] ?? "We moved things around to save you time."}
+            {[...journey.outreach_log]
+              .reverse()
+              .find((m) => m.direction === "out" && m.text.startsWith("Your plan changed"))
+              ?.text.replace("Your plan changed: ", "")
+              .replace(/^./, (c) => c.toUpperCase()) ?? "We moved things around to save you time."}
           </p>
           <p className="mt-1 text-ink-soft">
             The times below are up to date. You don&apos;t need to do anything else.
@@ -467,7 +483,7 @@ function VisitDay({
           <p className="mt-1 text-[18px]">
             {(now.people_ahead ?? 0) === 0
               ? "No one is ahead of you."
-              : `${now.people_ahead} ${now.people_ahead === 1 ? "person is" : "people are"} ahead of you. The wait is about ${Math.max(1, Math.round(now.est_wait_min ?? 0))} minutes.`}
+              : `${now.people_ahead} ${now.people_ahead === 1 ? "person is" : "people are"} ahead of you. The wait is about ${Math.max(1, Math.round(now.est_wait_min ?? 0))} minute${Math.round(now.est_wait_min ?? 0) > 1 ? "s" : ""}.`}
           </p>
           {!here && (
             <button
@@ -519,7 +535,7 @@ function VisitDay({
 
 function After({ journey }: { journey: Journey }) {
   const summary = journey.summary;
-  const visitDone = journey.phase === "POST" || journey.phase === "COMPLETED";
+  const visitDone = phaseOf(journey) === "after";
   return (
     <div>
       <p className="font-display text-[40px] leading-tight font-bold">
@@ -576,7 +592,7 @@ function After({ journey }: { journey: Journey }) {
 
 // ---- page ------------------------------------------------------------------------------
 
-function ToDo({ journey, onConfirm }: { journey: Journey; onConfirm: () => void }) {
+function ToDo({ journey, onConfirm }: { journey: Journey; onConfirm?: () => void }) {
   const list = appointments(journey);
   const lab = list.find((a) => a.guide.title === "Blood tests");
   const items: { done: boolean; text: ReactNode }[] = [];
@@ -585,22 +601,23 @@ function ToDo({ journey, onConfirm }: { journey: Journey; onConfirm: () => void 
     if (list.length > 0)
       items.push({
         done: !!journey.confirmation,
-        text: journey.confirmation ? (
-          "Confirm your visits"
-        ) : (
-          <button
-            type="button"
-            onClick={onConfirm}
-            className="text-left font-bold text-line underline"
-          >
-            Confirm your visits
-          </button>
-        ),
+        text:
+          journey.confirmation || !onConfirm ? (
+            "Confirm your visits"
+          ) : (
+            <button
+              type="button"
+              onClick={onConfirm}
+              className="text-left font-bold text-line underline"
+            >
+              Confirm your visits
+            </button>
+          ),
       });
     if (lab)
       items.push({
         done: false,
-        text: `The night before ${shortDay(lab.start)}: nothing to eat or drink except water after ${amPm(lab.start, -8)}.`,
+        text: `The night before ${shortDay(lab.start)}: nothing to eat or drink except water after ${fastFrom(lab.start)}.`,
       });
     items.push({ done: false, text: "Bring your insurance card and a photo ID." });
     items.push({ done: false, text: "Park in Garage A, level 1, next to the Main Entrance." });
@@ -609,7 +626,7 @@ function ToDo({ journey, onConfirm }: { journey: Journey; onConfirm: () => void 
         done: true,
         text: "A wheelchair will be waiting for you at the Main Entrance.",
       });
-  } else if (journey.phase === "VISIT") {
+  } else if (phaseOf(journey) === "visit") {
     items.push({
       done: false,
       text: "When you reach each desk, press I'm here so the staff know.",
@@ -687,7 +704,16 @@ function Messages({ messages }: { messages: Message[] }) {
  * Maria's patient portal (docs/DESIGN-PORTAL.md): one page, the three parts of her care on a
  * line, one "next for you" answer at the top, and every appointment explained from her side.
  */
-export function PatientPortal({ journeyId }: { journeyId: string }) {
+export function PatientPortal({
+  journeyId,
+  embedded = false,
+  phase: fixedPhase,
+}: {
+  journeyId: string;
+  /** Inside the story: no demo strip, and the story picks the part of care to show. */
+  embedded?: boolean;
+  phase?: Phase;
+}) {
   const [journey, setJourney] = useState<Journey | undefined>();
   const [events, setEvents] = useState<JourneyEventView[]>([]);
   const [status, setStatus] = useState<"loading" | "ok" | "offline">("loading");
@@ -710,7 +736,7 @@ export function PatientPortal({ journeyId }: { journeyId: string }) {
   }, [journeyId, refresh]);
 
   const current = journey ? phaseOf(journey) : "before";
-  const shown = phase ?? current;
+  const shown = fixedPhase ?? phase ?? current;
   const onConfirm = () =>
     void postReply(journeyId, "Yes, I'll be there.").then((ok) => {
       setNotice(
@@ -738,13 +764,15 @@ export function PatientPortal({ journeyId }: { journeyId: string }) {
     );
 
   return (
-    <div className="min-h-dvh bg-paper text-ink">
-      <p className="bg-ink px-6 py-1.5 text-[14px] text-white">
-        Demo: Maria&apos;s patient portal, with synthetic data.{" "}
-        <Link href="/" className="font-bold underline">
-          Back to the demo
-        </Link>
-      </p>
+    <div className={embedded ? "bg-paper text-ink" : "min-h-dvh bg-paper text-ink"}>
+      {!embedded && (
+        <p className="bg-ink px-6 py-1.5 text-[14px] text-white">
+          Demo: Maria&apos;s patient portal, with synthetic data.{" "}
+          <Link href="/" className="font-bold underline">
+            Back to the demo
+          </Link>
+        </p>
+      )}
       <header className="border-b border-ink/10">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-4 px-6 py-4">
           <p className="font-display text-[24px] font-bold">Halden Medical Center</p>
@@ -780,13 +808,13 @@ export function PatientPortal({ journeyId }: { journeyId: string }) {
           <div className="mt-10 grid gap-12 lg:grid-cols-[minmax(0,1fr)_340px]">
             <div className="min-w-0">
               {shown === "before" && (
-                <Before journey={journey} events={events} onConfirm={onConfirm} />
+                <Before journey={journey} events={events} {...(embedded ? {} : { onConfirm })} />
               )}
               {shown === "visit" && <VisitDay journey={journey} onImHere={onImHere} />}
               {shown === "after" && <After journey={journey} />}
             </div>
             <aside>
-              <ToDo journey={journey} onConfirm={onConfirm} />
+              <ToDo journey={journey} {...(embedded ? {} : { onConfirm })} />
               <section aria-labelledby="help-heading" className="mt-8">
                 <h2 id="help-heading" className="font-display text-[24px] font-bold">
                   Questions

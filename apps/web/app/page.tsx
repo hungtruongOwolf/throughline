@@ -31,28 +31,28 @@ const STAGES = [
 
 const ROLES = [
   {
-    href: "/p/maria-001",
+    href: "/story?step=arrive",
     who: "For patients",
     what: "What's next, where it is, how long it takes, and how to get there without stairs.",
-    cta: "Open Maria's phone",
+    cta: "See Maria's page on her visit day",
   },
   {
-    href: "/coordinator",
+    href: "/story?step=fax",
     who: "For intake coordinators",
     what: "Only the referrals that need a person: a missing field, an authorization to approve.",
-    cta: "Open the intake inbox",
+    cta: "See the coordinator's screen",
   },
   {
-    href: "/board/imaging_ct",
+    href: "/story?step=outage",
     who: "For station staff",
     what: "Who is arriving, who is waiting, who needs a wheelchair, at the CT desk.",
-    cta: "Open the CT board",
+    cta: "See the CT desk",
   },
   {
-    href: "/ops",
+    href: "/story?step=decide",
     who: "For operations",
     what: "Where the day is running late, and a simulated fix to approve or reject.",
-    cta: "Open the command center",
+    cta: "See the manager's decision",
   },
 ];
 
@@ -73,7 +73,7 @@ export default function Home() {
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-4">
               <Link
-                href="/journey/maria-001"
+                href="/story"
                 className="inline-flex min-h-12 items-center rounded-[12px] bg-line px-6 text-[17px] font-bold text-white"
               >
                 Follow Maria&apos;s journey

@@ -10,7 +10,10 @@ export function stepText(step: RouteStep, lang: Language): string {
     return t(lang, "directions.elevator", { place: step.to_label, floor: step.floor ?? "" });
   }
   if (step.kind === "stairs") return t(lang, "directions.stairs", { floor: step.floor ?? "" });
-  return t(lang, "directions.walk", { place: step.to_label, seconds: Math.round(step.seconds) });
+  return t(lang, "directions.walk", {
+    place: step.to_label,
+    minutes: Math.max(1, Math.round(step.seconds / 60)),
+  });
 }
 
 /**

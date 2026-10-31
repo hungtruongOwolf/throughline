@@ -142,3 +142,29 @@ export async function fetchJourneyEvents(journeyId: string): Promise<JourneyEven
   if (!res.ok) throw new Error(`events ${journeyId}: ${res.status}`);
   return (await res.json()) as JourneyEventView[];
 }
+
+export interface StoryState {
+  step: string;
+  index: number;
+  steps: string[];
+  now: string;
+  journey_id: string;
+}
+
+/** The demo story (runtime demo/story.ts): read, go to a step, or do the step's action. */
+export async function storyCommand(
+  command: { kind: "get" } | { kind: "goto"; step: string } | { kind: "act" },
+): Promise<StoryState> {
+  const url =
+    command.kind === "get"
+      ? `${RUNTIME_URL}/api/story`
+      : `${RUNTIME_URL}/api/story/${command.kind}`;
+  const res = await fetch(url, {
+    method: command.kind === "get" ? "GET" : "POST",
+    headers: { "content-type": "application/json" },
+    ...(command.kind === "goto" ? { body: JSON.stringify({ step: command.step }) } : {}),
+    cache: "no-store",
+  });
+  if (!res.ok) throw new Error(`story: ${res.status}`);
+  return (await res.json()) as StoryState;
+}

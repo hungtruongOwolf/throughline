@@ -182,11 +182,11 @@ export function generateProviders(): SyntheticProvider[] {
  * have no constraint.
  */
 export const PATIENT_AVAILABILITY: Record<string, { date: string; from: string; to: string }[]> = {
+  // Her daughter drives her after the school run, so from 9:00 on the days she is free.
   "pt-001": [
-    { date: "2026-11-14", from: "07:00", to: "12:00" },
-    { date: "2026-11-17", from: "07:00", to: "16:30" },
-    { date: "2026-11-18", from: "07:00", to: "16:30" },
-    { date: "2026-11-20", from: "07:00", to: "16:30" },
-    { date: "2026-11-24", from: "07:00", to: "16:30" },
+    { date: "2026-11-17", from: "09:00", to: "16:30" },
+    { date: "2026-11-18", from: "09:00", to: "16:30" },
+    { date: "2026-11-20", from: "09:00", to: "16:30" },
+    { date: "2026-11-24", from: "09:00", to: "16:30" },
   ],
 };

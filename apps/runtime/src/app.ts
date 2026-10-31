@@ -11,6 +11,7 @@ import { readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { seedDemo } from "./demo/visit-day";
 import { seedReferral } from "./demo/referral";
+import { STORY_STEPS, StoryDriver, type StoryStep } from "./demo/story";
 import { buildBoard, type SimBackground } from "./board";
 import { buildOverview } from "./ops-overview";
 import { locateFromPhoto } from "./locate";
@@ -289,7 +290,7 @@ export function createApp(ctx?: AppContext) {
       { ...ctx, engine: loadEngine() },
       { autopilot: body.data.autopilot },
     );
-    scenario.start();
+    await scenario.start();
     if (body.data.speed) clock.start(body.data.speed);
     return c.json({ now: clock.now(), running: clock.running, autopilot: body.data.autopilot });
   });
@@ -297,6 +298,22 @@ export function createApp(ctx?: AppContext) {
   app.get("/api/demo/scenario", (c) =>
     c.json({ started: scenario !== undefined, done: scenario?.done ?? false, now: clock.now() }),
   );
+
+  /** Maria's whole journey as one story, step by step (demo/story.ts). */
+  const story = new StoryDriver(ctx);
+  app.get("/api/story", (c) => c.json(story.state()));
+  app.post("/api/story/goto", async (c) => {
+    const body = (await c.req.json().catch(() => ({}))) as { step?: string };
+    const step = (STORY_STEPS as readonly string[]).includes(body.step ?? "")
+      ? (body.step as StoryStep)
+      : "fax";
+    await story.goto(step);
+    return c.json(story.state());
+  });
+  app.post("/api/story/act", async (c) => {
+    await story.act();
+    return c.json(story.state());
+  });
 
   /** PRE (spec 10.3): Maria's referral fax arrives and the pre-visit agents take it from there. */
   app.post("/api/demo/referral", async (c) => {

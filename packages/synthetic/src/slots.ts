@@ -38,6 +38,24 @@ function hoursOn(station: Station, date: Date): { open: number; close: number } 
 }
 
 /**
+ * New-patient holds: slots a clinic keeps open for new oncology patients, as real clinics do.
+ * Maria's first visit day (Nov 17) is built from these, so the referral flow books the same
+ * morning the visit-day scenario plays (CT on CT 1 just after the 09:40 outage).
+ */
+export const NEW_PATIENT_HOLDS: {
+  station_id: StationId;
+  date: string;
+  times: string[];
+  /** Taken by another patient instead of held open. */
+  full?: true;
+}[] = [
+  { station_id: "imaging_ct", date: "2026-11-17", times: ["09:30", "09:45"], full: true },
+  { station_id: "imaging_ct", date: "2026-11-17", times: ["10:00", "10:15"] },
+  { station_id: "vitals", date: "2026-11-17", times: ["10:30", "10:45"] },
+  { station_id: "clinic_2a", date: "2026-11-17", times: ["11:00", "11:15"] },
+];
+
+/**
  * Station calendars: 15-minute slots for `days` days from `start`, capacity = servers,
  * 70–85% pre-booked so the scheduler has to search (spec 10.1).
  */
@@ -55,6 +73,10 @@ export function generateSlots(seed: number, start = "2026-11-10", days = 30): Sl
       for (let t = hours.open; t + SLOT_MIN <= hours.close; t += SLOT_MIN) {
         let booked = 0;
         for (let s = 0; s < station.servers; s++) if (rng.chance(fill)) booked++;
+        const hold = NEW_PATIENT_HOLDS.find(
+          (h) => h.station_id === station.id && h.date === iso && h.times.includes(hhmm(t)),
+        );
+        if (hold) booked = hold.full ? station.servers : 0;
         slots.push({
           station_id: station.id,
           date: iso,

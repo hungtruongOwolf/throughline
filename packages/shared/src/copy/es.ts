@@ -39,7 +39,7 @@ export const es: Record<CopyKey, string> = {
   "companion.directions": "Cómo llegar a {place}: {steps}",
   "companion.done_for_today": "Esa fue su última parada de hoy. Gracias por venir.",
   "directions.title": "Cómo llegar a {place}",
-  "directions.walk": "Vaya hasta {place}, unos {seconds} segundos.",
+  "directions.walk": "Vaya hasta {place}, unos {minutes} min.",
   "directions.elevator": "Tome el {place} al piso {floor}.",
   "directions.stairs": "Use las escaleras hasta el piso {floor}.",
   "directions.total": "Unos {minutes} minutos en total.",

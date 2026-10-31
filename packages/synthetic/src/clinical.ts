@@ -62,8 +62,9 @@ export const ORDER_TEMPLATES: Record<"new_patient_med_onc" | "follow_up", OrderT
       station_id: "clinic_2a",
       duration_min: 20,
       depends_on: [
-        { key: "cbc", kind: "resulted_before", min_gap_minutes: 48 * 60 },
-        { key: "cmp", kind: "resulted_before", min_gap_minutes: 48 * 60 },
+        // Results back before the visit, drawn the same morning (LIS turnaround 45–60 min).
+        { key: "cbc", kind: "same_day_after", min_gap_minutes: 60 },
+        { key: "cmp", kind: "same_day_after", min_gap_minutes: 60 },
         { key: "ct", kind: "same_day_after", min_gap_minutes: 30 },
         { key: "vitals", kind: "same_day_after", min_gap_minutes: 0 },
       ],

@@ -50,6 +50,11 @@ export interface ScenarioDeps {
 export interface ScenarioOptions {
   /** Scripted people for the gates: a manager approves proposals, a nurse calls back. */
   autopilot: boolean;
+  /**
+   * Continue Maria's existing journey (the story, after the pre-visit agents booked her day)
+   * instead of resetting to a seeded one. The clock moves forward, so reminders still fire.
+   */
+  continueJourney?: boolean;
 }
 
 /** Maria on the morning of Nov 17: confirmed, wheelchair, no itinerary until she arrives. */
@@ -143,13 +148,17 @@ export class VisitDayScenario {
     private readonly options: ScenarioOptions,
   ) {}
 
-  /** Resets the runtime to 09:10 on Nov 17 and schedules the day. */
-  start(): void {
+  /** Resets the runtime to 09:10 on Nov 17 (or moves the clock there) and schedules the day. */
+  async start(): Promise<void> {
     const { runtime, store, clock, background } = this.deps;
-    store.reset();
-    background.reset();
-    clock.reset(at("09:10"));
-    runtime.saveJourney(confirmedMaria());
+    if (this.options.continueJourney) {
+      await clock.advanceTo(at("09:10"));
+    } else {
+      store.reset();
+      background.reset();
+      clock.reset(at("09:10"));
+      runtime.saveJourney(confirmedMaria());
+    }
     clock.at(at("09:12"), "Maria checks in at the kiosk", async () => {
       await runtime.ingest({
         type: "PatientArrived",
