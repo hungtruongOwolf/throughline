@@ -293,7 +293,9 @@ export class Runtime {
       this.saveStation(result.station_patch(this.station(event.station_id)));
     }
 
-    if (BLOCKING.has(capability)) {
+    // A model can also find clinical content the keyword lists missed (messenger `clinical`).
+    const handoff = result.next_events.some((e) => e.type === "HandoffRequested");
+    if (BLOCKING.has(capability) || handoff) {
       // Logged for audit, not propagated; only the review request goes out (spec 4.3 step 7).
       this.emit(next, depth + 1, () => false);
       const review = this.openReview({

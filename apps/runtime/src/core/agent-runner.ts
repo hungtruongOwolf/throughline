@@ -78,11 +78,26 @@ export class AgentRunner {
     const userText = errorNote
       ? `${spec.input(ctx)}\n\nYour previous attempt failed: ${errorNote}. Call ${spec.requiredTool} exactly once with valid arguments.`
       : spec.input(ctx);
+    const images = spec.images?.(ctx) ?? [];
     const history: ModelInputItem[] = [
       { role: "system", content: spec.system },
-      { role: "user", content: userText },
+      {
+        role: "user",
+        content:
+          images.length === 0
+            ? userText
+            : [
+                { type: "input_text", text: userText },
+                ...images.map((img) => ({
+                  type: "input_image" as const,
+                  image_url: `data:${img.mime};base64,${img.bytes.toString("base64")}`,
+                  detail: "high" as const,
+                })),
+              ],
+      },
     ];
     let required: { args: unknown } | undefined;
+    let nudged = false;
 
     for (let step = 0; step < spec.maxSteps && !required; step++) {
       const started = performance.now();
@@ -160,7 +175,17 @@ export class AgentRunner {
         replayed: response.replayed,
       });
       if (requiredCount > 1) throw new RequiredToolError(agent.name, "duplicated");
-      if (calls.length === 0) break;
+      if (calls.length === 0) {
+        // A model that answers in prose instead of calling the tool gets one nudge per attempt.
+        if (nudged || step + 1 >= spec.maxSteps) break;
+        nudged = true;
+        const text = response.output.map((o) => (o.type === "message" ? o.text : "")).join("");
+        if (text) history.push({ role: "assistant", content: text });
+        history.push({
+          role: "user",
+          content: `Do not reply in text. Call ${spec.requiredTool} now with the message as its arguments.`,
+        });
+      }
     }
     if (!required) throw new RequiredToolError(agent.name, "missing");
     return required.args;

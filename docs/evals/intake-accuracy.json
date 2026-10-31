@@ -1,0 +1,319 @@
+{
+  "model": "muse-spark-1.3",
+  "runs": 10,
+  "passed": 10,
+  "done": true,
+  "median_latency_ms": 3845.521200000003,
+  "results": [
+    {
+      "run": 1,
+      "ok": true,
+      "fallback": false,
+      "fields": {
+        "name": true,
+        "dob": true,
+        "provider": true,
+        "services": true,
+        "diagnosis": true,
+        "urgency": true,
+        "member_id_flagged": true
+      },
+      "read": {
+        "patient_name": "Maria Diaz",
+        "dob": "1955-03-08",
+        "phone": "+1 555 0101",
+        "language": "en",
+        "member_id": null,
+        "referring_provider": "Hannah Whitcombe, MD",
+        "services": [
+          "CBC w/ diff",
+          "CMP",
+          "CT chest/abdomen/pelvis with contrast",
+          "New patient consult, medical oncology"
+        ],
+        "diagnosis_code_as_written": "C34.90",
+        "urgency_as_written": "Routine, within 2 weeks",
+        "missing_fields": ["member_id"]
+      }
+    },
+    {
+      "run": 2,
+      "ok": true,
+      "fallback": false,
+      "fields": {
+        "name": true,
+        "dob": true,
+        "provider": true,
+        "services": true,
+        "diagnosis": true,
+        "urgency": true,
+        "member_id_flagged": true
+      },
+      "read": {
+        "patient_name": "Maria Diaz",
+        "dob": "1955-03-08",
+        "phone": "+1 555 0101",
+        "language": "en",
+        "member_id": null,
+        "referring_provider": "Hannah Whitcombe, MD",
+        "services": [
+          "CBC w/ diff",
+          "CMP",
+          "CT chest/abdomen/pelvis with contrast",
+          "New patient consult, medical oncology"
+        ],
+        "diagnosis_code_as_written": "C34.90",
+        "urgency_as_written": "Routine, within 2 weeks",
+        "missing_fields": ["member_id"]
+      }
+    },
+    {
+      "run": 3,
+      "ok": true,
+      "fallback": false,
+      "fields": {
+        "name": true,
+        "dob": true,
+        "provider": true,
+        "services": true,
+        "diagnosis": true,
+        "urgency": true,
+        "member_id_flagged": true
+      },
+      "read": {
+        "patient_name": "Maria Diaz",
+        "dob": "1955-03-08",
+        "phone": "+1 555 0101",
+        "language": "en",
+        "member_id": null,
+        "referring_provider": "Hannah Whitcombe, MD",
+        "services": [
+          "CBC w/ diff",
+          "CMP",
+          "CT chest/abdomen/pelvis with contrast",
+          "New patient consult, medical oncology"
+        ],
+        "diagnosis_code_as_written": "C34.90",
+        "urgency_as_written": "Routine, within 2 weeks",
+        "missing_fields": ["member_id"]
+      }
+    },
+    {
+      "run": 4,
+      "ok": true,
+      "fallback": false,
+      "fields": {
+        "name": true,
+        "dob": true,
+        "provider": true,
+        "services": true,
+        "diagnosis": true,
+        "urgency": true,
+        "member_id_flagged": true
+      },
+      "read": {
+        "patient_name": "Maria Diaz",
+        "dob": "1955-03-08",
+        "phone": "+1 555 0101",
+        "language": "en",
+        "member_id": null,
+        "referring_provider": "Hannah Whitcombe, MD",
+        "services": [
+          "CBC w/ diff",
+          "CMP",
+          "CT chest/abdomen/pelvis with contrast",
+          "New patient consult, medical oncology"
+        ],
+        "diagnosis_code_as_written": "C34.90",
+        "urgency_as_written": "Routine, within 2 weeks",
+        "missing_fields": ["member_id"]
+      }
+    },
+    {
+      "run": 5,
+      "ok": true,
+      "fallback": false,
+      "fields": {
+        "name": true,
+        "dob": true,
+        "provider": true,
+        "services": true,
+        "diagnosis": true,
+        "urgency": true,
+        "member_id_flagged": true
+      },
+      "read": {
+        "patient_name": "Maria Diaz",
+        "dob": "1955-03-08",
+        "phone": "+1 555 0101",
+        "language": "en",
+        "member_id": null,
+        "referring_provider": "Hannah Whitcombe, MD",
+        "services": [
+          "CBC w/ diff",
+          "CMP",
+          "CT chest/abdomen/pelvis with contrast",
+          "New patient consult, medical oncology"
+        ],
+        "diagnosis_code_as_written": "C34.90",
+        "urgency_as_written": "Routine, within 2 weeks",
+        "missing_fields": ["member_id"]
+      }
+    },
+    {
+      "run": 6,
+      "ok": true,
+      "fallback": false,
+      "fields": {
+        "name": true,
+        "dob": true,
+        "provider": true,
+        "services": true,
+        "diagnosis": true,
+        "urgency": true,
+        "member_id_flagged": true
+      },
+      "read": {
+        "patient_name": "Maria Diaz",
+        "dob": "1955-03-08",
+        "phone": "+1 555 0101",
+        "language": "en",
+        "member_id": null,
+        "referring_provider": "Hannah Whitcombe, MD",
+        "services": [
+          "CBC w/ diff",
+          "CMP",
+          "CT chest/abdomen/pelvis with contrast",
+          "New patient consult, medical oncology"
+        ],
+        "diagnosis_code_as_written": "C34.90",
+        "urgency_as_written": "Routine, within 2 weeks",
+        "missing_fields": ["member_id"]
+      }
+    },
+    {
+      "run": 7,
+      "ok": true,
+      "fallback": false,
+      "fields": {
+        "name": true,
+        "dob": true,
+        "provider": true,
+        "services": true,
+        "diagnosis": true,
+        "urgency": true,
+        "member_id_flagged": true
+      },
+      "read": {
+        "patient_name": "Maria Diaz",
+        "dob": "1955-03-08",
+        "phone": "+1 555 0101",
+        "language": "en",
+        "member_id": null,
+        "referring_provider": "Hannah Whitcombe, MD",
+        "services": [
+          "CBC w/ diff",
+          "CMP",
+          "CT chest/abdomen/pelvis with contrast",
+          "New patient consult, medical oncology"
+        ],
+        "diagnosis_code_as_written": "C34.90",
+        "urgency_as_written": "Routine, within 2 weeks",
+        "missing_fields": ["member_id"]
+      }
+    },
+    {
+      "run": 8,
+      "ok": true,
+      "fallback": false,
+      "fields": {
+        "name": true,
+        "dob": true,
+        "provider": true,
+        "services": true,
+        "diagnosis": true,
+        "urgency": true,
+        "member_id_flagged": true
+      },
+      "read": {
+        "patient_name": "Maria Diaz",
+        "dob": "1955-03-08",
+        "phone": "+1 555 0101",
+        "language": "en",
+        "member_id": null,
+        "referring_provider": "Hannah Whitcombe, MD",
+        "services": [
+          "CBC w/ diff",
+          "CMP",
+          "CT chest/abdomen/pelvis with contrast",
+          "New patient consult, medical oncology"
+        ],
+        "diagnosis_code_as_written": "C34.90",
+        "urgency_as_written": "Routine, within 2 weeks",
+        "missing_fields": ["member_id"]
+      }
+    },
+    {
+      "run": 9,
+      "ok": true,
+      "fallback": false,
+      "fields": {
+        "name": true,
+        "dob": true,
+        "provider": true,
+        "services": true,
+        "diagnosis": true,
+        "urgency": true,
+        "member_id_flagged": true
+      },
+      "read": {
+        "patient_name": "Maria Diaz",
+        "dob": "1955-03-08",
+        "phone": "+1 555 0101",
+        "language": "en",
+        "member_id": null,
+        "referring_provider": "Hannah Whitcombe, MD",
+        "services": [
+          "CBC w/ diff",
+          "CMP",
+          "CT chest/abdomen/pelvis with contrast",
+          "New patient consult, medical oncology"
+        ],
+        "diagnosis_code_as_written": "C34.90",
+        "urgency_as_written": "Routine, within 2 weeks",
+        "missing_fields": ["member_id"]
+      }
+    },
+    {
+      "run": 10,
+      "ok": true,
+      "fallback": false,
+      "fields": {
+        "name": true,
+        "dob": true,
+        "provider": true,
+        "services": true,
+        "diagnosis": true,
+        "urgency": true,
+        "member_id_flagged": true
+      },
+      "read": {
+        "patient_name": "Maria Diaz",
+        "dob": "1955-03-08",
+        "phone": "+1 555 0101",
+        "language": "en",
+        "member_id": null,
+        "referring_provider": "Hannah Whitcombe, MD",
+        "services": [
+          "CBC w/ diff",
+          "CMP",
+          "CT chest/abdomen/pelvis with contrast",
+          "New patient consult, medical oncology"
+        ],
+        "diagnosis_code_as_written": "C34.90",
+        "urgency_as_written": "Routine, within 2 weeks",
+        "missing_fields": ["member_id"]
+      }
+    }
+  ]
+}

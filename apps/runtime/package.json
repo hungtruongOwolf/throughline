@@ -10,6 +10,9 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run --passWithNoTests",
     "seed": "tsx --env-file-if-exists=../../.env scripts/seed.ts",
+    "eval:intake": "tsx --env-file-if-exists=../../.env scripts/eval-intake.ts",
+    "eval:classifier": "tsx --env-file-if-exists=../../.env scripts/eval-classifier.ts",
+    "record:story": "tsx --env-file-if-exists=../../.env scripts/record-story.ts",
     "smoke:models": "tsx --env-file-if-exists=../../.env scripts/smoke-models.ts",
     "gen:assets": "tsx --env-file-if-exists=../../.env scripts/gen-assets.ts"
   },

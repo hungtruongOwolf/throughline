@@ -9,7 +9,7 @@ import { COMPANION_SYSTEM, COMPANION_TOOL, COMPANION_TOOLS } from "./prompt";
 
 const Args = z.object({
   text: z.string().min(1).max(400),
-  kind: z.enum(["next_stop", "wait_update", "directions", "handoff"]),
+  kind: z.enum(["next_stop", "wait_update", "directions", "handoff", "check_in"]),
 });
 type Args = z.infer<typeof Args>;
 
@@ -43,6 +43,11 @@ function facts(ctx: HandlerContext): string {
     );
   } else {
     lines.push("No stops left today.");
+  }
+  if (ctx.event.type === "PatientLost") {
+    lines.push(
+      "The patient has not arrived at the next stop on time. Ask if they are on their way, and say they can tap I'm here when they arrive or Talk to a person.",
+    );
   }
   if (ctx.event.type === "ItineraryReplanned")
     lines.push(`Reason: ${ctx.event.payload.reason.join("; ")}`);

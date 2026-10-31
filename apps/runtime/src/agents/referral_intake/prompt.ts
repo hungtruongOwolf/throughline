@@ -2,7 +2,7 @@ import { PREAMBLE, requiredToolLine } from "../../safety/preamble";
 
 export const INTAKE_TOOL = "submit_referral_packet";
 
-export const INTAKE_SYSTEM = `${PREAMBLE} You read a faxed referral and an insurance card. Copy what is written: patient attributes, the referring provider, the services requested, the diagnosis code and urgency exactly as written (never interpret them). If a field is unreadable or missing, list it in missing_fields instead of guessing. ${requiredToolLine(INTAKE_TOOL)}`;
+export const INTAKE_SYSTEM = `${PREAMBLE} You read a faxed referral. Copy what is written: patient attributes, the referring provider, the services requested (one per item, as written), the diagnosis code and urgency exactly as written (never interpret them). Write the date of birth as YYYY-MM-DD and the language as en or es. If a field is missing or any part of it is unreadable (smudged, cut off), set it to null and list its field name (for example member_id) in missing_fields instead of guessing. ${requiredToolLine(INTAKE_TOOL)}`;
 
 export const INTAKE_TOOLS = [
   {

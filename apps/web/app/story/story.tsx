@@ -363,11 +363,19 @@ export function Story() {
           <p className="mt-3 max-w-[70ch] text-[19px]">{step.happened}</p>
 
           <div className="mt-6 flex flex-wrap items-center gap-4 rounded-[14px] bg-white p-4 ring-1 ring-ink/10">
-            {step.draft && (
-              <p className="w-full rounded-[16px] bg-line/10 px-4 py-3 text-[17px] sm:w-auto sm:flex-1">
-                <span className="block text-[13px] font-bold text-ink-soft">Maria&apos;s text</span>
-                {step.draft}
-              </p>
+            {step.voice && (
+              <div className="w-full rounded-[16px] bg-line/10 px-4 py-3 text-[17px] sm:w-auto sm:flex-1">
+                <span className="block text-[13px] font-bold text-ink-soft">
+                  Maria&apos;s voice note
+                </span>
+                <audio
+                  controls
+                  preload="none"
+                  src={`${RUNTIME_URL}${step.voice.src}`}
+                  className="mt-1 h-10 w-full max-w-[420px]"
+                />
+                <p className="mt-1">&ldquo;{step.voice.words}&rdquo;</p>
+              </div>
             )}
             {step.screen.kind !== "ops" && (
               <button

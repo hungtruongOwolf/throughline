@@ -15,6 +15,7 @@ import { STORY_STEPS, StoryDriver, type StoryStep } from "./demo/story";
 import { buildBoard, type SimBackground } from "./board";
 import { buildOverview } from "./ops-overview";
 import { locateFromPhoto } from "./locate";
+import { transcribe } from "./models/voice";
 import { loadEngine } from "@throughline/engine/node";
 import { VisitDayScenario } from "./sim/scenario";
 import type { ModelCache } from "./models/cache";
@@ -353,6 +354,38 @@ export function createApp(ctx?: AppContext) {
     return c.json(runtime.journey(id));
   });
 
+  /** A voice note from the patient (spec B7): Voice Transcribe, then the same path as a text. */
+  app.post("/api/journeys/:id/voice", async (c) => {
+    const id = c.req.param("id");
+    const journey = runtime.journey(id);
+    if (!journey) return c.json({ error: "not found" }, 404);
+    const form = await c.req.formData().catch(() => undefined);
+    const file = form?.get("audio");
+    if (!file || typeof file === "string") return c.json({ error: "audio required" }, 400);
+    if (file.size > 10 * 1024 * 1024) return c.json({ error: "voice note too long" }, 413);
+    let transcript: string;
+    try {
+      ({ transcript } = await transcribe(
+        {
+          ...ctx.models,
+          record: (r) => ctx.store.recordModelCall(r),
+          now: () => ctx.clock.now(),
+        },
+        Buffer.from(await file.arrayBuffer()),
+      ));
+    } catch {
+      return c.json({ error: "could not hear the voice note" }, 422);
+    }
+    if (!transcript) return c.json({ error: "could not hear the voice note" }, 422);
+    await runtime.ingest({
+      type: "PatientReplied",
+      journey_id: id,
+      payload: { channel: "voice_sim", transcript, language: journey.patient.language },
+    });
+    await bus.idle();
+    return c.json({ transcript, journey: runtime.journey(id) });
+  });
+
   /** The synthetic intake documents (images and PDF only; the ground-truth file stays private). */
   app.get("/api/documents/:name", async (c) => {
     const name = c.req.param("name");
@@ -363,6 +396,18 @@ export function createApp(ctx?: AppContext) {
       return c.body(new Uint8Array(bytes), 200, {
         "content-type": m[1] === "pdf" ? "application/pdf" : "image/png",
       });
+    } catch {
+      return c.json({ error: "not found" }, 404);
+    }
+  });
+
+  /** Recorded patient voice notes (WAV) the story sends to Voice Transcribe. */
+  app.get("/api/voice/:name", async (c) => {
+    const name = c.req.param("name");
+    if (!/^[a-z0-9-]+\.wav$/.test(name)) return c.json({ error: "not found" }, 404);
+    try {
+      const bytes = await readFile(fileURLToPath(new URL(name, VOICE_DIR)));
+      return c.body(new Uint8Array(bytes), 200, { "content-type": "audio/wav" });
     } catch {
       return c.json({ error: "not found" }, 404);
     }
@@ -380,6 +425,7 @@ export function createApp(ctx?: AppContext) {
 }
 
 const DOCUMENTS_DIR = new URL("../../../fixtures/documents/", import.meta.url);
+const VOICE_DIR = new URL("../../../fixtures/voice/", import.meta.url);
 
 const Clarify = z.object({
   field: z.string().min(1),

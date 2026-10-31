@@ -1,4 +1,8 @@
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import { loadEngine } from "@throughline/engine/node";
+import { modelsAvailable } from "../models/config";
+import { transcribe } from "../models/voice";
 import type { AppContext } from "../app";
 import { VisitDayScenario } from "../sim/scenario";
 import { seedReferral } from "./referral";
@@ -29,6 +33,9 @@ export type StoryStep = (typeof STORY_STEPS)[number];
 
 const MEMBER_ID = "LHP-883201-02";
 const MARIA_REPLY = "Yes, I'll be there. But my husband can't come, so I'll need a wheelchair.";
+const VOICE_NOTE = fileURLToPath(
+  new URL("../../../../fixtures/voice/maria-reply.wav", import.meta.url),
+);
 const at = (day: string, hhmm: string) => `2026-11-${day}T${hhmm}:00-06:00`;
 
 /** When each visit-day step's action stops the clock (the moment the next step shows). */
@@ -73,6 +80,24 @@ export class StoryDriver {
     while (this.index < target) await this.act();
   }
 
+  /** Maria answers with a voice note; if it cannot be transcribed, the same words as a text. */
+  private async mariaReply() {
+    const { models, store, clock } = this.ctx;
+    if (!modelsAvailable(models.config)) {
+      return { channel: "sms_sim" as const, text: MARIA_REPLY, language: "en" as const };
+    }
+    try {
+      const { transcript } = await transcribe(
+        { ...models, record: (r) => store.recordModelCall(r), now: () => clock.now() },
+        readFileSync(VOICE_NOTE),
+      );
+      if (transcript) return { channel: "voice_sim" as const, transcript, language: "en" as const };
+    } catch {
+      // No model available: fall through to the typed reply.
+    }
+    return { channel: "sms_sim" as const, text: MARIA_REPLY, language: "en" as const };
+  }
+
   /** Performs the current step's action and moves to the next step. */
   async act(): Promise<void> {
     const { runtime, clock, bus, store } = this.ctx;
@@ -100,7 +125,7 @@ export class StoryDriver {
         await runtime.ingest({
           type: "PatientReplied",
           journey_id: MARIA_JOURNEY_ID,
-          payload: { channel: "sms_sim", text: MARIA_REPLY, language: "en" },
+          payload: await this.mariaReply(),
         });
         await bus.idle();
         await clock.advanceTo(STORY_TIMES.dayBefore);

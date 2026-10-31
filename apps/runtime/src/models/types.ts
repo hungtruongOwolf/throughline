@@ -9,8 +9,13 @@ export interface ModelTool {
   strict?: boolean;
 }
 
+/** A user message part: text, or an image as a data URL (Spark vision). */
+export type ModelContentPart =
+  | { type: "input_text"; text: string }
+  | { type: "input_image"; image_url: string; detail: "auto" | "low" | "high" };
+
 export type ModelInputItem =
-  | { role: "system" | "user" | "assistant"; content: string }
+  | { role: "system" | "user" | "assistant"; content: string | ModelContentPart[] }
   | { type: "function_call"; call_id: string; name: string; arguments: string }
   | { type: "function_call_output"; call_id: string; output: string };
 

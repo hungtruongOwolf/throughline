@@ -21,8 +21,8 @@ export interface StoryStepCopy {
   happened: string;
   screen: Screen;
   action: string;
-  /** A message the actor sends with the action (Maria's text reply). */
-  draft?: string;
+  /** A voice note the actor sends with the action (Maria's reply), with what she says. */
+  voice?: { src: string; words: string };
   next: string;
 }
 
@@ -66,11 +66,14 @@ export const STEPS: StoryStepCopy[] = [
     when: "Thu, Nov 12, 8:05 am",
     who: "Maria, at home",
     happened:
-      "The insurer approved. Throughline fit all five appointments into one morning, on a day her daughter can drive her, and texted Maria what to expect.",
+      "The insurer approved. Throughline fit all five appointments into one morning, on a day her daughter can drive her, and texted Maria what to expect. She answers with a voice note.",
     screen: { kind: "patient", phase: "before" },
-    action: "Send",
-    draft: "Yes, I'll be there. But my husband can't come, so I'll need a wheelchair.",
-    next: "Throughline confirms, notes the wheelchair, and sends reminders before the day.",
+    action: "Send voice note",
+    voice: {
+      src: "/api/voice/maria-reply.wav",
+      words: "Yes, I'll be there. But my husband can't come, so I'll need a wheelchair.",
+    },
+    next: "Throughline writes down what she said, confirms, notes the wheelchair, and sends reminders before the day.",
   },
   {
     id: "day_before",

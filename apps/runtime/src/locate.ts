@@ -7,7 +7,7 @@ import type { SimClock } from "./bus/sim-clock";
 import type { RuntimeStore } from "./bus/store";
 import type { Runtime } from "./core/runtime";
 import type { ModelCache } from "./models/cache";
-import type { ModelConfig } from "./models/config";
+import { modelsAvailable, type ModelConfig } from "./models/config";
 import { metaClient } from "./models/meta";
 import { readSign, type SignReading } from "./models/vision";
 
@@ -51,7 +51,7 @@ export async function locateFromPhoto(
 ): Promise<{ node_id: string; confidence: number } | undefined> {
   const record = (r: ModelCallRecord) => deps.store.recordModelCall(r);
   let reading: SignReading | undefined;
-  if (deps.models.config.metaApiKey) {
+  if (modelsAvailable(deps.models.config)) {
     try {
       reading = (
         await readSign(

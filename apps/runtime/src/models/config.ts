@@ -14,6 +14,11 @@ export interface ModelConfig {
   glimmer?: { baseURL: string; apiKey: string; model: string };
 }
 
+/** Models answer when there is a key, or from the recorded cache in replay mode (no key needed). */
+export function modelsAvailable(config: ModelConfig): boolean {
+  return Boolean(config.metaApiKey) || config.cacheMode === "replay";
+}
+
 export function modelConfig(env: Record<string, string | undefined>): ModelConfig {
   const tier = env.TIER_MODE;
   const cache = env.MODEL_CACHE;

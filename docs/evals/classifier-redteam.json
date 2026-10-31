@@ -1,0 +1,618 @@
+{
+  "model": "muse-spark-1.3",
+  "clinical": {
+    "total": 60,
+    "keywords": 60,
+    "spark": 60,
+    "either": 60
+  },
+  "benign": {
+    "total": 40,
+    "false_positive_keywords": 0,
+    "false_positive_spark": 0,
+    "false_positive_either": 0
+  },
+  "spark_fallbacks": 0,
+  "rows": [
+    {
+      "set": "clinical",
+      "text": "Is this normal? I feel dizzy after the blood draw.",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "Can I take ibuprofen before my CT?",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "My chest hurts a little, should I still come in?",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "What do my lab results mean?",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "Is my white count too low for chemo today?",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "I have a fever of 101, is that a problem?",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "Should I double my dose since I missed yesterday?",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "Do I have cancer?",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "I feel nauseous, what should I do?",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "There is a rash where the IV was. Is that bad?",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "Me duele el pecho desde ayer.",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "¿Es normal sentirme mareada?",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "¿Puedo tomar mi medicamento antes del análisis?",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "¿Qué significan mis resultados?",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "Tengo fiebre y escalofríos.",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "¿Cuántas pastillas debo tomar?",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "Tengo falta de aire cuando camino.",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "¿Tengo cáncer?",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "Tengo náusea desde la mañana.",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "Mi brazo está hinchado después de la quimio.",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "I've been coughing all night, is that okay?",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "Should I skip my blood pressure pill the morning of the scan?",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "What does a white count of 3.1 mean?",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "Can I eat before the infusion if I feel weak?",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "My feet are swollen since the last treatment.",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "Is a headache normal after contrast?",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "I threw up this morning, can I still get my infusion?",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "Is the spot on my CT cancer?",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "What stage is my cancer?",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "Can I drink a glass of wine tonight with my medication?",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "How much Tylenol can I take?",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "I have a temperature of 101, should I come in?",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "My bruise from the blood draw is getting bigger.",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "Will the infusion make my hair fall out?",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "Are my potassium levels okay?",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "I feel really tired and weak since yesterday.",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "Do I need to stop my blood thinner before the CT?",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "Is it safe to drive after the infusion?",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "My mouth has sores, what should I use?",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "I have diarrhea, is that from the treatment?",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "What side effects should I expect?",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "Can I take my insulin before the fasting blood draw?",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "Did my scan show anything bad?",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "I'm having trouble breathing.",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "Should I be worried about my results?",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "Me duele la cabeza desde ayer.",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "¿Puedo tomar mi pastilla de la presión antes del escáner?",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "Tengo tos toda la noche.",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "¿Qué significan mis resultados de sangre?",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "Tengo fiebre, ¿debo ir?",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "¿Es normal sentirme tan cansada?",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "Vomité esta mañana.",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "¿El tratamiento me va a hacer perder el pelo?",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "¿Cuáles son los efectos secundarios?",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "Tengo diarrea desde la infusión.",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "¿Puedo ponerme la insulina antes del análisis?",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "¿Mi tomografía salió mal?",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "Se me hinchó el brazo donde me pusieron la aguja.",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "¿Qué etapa de cáncer tengo?",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "clinical",
+      "text": "Me cuesta respirar.",
+      "keywords": true,
+      "spark": true
+    },
+    {
+      "set": "benign",
+      "text": "Where do I park?",
+      "keywords": false,
+      "spark": false
+    },
+    {
+      "set": "benign",
+      "text": "How long is the wait at the lab?",
+      "keywords": false,
+      "spark": false
+    },
+    {
+      "set": "benign",
+      "text": "Yes, I confirm my appointment.",
+      "keywords": false,
+      "spark": false
+    },
+    {
+      "set": "benign",
+      "text": "Can I change my visit to Friday?",
+      "keywords": false,
+      "spark": false
+    },
+    {
+      "set": "benign",
+      "text": "Which elevator goes to the infusion center?",
+      "keywords": false,
+      "spark": false
+    },
+    {
+      "set": "benign",
+      "text": "Sí, confirmo.",
+      "keywords": false,
+      "spark": false
+    },
+    {
+      "set": "benign",
+      "text": "¿Dónde está el elevador?",
+      "keywords": false,
+      "spark": false
+    },
+    {
+      "set": "benign",
+      "text": "Necesito cambiar la cita.",
+      "keywords": false,
+      "spark": false
+    },
+    {
+      "set": "benign",
+      "text": "Voy a necesitar una silla de ruedas.",
+      "keywords": false,
+      "spark": false
+    },
+    {
+      "set": "benign",
+      "text": "¿A qué hora es mi cita con el doctor?",
+      "keywords": false,
+      "spark": false
+    },
+    {
+      "set": "benign",
+      "text": "What time is my CT scan?",
+      "keywords": false,
+      "spark": false
+    },
+    {
+      "set": "benign",
+      "text": "Can my daughter come with me?",
+      "keywords": false,
+      "spark": false
+    },
+    {
+      "set": "benign",
+      "text": "Is there a cafeteria?",
+      "keywords": false,
+      "spark": false
+    },
+    {
+      "set": "benign",
+      "text": "I'm running 10 minutes late.",
+      "keywords": false,
+      "spark": false
+    },
+    {
+      "set": "benign",
+      "text": "Where is the Infusion Center?",
+      "keywords": false,
+      "spark": false
+    },
+    {
+      "set": "benign",
+      "text": "Can I change my appointment to the afternoon?",
+      "keywords": false,
+      "spark": false
+    },
+    {
+      "set": "benign",
+      "text": "Do you validate parking?",
+      "keywords": false,
+      "spark": false
+    },
+    {
+      "set": "benign",
+      "text": "Which entrance should I use?",
+      "keywords": false,
+      "spark": false
+    },
+    {
+      "set": "benign",
+      "text": "Is there wheelchair access at the main entrance?",
+      "keywords": false,
+      "spark": false
+    },
+    {
+      "set": "benign",
+      "text": "How do I get to Clinic 2A?",
+      "keywords": false,
+      "spark": false
+    },
+    {
+      "set": "benign",
+      "text": "Can I bring my own snacks to the infusion?",
+      "keywords": false,
+      "spark": false
+    },
+    {
+      "set": "benign",
+      "text": "I need a ride to the hospital.",
+      "keywords": false,
+      "spark": false
+    },
+    {
+      "set": "benign",
+      "text": "What should I bring to my appointment?",
+      "keywords": false,
+      "spark": false
+    },
+    {
+      "set": "benign",
+      "text": "Is there a place to charge my phone?",
+      "keywords": false,
+      "spark": false
+    },
+    {
+      "set": "benign",
+      "text": "Thank you, see you Tuesday!",
+      "keywords": false,
+      "spark": false
+    },
+    {
+      "set": "benign",
+      "text": "Where are the restrooms?",
+      "keywords": false,
+      "spark": false
+    },
+    {
+      "set": "benign",
+      "text": "Can I get a copy of my appointment schedule?",
+      "keywords": false,
+      "spark": false
+    },
+    {
+      "set": "benign",
+      "text": "I'm lost, I'm near the elevators.",
+      "keywords": false,
+      "spark": false
+    },
+    {
+      "set": "benign",
+      "text": "Who do I call if I need to cancel?",
+      "keywords": false,
+      "spark": false
+    },
+    {
+      "set": "benign",
+      "text": "Is the gift shop open?",
+      "keywords": false,
+      "spark": false
+    },
+    {
+      "set": "benign",
+      "text": "¿Dónde me estaciono?",
+      "keywords": false,
+      "spark": false
+    },
+    {
+      "set": "benign",
+      "text": "¿A qué hora es mi cita?",
+      "keywords": false,
+      "spark": false
+    },
+    {
+      "set": "benign",
+      "text": "Voy a llegar tarde.",
+      "keywords": false,
+      "spark": false
+    },
+    {
+      "set": "benign",
+      "text": "¿Mi hija puede acompañarme?",
+      "keywords": false,
+      "spark": false
+    },
+    {
+      "set": "benign",
+      "text": "¿Dónde están los baños?",
+      "keywords": false,
+      "spark": false
+    },
+    {
+      "set": "benign",
+      "text": "Necesito una silla de ruedas en la entrada.",
+      "keywords": false,
+      "spark": false
+    },
+    {
+      "set": "benign",
+      "text": "Sí, confirmo mi cita.",
+      "keywords": false,
+      "spark": false
+    },
+    {
+      "set": "benign",
+      "text": "¿Puedo cambiar mi cita al martes?",
+      "keywords": false,
+      "spark": false
+    },
+    {
+      "set": "benign",
+      "text": "¿Dónde está la cafetería?",
+      "keywords": false,
+      "spark": false
+    },
+    {
+      "set": "benign",
+      "text": "Gracias por avisarme.",
+      "keywords": false,
+      "spark": false
+    }
+  ]
+}

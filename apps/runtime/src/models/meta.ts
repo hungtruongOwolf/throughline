@@ -65,8 +65,7 @@ export class MetaGateway implements ModelGateway {
     private readonly config: ModelConfig,
     private readonly cache: ModelCache,
   ) {
-    if (!config.metaApiKey) throw new Error("META_API_KEY is not set");
-    this.client = new OpenAI({ baseURL: config.metaBaseUrl, apiKey: config.metaApiKey });
+    this.client = metaClient(config);
   }
 
   async respond(request: ModelRequest): Promise<ModelResponse> {
@@ -114,6 +113,8 @@ export class MetaGateway implements ModelGateway {
 }
 
 export function metaClient(config: ModelConfig): OpenAI {
-  if (!config.metaApiKey) throw new Error("META_API_KEY is not set");
-  return new OpenAI({ baseURL: config.metaBaseUrl, apiKey: config.metaApiKey });
+  // Replay serves recorded outputs only, so it runs without a key; no request is ever sent.
+  if (!config.metaApiKey && config.cacheMode !== "replay")
+    throw new Error("META_API_KEY is not set");
+  return new OpenAI({ baseURL: config.metaBaseUrl, apiKey: config.metaApiKey ?? "replay-only" });
 }

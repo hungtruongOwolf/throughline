@@ -28,8 +28,9 @@ export function cacheKey(provider: string, model: string, request: unknown): str
 }
 
 /**
- * Record/replay model cache (spec 8.4). `record` calls the provider and stores the response
- * once per request hash; `replay` serves only from the cache and marks the call replayed.
+ * Record/replay model cache (spec 8.4). `record` serves a request already recorded and calls the
+ * provider only for new ones, storing each response once per request hash; `replay` serves only
+ * from the cache; `off` always calls the provider. Served-from-cache calls are marked replayed.
  */
 export class ModelCache {
   constructor(
@@ -47,16 +48,12 @@ export class ModelCache {
     const key = cacheKey(provider, model, request);
     const row = this.sqlite.prepare("SELECT response FROM model_cache WHERE key = ?").get(key) as
       { response: string } | undefined;
-    if (this.mode === "replay") {
-      if (!row) throw new CacheMiss(key);
-      return { value: JSON.parse(row.response) as T, replayed: true };
-    }
+    if (row) return { value: JSON.parse(row.response) as T, replayed: true };
+    if (this.mode === "replay") throw new CacheMiss(key);
     const value = await live();
-    if (!row) {
-      this.sqlite
-        .prepare("INSERT INTO model_cache (key, provider, model, response) VALUES (?, ?, ?, ?)")
-        .run(key, provider, model, JSON.stringify(value));
-    }
+    this.sqlite
+      .prepare("INSERT INTO model_cache (key, provider, model, response) VALUES (?, ?, ?, ?)")
+      .run(key, provider, model, JSON.stringify(value));
     return { value, replayed: false };
   }
 

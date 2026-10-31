@@ -10,16 +10,25 @@ import { INTAKE_SYSTEM, INTAKE_TOOL, INTAKE_TOOLS } from "./prompt";
 
 const DOCS = fileURLToPath(new URL("../../../../../fixtures/documents/", import.meta.url));
 
+/** Models sometimes write "null" or "" for a field they could not read; both mean unread. */
+const nullable = z.preprocess(
+  (v) =>
+    typeof v === "string" && ["", "null", "none", "n/a"].includes(v.trim().toLowerCase())
+      ? null
+      : v,
+  z.string().nullable(),
+);
+
 const Extracted = z.object({
   patient_name: z.string().min(1),
   dob: z.iso.date(),
   phone: z.string(),
   language: z.enum(["en", "es"]),
-  member_id: z.string().nullable(),
+  member_id: nullable,
   referring_provider: z.string(),
   services: z.array(z.string()).min(1),
-  diagnosis_code_as_written: z.string().nullable(),
-  urgency_as_written: z.string().nullable(),
+  diagnosis_code_as_written: nullable,
+  urgency_as_written: nullable,
   missing_fields: z.array(z.string()),
 });
 type Extracted = z.infer<typeof Extracted>;
@@ -158,7 +167,7 @@ function toResult(read: Extracted, ctx: HandlerContext): HandlerResult {
 /**
  * Referral intake (spec B1): Spark vision reads the fax and card into a ReferralPacket with
  * structured output; fields that cannot be read become a ClarificationNeeded for a coordinator.
- * Until model credit is live the documents' manifest is the fallback (recorded as such).
+ * When the model is unavailable the documents' manifest is the fallback (recorded as such).
  */
 export function createReferralIntakeAgent(): ModelAgent<Extracted> {
   return {
@@ -166,11 +175,14 @@ export function createReferralIntakeAgent(): ModelAgent<Extracted> {
     kind: "model",
     model: {
       system: INTAKE_SYSTEM,
-      // The document images are attached when the vision path is enabled (needs model credit).
-      input: (ctx) =>
-        `Referral documents: ${documentsOf(ctx)
-          .map((d) => d.uri)
-          .join(", ")}`,
+      input: () => "The faxed referral is attached. Read it and submit the packet.",
+      // The fax goes to Spark vision; the insurance card is for the coordinator to check.
+      images: (ctx) =>
+        documentsOf(ctx)
+          .filter((d) => d.kind === "referral_fax" && d.mime.startsWith("image/"))
+          .map((d) => `${DOCS}${basename(d.uri)}`)
+          .filter((path) => existsSync(path))
+          .map((path) => ({ mime: "image/png", bytes: readFileSync(path) })),
       tools: INTAKE_TOOLS,
       readTools: {},
       readSchemas: {},

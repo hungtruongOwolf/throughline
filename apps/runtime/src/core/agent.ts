@@ -68,6 +68,8 @@ export interface HandlerContext {
 export interface ModelSpec<Args> {
   system: string;
   input: (ctx: HandlerContext) => string;
+  /** Images sent with the input, e.g. a faxed referral for Spark vision. */
+  images?: (ctx: HandlerContext) => { mime: string; bytes: Buffer }[];
   tools: ModelTool[];
   readTools: Record<string, (args: unknown, ctx: HandlerContext) => Promise<unknown> | unknown>;
   requiredTool: string;

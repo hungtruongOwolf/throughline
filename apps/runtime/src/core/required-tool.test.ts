@@ -64,13 +64,15 @@ async function run(script: ModelOutputItem[][]) {
 }
 
 describe("required tool (test 6)", () => {
-  it("a loop that never calls the required tool is retried once, then falls back", async () => {
+  it("a loop that never calls the required tool is nudged, retried once, then falls back", async () => {
     const { h, gateway, fallbacks } = await run([
       [{ type: "message", text: "done" }],
       [{ type: "message", text: "done again" }],
     ]);
-    expect(gateway.requests).toHaveLength(2);
-    expect(JSON.stringify(gateway.requests[1]?.input)).toContain("required tool missing");
+    // Each attempt nudges once after a prose answer: two attempts, four requests.
+    expect(gateway.requests).toHaveLength(4);
+    expect(JSON.stringify(gateway.requests[1]?.input)).toContain("Call submit_referral_packet now");
+    expect(JSON.stringify(gateway.requests[2]?.input)).toContain("required tool missing");
     expect(fallbacks).toEqual(["fallback"]);
     expect(h.types()).toContain("ClarificationNeeded");
     expect(h.store.modelCalls().some((r) => r.used_fallback)).toBe(true);

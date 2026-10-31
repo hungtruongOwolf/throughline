@@ -7,7 +7,7 @@ import { Runtime } from "./core/runtime";
 import { openDatabase } from "./db/index";
 import type { ModelGateway } from "./models/types";
 import { ModelCache } from "./models/cache";
-import { modelConfig } from "./models/config";
+import { modelConfig, modelsAvailable } from "./models/config";
 import { MetaGateway, metaClient } from "./models/meta";
 import { samCount } from "./models/sam";
 import { CameraBank } from "./sim/cameras";
@@ -40,9 +40,13 @@ export function createContext(
   const bus = new EventBus();
   const clock = new SimClock(env.SIM_START ?? "2026-11-10T08:00:00-06:00");
   const config = modelConfig(env);
-  const cache = new ModelCache(sqlite, config.cacheMode);
+  // Recorded model outputs can live in their own file (fixtures/model-cache.sqlite), so a
+  // fresh in-memory event store still replays the recorded run.
+  const cacheDb = env.MODEL_CACHE_PATH ? openDatabase(env.MODEL_CACHE_PATH).sqlite : sqlite;
+  const cache = new ModelCache(cacheDb, config.cacheMode);
   const gateway =
-    opts.gateway ?? (config.metaApiKey ? new MetaGateway(config, cache) : unconfiguredGateway);
+    opts.gateway ??
+    (modelsAvailable(config) ? new MetaGateway(config, cache) : unconfiguredGateway);
   const runner = new AgentRunner(gateway, (r) => store.recordModelCall(r));
   const runtime = new Runtime({
     store,
@@ -66,7 +70,7 @@ export function createContext(
   const cameras = new CameraBank();
   // SAM goes through the cache: in replay mode the bank's recorded counts are served, a miss
   // falls back to tickets only (spec 6, sensing fallback). Without a key, tickets only.
-  const count: PersonCounter | undefined = config.metaApiKey
+  const count: PersonCounter | undefined = modelsAvailable(config)
     ? async (frame) => {
         try {
           const deps = {

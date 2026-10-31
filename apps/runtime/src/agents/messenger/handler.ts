@@ -41,12 +41,12 @@ export function keywordMemory(text: string): MemoryUpdate[] {
 const REPLY_TOOL = "handle_reply";
 
 const Args = z.object({
-  intent: z.enum(["confirm", "reschedule", "question", "human"]),
+  intent: z.enum(["confirm", "reschedule", "question", "human", "clinical"]),
   memory_updates: z.array(MemoryUpdate).max(6),
 });
 type Args = z.infer<typeof Args>;
 
-const SYSTEM = `${PREAMBLE} You read a patient's reply to their appointment text. Decide the intent: confirm, reschedule, question (about logistics), or human. Extract only these memory keys when the patient states them: mobility (walking or wheelchair), companion_present (true or false), preferred_time_of_day (morning or afternoon), transport_need (none, ride_needed, wheelchair_van). ${requiredToolLine(REPLY_TOOL)}`;
+const SYSTEM = `${PREAMBLE} You read a patient's reply to their appointment text. Decide the intent: confirm, reschedule, question (about logistics), human, or clinical. Choose clinical whenever the reply mentions a symptom, how they feel, a medicine, a test result, a diagnosis, a side effect, or anything else a nurse or doctor should answer; you never answer those. Extract only these memory keys when the patient states them: mobility (walking or wheelchair), companion_present (true or false), preferred_time_of_day (morning or afternoon), transport_need (none, ride_needed, wheelchair_van). ${requiredToolLine(REPLY_TOOL)}`;
 
 const TOOLS = [
   {
@@ -59,7 +59,10 @@ const TOOLS = [
       additionalProperties: false,
       required: ["intent", "memory_updates"],
       properties: {
-        intent: { type: "string", enum: ["confirm", "reschedule", "question", "human"] },
+        intent: {
+          type: "string",
+          enum: ["confirm", "reschedule", "question", "human", "clinical"],
+        },
         memory_updates: {
           type: "array",
           items: {
@@ -86,7 +89,10 @@ function replyText(ctx: HandlerContext): string {
 }
 
 /** Records the reply, applies memory, answers, and confirms the visit on a yes. */
-function handled(args: Args, ctx: HandlerContext): HandlerResult {
+function handled(
+  args: Args & { intent: Exclude<Args["intent"], "clinical"> },
+  ctx: HandlerContext,
+): HandlerResult {
   const journey = ctx.journey as Journey;
   const reply = ctx.event as Extract<DomainEvent, { type: "PatientReplied" }>;
   const lang = journey.patient.language;
@@ -184,8 +190,8 @@ function handoff(ctx: HandlerContext): HandlerResult {
 
 /**
  * Messenger (spec B6/B7): Spark `handle_reply` reads intent and allowlisted memory from a
- * reply (keyword fallback until model credit is live); clinical content never gets here, the
- * orchestrator routes it to a BLOCKING nurse handoff. Reminders go out from sim timers.
+ * reply (keyword fallback without a model). Clinical content the keyword lists catch never gets
+ * here; what they miss, Spark answers `clinical`, and both become a BLOCKING nurse handoff. Reminders go out from sim timers.
  */
 export function createMessengerAgent(): ModelAgent<Args> {
   return {
@@ -203,7 +209,8 @@ export function createMessengerAgent(): ModelAgent<Args> {
       effort: "minimal",
       maxSteps: 2,
       maxOutputTokens: 400,
-      apply: (args, ctx) => handled(args, ctx),
+      apply: (args, ctx) =>
+        args.intent === "clinical" ? handoff(ctx) : handled({ ...args, intent: args.intent }, ctx),
     },
     fallback: (ctx) => {
       if (ctx.capability === "handoff.request") return handoff(ctx);

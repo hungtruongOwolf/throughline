@@ -16,7 +16,10 @@ export const COMPANION_TOOLS = [
       required: ["text", "kind"],
       properties: {
         text: { type: "string", description: "The message, under 240 characters." },
-        kind: { type: "string", enum: ["next_stop", "wait_update", "directions", "handoff"] },
+        kind: {
+          type: "string",
+          enum: ["next_stop", "wait_update", "directions", "handoff", "check_in"],
+        },
       },
     },
   },

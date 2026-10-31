@@ -5,14 +5,15 @@ import { CacheMiss, ModelCache } from "./cache";
 describe("model cache (test 13)", () => {
   const request = { model: "muse-spark-1.3", input: [{ role: "user", content: "hi" }] };
 
-  it("record writes once per request hash", async () => {
+  it("record calls the provider once per request hash, then serves the recording", async () => {
     const { sqlite } = openDatabase(":memory:");
     const cache = new ModelCache(sqlite, "record");
     let live = 0;
     const call = () =>
       cache.call("meta", "muse-spark-1.3", request, () => Promise.resolve({ n: ++live }));
     expect(await call()).toEqual({ value: { n: 1 }, replayed: false });
-    expect(await call()).toEqual({ value: { n: 2 }, replayed: false });
+    expect(await call()).toEqual({ value: { n: 1 }, replayed: true });
+    expect(live).toBe(1);
     expect(cache.size()).toBe(1);
   });
 
