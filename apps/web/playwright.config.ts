@@ -2,6 +2,8 @@ import { defineConfig } from "@playwright/test";
 
 export default defineConfig({
   testDir: "./e2e",
+  // All specs share one stateful runtime (they reset and move Maria), so they run in order.
+  workers: 1,
   use: { baseURL: "http://localhost:3000" },
   webServer: [
     {
