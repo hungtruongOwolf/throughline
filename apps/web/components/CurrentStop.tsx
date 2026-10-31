@@ -40,7 +40,9 @@ export function CurrentStop({
       <div className="mt-6">
         <BigNumber value={peopleAhead} label={words} />
         <p className="mt-1 text-[19px]">
-          {t(lang, "patient.about_minutes", { minutes: Math.round(waitMinutes) })}
+          {Math.round(waitMinutes) <= 1
+            ? t(lang, "patient.about_one_minute")
+            : t(lang, "patient.about_minutes", { minutes: Math.round(waitMinutes) })}
         </p>
       </div>
       <div className="mt-6 flex flex-col items-start gap-3">

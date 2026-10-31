@@ -35,6 +35,7 @@ export function createContext(
   const store = new RuntimeStore(sqlite);
   const engine = loadEngine();
   const simDay = SimRequest.parse(day);
+  const background = new SimBackground(engine, simDay);
   const bus = new EventBus();
   const clock = new SimClock(env.SIM_START ?? "2026-11-10T08:00:00-06:00");
   const config = modelConfig(env);
@@ -55,11 +56,11 @@ export function createContext(
         journeys: () => store.listAggregates<Journey>("journey"),
         station: (id) =>
           store.loadAggregate<StationState>("station", id)?.value ?? createStation(id),
+        onApplied: (action) => background.apply(action),
       }),
     providerReviewOn: env.PROVIDER_REVIEW_ON !== "false",
   });
   runtime.start();
-  const background = new SimBackground(engine, simDay);
   const cameras = new CameraBank();
   // SAM goes through the cache: in replay mode the bank's recorded counts are served, a miss
   // falls back to tickets only (spec 6, sensing fallback). Without a key, tickets only.

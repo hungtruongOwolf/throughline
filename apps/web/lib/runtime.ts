@@ -85,11 +85,37 @@ export async function resolveReview(
 }
 
 export async function clockCommand(
-  command: { action: "start"; speed: 1 | 10 | 60 } | { action: "stop" } | { action: "jump" },
+  command: { action: "start"; speed: 1 | 10 | 60 | 600 } | { action: "stop" } | { action: "jump" },
 ): Promise<void> {
   await fetch(`${RUNTIME_URL}/api/clock`, {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify(command),
+  });
+}
+
+export interface StoredEventView {
+  seq: number;
+  event: {
+    id: string;
+    type: string;
+    occurred_at: string;
+    journey_id?: string;
+    station_id?: string;
+    payload: Record<string, unknown>;
+  };
+}
+
+export async function fetchEvents(limit = 300): Promise<StoredEventView[]> {
+  const res = await fetch(`${RUNTIME_URL}/api/events?limit=${limit}`, { cache: "no-store" });
+  if (!res.ok) throw new Error(`events: ${res.status}`);
+  return (await res.json()) as StoredEventView[];
+}
+
+export async function startScenario(autopilot: boolean, speed?: 10 | 60 | 600): Promise<void> {
+  await fetch(`${RUNTIME_URL}/api/demo/scenario`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ autopilot, ...(speed ? { speed } : {}) }),
   });
 }

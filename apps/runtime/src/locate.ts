@@ -94,7 +94,11 @@ export async function locateFromPhoto(
   await deps.runtime.ingest({
     type: "PatientLocated",
     journey_id: journeyId,
-    payload: { node_id: found.node_id, confidence: Math.round(found.confidence * 100) / 100 },
+    // Capped below 1: confidence 1 is reserved for a check-in scan at the station itself.
+    payload: {
+      node_id: found.node_id,
+      confidence: Math.min(0.99, Math.round(found.confidence * 100) / 100),
+    },
   });
   return { node_id: found.node_id, confidence: found.confidence };
 }

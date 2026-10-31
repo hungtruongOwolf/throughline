@@ -85,6 +85,8 @@ function affected(journeys: Journey[], station: StationId): string[] {
 
 export interface OpsDeps {
   engine: Engine;
+  /** Applying an action changes the simulated world from then on. */
+  onApplied?: (action: OpsActionLite) => void;
   /** The simulated day the what-if replays (fixtures/day-2026-11-17.json). */
   day: SimRequest;
   journeys: () => Journey[];
@@ -157,11 +159,22 @@ function apply(ctx: HandlerContext, deps: OpsDeps): HandlerResult {
   const station = action.predicted_effect.station_id;
   const servers = campus.stations.find((s) => s.id === station)?.servers ?? 1;
   const affectedIds = affected(deps.journeys(), station);
+  deps.onApplied?.({
+    id: action.id,
+    kind: action.kind,
+    station_id: station,
+    at: ctx.now,
+    ...(typeof action.params.count === "number" ? { count: action.params.count } : {}),
+    ...(typeof action.params.to_station === "string"
+      ? { to_station: action.params.to_station as OpsActionLite["station_id"] }
+      : {}),
+  });
   return {
     summary: `applied: ${action.title} (approved by ${ctx.approved_by ?? "unknown"})`,
     station_patch: (s) => ({
       ...s,
       ...(action.kind === "open_server" ? { open_servers: (s.open_servers ?? servers) + 1 } : {}),
+      last_action_at: ctx.now,
       ops_actions: s.ops_actions.map((a) => (a.id === action.id ? { ...a, status: "applied" } : a)),
     }),
     next_events: [

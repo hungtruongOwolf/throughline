@@ -174,3 +174,13 @@ Question it answers: where is the building backing up, what does the system prop
 - Compared with the generic default (KPI tiles over a map and a table): no tiles, no table; the map, one rail of decisions, one strip of time.
 - The HELD token was darkened to `#9A4507` because the brief's `#B45309` on `#FDF1DC` measured 4.49:1 (DECISIONS #59).
 - Screenshots: `docs/screens/ops-1536.png`, `docs/screens/patient-replanned-390.png` (the phone after approval, updated over SSE without a reload).
+
+### Journey Control `/journey/[id]` (D2-9, first version)
+
+Question it answers: what is happening to this one patient right now, across every surface, and where did a person decide?
+
+- One line of beats across the top (arrived, CT 1 down, approved, CT 2, lost, sign photo, results, clinic, infusion, nurse, checkout), each filled with the time it happened; the next expected beat is the large teal stop.
+- Three live frames: the patient's phone (390 wide), the campus map (the command center), and the station board for the patient's current stop. They are the real pages in iframes, so the video shows exactly what each person sees.
+- The event cascade on the right, newest first, with HELD rows in the held colors and decisions marked with who decided. Queue updates are left out.
+- Controls: start the visit day (autopilot on by default: a scripted manager and nurse answer the gates; off for a live demo where a person clicks Approve), 10x, 60x, 600x, pause. The header says that everything is simulated.
+- Screenshots: `docs/screens/journey-control-1536.png` (09:56, CT 2 started) and `docs/screens/journey-control-done-1536.png` (after checkout).

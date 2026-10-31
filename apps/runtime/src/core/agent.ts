@@ -19,6 +19,8 @@ export interface StationState {
   synthetic: true;
   queue?: QueueState;
   open_servers?: number;
+  /** When the last ops action here was applied; detection waits for it to take effect. */
+  last_action_at?: string;
   /** The last few estimated waits, newest last (bottleneck detection, spec V8). */
   recent_waits?: number[];
   ops_actions: OpsAction[];

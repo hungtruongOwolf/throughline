@@ -11,6 +11,8 @@ import { seedDemo } from "./demo/visit-day";
 import { buildBoard, type SimBackground } from "./board";
 import { buildOverview } from "./ops-overview";
 import { locateFromPhoto } from "./locate";
+import { loadEngine } from "@throughline/engine/node";
+import { VisitDayScenario } from "./sim/scenario";
 import type { ModelCache } from "./models/cache";
 import type { ModelConfig } from "./models/config";
 import type { SensingLoop } from "./sim/sensing-loop";
@@ -267,6 +269,32 @@ export function createApp(ctx?: AppContext) {
   /** Command center data (spec 9.3): station waits, journeys in house, proposals. */
   app.get("/api/ops/overview", (c) => c.json(buildOverview(store, runtime, clock, background)));
 
+  /** Recent events across journeys and stations for the cascade (queue updates left out). */
+  app.get("/api/events", (c) => {
+    const limit = Math.min(500, Number(c.req.query("limit") ?? 200));
+    const all = store.events().filter((e) => e.event.type !== "QueueStateUpdated");
+    return c.json(all.slice(-limit));
+  });
+
+  /** The whole visit day (spec 10.3) on the sim clock; autopilot plays the people at the gates. */
+  let scenario: VisitDayScenario | undefined;
+  app.post("/api/demo/scenario", async (c) => {
+    const body = ScenarioCommand.safeParse(await c.req.json().catch(() => ({})));
+    if (!body.success) return c.json({ error: body.error.issues }, 400);
+    scenario?.stop();
+    scenario = new VisitDayScenario(
+      { ...ctx, engine: loadEngine() },
+      { autopilot: body.data.autopilot },
+    );
+    scenario.start();
+    if (body.data.speed) clock.start(body.data.speed);
+    return c.json({ now: clock.now(), running: clock.running, autopilot: body.data.autopilot });
+  });
+
+  app.get("/api/demo/scenario", (c) =>
+    c.json({ started: scenario !== undefined, done: scenario?.done ?? false, now: clock.now() }),
+  );
+
   /** Demo beats of Maria's Nov 17 (until the agents play the whole scenario). Resets state. */
   app.post("/api/demo/visit-day", async (c) => {
     const beat = c.req.query("beat") === "ct_outage" ? "ct_outage" : "lab";
@@ -277,6 +305,11 @@ export function createApp(ctx?: AppContext) {
 
   return app;
 }
+
+const ScenarioCommand = z.object({
+  autopilot: z.boolean().default(true),
+  speed: z.union([z.literal(1), z.literal(10), z.literal(60), z.literal(600)]).optional(),
+});
 
 const StaffAction = z.discriminatedUnion("action", [
   z.object({ action: z.literal("start"), journey_id: z.string(), order_id: z.string() }),

@@ -64,7 +64,7 @@ export function itineraryRequest(
       order_id: s.order_id,
       station_id: s.station_id,
       duration_min: order?.duration_min ?? 15,
-      node_id: moved ?? s.node_id,
+      ...(moved || s.node_id ? { node_id: moved ?? s.node_id } : {}),
       // Moving to another room gives up the booked slot in the old one.
       ...(booked && !moved && status === "pending" ? { not_before: booked } : {}),
       status,
@@ -125,10 +125,27 @@ export function createItineraryAgent(deps: ItineraryDeps): DeterministicAgent {
   };
 }
 
+/** On arrival there is no itinerary yet: today's stops come from the orders (spec V2). */
+function stopsFromOrders(journey: Journey, now: string): Stop[] {
+  return journey.orders
+    .filter((o) => o.status !== "resulted" && o.status !== "acknowledged")
+    .map((o) => ({
+      order_id: o.id,
+      station_id: o.station_id,
+      node_id: "",
+      status: "pending" as const,
+      eta_start: now,
+      eta_end: now,
+    }));
+}
+
 function plan(ctx: HandlerContext, deps: ItineraryDeps): HandlerResult {
   const journey = ctx.journey;
-  if (!journey?.itinerary) return { summary: "nothing to plan", next_events: [] };
-  const req = itineraryRequest(journey, ctx.now, deps);
+  if (!journey) return { summary: "nothing to plan", next_events: [] };
+  const stops = journey.itinerary?.stops ?? stopsFromOrders(journey, ctx.now);
+  if (stops.length === 0) return { summary: "nothing to plan", next_events: [] };
+  const withStops = { ...journey, itinerary: { planned_at: ctx.now, reason: [], stops } };
+  const req = itineraryRequest(withStops, ctx.now, deps);
   const result = deps.engine.planItinerary({
     ...req,
     stops: req.stops.map((s) => ({ ...s, status: "pending" as const })),
@@ -138,7 +155,7 @@ function plan(ctx: HandlerContext, deps: ItineraryDeps): HandlerResult {
     next_events: [
       {
         type: "ItineraryPlanned",
-        payload: { itinerary: toItinerary(result, journey.itinerary.stops, ctx.now) },
+        payload: { itinerary: toItinerary(result, stops, ctx.now) },
       },
     ],
   };

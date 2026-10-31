@@ -64,11 +64,10 @@ function templateText(ctx: HandlerContext): string {
     case "ResultReady":
       return t(lang, "companion.result_ready");
     default: {
-      return t(lang, "companion.next_stop", {
-        place,
-        ahead: stop.people_ahead ?? 0,
-        minutes: Math.round(stop.est_wait_min ?? 0),
-      });
+      const minutes = Math.round(stop.est_wait_min ?? 0);
+      return minutes <= 1
+        ? t(lang, "companion.next_stop_short", { place, ahead: stop.people_ahead ?? 0 })
+        : t(lang, "companion.next_stop", { place, ahead: stop.people_ahead ?? 0, minutes });
     }
   }
 }

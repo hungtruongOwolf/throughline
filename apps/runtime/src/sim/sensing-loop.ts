@@ -72,8 +72,10 @@ export class SensingLoop {
           ticketed: tickets,
           ...(sensed === undefined ? {} : { sensed, frame_age_min: 0 }),
         });
+        // Operational servers come from the simulated day, which includes outages and the
+        // ops actions approved so far.
         const live = runtime.station(id);
-        const open = live.open_servers ?? snapshot(id)?.open_servers;
+        const open = snapshot(id)?.open_servers ?? live.open_servers;
         const wait = engine.estimateWait({
           station_id: id,
           count: fused.count_fused,
@@ -88,7 +90,7 @@ export class SensingLoop {
           est_wait_min: wait.est_wait_min,
           source: fused.source,
         };
-        if (open !== undefined && live.open_servers === undefined) {
+        if (open !== undefined && live.open_servers !== open) {
           runtime.saveStation({ ...live, open_servers: open });
         }
         await runtime.ingest({ type: "QueueStateUpdated", station_id: id, payload: { queue } });

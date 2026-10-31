@@ -8,6 +8,7 @@ import {
   type BoardView,
   type HumanReview,
   type Journey,
+  type OpsActionLite,
   type SimRequest,
   type SimResult,
   type StationId,
@@ -37,6 +38,7 @@ function nodeLabel(id: string): string {
  */
 export class SimBackground {
   private result: SimResult | undefined;
+  private readonly actions: OpsActionLite[] = [];
   private readonly names: Map<string, string>;
 
   constructor(
@@ -49,10 +51,23 @@ export class SimBackground {
   get(): SimResult {
     this.result ??= this.engine.simulate({
       ...this.day,
+      actions: [...this.actions],
       include_visits: true,
       snapshot_every_min: 1,
     });
     return this.result;
+  }
+
+  /** An approved ops action changes the simulated world from its time on (same seed). */
+  apply(action: OpsActionLite): void {
+    this.actions.push(action);
+    this.result = undefined;
+  }
+
+  /** Demo reset: the day without any approved actions. */
+  reset(): void {
+    this.actions.length = 0;
+    this.result = undefined;
   }
 
   name(patientId: string): string {

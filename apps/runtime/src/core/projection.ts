@@ -1,3 +1,4 @@
+import { campus } from "@throughline/hospital";
 import type { DomainEvent, Journey } from "@throughline/shared";
 
 /**
@@ -43,18 +44,53 @@ export function projectJourney(journey: Journey, event: DomainEvent): Journey {
     }
     case "PatientLost":
       return { ...journey, lost: true };
-    case "PatientLocated":
+    case "PatientLocated": {
+      // A check-in at the current stop's room or waiting area means "waiting here" (spec V4).
+      const station = itinerary?.stops.find((s) => s.status !== "done" && s.status !== "skipped");
+      const atStop =
+        station &&
+        (event.payload.node_id === station.node_id ||
+          campus.stations.find((s) => s.id === station.station_id)?.waiting_node ===
+            event.payload.node_id);
       return {
         ...journey,
         lost: false,
+        ...(itinerary && station && atStop
+          ? {
+              itinerary: {
+                ...itinerary,
+                stops: itinerary.stops.map((s) =>
+                  s === station ? { ...s, status: "waiting" as const } : s,
+                ),
+              },
+            }
+          : {}),
         last_location: {
           node_id: event.payload.node_id,
           at: event.occurred_at,
-          source: "sign_photo",
+          source: event.payload.confidence >= 1 ? "checkin" : "sign_photo",
         },
       };
-    case "ItineraryPlanned":
-      return { ...journey, itinerary: event.payload.itinerary };
+    }
+    case "ItineraryPlanned": {
+      const stops = event.payload.itinerary.stops;
+      const first = stops[0];
+      const last = stops[stops.length - 1];
+      const planned =
+        first && last
+          ? Math.round((Date.parse(last.eta_end) - Date.parse(event.occurred_at)) / 60_000)
+          : undefined;
+      return {
+        ...journey,
+        itinerary: event.payload.itinerary,
+        kpis: {
+          ...journey.kpis,
+          ...(planned !== undefined && journey.kpis.planned_minutes_on_site === undefined
+            ? { planned_minutes_on_site: planned }
+            : {}),
+        },
+      };
+    }
     case "ItineraryReplanned":
       return {
         ...journey,

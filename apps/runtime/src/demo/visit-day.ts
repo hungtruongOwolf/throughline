@@ -141,8 +141,9 @@ export async function seedDemo(
   },
   beat: DemoBeat,
 ): Promise<Journey> {
-  const { runtime, store, clock, sensing } = ctx;
+  const { runtime, store, clock, sensing, background } = ctx;
   store.reset();
+  background.reset();
   if (beat === "lab") {
     clock.reset(at("10:20"));
     return runtime.saveJourney(

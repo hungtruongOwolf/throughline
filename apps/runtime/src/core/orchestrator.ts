@@ -17,6 +17,8 @@ const one = (capability: Capability, agent: AgentName): Invocation[] => [{ capab
  */
 /** Spec V3: a queue estimate this far from a journey's plan triggers a replan. */
 export const REPLAN_DEVIATION_MIN = 10;
+/** No more than one queue-driven replan per journey in this window (no thrashing). */
+export const REPLAN_COOLDOWN_MIN = 10;
 
 export function route(
   event: DomainEvent,
@@ -62,8 +64,10 @@ export function route(
     case "StopCompleted":
     case "PatientLost":
       return one("patient.message", "companion");
-    case "PatientLocated":
-      return one("directions.send", "companion");
+    case "PatientLocated": {
+      // A check-in scan at the stop itself needs no directions.
+      return event.payload.confidence >= 1 ? [] : one("directions.send", "companion");
+    }
     case "ResultReady":
       return ctx.journey?.phase === "VISIT"
         ? [
@@ -93,8 +97,11 @@ export function route(
       // Journeys whose next stop is here and whose planned wait is now off by > 10 minutes.
       const replans = (ctx.journeys?.() ?? []).flatMap((j) => {
         const next = j.itinerary?.stops.find((s) => s.status !== "done" && s.status !== "skipped");
-        if (!next || next.station_id !== queue.station_id || next.status === "in_service")
-          return [];
+        // Only patients still on their way: once in line, the queue is the plan.
+        if (!next || next.station_id !== queue.station_id) return [];
+        if (next.status !== "pending" && next.status !== "in_transit") return [];
+        const sincePlan = Date.parse(queue.at) - Date.parse(j.itinerary?.planned_at ?? queue.at);
+        if (sincePlan < REPLAN_COOLDOWN_MIN * 60_000) return [];
         const planned = next.est_wait_min ?? 0;
         return Math.abs(queue.est_wait_min - planned) > REPLAN_DEVIATION_MIN
           ? [
