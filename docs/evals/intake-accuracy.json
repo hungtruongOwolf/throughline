@@ -3,7 +3,7 @@
   "runs": 10,
   "passed": 10,
   "done": true,
-  "median_latency_ms": 3845.521200000003,
+  "median_latency_ms": 2994.5048000000024,
   "results": [
     {
       "run": 1,

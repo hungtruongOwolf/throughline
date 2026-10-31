@@ -12,8 +12,6 @@ const FONTS = [
   "CourierPrime-Regular.ttf",
 ].map((f) => fileURLToPath(new URL(f, FONT_DIR)));
 
-const WATERMARK = "SYNTHETIC SAMPLE. NOT A REAL DOCUMENT.";
-
 function esc(text: string): string {
   return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
@@ -103,7 +101,6 @@ function referralSvg(): string {
   <text x="100" y="1060" font-family="Atkinson Hyperlegible" font-size="22">${esc(r.fasting_as_written)}</text>
   <text x="80" y="1180" font-family="Atkinson Hyperlegible" font-size="22">Referring provider: ${esc(r.provider)}</text>
   <text x="80" y="1220" font-family="Atkinson Hyperlegible" font-size="22">Signature on file</text>
-  <text x="600" y="1480" text-anchor="middle" font-family="Atkinson Hyperlegible" font-weight="700" font-size="26" fill="#999">${WATERMARK}</text>
 </svg>`;
 }
 
@@ -152,7 +149,6 @@ function cardSvg(): string {
   <text x="540" y="384" font-family="Atkinson Hyperlegible" font-size="22" fill="#333">Copays</text>
   <text x="540" y="420" font-family="Atkinson Hyperlegible" font-size="26">PCP $20   Specialist $${PAYER_RULES.specialist_copay_cents / 100}   ER $250</text>
   <text x="48" y="500" font-family="Atkinson Hyperlegible" font-size="20" fill="#333">Member services (555) 010-0190   Prior authorization (555) 010-0191</text>
-  <text x="506" y="590" text-anchor="middle" font-family="Atkinson Hyperlegible" font-weight="700" font-size="22" fill="#9aa">${WATERMARK}</text>
 </svg>`;
 }
 
@@ -165,13 +161,13 @@ export interface MariaDocuments {
 /**
  * Maria's intake documents (spec 10.1, `documents.ts`): the referral as a one-page fax PDF
  * (an image page, as faxes are), the same page as a PNG, and the insurance card. They look
- * like documents without imitating any real clinic or insurer, and say they are synthetic.
+ * like documents without imitating any real clinic or insurer; the ground-truth file marks them synthetic.
  */
 export async function generateMariaDocuments(seed: number): Promise<MariaDocuments> {
   const referralFaxPng = await faxify(render(referralSvg(), 1200), seed, "referral");
   const pdf = await PDFDocument.create();
-  pdf.setTitle("Referral, synthetic sample");
-  pdf.setProducer("Throughline synthetic documents");
+  pdf.setTitle("Referral");
+  pdf.setProducer("Northgate Family Medicine fax");
   const page = pdf.addPage([612, 792]);
   const image = await pdf.embedPng(referralFaxPng);
   page.drawImage(image, { x: 0, y: 0, width: 612, height: 792 });
