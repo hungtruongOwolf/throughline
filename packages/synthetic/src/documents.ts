@@ -40,7 +40,7 @@ export const MARIA_REFERRAL = {
     name: "Maria Diaz",
     dob: "03/08/1955",
     phone: "+1 555 0101",
-    language: "Spanish",
+    language: "English",
     address: "1420 Cedar Street, Halden",
   },
   insurance: { payer: ORGS.payer, member_id_visible: "LHP-883201-", plan: PAYER_RULES.plan_id },

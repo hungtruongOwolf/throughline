@@ -110,7 +110,7 @@ export const MARIA: SyntheticPatient = {
   synthetic: true,
   display_name: "Maria Diaz",
   dob: "1955-03-08",
-  language: "es",
+  language: "en",
   mobility: "walking",
   phone_sim: "+1 555 0101",
   distance_band: "mid",

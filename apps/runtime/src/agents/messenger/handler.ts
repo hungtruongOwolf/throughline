@@ -26,7 +26,7 @@ export function keywordMemory(text: string): MemoryUpdate[] {
   const out: MemoryUpdate[] = [];
   if (/silla de ruedas|wheelchair/.test(s)) out.push({ key: "mobility", value: "wheelchair" });
   if (
-    /(esposo|esposa|hij[oa]|marido)\s+no\s+puede\s+venir|voy\s+sol[oa]|no one can come|coming alone|by myself/.test(
+    /(esposo|esposa|hij[oa]|marido)\s+no\s+puede\s+venir|voy\s+sol[oa]|no one can come|coming alone|by myself|(husband|wife|son|daughter) can'?t come/.test(
       s,
     )
   )

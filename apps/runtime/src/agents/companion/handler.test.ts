@@ -19,7 +19,7 @@ function photo(path: string): FormData {
 }
 
 describe("companion and visit-day agents (D2-4)", () => {
-  it("locates Maria from a sign photo and sends wheelchair directions in Spanish", async () => {
+  it("locates Maria from a sign photo and sends wheelchair directions", async () => {
     const { ctx, app } = await beat("lab");
     // packages/synthetic/signs/14.webp is the "Elevator A" sign on Level 1.
     const res = await app.request("/api/journeys/maria-001/locate", {
@@ -33,7 +33,7 @@ describe("companion and visit-day agents (D2-4)", () => {
     const journey = ctx.runtime.journey("maria-001") as Journey;
     expect(journey.last_location).toMatchObject({ node_id: "mp1.elevA", source: "sign_photo" });
     expect(journey.kpis.direction_requests).toBe(1);
-    expect(journey.outreach_log.at(-1)?.text).toMatch(/^Cómo llegar a Lab Draw/);
+    expect(journey.outreach_log.at(-1)?.text).toMatch(/^Directions to Lab Draw/);
     // The reading came from the recorded Spark output and says so.
     expect(ctx.store.modelCalls().find((c) => c.capability === "patient.locate")?.replayed).toBe(
       true,
@@ -61,7 +61,7 @@ describe("companion and visit-day agents (D2-4)", () => {
       body: JSON.stringify({ decision: "approved", by: "manager.ito" }),
     });
     const journey = ctx.runtime.journey("maria-001") as Journey;
-    expect(journey.outreach_log.at(-1)?.text).toMatch(/^Su plan cambió: CT 2 ahora hacia las/);
+    expect(journey.outreach_log.at(-1)?.text).toMatch(/^Your plan changed: CT 2 is now about/);
     const fallback = ctx.store
       .modelCalls()
       .find((c) => c.capability === "patient.message" && c.used_fallback);
@@ -73,11 +73,11 @@ describe("companion and visit-day agents (D2-4)", () => {
     await ctx.runtime.ingest({
       type: "PatientReplied",
       journey_id: "maria-001",
-      payload: { channel: "sms_sim", text: "¿Es normal sentirme mareada?", language: "es" },
+      payload: { channel: "sms_sim", text: "Is it normal to feel dizzy?", language: "en" },
     });
     const journey = ctx.runtime.journey("maria-001") as Journey;
     expect(journey.handoff_open).toBe(true);
-    expect(journey.outreach_log.at(-1)?.text).toMatch(/^No puedo ayudar con preguntas médicas/);
+    expect(journey.outreach_log.at(-1)?.text).toMatch(/^I can't help with medical questions/);
     expect(ctx.store.reviews("pending")[0]).toMatchObject({ kind: "handoff" });
   });
 
@@ -92,7 +92,7 @@ describe("companion and visit-day agents (D2-4)", () => {
     expect(journey.orders.find((o) => o.id === "o-cbc")?.status).toBe("resulted");
     // ResultReady also triggers a replan, so look for the message anywhere in the log.
     expect(journey.outreach_log.map((m) => m.text)).toContain(
-      "El laboratorio terminó con su muestra. Su siguiente parada puede continuar.",
+      "The lab has finished with your sample. Your next stop can go ahead.",
     );
     expect(ctx.store.modelCalls().filter((c) => c.capability === "result.watch")).toEqual([]);
   });
@@ -108,6 +108,6 @@ describe("companion and visit-day agents (D2-4)", () => {
     });
     const log = (ctx.runtime.journey("maria-001") as Journey).outreach_log;
     expect(log[0]).toMatchObject({ disclaimer: true });
-    expect(log[0]?.text).toMatch(/asistente de IA/);
+    expect(log[0]?.text).toMatch(/an AI assistant/);
   });
 });

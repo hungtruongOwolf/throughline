@@ -49,7 +49,6 @@ function Phone({ lang }: { lang: Language }) {
       <div lang={lang} className="flex h-full flex-col bg-paper px-6 pt-12 pb-8 text-[17px]">
         <header className="flex items-baseline justify-between">
           <span className="font-bold">{t(lang, "hospital.name")}</span>
-          <span className="text-[15px] text-ink-soft">EN ES</span>
         </header>
         <div className="mt-8 flex-1 overflow-hidden">
           <Throughline stops={patientLine(lang)} label={t(lang, "patient.itinerary_label")} />
@@ -103,7 +102,7 @@ export default function ComponentsPage() {
         <h2 className="font-display text-[28px] font-semibold">Patient phone, visit day</h2>
         <div className="mt-6 flex flex-wrap gap-12">
           <Phone lang="en" />
-          <Phone lang="es" />
+          <Phone lang="en" />
         </div>
       </section>
 

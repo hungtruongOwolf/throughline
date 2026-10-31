@@ -84,7 +84,6 @@ function lineItems(
  */
 export function PatientPhone({ journeyId }: { journeyId: string }) {
   const [load, setLoad] = useState<Load>({ status: "loading" });
-  const [lang, setLang] = useState<Language | undefined>();
   const [sheet, setSheet] = useState(false);
   const [route, setRoute] = useState<WalkingRoute | undefined>();
   const [notice, setNotice] = useState<"handoff" | "check_in_failed" | undefined>();
@@ -101,7 +100,7 @@ export function PatientPhone({ journeyId }: { journeyId: string }) {
   }, [journeyId, refresh]);
 
   const journey = load.status === "ok" ? load.journey : undefined;
-  const language: Language = lang ?? journey?.patient.language ?? "en";
+  const language: Language = journey?.patient.language ?? "en";
   const stops = journey?.itinerary?.stops ?? [];
   const current = stops[currentIndex(stops)];
   const from = journey?.last_location?.node_id ?? "mp1.entrance";
@@ -130,20 +129,6 @@ export function PatientPhone({ journeyId }: { journeyId: string }) {
     >
       <header className="flex items-center justify-between">
         <span className="font-bold">{t(language, "hospital.name")}</span>
-        <span className="flex gap-1">
-          {(["en", "es"] as const).map((l) => (
-            <button
-              key={l}
-              type="button"
-              lang={l}
-              aria-pressed={language === l}
-              onClick={() => setLang(l)}
-              className={`min-h-12 min-w-12 rounded-[12px] text-[15px] ${language === l ? "font-bold text-ink" : "text-ink-soft"}`}
-            >
-              {l.toUpperCase()}
-            </button>
-          ))}
-        </span>
       </header>
 
       <main className="mt-6 flex-1">

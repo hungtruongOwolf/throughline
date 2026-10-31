@@ -12,7 +12,7 @@ describe("pnpm seed", () => {
     expect(first.patients).toBe(200);
     expect(db.select({ n: count() }).from(schema.slots).get()?.n).toBe(first.slots);
     const maria = db.select().from(schema.patients).where(eq(schema.patients.id, "pt-001")).get();
-    expect(maria).toMatchObject({ display_name: "Maria Diaz", language: "es", synthetic: true });
+    expect(maria).toMatchObject({ display_name: "Maria Diaz", language: "en", synthetic: true });
   });
 
   it("refuses non-synthetic rows at the database level", () => {

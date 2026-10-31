@@ -66,13 +66,13 @@ describe("pre-visit agents (D3-2)", () => {
     );
     const out = journey.outreach_log.filter((m) => m.direction === "out");
     expect(out[0]?.disclaimer).toBe(true);
-    expect(out.every((m) => m.language === "es")).toBe(true);
+    expect(out.every((m) => m.language === "en")).toBe(true);
 
     journey = (await (
       await app.request(
         "/api/journeys/maria-001/reply",
         json({
-          text: "Sí, confirmo. Pero mi esposo no puede venir, voy a necesitar una silla de ruedas.",
+          text: "Yes, I confirm. But my husband can't come, so I'll need a wheelchair.",
         }),
       )
     ).json()) as Journey;

@@ -10,7 +10,7 @@
       "name": "Maria Diaz",
       "dob": "03/08/1955",
       "phone": "+1 555 0101",
-      "language": "Spanish",
+      "language": "English",
       "address": "1420 Cedar Street, Halden"
     },
     "insurance": {
@@ -30,5 +30,7 @@
     "fasting_as_written": "Nothing to eat or drink except water for 8 hours before the blood draw."
   },
   "card_member_id": "LHP-883201-02",
-  "expected_missing_fields": ["member_id"]
+  "expected_missing_fields": [
+    "member_id"
+  ]
 }

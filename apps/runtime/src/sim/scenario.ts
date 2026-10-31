@@ -35,7 +35,7 @@ const TURNAROUND: Record<string, number> = { "o-cbc": LIS_TURNAROUND_MIN["CBC w/
 const ELEVATOR_A_PHOTO = fileURLToPath(
   new URL("../../../../packages/synthetic/signs/14.webp", import.meta.url),
 );
-const CLINICAL_QUESTION = "¿Es normal sentirme mareada?";
+const CLINICAL_QUESTION = "Is it normal to feel dizzy?";
 
 export interface ScenarioDeps {
   background: SimBackground;
@@ -112,13 +112,13 @@ function confirmedMaria(): Journey {
         id: "m-reply",
         direction: "in",
         channel: "voice_sim",
-        language: "es",
-        text: "Sí, confirmo. Pero mi esposo no puede venir, voy a necesitar una silla de ruedas.",
+        language: "en",
+        text: "Yes, I confirm. But my husband can't come, so I'll need a wheelchair.",
         disclaimer: false,
         at: "2026-11-13T17:05:00-06:00",
       },
     ],
-    memory: { preferred_language: "es", mobility: "wheelchair", companion_present: "false" },
+    memory: { preferred_language: "en", mobility: "wheelchair", companion_present: "false" },
   };
 }
 
@@ -235,7 +235,7 @@ export class VisitDayScenario {
         await runtime.ingest({
           type: "PatientReplied",
           journey_id: SCENARIO_JOURNEY,
-          payload: { channel: "sms_sim", text: CLINICAL_QUESTION, language: "es" },
+          payload: { channel: "sms_sim", text: CLINICAL_QUESTION, language: "en" },
         });
       }
       if (now >= Date.parse(stop.eta_end)) {

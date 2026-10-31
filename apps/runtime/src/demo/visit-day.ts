@@ -78,7 +78,7 @@ function message(id: string, direction: Message["direction"], text: string, time
     id,
     direction,
     channel: direction === "in" ? "voice_sim" : "sms_sim",
-    language: "es",
+    language: "en",
     text,
     disclaimer: id === "m1",
     at: time,
@@ -118,15 +118,15 @@ function mariaJourney(statuses: Stop["status"][], lastNode: string, now: string)
     },
     last_location: { node_id: lastNode, at: now, source: "checkin" },
     outreach_log: [
-      message("m1", "out", t("es", "disclosure.first_contact"), at("09:12")),
+      message("m1", "out", t("en", "disclosure.first_contact"), at("09:12")),
       message(
         "m2",
         "in",
-        "Sí, confirmo. Pero mi esposo no puede venir, voy a necesitar una silla de ruedas.",
+        "Yes, I confirm. But my husband can't come, so I'll need a wheelchair.",
         "2026-11-13T17:05:00-06:00",
       ),
     ],
-    memory: { preferred_language: "es", mobility: "wheelchair", companion_present: "false" },
+    memory: { preferred_language: "en", mobility: "wheelchair", companion_present: "false" },
     kpis: { planned_minutes_on_site: plan.total_minutes, replans: 0, direction_requests: 0 },
   };
 }
