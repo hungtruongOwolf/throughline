@@ -128,4 +128,15 @@ Cream background with terracotta accent; near-black with acid green; hairline-ru
 
 ## Surface notes
 
-_Added per surface during the build._
+_Added per surface during the build (process 9.9 steps 1–2)._
+
+### Component sheet `/dev/components` (D1-8)
+
+Question it answers: do the line, stops, current stop, zone chip, and big number read as one wayfinding system in both languages?
+
+- The line takes the zone color of the stop it passes through; teal (`--line`) where no zone applies (referral, booking, summary). Stops are square (corners 0): done = 16 px ink, current = 24 px teal, future = 16 px outline.
+- Zone chips keep ink text on a 12–15% zone tint with a solid zone square, because white text on gold or blue fails AA. The color never carries meaning alone: the chip always says "Level 2, Gold Zone".
+- Stop names on the patient line use the sign text from the registry ("Lab Draw", "Medical Oncology 2A") rather than sentence case, so the words on the phone match the words on the physical sign. Everything else is sentence case.
+- Atkinson Hyperlegible's slashed zero shows in times ("10:15"); kept, it is part of why the face was chosen.
+- Compared with the generic default (a timeline component with circles, cards, and a shadow per stop): square stops, no cards, no shadow, one large block for the current stop only.
+- Screenshot: `docs/screens/dev-components.png` (1536 wide).

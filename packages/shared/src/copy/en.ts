@@ -15,6 +15,14 @@ export const en = {
   "patient.people_ahead_one": "1 person ahead",
   "patient.about_minutes": "about {minutes} minutes",
   "patient.done_at": "done {time}",
+  "patient.eta": "about {time}",
+  "patient.level_zone": "Level {floor}, {zone} Zone",
+  "patient.itinerary_label": "Today's stops",
+  "zone.blue": "Blue",
+  "zone.gold": "Gold",
+  "zone.green": "Green",
+  "zone.rose": "Rose",
+  "zone.violet": "Violet",
   "patient.sign_unreadable":
     "We couldn't read the sign. Try the sign with the floor number, or tap 'Talk to a person'.",
   "board.empty": "No one is waiting here right now.",
@@ -35,6 +43,7 @@ export type CopyKey = keyof typeof en;
 /** Keys rendered on the patient phone or kiosk; checked for forbidden characters. */
 export const PATIENT_SURFACE_PREFIXES = [
   "patient.",
+  "zone.",
   "disclosure.",
   "handoff.",
   "footer.",
