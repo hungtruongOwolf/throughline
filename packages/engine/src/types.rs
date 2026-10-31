@@ -214,6 +214,156 @@ pub struct ReplanResult {
     pub reason: Vec<String>,
 }
 
+#[derive(Debug, Clone, Deserialize)]
+pub struct SimStop {
+    pub station_id: String,
+    /// A specific room, e.g. `mp2.ct2`; defaults to the station's first node.
+    #[serde(default)]
+    pub node_id: Option<String>,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct SimPatient {
+    pub id: String,
+    pub arrive: String,
+    #[serde(default = "default_entrance")]
+    pub entrance: String,
+    pub mobility: Mobility,
+    /// Visit order, already planned (the demo day plans each patient once with the solver).
+    pub stops: Vec<SimStop>,
+}
+
+fn default_entrance() -> String {
+    "mp1.entrance".into()
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct Disruption {
+    pub station_id: String,
+    pub from: String,
+    pub to: String,
+    pub servers_down: u32,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum OpsKind {
+    OpenServer,
+    Divert,
+    CallVolunteer,
+    CloseStation,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct OpsActionLite {
+    pub id: String,
+    pub kind: OpsKind,
+    pub station_id: String,
+    pub at: String,
+    /// `divert`: how many waiting patients move.
+    #[serde(default)]
+    pub count: Option<u32>,
+    /// `divert`: the sibling station they move to.
+    #[serde(default)]
+    pub to_station: Option<String>,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct SimRequest {
+    pub seed: u64,
+    pub start: String,
+    pub end: String,
+    pub patients: Vec<SimPatient>,
+    #[serde(default)]
+    pub disruptions: Vec<Disruption>,
+    /// Actions applied in this run (what-if adds one candidate at a time).
+    #[serde(default)]
+    pub actions: Vec<OpsActionLite>,
+    /// Snapshot interval; 0 turns snapshots off.
+    #[serde(default = "default_snapshot")]
+    pub snapshot_every_min: f64,
+}
+
+fn default_snapshot() -> f64 {
+    1.0
+}
+
+#[derive(Debug, Serialize, PartialEq)]
+pub struct Snapshot {
+    pub at: String,
+    pub station_id: String,
+    pub count: u32,
+    pub open_servers: u32,
+    pub est_wait_min: f64,
+}
+
+#[derive(Debug, Serialize, PartialEq)]
+pub struct PatientOutcome {
+    pub id: String,
+    pub minutes_on_site: f64,
+    pub walking_seconds: f64,
+    pub wait_minutes: f64,
+    pub finished: bool,
+}
+
+#[derive(Debug, Serialize, PartialEq)]
+pub struct StationKpi {
+    pub station_id: String,
+    pub served: u32,
+    pub mean_wait_min: f64,
+    pub p90_wait_min: f64,
+}
+
+#[derive(Debug, Serialize, PartialEq)]
+pub struct SimKpis {
+    pub patients: u32,
+    pub finished: u32,
+    pub mean_minutes_on_site: f64,
+    pub p90_minutes_on_site: f64,
+    pub stations: Vec<StationKpi>,
+}
+
+#[derive(Debug, Serialize, PartialEq)]
+pub struct SimResult {
+    pub snapshots: Vec<Snapshot>,
+    pub per_patient: Vec<PatientOutcome>,
+    pub kpis: SimKpis,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct WhatIfRequest {
+    #[serde(flatten)]
+    pub sim: SimRequest,
+    /// Candidate actions, each evaluated on its own against the baseline.
+    pub candidates: Vec<OpsActionLite>,
+    pub replicates: u32,
+    pub horizon_min: f64,
+}
+
+#[derive(Debug, Serialize, PartialEq)]
+pub struct WaitStats {
+    pub station_id: String,
+    pub mean_wait_min: f64,
+    pub p90_wait_min: f64,
+}
+
+#[derive(Debug, Serialize, PartialEq)]
+pub struct ActionEffect {
+    pub action_id: String,
+    pub station_id: String,
+    pub mean_wait_min: f64,
+    pub p90_wait_min: f64,
+    /// Baseline mean minus this action's mean; positive is better.
+    pub delta_min: f64,
+    pub affected_journeys: u32,
+}
+
+#[derive(Debug, Serialize, PartialEq)]
+pub struct WhatIfResult {
+    pub baseline: Vec<WaitStats>,
+    pub per_action: Vec<ActionEffect>,
+}
+
 /// Every function is total: bad input comes back as `{ "error": { code, message } }`.
 #[derive(Debug, Serialize)]
 pub struct EngineError {

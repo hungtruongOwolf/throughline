@@ -1,0 +1,3287 @@
+{
+  "synthetic": true,
+  "seed": 1104,
+  "start": "2026-11-17T07:00:00-06:00",
+  "end": "2026-11-17T17:00:00-06:00",
+  "patients": [
+    {
+      "id": "pt-001",
+      "arrive": "2026-11-17T08:54:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-002",
+      "arrive": "2026-11-17T07:00:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2b"
+        }
+      ]
+    },
+    {
+      "id": "pt-003",
+      "arrive": "2026-11-17T07:38:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2a"
+        }
+      ]
+    },
+    {
+      "id": "pt-004",
+      "arrive": "2026-11-17T07:52:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2b"
+        }
+      ]
+    },
+    {
+      "id": "pt-005",
+      "arrive": "2026-11-17T08:10:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "pharmacy"
+        }
+      ]
+    },
+    {
+      "id": "pt-006",
+      "arrive": "2026-11-17T08:32:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-007",
+      "arrive": "2026-11-17T10:46:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-008",
+      "arrive": "2026-11-17T08:41:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-009",
+      "arrive": "2026-11-17T09:18:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "wheelchair",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-010",
+      "arrive": "2026-11-17T10:41:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "imaging_ct"
+        }
+      ]
+    },
+    {
+      "id": "pt-011",
+      "arrive": "2026-11-17T10:14:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2a"
+        },
+        {
+          "station_id": "infusion"
+        }
+      ]
+    },
+    {
+      "id": "pt-012",
+      "arrive": "2026-11-17T09:58:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2b"
+        }
+      ]
+    },
+    {
+      "id": "pt-013",
+      "arrive": "2026-11-17T09:23:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2a"
+        },
+        {
+          "station_id": "infusion"
+        }
+      ]
+    },
+    {
+      "id": "pt-014",
+      "arrive": "2026-11-17T08:29:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2b"
+        }
+      ]
+    },
+    {
+      "id": "pt-015",
+      "arrive": "2026-11-17T07:27:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-016",
+      "arrive": "2026-11-17T10:32:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2b"
+        }
+      ]
+    },
+    {
+      "id": "pt-017",
+      "arrive": "2026-11-17T08:20:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "imaging_ct"
+        }
+      ]
+    },
+    {
+      "id": "pt-018",
+      "arrive": "2026-11-17T09:28:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-019",
+      "arrive": "2026-11-17T07:05:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "imaging_xray"
+        }
+      ]
+    },
+    {
+      "id": "pt-020",
+      "arrive": "2026-11-17T08:46:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2b"
+        },
+        {
+          "station_id": "infusion"
+        }
+      ]
+    },
+    {
+      "id": "pt-021",
+      "arrive": "2026-11-17T10:12:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2a"
+        },
+        {
+          "station_id": "infusion"
+        }
+      ]
+    },
+    {
+      "id": "pt-022",
+      "arrive": "2026-11-17T12:13:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "imaging_ct"
+        }
+      ]
+    },
+    {
+      "id": "pt-023",
+      "arrive": "2026-11-17T07:36:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-024",
+      "arrive": "2026-11-17T13:52:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "imaging_ct"
+        }
+      ]
+    },
+    {
+      "id": "pt-025",
+      "arrive": "2026-11-17T07:39:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2a"
+        }
+      ]
+    },
+    {
+      "id": "pt-026",
+      "arrive": "2026-11-17T07:46:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "pharmacy"
+        }
+      ]
+    },
+    {
+      "id": "pt-027",
+      "arrive": "2026-11-17T07:24:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-028",
+      "arrive": "2026-11-17T13:43:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "imaging_ct"
+        }
+      ]
+    },
+    {
+      "id": "pt-029",
+      "arrive": "2026-11-17T10:18:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-030",
+      "arrive": "2026-11-17T09:18:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-031",
+      "arrive": "2026-11-17T08:14:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-032",
+      "arrive": "2026-11-17T12:35:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "imaging_ct"
+        }
+      ]
+    },
+    {
+      "id": "pt-033",
+      "arrive": "2026-11-17T09:21:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "imaging_ct"
+        }
+      ]
+    },
+    {
+      "id": "pt-034",
+      "arrive": "2026-11-17T09:58:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "imaging_ct"
+        }
+      ]
+    },
+    {
+      "id": "pt-035",
+      "arrive": "2026-11-17T11:39:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-036",
+      "arrive": "2026-11-17T09:50:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "imaging_ct"
+        }
+      ]
+    },
+    {
+      "id": "pt-037",
+      "arrive": "2026-11-17T13:26:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-038",
+      "arrive": "2026-11-17T10:25:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-039",
+      "arrive": "2026-11-17T07:32:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-040",
+      "arrive": "2026-11-17T11:17:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-041",
+      "arrive": "2026-11-17T12:41:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "wheelchair",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-042",
+      "arrive": "2026-11-17T09:07:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-043",
+      "arrive": "2026-11-17T08:54:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2a"
+        }
+      ]
+    },
+    {
+      "id": "pt-044",
+      "arrive": "2026-11-17T08:40:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2b"
+        },
+        {
+          "station_id": "infusion"
+        }
+      ]
+    },
+    {
+      "id": "pt-045",
+      "arrive": "2026-11-17T08:30:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2a"
+        }
+      ]
+    },
+    {
+      "id": "pt-046",
+      "arrive": "2026-11-17T11:22:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "imaging_ct"
+        }
+      ]
+    },
+    {
+      "id": "pt-047",
+      "arrive": "2026-11-17T09:33:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "pharmacy"
+        }
+      ]
+    },
+    {
+      "id": "pt-048",
+      "arrive": "2026-11-17T08:27:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-049",
+      "arrive": "2026-11-17T12:54:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-050",
+      "arrive": "2026-11-17T07:03:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "imaging_xray"
+        }
+      ]
+    },
+    {
+      "id": "pt-051",
+      "arrive": "2026-11-17T07:59:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2a"
+        }
+      ]
+    },
+    {
+      "id": "pt-052",
+      "arrive": "2026-11-17T08:10:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2b"
+        }
+      ]
+    },
+    {
+      "id": "pt-053",
+      "arrive": "2026-11-17T07:11:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-054",
+      "arrive": "2026-11-17T10:02:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-055",
+      "arrive": "2026-11-17T07:42:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "imaging_ct"
+        }
+      ]
+    },
+    {
+      "id": "pt-056",
+      "arrive": "2026-11-17T08:47:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2b"
+        },
+        {
+          "station_id": "infusion"
+        }
+      ]
+    },
+    {
+      "id": "pt-057",
+      "arrive": "2026-11-17T07:26:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2a"
+        },
+        {
+          "station_id": "infusion"
+        }
+      ]
+    },
+    {
+      "id": "pt-058",
+      "arrive": "2026-11-17T07:41:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "imaging_ct"
+        }
+      ]
+    },
+    {
+      "id": "pt-059",
+      "arrive": "2026-11-17T07:02:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-060",
+      "arrive": "2026-11-17T13:29:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "wheelchair",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2b"
+        },
+        {
+          "station_id": "infusion"
+        }
+      ]
+    },
+    {
+      "id": "pt-061",
+      "arrive": "2026-11-17T08:20:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2a"
+        }
+      ]
+    },
+    {
+      "id": "pt-062",
+      "arrive": "2026-11-17T09:01:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2b"
+        }
+      ]
+    },
+    {
+      "id": "pt-063",
+      "arrive": "2026-11-17T07:59:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "pharmacy"
+        }
+      ]
+    },
+    {
+      "id": "pt-064",
+      "arrive": "2026-11-17T08:07:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "imaging_ct"
+        }
+      ]
+    },
+    {
+      "id": "pt-065",
+      "arrive": "2026-11-17T10:27:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-066",
+      "arrive": "2026-11-17T09:55:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "wheelchair",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-067",
+      "arrive": "2026-11-17T07:57:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-068",
+      "arrive": "2026-11-17T07:31:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2b"
+        },
+        {
+          "station_id": "infusion"
+        }
+      ]
+    },
+    {
+      "id": "pt-069",
+      "arrive": "2026-11-17T13:45:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2a"
+        }
+      ]
+    },
+    {
+      "id": "pt-070",
+      "arrive": "2026-11-17T13:09:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "wheelchair",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-071",
+      "arrive": "2026-11-17T08:15:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2a"
+        },
+        {
+          "station_id": "infusion"
+        }
+      ]
+    },
+    {
+      "id": "pt-072",
+      "arrive": "2026-11-17T10:23:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-073",
+      "arrive": "2026-11-17T09:57:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "wheelchair",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "pharmacy"
+        }
+      ]
+    },
+    {
+      "id": "pt-074",
+      "arrive": "2026-11-17T14:29:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "imaging_ct"
+        }
+      ]
+    },
+    {
+      "id": "pt-075",
+      "arrive": "2026-11-17T08:46:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-076",
+      "arrive": "2026-11-17T07:20:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-077",
+      "arrive": "2026-11-17T09:30:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-078",
+      "arrive": "2026-11-17T09:44:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "imaging_ct"
+        }
+      ]
+    },
+    {
+      "id": "pt-079",
+      "arrive": "2026-11-17T07:26:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2a"
+        },
+        {
+          "station_id": "infusion"
+        }
+      ]
+    },
+    {
+      "id": "pt-080",
+      "arrive": "2026-11-17T12:15:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2b"
+        },
+        {
+          "station_id": "infusion"
+        }
+      ]
+    },
+    {
+      "id": "pt-081",
+      "arrive": "2026-11-17T11:37:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "wheelchair",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2a"
+        }
+      ]
+    },
+    {
+      "id": "pt-082",
+      "arrive": "2026-11-17T10:16:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2b"
+        }
+      ]
+    },
+    {
+      "id": "pt-083",
+      "arrive": "2026-11-17T12:49:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-084",
+      "arrive": "2026-11-17T12:05:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2b"
+        }
+      ]
+    },
+    {
+      "id": "pt-085",
+      "arrive": "2026-11-17T12:54:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "pharmacy"
+        }
+      ]
+    },
+    {
+      "id": "pt-086",
+      "arrive": "2026-11-17T07:20:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-087",
+      "arrive": "2026-11-17T11:03:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-088",
+      "arrive": "2026-11-17T07:56:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "imaging_xray"
+        }
+      ]
+    },
+    {
+      "id": "pt-089",
+      "arrive": "2026-11-17T07:16:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-090",
+      "arrive": "2026-11-17T07:48:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-091",
+      "arrive": "2026-11-17T12:28:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-092",
+      "arrive": "2026-11-17T09:46:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-093",
+      "arrive": "2026-11-17T12:18:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "wheelchair",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-094",
+      "arrive": "2026-11-17T07:37:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-095",
+      "arrive": "2026-11-17T11:38:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2a"
+        }
+      ]
+    },
+    {
+      "id": "pt-096",
+      "arrive": "2026-11-17T11:25:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-097",
+      "arrive": "2026-11-17T08:46:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "pharmacy"
+        }
+      ]
+    },
+    {
+      "id": "pt-098",
+      "arrive": "2026-11-17T07:17:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-099",
+      "arrive": "2026-11-17T08:15:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-100",
+      "arrive": "2026-11-17T07:21:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-101",
+      "arrive": "2026-11-17T08:20:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-102",
+      "arrive": "2026-11-17T07:39:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2b"
+        }
+      ]
+    },
+    {
+      "id": "pt-103",
+      "arrive": "2026-11-17T07:06:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "wheelchair",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2a"
+        }
+      ]
+    },
+    {
+      "id": "pt-104",
+      "arrive": "2026-11-17T09:09:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "imaging_xray"
+        }
+      ]
+    },
+    {
+      "id": "pt-105",
+      "arrive": "2026-11-17T10:14:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-106",
+      "arrive": "2026-11-17T09:22:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2b"
+        },
+        {
+          "station_id": "infusion"
+        }
+      ]
+    },
+    {
+      "id": "pt-107",
+      "arrive": "2026-11-17T11:54:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-108",
+      "arrive": "2026-11-17T07:56:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2b"
+        }
+      ]
+    },
+    {
+      "id": "pt-109",
+      "arrive": "2026-11-17T11:35:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "imaging_ct"
+        }
+      ]
+    },
+    {
+      "id": "pt-110",
+      "arrive": "2026-11-17T07:50:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-111",
+      "arrive": "2026-11-17T09:07:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "wheelchair",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "imaging_xray"
+        }
+      ]
+    },
+    {
+      "id": "pt-112",
+      "arrive": "2026-11-17T10:57:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "wheelchair",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "imaging_ct"
+        }
+      ]
+    },
+    {
+      "id": "pt-113",
+      "arrive": "2026-11-17T07:47:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2a"
+        }
+      ]
+    },
+    {
+      "id": "pt-114",
+      "arrive": "2026-11-17T09:28:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-115",
+      "arrive": "2026-11-17T12:59:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-116",
+      "arrive": "2026-11-17T09:30:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2b"
+        },
+        {
+          "station_id": "infusion"
+        }
+      ]
+    },
+    {
+      "id": "pt-117",
+      "arrive": "2026-11-17T07:22:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "imaging_xray"
+        }
+      ]
+    },
+    {
+      "id": "pt-118",
+      "arrive": "2026-11-17T10:18:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "imaging_xray"
+        }
+      ]
+    },
+    {
+      "id": "pt-119",
+      "arrive": "2026-11-17T09:17:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2a"
+        }
+      ]
+    },
+    {
+      "id": "pt-120",
+      "arrive": "2026-11-17T12:35:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2b"
+        }
+      ]
+    },
+    {
+      "id": "pt-121",
+      "arrive": "2026-11-17T10:50:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "wheelchair",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "imaging_ct"
+        }
+      ]
+    },
+    {
+      "id": "pt-122",
+      "arrive": "2026-11-17T08:00:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-123",
+      "arrive": "2026-11-17T08:40:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-124",
+      "arrive": "2026-11-17T08:24:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2b"
+        },
+        {
+          "station_id": "infusion"
+        }
+      ]
+    },
+    {
+      "id": "pt-125",
+      "arrive": "2026-11-17T07:34:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2a"
+        }
+      ]
+    },
+    {
+      "id": "pt-126",
+      "arrive": "2026-11-17T07:31:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2b"
+        }
+      ]
+    },
+    {
+      "id": "pt-127",
+      "arrive": "2026-11-17T09:19:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2a"
+        }
+      ]
+    },
+    {
+      "id": "pt-128",
+      "arrive": "2026-11-17T10:20:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-129",
+      "arrive": "2026-11-17T11:35:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "imaging_ct"
+        }
+      ]
+    },
+    {
+      "id": "pt-130",
+      "arrive": "2026-11-17T09:57:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "imaging_xray"
+        }
+      ]
+    },
+    {
+      "id": "pt-131",
+      "arrive": "2026-11-17T12:27:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2a"
+        }
+      ]
+    },
+    {
+      "id": "pt-132",
+      "arrive": "2026-11-17T10:54:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "pharmacy"
+        }
+      ]
+    },
+    {
+      "id": "pt-133",
+      "arrive": "2026-11-17T12:40:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2a"
+        }
+      ]
+    },
+    {
+      "id": "pt-134",
+      "arrive": "2026-11-17T07:04:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "imaging_xray"
+        }
+      ]
+    },
+    {
+      "id": "pt-135",
+      "arrive": "2026-11-17T08:25:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-136",
+      "arrive": "2026-11-17T10:32:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-137",
+      "arrive": "2026-11-17T09:17:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-138",
+      "arrive": "2026-11-17T08:50:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2b"
+        },
+        {
+          "station_id": "infusion"
+        }
+      ]
+    },
+    {
+      "id": "pt-139",
+      "arrive": "2026-11-17T10:47:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "wheelchair",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-140",
+      "arrive": "2026-11-17T09:17:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2b"
+        }
+      ]
+    },
+    {
+      "id": "pt-141",
+      "arrive": "2026-11-17T11:30:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "wheelchair",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-142",
+      "arrive": "2026-11-17T11:26:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "pharmacy"
+        }
+      ]
+    },
+    {
+      "id": "pt-143",
+      "arrive": "2026-11-17T07:22:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-144",
+      "arrive": "2026-11-17T10:24:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2b"
+        }
+      ]
+    },
+    {
+      "id": "pt-145",
+      "arrive": "2026-11-17T09:01:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-146",
+      "arrive": "2026-11-17T07:14:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "imaging_xray"
+        }
+      ]
+    },
+    {
+      "id": "pt-147",
+      "arrive": "2026-11-17T09:15:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "pharmacy"
+        }
+      ]
+    },
+    {
+      "id": "pt-148",
+      "arrive": "2026-11-17T10:19:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "imaging_xray"
+        }
+      ]
+    },
+    {
+      "id": "pt-149",
+      "arrive": "2026-11-17T07:53:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-150",
+      "arrive": "2026-11-17T08:25:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-151",
+      "arrive": "2026-11-17T07:52:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2a"
+        }
+      ]
+    },
+    {
+      "id": "pt-152",
+      "arrive": "2026-11-17T09:58:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-153",
+      "arrive": "2026-11-17T07:54:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "imaging_xray"
+        }
+      ]
+    },
+    {
+      "id": "pt-154",
+      "arrive": "2026-11-17T09:51:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2b"
+        }
+      ]
+    },
+    {
+      "id": "pt-155",
+      "arrive": "2026-11-17T09:24:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2a"
+        },
+        {
+          "station_id": "infusion"
+        }
+      ]
+    },
+    {
+      "id": "pt-156",
+      "arrive": "2026-11-17T07:42:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-157",
+      "arrive": "2026-11-17T08:34:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2a"
+        },
+        {
+          "station_id": "infusion"
+        }
+      ]
+    },
+    {
+      "id": "pt-158",
+      "arrive": "2026-11-17T08:09:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "pharmacy"
+        }
+      ]
+    },
+    {
+      "id": "pt-159",
+      "arrive": "2026-11-17T12:30:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "imaging_xray"
+        }
+      ]
+    },
+    {
+      "id": "pt-160",
+      "arrive": "2026-11-17T11:46:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "imaging_ct"
+        }
+      ]
+    },
+    {
+      "id": "pt-161",
+      "arrive": "2026-11-17T09:31:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "imaging_ct"
+        }
+      ]
+    },
+    {
+      "id": "pt-162",
+      "arrive": "2026-11-17T07:43:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-163",
+      "arrive": "2026-11-17T10:33:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-164",
+      "arrive": "2026-11-17T11:27:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-165",
+      "arrive": "2026-11-17T09:10:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2a"
+        }
+      ]
+    },
+    {
+      "id": "pt-166",
+      "arrive": "2026-11-17T07:08:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-167",
+      "arrive": "2026-11-17T11:27:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "imaging_ct"
+        }
+      ]
+    },
+    {
+      "id": "pt-168",
+      "arrive": "2026-11-17T09:40:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2b"
+        },
+        {
+          "station_id": "infusion"
+        }
+      ]
+    },
+    {
+      "id": "pt-169",
+      "arrive": "2026-11-17T13:37:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "pharmacy"
+        }
+      ]
+    },
+    {
+      "id": "pt-170",
+      "arrive": "2026-11-17T10:41:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-171",
+      "arrive": "2026-11-17T10:26:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-172",
+      "arrive": "2026-11-17T12:23:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2b"
+        }
+      ]
+    },
+    {
+      "id": "pt-173",
+      "arrive": "2026-11-17T08:13:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "pharmacy"
+        }
+      ]
+    },
+    {
+      "id": "pt-174",
+      "arrive": "2026-11-17T10:46:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "wheelchair",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2b"
+        }
+      ]
+    },
+    {
+      "id": "pt-175",
+      "arrive": "2026-11-17T07:25:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2a"
+        }
+      ]
+    },
+    {
+      "id": "pt-176",
+      "arrive": "2026-11-17T09:59:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2b"
+        }
+      ]
+    },
+    {
+      "id": "pt-177",
+      "arrive": "2026-11-17T12:20:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "imaging_ct"
+        }
+      ]
+    },
+    {
+      "id": "pt-178",
+      "arrive": "2026-11-17T08:49:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-179",
+      "arrive": "2026-11-17T09:37:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "pharmacy"
+        }
+      ]
+    },
+    {
+      "id": "pt-180",
+      "arrive": "2026-11-17T10:46:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2b"
+        }
+      ]
+    },
+    {
+      "id": "pt-181",
+      "arrive": "2026-11-17T07:03:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "wheelchair",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2a"
+        }
+      ]
+    },
+    {
+      "id": "pt-182",
+      "arrive": "2026-11-17T07:43:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-183",
+      "arrive": "2026-11-17T07:58:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2a"
+        },
+        {
+          "station_id": "infusion"
+        }
+      ]
+    },
+    {
+      "id": "pt-184",
+      "arrive": "2026-11-17T08:39:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2b"
+        }
+      ]
+    },
+    {
+      "id": "pt-185",
+      "arrive": "2026-11-17T09:03:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "imaging_xray"
+        }
+      ]
+    },
+    {
+      "id": "pt-186",
+      "arrive": "2026-11-17T07:43:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2b"
+        }
+      ]
+    },
+    {
+      "id": "pt-187",
+      "arrive": "2026-11-17T11:03:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2a"
+        }
+      ]
+    },
+    {
+      "id": "pt-188",
+      "arrive": "2026-11-17T07:15:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2b"
+        }
+      ]
+    },
+    {
+      "id": "pt-189",
+      "arrive": "2026-11-17T10:45:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "pharmacy"
+        }
+      ]
+    },
+    {
+      "id": "pt-190",
+      "arrive": "2026-11-17T12:15:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-191",
+      "arrive": "2026-11-17T11:47:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "imaging_ct"
+        }
+      ]
+    },
+    {
+      "id": "pt-192",
+      "arrive": "2026-11-17T09:24:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2b"
+        }
+      ]
+    },
+    {
+      "id": "pt-193",
+      "arrive": "2026-11-17T08:02:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "pharmacy"
+        }
+      ]
+    },
+    {
+      "id": "pt-194",
+      "arrive": "2026-11-17T07:00:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "pharmacy"
+        }
+      ]
+    },
+    {
+      "id": "pt-195",
+      "arrive": "2026-11-17T10:07:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2a"
+        }
+      ]
+    },
+    {
+      "id": "pt-196",
+      "arrive": "2026-11-17T10:33:00-06:00",
+      "entrance": "g2.parking",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2b"
+        },
+        {
+          "station_id": "infusion"
+        }
+      ]
+    },
+    {
+      "id": "pt-197",
+      "arrive": "2026-11-17T08:07:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "imaging_xray"
+        }
+      ]
+    },
+    {
+      "id": "pt-198",
+      "arrive": "2026-11-17T08:18:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    },
+    {
+      "id": "pt-199",
+      "arrive": "2026-11-17T09:12:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        },
+        {
+          "station_id": "vitals"
+        },
+        {
+          "station_id": "clinic_2a"
+        }
+      ]
+    },
+    {
+      "id": "pt-200",
+      "arrive": "2026-11-17T12:04:00-06:00",
+      "entrance": "mp1.entrance",
+      "mobility": "walking",
+      "stops": [
+        {
+          "station_id": "registration"
+        },
+        {
+          "station_id": "lab_draw"
+        }
+      ]
+    }
+  ],
+  "disruptions": [
+    {
+      "station_id": "imaging_ct",
+      "from": "2026-11-17T09:40:00-06:00",
+      "to": "2026-11-17T10:25:00-06:00",
+      "servers_down": 1
+    }
+  ]
+}

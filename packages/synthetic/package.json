@@ -7,7 +7,8 @@
   "types": "./src/index.ts",
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "gen:day": "tsx scripts/gen-day.ts"
   },
   "dependencies": {
     "zod": "^4.6.7"

@@ -149,3 +149,102 @@ export const ReplanResult = z.object({
   reason: z.array(z.string()),
 });
 export type ReplanResult = z.infer<typeof ReplanResult>;
+
+export const SimPatient = z.object({
+  id: z.string(),
+  arrive: SimTime,
+  entrance: NodeId.optional(),
+  mobility: Mobility,
+  stops: z.array(z.object({ station_id: StationId, node_id: NodeId.optional() })),
+});
+export type SimPatient = z.infer<typeof SimPatient>;
+
+export const OpsActionLite = z.object({
+  id: z.string(),
+  kind: z.enum(["open_server", "divert", "call_volunteer", "close_station"]),
+  station_id: StationId,
+  at: SimTime,
+  count: z.number().int().positive().optional(),
+  to_station: StationId.optional(),
+});
+export type OpsActionLite = z.infer<typeof OpsActionLite>;
+
+export const SimRequest = z.object({
+  seed: z.number().int().nonnegative(),
+  start: SimTime,
+  end: SimTime,
+  patients: z.array(SimPatient),
+  disruptions: z
+    .array(
+      z.object({
+        station_id: StationId,
+        from: SimTime,
+        to: SimTime,
+        servers_down: z.number().int().positive(),
+      }),
+    )
+    .optional(),
+  actions: z.array(OpsActionLite).optional(),
+  snapshot_every_min: z.number().nonnegative().optional(),
+});
+export type SimRequest = z.infer<typeof SimRequest>;
+
+export const SimResult = z.object({
+  snapshots: z.array(
+    z.object({
+      at: SimTime,
+      station_id: StationId,
+      count: z.number().int().nonnegative(),
+      open_servers: z.number().int().nonnegative(),
+      est_wait_min: z.number().nonnegative(),
+    }),
+  ),
+  per_patient: z.array(
+    z.object({
+      id: z.string(),
+      minutes_on_site: z.number().nonnegative(),
+      walking_seconds: z.number().nonnegative(),
+      wait_minutes: z.number().nonnegative(),
+      finished: z.boolean(),
+    }),
+  ),
+  kpis: z.object({
+    patients: z.number().int(),
+    finished: z.number().int(),
+    mean_minutes_on_site: z.number(),
+    p90_minutes_on_site: z.number(),
+    stations: z.array(
+      z.object({
+        station_id: StationId,
+        served: z.number().int(),
+        mean_wait_min: z.number(),
+        p90_wait_min: z.number(),
+      }),
+    ),
+  }),
+});
+export type SimResult = z.infer<typeof SimResult>;
+
+export const WhatIfRequest = SimRequest.extend({
+  candidates: z.array(OpsActionLite).min(1),
+  replicates: z.number().int().min(1).max(200),
+  horizon_min: z.number().positive(),
+});
+export type WhatIfRequest = z.infer<typeof WhatIfRequest>;
+
+export const WhatIfResult = z.object({
+  baseline: z.array(
+    z.object({ station_id: StationId, mean_wait_min: z.number(), p90_wait_min: z.number() }),
+  ),
+  per_action: z.array(
+    z.object({
+      action_id: z.string(),
+      station_id: StationId,
+      mean_wait_min: z.number(),
+      p90_wait_min: z.number(),
+      delta_min: z.number(),
+      affected_journeys: z.number().int(),
+    }),
+  ),
+});
+export type WhatIfResult = z.infer<typeof WhatIfResult>;

@@ -15,3 +15,4 @@ export function generateWorld(seed: number) {
     slots: generateSlots(seed),
   };
 }
+export * from "./day";

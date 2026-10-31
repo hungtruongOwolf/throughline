@@ -12,6 +12,7 @@
     "test": "vitest run && cargo test --quiet",
     "route": "tsx scripts/route.ts",
     "gen:fixtures": "tsx scripts/gen-fixtures.ts && tsx scripts/gen-itinerary-fixtures.ts",
-    "plan": "tsx scripts/plan.ts"
+    "plan": "tsx scripts/plan.ts",
+    "sim": "tsx scripts/sim.ts"
   }
 }

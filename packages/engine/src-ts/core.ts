@@ -7,12 +7,16 @@ import {
   ItineraryRequest,
   ReplanRequest,
   ReplanResult,
+  SimRequest,
+  SimResult,
   WaitEstimate,
   WaitRequest,
   WalkingMatrix,
   WalkingMatrixRequest,
   WalkingRoute,
   WalkingRouteRequest,
+  WhatIfRequest,
+  WhatIfResult,
 } from "@throughline/shared";
 
 /** The raw wasm-bindgen exports: JSON strings in, JSON strings out. */
@@ -25,6 +29,8 @@ export interface RawEngine {
   fuseQueue(requestJson: string): string;
   planItinerary(requestJson: string): string;
   replanItinerary(requestJson: string): string;
+  simulate(requestJson: string): string;
+  whatIf(requestJson: string): string;
 }
 
 export class EngineCallError extends Error {
@@ -47,6 +53,8 @@ export interface Engine {
   fuseQueue(req: FuseRequest): FuseResult;
   planItinerary(req: ItineraryRequest): ItineraryPlan;
   replanItinerary(req: ReplanRequest): ReplanResult;
+  simulate(req: SimRequest): SimResult;
+  whatIf(req: WhatIfRequest): WhatIfResult;
 }
 
 /** Function names usable by golden fixtures. */
@@ -56,7 +64,9 @@ export type EngineFunction =
   | "estimateWait"
   | "fuseQueue"
   | "planItinerary"
-  | "replanItinerary";
+  | "replanItinerary"
+  | "simulate"
+  | "whatIf";
 
 function call<Req, Res>(
   fn: (json: string) => string,
@@ -83,5 +93,7 @@ export function wrapEngine(raw: RawEngine): Engine {
     fuseQueue: (req) => call((j) => raw.fuseQueue(j), FuseRequest, FuseResult, req),
     planItinerary: (req) => call((j) => raw.planItinerary(j), ItineraryRequest, ItineraryPlan, req),
     replanItinerary: (req) => call((j) => raw.replanItinerary(j), ReplanRequest, ReplanResult, req),
+    simulate: (req) => call((j) => raw.simulate(j), SimRequest, SimResult, req),
+    whatIf: (req) => call((j) => raw.whatIf(j), WhatIfRequest, WhatIfResult, req),
   };
 }

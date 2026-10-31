@@ -3,14 +3,15 @@
 pub mod campus;
 pub mod itinerary;
 pub mod queue;
+pub mod sim;
 pub mod time;
 pub mod types;
 
 use wasm_bindgen::prelude::*;
 
 use crate::types::{
-    EngineError, FuseRequest, ItineraryRequest, ReplanRequest, WaitRequest, WalkingMatrixRequest,
-    WalkingRouteRequest,
+    EngineError, FuseRequest, ItineraryRequest, ReplanRequest, SimRequest, WaitRequest,
+    WalkingMatrixRequest, WalkingRouteRequest, WhatIfRequest,
 };
 
 /// Crate version, so the proof panel can say "engine: rust-wasm 0.x".
@@ -69,6 +70,20 @@ pub fn replan_itinerary(request_json: &str) -> String {
     })
 }
 
+#[wasm_bindgen]
+pub fn simulate(request_json: &str) -> String {
+    run(request_json, |req: SimRequest| {
+        sim::simulate(campus::campus()?, &req)
+    })
+}
+
+#[wasm_bindgen(js_name = whatIf)]
+pub fn what_if(request_json: &str) -> String {
+    run(request_json, |req: WhatIfRequest| {
+        sim::what_if(campus::campus()?, &req)
+    })
+}
+
 /// Parses the request, runs `f`, and serializes either the result or an error envelope.
 fn run<Req, Res, F>(request_json: &str, f: F) -> String
 where
@@ -115,6 +130,8 @@ mod tests {
             "fuseQueue" => fuse_queue(request),
             "planItinerary" => plan_itinerary(request),
             "replanItinerary" => replan_itinerary(request),
+            "simulate" => simulate(request),
+            "whatIf" => what_if(request),
             other => panic!("unknown fixture function {other}"),
         }
     }
