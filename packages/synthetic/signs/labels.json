@@ -1,0 +1,182 @@
+[
+  {
+    "file": "00.webp",
+    "sign_id": "sign.mp1.lobby",
+    "node_id": "mp1.lobby",
+    "background": 0
+  },
+  {
+    "file": "01.webp",
+    "sign_id": "sign.mp1.lab_wait",
+    "node_id": "mp1.lab_wait",
+    "background": 1
+  },
+  {
+    "file": "02.webp",
+    "sign_id": "sign.mp2.ct1",
+    "node_id": "mp2.ct1",
+    "background": 2
+  },
+  {
+    "file": "03.webp",
+    "sign_id": "sign.cc2.nurse",
+    "node_id": "cc2.nurse",
+    "background": 0
+  },
+  {
+    "file": "04.webp",
+    "sign_id": "sign.mp1.cafe",
+    "node_id": "mp1.cafe",
+    "background": 1
+  },
+  {
+    "file": "05.webp",
+    "sign_id": "sign.cc3.elevB",
+    "node_id": "cc3.elevB",
+    "background": 2
+  },
+  {
+    "file": "06.webp",
+    "sign_id": "sign.cc2.elevB",
+    "node_id": "cc2.elevB",
+    "background": 0
+  },
+  {
+    "file": "07.webp",
+    "sign_id": "sign.mp2.bridge_g",
+    "node_id": "mp2.bridge_g",
+    "background": 1
+  },
+  {
+    "file": "08.webp",
+    "sign_id": "sign.cc1.lobby",
+    "node_id": "cc1.lobby",
+    "background": 2
+  },
+  {
+    "file": "09.webp",
+    "sign_id": "sign.cc3.infusion_wait",
+    "node_id": "cc3.infusion_wait",
+    "background": 0
+  },
+  {
+    "file": "10.webp",
+    "sign_id": "sign.mp1.corr_a",
+    "node_id": "mp1.corr_a",
+    "background": 1
+  },
+  {
+    "file": "11.webp",
+    "sign_id": "sign.gl.walkway",
+    "node_id": "gl.walkway",
+    "background": 2
+  },
+  {
+    "file": "12.webp",
+    "sign_id": "sign.cc2.vitals",
+    "node_id": "cc2.vitals",
+    "background": 0
+  },
+  {
+    "file": "13.webp",
+    "sign_id": "sign.mp1.garden_door",
+    "node_id": "mp1.garden_door",
+    "background": 1
+  },
+  {
+    "file": "14.webp",
+    "sign_id": "sign.mp1.elevA",
+    "node_id": "mp1.elevA",
+    "background": 2
+  },
+  {
+    "file": "15.webp",
+    "sign_id": "sign.mp2.bridge_cc",
+    "node_id": "mp2.bridge_cc",
+    "background": 0
+  },
+  {
+    "file": "16.webp",
+    "sign_id": "sign.mp2.ct2",
+    "node_id": "mp2.ct2",
+    "background": 1
+  },
+  {
+    "file": "17.webp",
+    "sign_id": "sign.mp1.registration",
+    "node_id": "mp1.registration",
+    "background": 2
+  },
+  {
+    "file": "18.webp",
+    "sign_id": "sign.mp2.xray",
+    "node_id": "mp2.xray",
+    "background": 0
+  },
+  {
+    "file": "19.webp",
+    "sign_id": "sign.g2.bridge",
+    "node_id": "g2.bridge",
+    "background": 1
+  },
+  {
+    "file": "20.webp",
+    "sign_id": "sign.cc1.elevB",
+    "node_id": "cc1.elevB",
+    "background": 2
+  },
+  {
+    "file": "21.webp",
+    "sign_id": "sign.cc2.pod_2a",
+    "node_id": "cc2.pod_2a",
+    "background": 0
+  },
+  {
+    "file": "22.webp",
+    "sign_id": "sign.mp1.lab_draw",
+    "node_id": "mp1.lab_draw",
+    "background": 1
+  },
+  {
+    "file": "23.webp",
+    "sign_id": "sign.cc2.pod_2b",
+    "node_id": "cc2.pod_2b",
+    "background": 2
+  },
+  {
+    "file": "24.webp",
+    "sign_id": "sign.g2.parking",
+    "node_id": "g2.parking",
+    "background": 0
+  },
+  {
+    "file": "25.webp",
+    "sign_id": "sign.cc3.lounge",
+    "node_id": "cc3.lounge",
+    "background": 1
+  },
+  {
+    "file": "26.webp",
+    "sign_id": "sign.mp1.pharmacy",
+    "node_id": "mp1.pharmacy",
+    "background": 2
+  },
+  {
+    "file": "27.webp",
+    "sign_id": "sign.mp2.financial",
+    "node_id": "mp2.financial",
+    "background": 0
+  },
+  {
+    "file": "28.webp",
+    "sign_id": "sign.mp2.imaging_wait",
+    "node_id": "mp2.imaging_wait",
+    "background": 1
+  },
+  {
+    "file": "29.webp",
+    "sign_id": "sign.cc2.wait_2b",
+    "node_id": "cc2.wait_2b",
+    "background": 2
+  }
+]

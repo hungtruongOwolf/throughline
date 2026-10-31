@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run --passWithNoTests",
     "seed": "tsx --env-file-if-exists=../../.env scripts/seed.ts",
-    "smoke:models": "tsx --env-file-if-exists=../../.env scripts/smoke-models.ts"
+    "smoke:models": "tsx --env-file-if-exists=../../.env scripts/smoke-models.ts",
+    "gen:assets": "tsx --env-file-if-exists=../../.env scripts/gen-assets.ts"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^9.6.0",

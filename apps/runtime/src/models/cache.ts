@@ -60,6 +60,13 @@ export class ModelCache {
     return { value, replayed: false };
   }
 
+  /** Drops one recorded response, e.g. an output that failed validation, so it is not replayed. */
+  forget(provider: string, model: string, request: unknown): void {
+    this.sqlite
+      .prepare("DELETE FROM model_cache WHERE key = ?")
+      .run(cacheKey(provider, model, request));
+  }
+
   size(): number {
     return (this.sqlite.prepare("SELECT COUNT(*) AS n FROM model_cache").get() as { n: number }).n;
   }

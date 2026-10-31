@@ -1,0 +1,1682 @@
+[
+  {
+    "camera_id": "cam-2a",
+    "node_id": "cc2.wait_2a",
+    "file": "cam-2a/00.webp",
+    "target_count": 0,
+    "sam_count": 0
+  },
+  {
+    "camera_id": "cam-2a",
+    "node_id": "cc2.wait_2a",
+    "file": "cam-2a/01.webp",
+    "target_count": 0,
+    "sam_count": 0
+  },
+  {
+    "camera_id": "cam-2a",
+    "node_id": "cc2.wait_2a",
+    "file": "cam-2a/02.webp",
+    "target_count": 1,
+    "sam_count": 1
+  },
+  {
+    "camera_id": "cam-2a",
+    "node_id": "cc2.wait_2a",
+    "file": "cam-2a/03.webp",
+    "target_count": 1,
+    "sam_count": 1
+  },
+  {
+    "camera_id": "cam-2a",
+    "node_id": "cc2.wait_2a",
+    "file": "cam-2a/04.webp",
+    "target_count": 1,
+    "sam_count": 1
+  },
+  {
+    "camera_id": "cam-2a",
+    "node_id": "cc2.wait_2a",
+    "file": "cam-2a/05.webp",
+    "target_count": 1,
+    "sam_count": 1
+  },
+  {
+    "camera_id": "cam-2a",
+    "node_id": "cc2.wait_2a",
+    "file": "cam-2a/06.webp",
+    "target_count": 2,
+    "sam_count": 2
+  },
+  {
+    "camera_id": "cam-2a",
+    "node_id": "cc2.wait_2a",
+    "file": "cam-2a/07.webp",
+    "target_count": 2,
+    "sam_count": 2
+  },
+  {
+    "camera_id": "cam-2a",
+    "node_id": "cc2.wait_2a",
+    "file": "cam-2a/08.webp",
+    "target_count": 2,
+    "sam_count": 2
+  },
+  {
+    "camera_id": "cam-2a",
+    "node_id": "cc2.wait_2a",
+    "file": "cam-2a/09.webp",
+    "target_count": 2,
+    "sam_count": 2
+  },
+  {
+    "camera_id": "cam-2a",
+    "node_id": "cc2.wait_2a",
+    "file": "cam-2a/10.webp",
+    "target_count": 3,
+    "sam_count": 4
+  },
+  {
+    "camera_id": "cam-2a",
+    "node_id": "cc2.wait_2a",
+    "file": "cam-2a/11.webp",
+    "target_count": 3,
+    "sam_count": 3
+  },
+  {
+    "camera_id": "cam-2a",
+    "node_id": "cc2.wait_2a",
+    "file": "cam-2a/12.webp",
+    "target_count": 3,
+    "sam_count": 3
+  },
+  {
+    "camera_id": "cam-2a",
+    "node_id": "cc2.wait_2a",
+    "file": "cam-2a/13.webp",
+    "target_count": 3,
+    "sam_count": 3
+  },
+  {
+    "camera_id": "cam-2a",
+    "node_id": "cc2.wait_2a",
+    "file": "cam-2a/14.webp",
+    "target_count": 4,
+    "sam_count": 4
+  },
+  {
+    "camera_id": "cam-2a",
+    "node_id": "cc2.wait_2a",
+    "file": "cam-2a/15.webp",
+    "target_count": 4,
+    "sam_count": 7
+  },
+  {
+    "camera_id": "cam-2a",
+    "node_id": "cc2.wait_2a",
+    "file": "cam-2a/16.webp",
+    "target_count": 4,
+    "sam_count": 4
+  },
+  {
+    "camera_id": "cam-2a",
+    "node_id": "cc2.wait_2a",
+    "file": "cam-2a/17.webp",
+    "target_count": 4,
+    "sam_count": 4
+  },
+  {
+    "camera_id": "cam-2a",
+    "node_id": "cc2.wait_2a",
+    "file": "cam-2a/18.webp",
+    "target_count": 5,
+    "sam_count": 5
+  },
+  {
+    "camera_id": "cam-2a",
+    "node_id": "cc2.wait_2a",
+    "file": "cam-2a/19.webp",
+    "target_count": 5,
+    "sam_count": 4
+  },
+  {
+    "camera_id": "cam-2a",
+    "node_id": "cc2.wait_2a",
+    "file": "cam-2a/20.webp",
+    "target_count": 5,
+    "sam_count": 6
+  },
+  {
+    "camera_id": "cam-2a",
+    "node_id": "cc2.wait_2a",
+    "file": "cam-2a/21.webp",
+    "target_count": 5,
+    "sam_count": 5
+  },
+  {
+    "camera_id": "cam-2a",
+    "node_id": "cc2.wait_2a",
+    "file": "cam-2a/22.webp",
+    "target_count": 6,
+    "sam_count": 6
+  },
+  {
+    "camera_id": "cam-2a",
+    "node_id": "cc2.wait_2a",
+    "file": "cam-2a/23.webp",
+    "target_count": 6,
+    "sam_count": 8
+  },
+  {
+    "camera_id": "cam-2a",
+    "node_id": "cc2.wait_2a",
+    "file": "cam-2a/24.webp",
+    "target_count": 6,
+    "sam_count": 6
+  },
+  {
+    "camera_id": "cam-2a",
+    "node_id": "cc2.wait_2a",
+    "file": "cam-2a/25.webp",
+    "target_count": 6,
+    "sam_count": 6
+  },
+  {
+    "camera_id": "cam-2a",
+    "node_id": "cc2.wait_2a",
+    "file": "cam-2a/26.webp",
+    "target_count": 7,
+    "sam_count": 7
+  },
+  {
+    "camera_id": "cam-2a",
+    "node_id": "cc2.wait_2a",
+    "file": "cam-2a/27.webp",
+    "target_count": 7,
+    "sam_count": 7
+  },
+  {
+    "camera_id": "cam-2a",
+    "node_id": "cc2.wait_2a",
+    "file": "cam-2a/28.webp",
+    "target_count": 7,
+    "sam_count": 7
+  },
+  {
+    "camera_id": "cam-2a",
+    "node_id": "cc2.wait_2a",
+    "file": "cam-2a/29.webp",
+    "target_count": 7,
+    "sam_count": 7
+  },
+  {
+    "camera_id": "cam-2a",
+    "node_id": "cc2.wait_2a",
+    "file": "cam-2a/30.webp",
+    "target_count": 8,
+    "sam_count": 8
+  },
+  {
+    "camera_id": "cam-2a",
+    "node_id": "cc2.wait_2a",
+    "file": "cam-2a/31.webp",
+    "target_count": 8,
+    "sam_count": 8
+  },
+  {
+    "camera_id": "cam-2a",
+    "node_id": "cc2.wait_2a",
+    "file": "cam-2a/32.webp",
+    "target_count": 8,
+    "sam_count": 8
+  },
+  {
+    "camera_id": "cam-2a",
+    "node_id": "cc2.wait_2a",
+    "file": "cam-2a/33.webp",
+    "target_count": 8,
+    "sam_count": 9
+  },
+  {
+    "camera_id": "cam-2a",
+    "node_id": "cc2.wait_2a",
+    "file": "cam-2a/34.webp",
+    "target_count": 9,
+    "sam_count": 9
+  },
+  {
+    "camera_id": "cam-2a",
+    "node_id": "cc2.wait_2a",
+    "file": "cam-2a/35.webp",
+    "target_count": 9,
+    "sam_count": 9
+  },
+  {
+    "camera_id": "cam-2a",
+    "node_id": "cc2.wait_2a",
+    "file": "cam-2a/36.webp",
+    "target_count": 9,
+    "sam_count": 10
+  },
+  {
+    "camera_id": "cam-2a",
+    "node_id": "cc2.wait_2a",
+    "file": "cam-2a/37.webp",
+    "target_count": 9,
+    "sam_count": 10
+  },
+  {
+    "camera_id": "cam-2a",
+    "node_id": "cc2.wait_2a",
+    "file": "cam-2a/38.webp",
+    "target_count": 10,
+    "sam_count": 11
+  },
+  {
+    "camera_id": "cam-2a",
+    "node_id": "cc2.wait_2a",
+    "file": "cam-2a/39.webp",
+    "target_count": 10,
+    "sam_count": 10
+  },
+  {
+    "camera_id": "cam-2b",
+    "node_id": "cc2.wait_2b",
+    "file": "cam-2b/00.webp",
+    "target_count": 0,
+    "sam_count": 0
+  },
+  {
+    "camera_id": "cam-2b",
+    "node_id": "cc2.wait_2b",
+    "file": "cam-2b/01.webp",
+    "target_count": 0,
+    "sam_count": 0
+  },
+  {
+    "camera_id": "cam-2b",
+    "node_id": "cc2.wait_2b",
+    "file": "cam-2b/02.webp",
+    "target_count": 1,
+    "sam_count": 1
+  },
+  {
+    "camera_id": "cam-2b",
+    "node_id": "cc2.wait_2b",
+    "file": "cam-2b/03.webp",
+    "target_count": 1,
+    "sam_count": 1
+  },
+  {
+    "camera_id": "cam-2b",
+    "node_id": "cc2.wait_2b",
+    "file": "cam-2b/04.webp",
+    "target_count": 1,
+    "sam_count": 1
+  },
+  {
+    "camera_id": "cam-2b",
+    "node_id": "cc2.wait_2b",
+    "file": "cam-2b/05.webp",
+    "target_count": 1,
+    "sam_count": 1
+  },
+  {
+    "camera_id": "cam-2b",
+    "node_id": "cc2.wait_2b",
+    "file": "cam-2b/06.webp",
+    "target_count": 2,
+    "sam_count": 2
+  },
+  {
+    "camera_id": "cam-2b",
+    "node_id": "cc2.wait_2b",
+    "file": "cam-2b/07.webp",
+    "target_count": 2,
+    "sam_count": 2
+  },
+  {
+    "camera_id": "cam-2b",
+    "node_id": "cc2.wait_2b",
+    "file": "cam-2b/08.webp",
+    "target_count": 2,
+    "sam_count": 2
+  },
+  {
+    "camera_id": "cam-2b",
+    "node_id": "cc2.wait_2b",
+    "file": "cam-2b/09.webp",
+    "target_count": 2,
+    "sam_count": 2
+  },
+  {
+    "camera_id": "cam-2b",
+    "node_id": "cc2.wait_2b",
+    "file": "cam-2b/10.webp",
+    "target_count": 3,
+    "sam_count": 3
+  },
+  {
+    "camera_id": "cam-2b",
+    "node_id": "cc2.wait_2b",
+    "file": "cam-2b/11.webp",
+    "target_count": 3,
+    "sam_count": 2
+  },
+  {
+    "camera_id": "cam-2b",
+    "node_id": "cc2.wait_2b",
+    "file": "cam-2b/12.webp",
+    "target_count": 3,
+    "sam_count": 3
+  },
+  {
+    "camera_id": "cam-2b",
+    "node_id": "cc2.wait_2b",
+    "file": "cam-2b/13.webp",
+    "target_count": 3,
+    "sam_count": 3
+  },
+  {
+    "camera_id": "cam-2b",
+    "node_id": "cc2.wait_2b",
+    "file": "cam-2b/14.webp",
+    "target_count": 4,
+    "sam_count": 4
+  },
+  {
+    "camera_id": "cam-2b",
+    "node_id": "cc2.wait_2b",
+    "file": "cam-2b/15.webp",
+    "target_count": 4,
+    "sam_count": 4
+  },
+  {
+    "camera_id": "cam-2b",
+    "node_id": "cc2.wait_2b",
+    "file": "cam-2b/16.webp",
+    "target_count": 4,
+    "sam_count": 4
+  },
+  {
+    "camera_id": "cam-2b",
+    "node_id": "cc2.wait_2b",
+    "file": "cam-2b/17.webp",
+    "target_count": 4,
+    "sam_count": 4
+  },
+  {
+    "camera_id": "cam-2b",
+    "node_id": "cc2.wait_2b",
+    "file": "cam-2b/18.webp",
+    "target_count": 5,
+    "sam_count": 5
+  },
+  {
+    "camera_id": "cam-2b",
+    "node_id": "cc2.wait_2b",
+    "file": "cam-2b/19.webp",
+    "target_count": 5,
+    "sam_count": 6
+  },
+  {
+    "camera_id": "cam-2b",
+    "node_id": "cc2.wait_2b",
+    "file": "cam-2b/20.webp",
+    "target_count": 5,
+    "sam_count": 5
+  },
+  {
+    "camera_id": "cam-2b",
+    "node_id": "cc2.wait_2b",
+    "file": "cam-2b/21.webp",
+    "target_count": 5,
+    "sam_count": 5
+  },
+  {
+    "camera_id": "cam-2b",
+    "node_id": "cc2.wait_2b",
+    "file": "cam-2b/22.webp",
+    "target_count": 6,
+    "sam_count": 6
+  },
+  {
+    "camera_id": "cam-2b",
+    "node_id": "cc2.wait_2b",
+    "file": "cam-2b/23.webp",
+    "target_count": 6,
+    "sam_count": 6
+  },
+  {
+    "camera_id": "cam-2b",
+    "node_id": "cc2.wait_2b",
+    "file": "cam-2b/24.webp",
+    "target_count": 6,
+    "sam_count": 6
+  },
+  {
+    "camera_id": "cam-2b",
+    "node_id": "cc2.wait_2b",
+    "file": "cam-2b/25.webp",
+    "target_count": 6,
+    "sam_count": 6
+  },
+  {
+    "camera_id": "cam-2b",
+    "node_id": "cc2.wait_2b",
+    "file": "cam-2b/26.webp",
+    "target_count": 7,
+    "sam_count": 8
+  },
+  {
+    "camera_id": "cam-2b",
+    "node_id": "cc2.wait_2b",
+    "file": "cam-2b/27.webp",
+    "target_count": 7,
+    "sam_count": 8
+  },
+  {
+    "camera_id": "cam-2b",
+    "node_id": "cc2.wait_2b",
+    "file": "cam-2b/28.webp",
+    "target_count": 7,
+    "sam_count": 8
+  },
+  {
+    "camera_id": "cam-2b",
+    "node_id": "cc2.wait_2b",
+    "file": "cam-2b/29.webp",
+    "target_count": 7,
+    "sam_count": 7
+  },
+  {
+    "camera_id": "cam-2b",
+    "node_id": "cc2.wait_2b",
+    "file": "cam-2b/30.webp",
+    "target_count": 8,
+    "sam_count": 8
+  },
+  {
+    "camera_id": "cam-2b",
+    "node_id": "cc2.wait_2b",
+    "file": "cam-2b/31.webp",
+    "target_count": 8,
+    "sam_count": 10
+  },
+  {
+    "camera_id": "cam-2b",
+    "node_id": "cc2.wait_2b",
+    "file": "cam-2b/32.webp",
+    "target_count": 8,
+    "sam_count": 9
+  },
+  {
+    "camera_id": "cam-2b",
+    "node_id": "cc2.wait_2b",
+    "file": "cam-2b/33.webp",
+    "target_count": 8,
+    "sam_count": 8
+  },
+  {
+    "camera_id": "cam-2b",
+    "node_id": "cc2.wait_2b",
+    "file": "cam-2b/34.webp",
+    "target_count": 9,
+    "sam_count": 9
+  },
+  {
+    "camera_id": "cam-2b",
+    "node_id": "cc2.wait_2b",
+    "file": "cam-2b/35.webp",
+    "target_count": 9,
+    "sam_count": 10
+  },
+  {
+    "camera_id": "cam-2b",
+    "node_id": "cc2.wait_2b",
+    "file": "cam-2b/36.webp",
+    "target_count": 9,
+    "sam_count": 10
+  },
+  {
+    "camera_id": "cam-2b",
+    "node_id": "cc2.wait_2b",
+    "file": "cam-2b/37.webp",
+    "target_count": 9,
+    "sam_count": 8
+  },
+  {
+    "camera_id": "cam-2b",
+    "node_id": "cc2.wait_2b",
+    "file": "cam-2b/38.webp",
+    "target_count": 10,
+    "sam_count": 11
+  },
+  {
+    "camera_id": "cam-2b",
+    "node_id": "cc2.wait_2b",
+    "file": "cam-2b/39.webp",
+    "target_count": 10,
+    "sam_count": 24
+  },
+  {
+    "camera_id": "cam-imaging",
+    "node_id": "mp2.imaging_wait",
+    "file": "cam-imaging/00.webp",
+    "target_count": 0,
+    "sam_count": 0
+  },
+  {
+    "camera_id": "cam-imaging",
+    "node_id": "mp2.imaging_wait",
+    "file": "cam-imaging/01.webp",
+    "target_count": 0,
+    "sam_count": 0
+  },
+  {
+    "camera_id": "cam-imaging",
+    "node_id": "mp2.imaging_wait",
+    "file": "cam-imaging/02.webp",
+    "target_count": 1,
+    "sam_count": 1
+  },
+  {
+    "camera_id": "cam-imaging",
+    "node_id": "mp2.imaging_wait",
+    "file": "cam-imaging/03.webp",
+    "target_count": 1,
+    "sam_count": 1
+  },
+  {
+    "camera_id": "cam-imaging",
+    "node_id": "mp2.imaging_wait",
+    "file": "cam-imaging/04.webp",
+    "target_count": 1,
+    "sam_count": 1
+  },
+  {
+    "camera_id": "cam-imaging",
+    "node_id": "mp2.imaging_wait",
+    "file": "cam-imaging/05.webp",
+    "target_count": 2,
+    "sam_count": 2
+  },
+  {
+    "camera_id": "cam-imaging",
+    "node_id": "mp2.imaging_wait",
+    "file": "cam-imaging/06.webp",
+    "target_count": 2,
+    "sam_count": 2
+  },
+  {
+    "camera_id": "cam-imaging",
+    "node_id": "mp2.imaging_wait",
+    "file": "cam-imaging/07.webp",
+    "target_count": 2,
+    "sam_count": 2
+  },
+  {
+    "camera_id": "cam-imaging",
+    "node_id": "mp2.imaging_wait",
+    "file": "cam-imaging/08.webp",
+    "target_count": 2,
+    "sam_count": 2
+  },
+  {
+    "camera_id": "cam-imaging",
+    "node_id": "mp2.imaging_wait",
+    "file": "cam-imaging/09.webp",
+    "target_count": 3,
+    "sam_count": 3
+  },
+  {
+    "camera_id": "cam-imaging",
+    "node_id": "mp2.imaging_wait",
+    "file": "cam-imaging/10.webp",
+    "target_count": 3,
+    "sam_count": 3
+  },
+  {
+    "camera_id": "cam-imaging",
+    "node_id": "mp2.imaging_wait",
+    "file": "cam-imaging/11.webp",
+    "target_count": 3,
+    "sam_count": 3
+  },
+  {
+    "camera_id": "cam-imaging",
+    "node_id": "mp2.imaging_wait",
+    "file": "cam-imaging/12.webp",
+    "target_count": 4,
+    "sam_count": 4
+  },
+  {
+    "camera_id": "cam-imaging",
+    "node_id": "mp2.imaging_wait",
+    "file": "cam-imaging/13.webp",
+    "target_count": 4,
+    "sam_count": 4
+  },
+  {
+    "camera_id": "cam-imaging",
+    "node_id": "mp2.imaging_wait",
+    "file": "cam-imaging/14.webp",
+    "target_count": 4,
+    "sam_count": 4
+  },
+  {
+    "camera_id": "cam-imaging",
+    "node_id": "mp2.imaging_wait",
+    "file": "cam-imaging/15.webp",
+    "target_count": 5,
+    "sam_count": 5
+  },
+  {
+    "camera_id": "cam-imaging",
+    "node_id": "mp2.imaging_wait",
+    "file": "cam-imaging/16.webp",
+    "target_count": 5,
+    "sam_count": 5
+  },
+  {
+    "camera_id": "cam-imaging",
+    "node_id": "mp2.imaging_wait",
+    "file": "cam-imaging/17.webp",
+    "target_count": 5,
+    "sam_count": 5
+  },
+  {
+    "camera_id": "cam-imaging",
+    "node_id": "mp2.imaging_wait",
+    "file": "cam-imaging/18.webp",
+    "target_count": 6,
+    "sam_count": 6
+  },
+  {
+    "camera_id": "cam-imaging",
+    "node_id": "mp2.imaging_wait",
+    "file": "cam-imaging/19.webp",
+    "target_count": 6,
+    "sam_count": 6
+  },
+  {
+    "camera_id": "cam-imaging",
+    "node_id": "mp2.imaging_wait",
+    "file": "cam-imaging/20.webp",
+    "target_count": 6,
+    "sam_count": 6
+  },
+  {
+    "camera_id": "cam-imaging",
+    "node_id": "mp2.imaging_wait",
+    "file": "cam-imaging/21.webp",
+    "target_count": 6,
+    "sam_count": 6
+  },
+  {
+    "camera_id": "cam-imaging",
+    "node_id": "mp2.imaging_wait",
+    "file": "cam-imaging/22.webp",
+    "target_count": 7,
+    "sam_count": 7
+  },
+  {
+    "camera_id": "cam-imaging",
+    "node_id": "mp2.imaging_wait",
+    "file": "cam-imaging/23.webp",
+    "target_count": 7,
+    "sam_count": 7
+  },
+  {
+    "camera_id": "cam-imaging",
+    "node_id": "mp2.imaging_wait",
+    "file": "cam-imaging/24.webp",
+    "target_count": 7,
+    "sam_count": 7
+  },
+  {
+    "camera_id": "cam-imaging",
+    "node_id": "mp2.imaging_wait",
+    "file": "cam-imaging/25.webp",
+    "target_count": 8,
+    "sam_count": 8
+  },
+  {
+    "camera_id": "cam-imaging",
+    "node_id": "mp2.imaging_wait",
+    "file": "cam-imaging/26.webp",
+    "target_count": 8,
+    "sam_count": 9
+  },
+  {
+    "camera_id": "cam-imaging",
+    "node_id": "mp2.imaging_wait",
+    "file": "cam-imaging/27.webp",
+    "target_count": 8,
+    "sam_count": 10
+  },
+  {
+    "camera_id": "cam-imaging",
+    "node_id": "mp2.imaging_wait",
+    "file": "cam-imaging/28.webp",
+    "target_count": 9,
+    "sam_count": 9
+  },
+  {
+    "camera_id": "cam-imaging",
+    "node_id": "mp2.imaging_wait",
+    "file": "cam-imaging/29.webp",
+    "target_count": 9,
+    "sam_count": 10
+  },
+  {
+    "camera_id": "cam-imaging",
+    "node_id": "mp2.imaging_wait",
+    "file": "cam-imaging/30.webp",
+    "target_count": 9,
+    "sam_count": 10
+  },
+  {
+    "camera_id": "cam-imaging",
+    "node_id": "mp2.imaging_wait",
+    "file": "cam-imaging/31.webp",
+    "target_count": 10,
+    "sam_count": 10
+  },
+  {
+    "camera_id": "cam-imaging",
+    "node_id": "mp2.imaging_wait",
+    "file": "cam-imaging/32.webp",
+    "target_count": 10,
+    "sam_count": 11
+  },
+  {
+    "camera_id": "cam-imaging",
+    "node_id": "mp2.imaging_wait",
+    "file": "cam-imaging/33.webp",
+    "target_count": 10,
+    "sam_count": 14
+  },
+  {
+    "camera_id": "cam-imaging",
+    "node_id": "mp2.imaging_wait",
+    "file": "cam-imaging/34.webp",
+    "target_count": 10,
+    "sam_count": 13
+  },
+  {
+    "camera_id": "cam-imaging",
+    "node_id": "mp2.imaging_wait",
+    "file": "cam-imaging/35.webp",
+    "target_count": 11,
+    "sam_count": 12
+  },
+  {
+    "camera_id": "cam-imaging",
+    "node_id": "mp2.imaging_wait",
+    "file": "cam-imaging/36.webp",
+    "target_count": 11,
+    "sam_count": 12
+  },
+  {
+    "camera_id": "cam-imaging",
+    "node_id": "mp2.imaging_wait",
+    "file": "cam-imaging/37.webp",
+    "target_count": 11,
+    "sam_count": 13
+  },
+  {
+    "camera_id": "cam-imaging",
+    "node_id": "mp2.imaging_wait",
+    "file": "cam-imaging/38.webp",
+    "target_count": 12,
+    "sam_count": 14
+  },
+  {
+    "camera_id": "cam-imaging",
+    "node_id": "mp2.imaging_wait",
+    "file": "cam-imaging/39.webp",
+    "target_count": 12,
+    "sam_count": 16
+  },
+  {
+    "camera_id": "cam-infusion",
+    "node_id": "cc3.infusion_wait",
+    "file": "cam-infusion/00.webp",
+    "target_count": 0,
+    "sam_count": 0
+  },
+  {
+    "camera_id": "cam-infusion",
+    "node_id": "cc3.infusion_wait",
+    "file": "cam-infusion/01.webp",
+    "target_count": 0,
+    "sam_count": 0
+  },
+  {
+    "camera_id": "cam-infusion",
+    "node_id": "cc3.infusion_wait",
+    "file": "cam-infusion/02.webp",
+    "target_count": 0,
+    "sam_count": 0
+  },
+  {
+    "camera_id": "cam-infusion",
+    "node_id": "cc3.infusion_wait",
+    "file": "cam-infusion/03.webp",
+    "target_count": 1,
+    "sam_count": 1
+  },
+  {
+    "camera_id": "cam-infusion",
+    "node_id": "cc3.infusion_wait",
+    "file": "cam-infusion/04.webp",
+    "target_count": 1,
+    "sam_count": 1
+  },
+  {
+    "camera_id": "cam-infusion",
+    "node_id": "cc3.infusion_wait",
+    "file": "cam-infusion/05.webp",
+    "target_count": 1,
+    "sam_count": 1
+  },
+  {
+    "camera_id": "cam-infusion",
+    "node_id": "cc3.infusion_wait",
+    "file": "cam-infusion/06.webp",
+    "target_count": 1,
+    "sam_count": 1
+  },
+  {
+    "camera_id": "cam-infusion",
+    "node_id": "cc3.infusion_wait",
+    "file": "cam-infusion/07.webp",
+    "target_count": 1,
+    "sam_count": 1
+  },
+  {
+    "camera_id": "cam-infusion",
+    "node_id": "cc3.infusion_wait",
+    "file": "cam-infusion/08.webp",
+    "target_count": 2,
+    "sam_count": 2
+  },
+  {
+    "camera_id": "cam-infusion",
+    "node_id": "cc3.infusion_wait",
+    "file": "cam-infusion/09.webp",
+    "target_count": 2,
+    "sam_count": 2
+  },
+  {
+    "camera_id": "cam-infusion",
+    "node_id": "cc3.infusion_wait",
+    "file": "cam-infusion/10.webp",
+    "target_count": 2,
+    "sam_count": 2
+  },
+  {
+    "camera_id": "cam-infusion",
+    "node_id": "cc3.infusion_wait",
+    "file": "cam-infusion/11.webp",
+    "target_count": 2,
+    "sam_count": 2
+  },
+  {
+    "camera_id": "cam-infusion",
+    "node_id": "cc3.infusion_wait",
+    "file": "cam-infusion/12.webp",
+    "target_count": 2,
+    "sam_count": 2
+  },
+  {
+    "camera_id": "cam-infusion",
+    "node_id": "cc3.infusion_wait",
+    "file": "cam-infusion/13.webp",
+    "target_count": 3,
+    "sam_count": 3
+  },
+  {
+    "camera_id": "cam-infusion",
+    "node_id": "cc3.infusion_wait",
+    "file": "cam-infusion/14.webp",
+    "target_count": 3,
+    "sam_count": 3
+  },
+  {
+    "camera_id": "cam-infusion",
+    "node_id": "cc3.infusion_wait",
+    "file": "cam-infusion/15.webp",
+    "target_count": 3,
+    "sam_count": 9
+  },
+  {
+    "camera_id": "cam-infusion",
+    "node_id": "cc3.infusion_wait",
+    "file": "cam-infusion/16.webp",
+    "target_count": 3,
+    "sam_count": 3
+  },
+  {
+    "camera_id": "cam-infusion",
+    "node_id": "cc3.infusion_wait",
+    "file": "cam-infusion/17.webp",
+    "target_count": 3,
+    "sam_count": 3
+  },
+  {
+    "camera_id": "cam-infusion",
+    "node_id": "cc3.infusion_wait",
+    "file": "cam-infusion/18.webp",
+    "target_count": 4,
+    "sam_count": 4
+  },
+  {
+    "camera_id": "cam-infusion",
+    "node_id": "cc3.infusion_wait",
+    "file": "cam-infusion/19.webp",
+    "target_count": 4,
+    "sam_count": 4
+  },
+  {
+    "camera_id": "cam-infusion",
+    "node_id": "cc3.infusion_wait",
+    "file": "cam-infusion/20.webp",
+    "target_count": 4,
+    "sam_count": 4
+  },
+  {
+    "camera_id": "cam-infusion",
+    "node_id": "cc3.infusion_wait",
+    "file": "cam-infusion/21.webp",
+    "target_count": 4,
+    "sam_count": 4
+  },
+  {
+    "camera_id": "cam-infusion",
+    "node_id": "cc3.infusion_wait",
+    "file": "cam-infusion/22.webp",
+    "target_count": 5,
+    "sam_count": 3
+  },
+  {
+    "camera_id": "cam-infusion",
+    "node_id": "cc3.infusion_wait",
+    "file": "cam-infusion/23.webp",
+    "target_count": 5,
+    "sam_count": 5
+  },
+  {
+    "camera_id": "cam-infusion",
+    "node_id": "cc3.infusion_wait",
+    "file": "cam-infusion/24.webp",
+    "target_count": 5,
+    "sam_count": 3
+  },
+  {
+    "camera_id": "cam-infusion",
+    "node_id": "cc3.infusion_wait",
+    "file": "cam-infusion/25.webp",
+    "target_count": 5,
+    "sam_count": 5
+  },
+  {
+    "camera_id": "cam-infusion",
+    "node_id": "cc3.infusion_wait",
+    "file": "cam-infusion/26.webp",
+    "target_count": 5,
+    "sam_count": 6
+  },
+  {
+    "camera_id": "cam-infusion",
+    "node_id": "cc3.infusion_wait",
+    "file": "cam-infusion/27.webp",
+    "target_count": 6,
+    "sam_count": 6
+  },
+  {
+    "camera_id": "cam-infusion",
+    "node_id": "cc3.infusion_wait",
+    "file": "cam-infusion/28.webp",
+    "target_count": 6,
+    "sam_count": 7
+  },
+  {
+    "camera_id": "cam-infusion",
+    "node_id": "cc3.infusion_wait",
+    "file": "cam-infusion/29.webp",
+    "target_count": 6,
+    "sam_count": 6
+  },
+  {
+    "camera_id": "cam-infusion",
+    "node_id": "cc3.infusion_wait",
+    "file": "cam-infusion/30.webp",
+    "target_count": 6,
+    "sam_count": 6
+  },
+  {
+    "camera_id": "cam-infusion",
+    "node_id": "cc3.infusion_wait",
+    "file": "cam-infusion/31.webp",
+    "target_count": 6,
+    "sam_count": 6
+  },
+  {
+    "camera_id": "cam-infusion",
+    "node_id": "cc3.infusion_wait",
+    "file": "cam-infusion/32.webp",
+    "target_count": 7,
+    "sam_count": 7
+  },
+  {
+    "camera_id": "cam-infusion",
+    "node_id": "cc3.infusion_wait",
+    "file": "cam-infusion/33.webp",
+    "target_count": 7,
+    "sam_count": 7
+  },
+  {
+    "camera_id": "cam-infusion",
+    "node_id": "cc3.infusion_wait",
+    "file": "cam-infusion/34.webp",
+    "target_count": 7,
+    "sam_count": 8
+  },
+  {
+    "camera_id": "cam-infusion",
+    "node_id": "cc3.infusion_wait",
+    "file": "cam-infusion/35.webp",
+    "target_count": 7,
+    "sam_count": 7
+  },
+  {
+    "camera_id": "cam-infusion",
+    "node_id": "cc3.infusion_wait",
+    "file": "cam-infusion/36.webp",
+    "target_count": 7,
+    "sam_count": 7
+  },
+  {
+    "camera_id": "cam-infusion",
+    "node_id": "cc3.infusion_wait",
+    "file": "cam-infusion/37.webp",
+    "target_count": 8,
+    "sam_count": 8
+  },
+  {
+    "camera_id": "cam-infusion",
+    "node_id": "cc3.infusion_wait",
+    "file": "cam-infusion/38.webp",
+    "target_count": 8,
+    "sam_count": 9
+  },
+  {
+    "camera_id": "cam-infusion",
+    "node_id": "cc3.infusion_wait",
+    "file": "cam-infusion/39.webp",
+    "target_count": 8,
+    "sam_count": 8
+  },
+  {
+    "camera_id": "cam-lab",
+    "node_id": "mp1.lab_wait",
+    "file": "cam-lab/00.webp",
+    "target_count": 0,
+    "sam_count": 0
+  },
+  {
+    "camera_id": "cam-lab",
+    "node_id": "mp1.lab_wait",
+    "file": "cam-lab/01.webp",
+    "target_count": 0,
+    "sam_count": 0
+  },
+  {
+    "camera_id": "cam-lab",
+    "node_id": "mp1.lab_wait",
+    "file": "cam-lab/02.webp",
+    "target_count": 1,
+    "sam_count": 1
+  },
+  {
+    "camera_id": "cam-lab",
+    "node_id": "mp1.lab_wait",
+    "file": "cam-lab/03.webp",
+    "target_count": 1,
+    "sam_count": 1
+  },
+  {
+    "camera_id": "cam-lab",
+    "node_id": "mp1.lab_wait",
+    "file": "cam-lab/04.webp",
+    "target_count": 1,
+    "sam_count": 1
+  },
+  {
+    "camera_id": "cam-lab",
+    "node_id": "mp1.lab_wait",
+    "file": "cam-lab/05.webp",
+    "target_count": 2,
+    "sam_count": 2
+  },
+  {
+    "camera_id": "cam-lab",
+    "node_id": "mp1.lab_wait",
+    "file": "cam-lab/06.webp",
+    "target_count": 2,
+    "sam_count": 2
+  },
+  {
+    "camera_id": "cam-lab",
+    "node_id": "mp1.lab_wait",
+    "file": "cam-lab/07.webp",
+    "target_count": 3,
+    "sam_count": 3
+  },
+  {
+    "camera_id": "cam-lab",
+    "node_id": "mp1.lab_wait",
+    "file": "cam-lab/08.webp",
+    "target_count": 3,
+    "sam_count": 4
+  },
+  {
+    "camera_id": "cam-lab",
+    "node_id": "mp1.lab_wait",
+    "file": "cam-lab/09.webp",
+    "target_count": 3,
+    "sam_count": 3
+  },
+  {
+    "camera_id": "cam-lab",
+    "node_id": "mp1.lab_wait",
+    "file": "cam-lab/10.webp",
+    "target_count": 4,
+    "sam_count": 5
+  },
+  {
+    "camera_id": "cam-lab",
+    "node_id": "mp1.lab_wait",
+    "file": "cam-lab/11.webp",
+    "target_count": 4,
+    "sam_count": 4
+  },
+  {
+    "camera_id": "cam-lab",
+    "node_id": "mp1.lab_wait",
+    "file": "cam-lab/12.webp",
+    "target_count": 4,
+    "sam_count": 4
+  },
+  {
+    "camera_id": "cam-lab",
+    "node_id": "mp1.lab_wait",
+    "file": "cam-lab/13.webp",
+    "target_count": 5,
+    "sam_count": 5
+  },
+  {
+    "camera_id": "cam-lab",
+    "node_id": "mp1.lab_wait",
+    "file": "cam-lab/14.webp",
+    "target_count": 5,
+    "sam_count": 5
+  },
+  {
+    "camera_id": "cam-lab",
+    "node_id": "mp1.lab_wait",
+    "file": "cam-lab/15.webp",
+    "target_count": 5,
+    "sam_count": 14
+  },
+  {
+    "camera_id": "cam-lab",
+    "node_id": "mp1.lab_wait",
+    "file": "cam-lab/16.webp",
+    "target_count": 6,
+    "sam_count": 6
+  },
+  {
+    "camera_id": "cam-lab",
+    "node_id": "mp1.lab_wait",
+    "file": "cam-lab/17.webp",
+    "target_count": 6,
+    "sam_count": 6
+  },
+  {
+    "camera_id": "cam-lab",
+    "node_id": "mp1.lab_wait",
+    "file": "cam-lab/18.webp",
+    "target_count": 6,
+    "sam_count": 7
+  },
+  {
+    "camera_id": "cam-lab",
+    "node_id": "mp1.lab_wait",
+    "file": "cam-lab/19.webp",
+    "target_count": 7,
+    "sam_count": 7
+  },
+  {
+    "camera_id": "cam-lab",
+    "node_id": "mp1.lab_wait",
+    "file": "cam-lab/20.webp",
+    "target_count": 7,
+    "sam_count": 7
+  },
+  {
+    "camera_id": "cam-lab",
+    "node_id": "mp1.lab_wait",
+    "file": "cam-lab/21.webp",
+    "target_count": 8,
+    "sam_count": 10
+  },
+  {
+    "camera_id": "cam-lab",
+    "node_id": "mp1.lab_wait",
+    "file": "cam-lab/22.webp",
+    "target_count": 8,
+    "sam_count": 8
+  },
+  {
+    "camera_id": "cam-lab",
+    "node_id": "mp1.lab_wait",
+    "file": "cam-lab/23.webp",
+    "target_count": 8,
+    "sam_count": 23
+  },
+  {
+    "camera_id": "cam-lab",
+    "node_id": "mp1.lab_wait",
+    "file": "cam-lab/24.webp",
+    "target_count": 9,
+    "sam_count": 9
+  },
+  {
+    "camera_id": "cam-lab",
+    "node_id": "mp1.lab_wait",
+    "file": "cam-lab/25.webp",
+    "target_count": 9,
+    "sam_count": 11
+  },
+  {
+    "camera_id": "cam-lab",
+    "node_id": "mp1.lab_wait",
+    "file": "cam-lab/26.webp",
+    "target_count": 9,
+    "sam_count": 11
+  },
+  {
+    "camera_id": "cam-lab",
+    "node_id": "mp1.lab_wait",
+    "file": "cam-lab/27.webp",
+    "target_count": 10,
+    "sam_count": 10
+  },
+  {
+    "camera_id": "cam-lab",
+    "node_id": "mp1.lab_wait",
+    "file": "cam-lab/28.webp",
+    "target_count": 10,
+    "sam_count": 10
+  },
+  {
+    "camera_id": "cam-lab",
+    "node_id": "mp1.lab_wait",
+    "file": "cam-lab/29.webp",
+    "target_count": 10,
+    "sam_count": 12
+  },
+  {
+    "camera_id": "cam-lab",
+    "node_id": "mp1.lab_wait",
+    "file": "cam-lab/30.webp",
+    "target_count": 11,
+    "sam_count": 14
+  },
+  {
+    "camera_id": "cam-lab",
+    "node_id": "mp1.lab_wait",
+    "file": "cam-lab/31.webp",
+    "target_count": 11,
+    "sam_count": 12
+  },
+  {
+    "camera_id": "cam-lab",
+    "node_id": "mp1.lab_wait",
+    "file": "cam-lab/32.webp",
+    "target_count": 11,
+    "sam_count": 11
+  },
+  {
+    "camera_id": "cam-lab",
+    "node_id": "mp1.lab_wait",
+    "file": "cam-lab/33.webp",
+    "target_count": 12,
+    "sam_count": 16
+  },
+  {
+    "camera_id": "cam-lab",
+    "node_id": "mp1.lab_wait",
+    "file": "cam-lab/34.webp",
+    "target_count": 12,
+    "sam_count": 15
+  },
+  {
+    "camera_id": "cam-lab",
+    "node_id": "mp1.lab_wait",
+    "file": "cam-lab/35.webp",
+    "target_count": 13,
+    "sam_count": 16
+  },
+  {
+    "camera_id": "cam-lab",
+    "node_id": "mp1.lab_wait",
+    "file": "cam-lab/36.webp",
+    "target_count": 13,
+    "sam_count": 15
+  },
+  {
+    "camera_id": "cam-lab",
+    "node_id": "mp1.lab_wait",
+    "file": "cam-lab/37.webp",
+    "target_count": 13,
+    "sam_count": 15
+  },
+  {
+    "camera_id": "cam-lab",
+    "node_id": "mp1.lab_wait",
+    "file": "cam-lab/38.webp",
+    "target_count": 14,
+    "sam_count": 17
+  },
+  {
+    "camera_id": "cam-lab",
+    "node_id": "mp1.lab_wait",
+    "file": "cam-lab/39.webp",
+    "target_count": 14,
+    "sam_count": 20
+  },
+  {
+    "camera_id": "cam-lobby",
+    "node_id": "mp1.lobby",
+    "file": "cam-lobby/00.webp",
+    "target_count": 0,
+    "sam_count": 0
+  },
+  {
+    "camera_id": "cam-lobby",
+    "node_id": "mp1.lobby",
+    "file": "cam-lobby/01.webp",
+    "target_count": 0,
+    "sam_count": 0
+  },
+  {
+    "camera_id": "cam-lobby",
+    "node_id": "mp1.lobby",
+    "file": "cam-lobby/02.webp",
+    "target_count": 1,
+    "sam_count": 1
+  },
+  {
+    "camera_id": "cam-lobby",
+    "node_id": "mp1.lobby",
+    "file": "cam-lobby/03.webp",
+    "target_count": 1,
+    "sam_count": 1
+  },
+  {
+    "camera_id": "cam-lobby",
+    "node_id": "mp1.lobby",
+    "file": "cam-lobby/04.webp",
+    "target_count": 2,
+    "sam_count": 2
+  },
+  {
+    "camera_id": "cam-lobby",
+    "node_id": "mp1.lobby",
+    "file": "cam-lobby/05.webp",
+    "target_count": 2,
+    "sam_count": 2
+  },
+  {
+    "camera_id": "cam-lobby",
+    "node_id": "mp1.lobby",
+    "file": "cam-lobby/06.webp",
+    "target_count": 2,
+    "sam_count": 2
+  },
+  {
+    "camera_id": "cam-lobby",
+    "node_id": "mp1.lobby",
+    "file": "cam-lobby/07.webp",
+    "target_count": 3,
+    "sam_count": 4
+  },
+  {
+    "camera_id": "cam-lobby",
+    "node_id": "mp1.lobby",
+    "file": "cam-lobby/08.webp",
+    "target_count": 3,
+    "sam_count": 3
+  },
+  {
+    "camera_id": "cam-lobby",
+    "node_id": "mp1.lobby",
+    "file": "cam-lobby/09.webp",
+    "target_count": 4,
+    "sam_count": 4
+  },
+  {
+    "camera_id": "cam-lobby",
+    "node_id": "mp1.lobby",
+    "file": "cam-lobby/10.webp",
+    "target_count": 4,
+    "sam_count": 4
+  },
+  {
+    "camera_id": "cam-lobby",
+    "node_id": "mp1.lobby",
+    "file": "cam-lobby/11.webp",
+    "target_count": 5,
+    "sam_count": 4
+  },
+  {
+    "camera_id": "cam-lobby",
+    "node_id": "mp1.lobby",
+    "file": "cam-lobby/12.webp",
+    "target_count": 5,
+    "sam_count": 6
+  },
+  {
+    "camera_id": "cam-lobby",
+    "node_id": "mp1.lobby",
+    "file": "cam-lobby/13.webp",
+    "target_count": 5,
+    "sam_count": 5
+  },
+  {
+    "camera_id": "cam-lobby",
+    "node_id": "mp1.lobby",
+    "file": "cam-lobby/14.webp",
+    "target_count": 6,
+    "sam_count": 7
+  },
+  {
+    "camera_id": "cam-lobby",
+    "node_id": "mp1.lobby",
+    "file": "cam-lobby/15.webp",
+    "target_count": 6,
+    "sam_count": 9
+  },
+  {
+    "camera_id": "cam-lobby",
+    "node_id": "mp1.lobby",
+    "file": "cam-lobby/16.webp",
+    "target_count": 7,
+    "sam_count": 8
+  },
+  {
+    "camera_id": "cam-lobby",
+    "node_id": "mp1.lobby",
+    "file": "cam-lobby/17.webp",
+    "target_count": 7,
+    "sam_count": 10
+  },
+  {
+    "camera_id": "cam-lobby",
+    "node_id": "mp1.lobby",
+    "file": "cam-lobby/18.webp",
+    "target_count": 7,
+    "sam_count": 8
+  },
+  {
+    "camera_id": "cam-lobby",
+    "node_id": "mp1.lobby",
+    "file": "cam-lobby/19.webp",
+    "target_count": 8,
+    "sam_count": 10
+  },
+  {
+    "camera_id": "cam-lobby",
+    "node_id": "mp1.lobby",
+    "file": "cam-lobby/20.webp",
+    "target_count": 8,
+    "sam_count": 17
+  },
+  {
+    "camera_id": "cam-lobby",
+    "node_id": "mp1.lobby",
+    "file": "cam-lobby/21.webp",
+    "target_count": 9,
+    "sam_count": 9
+  },
+  {
+    "camera_id": "cam-lobby",
+    "node_id": "mp1.lobby",
+    "file": "cam-lobby/22.webp",
+    "target_count": 9,
+    "sam_count": 10
+  },
+  {
+    "camera_id": "cam-lobby",
+    "node_id": "mp1.lobby",
+    "file": "cam-lobby/23.webp",
+    "target_count": 9,
+    "sam_count": 10
+  },
+  {
+    "camera_id": "cam-lobby",
+    "node_id": "mp1.lobby",
+    "file": "cam-lobby/24.webp",
+    "target_count": 10,
+    "sam_count": 11
+  },
+  {
+    "camera_id": "cam-lobby",
+    "node_id": "mp1.lobby",
+    "file": "cam-lobby/25.webp",
+    "target_count": 10,
+    "sam_count": 14
+  },
+  {
+    "camera_id": "cam-lobby",
+    "node_id": "mp1.lobby",
+    "file": "cam-lobby/26.webp",
+    "target_count": 11,
+    "sam_count": 11
+  },
+  {
+    "camera_id": "cam-lobby",
+    "node_id": "mp1.lobby",
+    "file": "cam-lobby/27.webp",
+    "target_count": 11,
+    "sam_count": 12
+  },
+  {
+    "camera_id": "cam-lobby",
+    "node_id": "mp1.lobby",
+    "file": "cam-lobby/28.webp",
+    "target_count": 11,
+    "sam_count": 11
+  },
+  {
+    "camera_id": "cam-lobby",
+    "node_id": "mp1.lobby",
+    "file": "cam-lobby/29.webp",
+    "target_count": 12,
+    "sam_count": 18
+  },
+  {
+    "camera_id": "cam-lobby",
+    "node_id": "mp1.lobby",
+    "file": "cam-lobby/30.webp",
+    "target_count": 12,
+    "sam_count": 16
+  },
+  {
+    "camera_id": "cam-lobby",
+    "node_id": "mp1.lobby",
+    "file": "cam-lobby/31.webp",
+    "target_count": 13,
+    "sam_count": 24
+  },
+  {
+    "camera_id": "cam-lobby",
+    "node_id": "mp1.lobby",
+    "file": "cam-lobby/32.webp",
+    "target_count": 13,
+    "sam_count": 18
+  },
+  {
+    "camera_id": "cam-lobby",
+    "node_id": "mp1.lobby",
+    "file": "cam-lobby/33.webp",
+    "target_count": 14,
+    "sam_count": 14
+  },
+  {
+    "camera_id": "cam-lobby",
+    "node_id": "mp1.lobby",
+    "file": "cam-lobby/34.webp",
+    "target_count": 14,
+    "sam_count": 16
+  },
+  {
+    "camera_id": "cam-lobby",
+    "node_id": "mp1.lobby",
+    "file": "cam-lobby/35.webp",
+    "target_count": 14,
+    "sam_count": 19
+  },
+  {
+    "camera_id": "cam-lobby",
+    "node_id": "mp1.lobby",
+    "file": "cam-lobby/36.webp",
+    "target_count": 15,
+    "sam_count": 23
+  },
+  {
+    "camera_id": "cam-lobby",
+    "node_id": "mp1.lobby",
+    "file": "cam-lobby/37.webp",
+    "target_count": 15,
+    "sam_count": 22
+  },
+  {
+    "camera_id": "cam-lobby",
+    "node_id": "mp1.lobby",
+    "file": "cam-lobby/38.webp",
+    "target_count": 16,
+    "sam_count": 22
+  },
+  {
+    "camera_id": "cam-lobby",
+    "node_id": "mp1.lobby",
+    "file": "cam-lobby/39.webp",
+    "target_count": 16,
+    "sam_count": 17
+  }
+]

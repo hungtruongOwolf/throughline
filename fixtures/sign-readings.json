@@ -1,0 +1,185 @@
+{
+  "source": "muse-spark-1.3, recorded live by gen-assets readings",
+  "readings": [
+    {
+      "file": "00.webp",
+      "node_id": "mp1.lobby",
+      "heading": ["Main Lobby", "Welcome Desk"],
+      "directions": ["Main Entrance", "Registration & Check-in", "Café"]
+    },
+    {
+      "file": "01.webp",
+      "node_id": "mp1.lab_wait",
+      "heading": ["Outpatient Lab", "Waiting"],
+      "directions": []
+    },
+    {
+      "file": "02.webp",
+      "node_id": "mp2.ct1",
+      "heading": ["CT 1"],
+      "directions": []
+    },
+    {
+      "file": "03.webp",
+      "node_id": "cc2.nurse",
+      "heading": ["Nurse Station"],
+      "directions": []
+    },
+    {
+      "file": "04.webp",
+      "node_id": "mp1.cafe",
+      "heading": ["Café"],
+      "directions": []
+    },
+    {
+      "file": "05.webp",
+      "node_id": "cc3.elevB",
+      "heading": ["Elevator B", "Level 3"],
+      "directions": ["Elevator B", "Elevator B", "Infusion Center"]
+    },
+    {
+      "file": "06.webp",
+      "node_id": "cc2.elevB",
+      "heading": ["Elevator B", "Level 2"],
+      "directions": ["Elevator B", "Elevator B", "Rose Zone"]
+    },
+    {
+      "file": "07.webp",
+      "node_id": "mp2.bridge_g",
+      "heading": ["Skybridge → Parking Garage"],
+      "directions": ["Gold Zone", "Garage Level 2"]
+    },
+    {
+      "file": "08.webp",
+      "node_id": "cc1.lobby",
+      "heading": ["Cancer Center Lobby"],
+      "directions": ["Garden Link", "Elevator B"]
+    },
+    {
+      "file": "09.webp",
+      "node_id": "cc3.infusion_wait",
+      "heading": ["Infusion Center", "Waiting"],
+      "directions": []
+    },
+    {
+      "file": "10.webp",
+      "node_id": "mp1.corr_a",
+      "heading": ["Blue Zone"],
+      "directions": ["Main Lobby", "Elevator A", "Outpatient Lab"]
+    },
+    {
+      "file": "11.webp",
+      "node_id": "gl.walkway",
+      "heading": ["Garden Link"],
+      "directions": ["Garden Link", "Cancer Center Lobby"]
+    },
+    {
+      "file": "12.webp",
+      "node_id": "cc2.vitals",
+      "heading": ["Vitals"],
+      "directions": []
+    },
+    {
+      "file": "13.webp",
+      "node_id": "mp1.garden_door",
+      "heading": ["Garden Link → Cancer Center"],
+      "directions": ["Blue Zone", "Garden Link"]
+    },
+    {
+      "file": "14.webp",
+      "node_id": "mp1.elevA",
+      "heading": ["Elevator A"],
+      "directions": ["↑ Blue Zone", "↑ Elevator A"]
+    },
+    {
+      "file": "15.webp",
+      "node_id": "mp2.bridge_cc",
+      "heading": ["Link Bridge → Cancer Center Level 2"],
+      "directions": ["← Gold Zone", "→ Link Bridge"]
+    },
+    {
+      "file": "16.webp",
+      "node_id": "mp2.ct2",
+      "heading": ["CT 2"],
+      "directions": []
+    },
+    {
+      "file": "17.webp",
+      "node_id": "mp1.registration",
+      "heading": ["Registration & Check-in"],
+      "directions": []
+    },
+    {
+      "file": "18.webp",
+      "node_id": "mp2.xray",
+      "heading": ["X-ray"],
+      "directions": []
+    },
+    {
+      "file": "19.webp",
+      "node_id": "g2.bridge",
+      "heading": ["Garage Level 2", "Skybridge"],
+      "directions": ["Skybridge", "Patient Parking"]
+    },
+    {
+      "file": "20.webp",
+      "node_id": "cc1.elevB",
+      "heading": ["Elevator B"],
+      "directions": ["Cancer Center Lobby", "Elevator B", "Elevator B"]
+    },
+    {
+      "file": "21.webp",
+      "node_id": "cc2.pod_2a",
+      "heading": ["Medical Oncology 2A"],
+      "directions": []
+    },
+    {
+      "file": "22.webp",
+      "node_id": "mp1.lab_draw",
+      "heading": ["Lab Draw"],
+      "directions": []
+    },
+    {
+      "file": "23.webp",
+      "node_id": "cc2.pod_2b",
+      "heading": ["Medical Oncology 2B"],
+      "directions": []
+    },
+    {
+      "file": "24.webp",
+      "node_id": "g2.parking",
+      "heading": ["Patient Parking"],
+      "directions": []
+    },
+    {
+      "file": "25.webp",
+      "node_id": "cc3.lounge",
+      "heading": ["Patient & Family Lounge"],
+      "directions": []
+    },
+    {
+      "file": "26.webp",
+      "node_id": "mp1.pharmacy",
+      "heading": ["Outpatient Pharmacy"],
+      "directions": []
+    },
+    {
+      "file": "27.webp",
+      "node_id": "mp2.financial",
+      "heading": ["Financial Counseling"],
+      "directions": []
+    },
+    {
+      "file": "28.webp",
+      "node_id": "mp2.imaging_wait",
+      "heading": ["Imaging"],
+      "directions": ["Waiting"]
+    },
+    {
+      "file": "29.webp",
+      "node_id": "cc2.wait_2b",
+      "heading": ["Clinic 2B"],
+      "directions": ["Waiting"]
+    }
+  ]
+}

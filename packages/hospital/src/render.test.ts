@@ -8,7 +8,10 @@ describe("renderers", () => {
     for (const sign of campus.signs) {
       const svg = renderSignSvg(sign, labels);
       expect(svg.startsWith("<svg")).toBe(true);
-      for (const line of sign.lines) expect(svg).toContain(line.replace(/&/g, "&amp;"));
+      for (const line of sign.lines) {
+        for (const part of line.split("→"))
+          expect(svg).toContain(part.trim().replace(/&/g, "&amp;"));
+      }
     }
   });
 

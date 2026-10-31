@@ -16,3 +16,4 @@ export function generateWorld(seed: number) {
   };
 }
 export * from "./day";
+export * from "./frames";
