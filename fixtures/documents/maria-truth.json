@@ -30,7 +30,5 @@
     "fasting_as_written": "Nothing to eat or drink except water for 8 hours before the blood draw."
   },
   "card_member_id": "LHP-883201-02",
-  "expected_missing_fields": [
-    "member_id"
-  ]
+  "expected_missing_fields": ["member_id"]
 }
