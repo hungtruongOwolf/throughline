@@ -1,0 +1,59 @@
+{
+  "source": "hand-computed: est_wait_min = count × mean_service_min / open_servers; fused = 0.6 × sensed + 0.4 × ticketed when the frame is < 3 min old",
+  "cases": [
+    {
+      "name": "CT, 3 waiting, both scanners",
+      "fn": "estimateWait",
+      "request": { "station_id": "imaging_ct", "count": 3 },
+      "expected": { "est_wait_min": 37.5, "open_servers": 2 }
+    },
+    {
+      "name": "CT, 3 waiting, CT 1 down",
+      "fn": "estimateWait",
+      "request": { "station_id": "imaging_ct", "count": 3, "open_servers": 1 },
+      "expected": { "est_wait_min": 75, "open_servers": 1 }
+    },
+    {
+      "name": "lab draw, 9 waiting, 6 chairs",
+      "fn": "estimateWait",
+      "request": { "station_id": "lab_draw", "count": 9 },
+      "expected": { "est_wait_min": 9, "open_servers": 6 }
+    },
+    {
+      "name": "infusion, 4 waiting, 24 chairs",
+      "fn": "estimateWait",
+      "request": { "station_id": "infusion", "count": 4 },
+      "expected": { "est_wait_min": 20, "open_servers": 24 }
+    },
+    {
+      "name": "registration clamped at closing time",
+      "fn": "estimateWait",
+      "request": { "station_id": "registration", "count": 14, "minutes_until_close": 5 },
+      "expected": { "est_wait_min": 5, "open_servers": 6 }
+    },
+    {
+      "name": "unknown station",
+      "fn": "estimateWait",
+      "request": { "station_id": "morgue", "count": 1 },
+      "expected": { "error": { "code": "unknown_station", "message": "unknown station morgue" } }
+    },
+    {
+      "name": "fresh frame fuses",
+      "fn": "fuseQueue",
+      "request": { "sensed": 12, "ticketed": 7, "frame_age_min": 0.5 },
+      "expected": { "count_fused": 10, "source": "fused" }
+    },
+    {
+      "name": "stale frame falls back to tickets",
+      "fn": "fuseQueue",
+      "request": { "sensed": 12, "ticketed": 7, "frame_age_min": 5 },
+      "expected": { "count_fused": 7, "source": "tickets" }
+    },
+    {
+      "name": "no frame uses tickets",
+      "fn": "fuseQueue",
+      "request": { "ticketed": 4 },
+      "expected": { "count_fused": 4, "source": "tickets" }
+    }
+  ]
+}

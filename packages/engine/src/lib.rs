@@ -1,11 +1,14 @@
 //! WASM exports: JSON string in, JSON string out (spec 7.1). No I/O, no clock, no network.
 
 pub mod campus;
+pub mod queue;
 pub mod types;
 
 use wasm_bindgen::prelude::*;
 
-use crate::types::{EngineError, WalkingRouteRequest};
+use crate::types::{
+    EngineError, FuseRequest, WaitRequest, WalkingMatrixRequest, WalkingRouteRequest,
+};
 
 /// Crate version, so the proof panel can say "engine: rust-wasm 0.x".
 #[wasm_bindgen]
@@ -29,6 +32,26 @@ pub fn walking_route(request_json: &str) -> String {
     })
 }
 
+#[wasm_bindgen(js_name = walkingMatrix)]
+pub fn walking_matrix(request_json: &str) -> String {
+    run(request_json, |req: WalkingMatrixRequest| {
+        campus::walking_matrix(campus::campus()?, &req.node_ids, req.mobility)
+    })
+}
+
+#[wasm_bindgen(js_name = estimateWait)]
+pub fn estimate_wait(request_json: &str) -> String {
+    run(request_json, |req: WaitRequest| {
+        let station = campus::campus()?.station(&req.station_id)?;
+        queue::estimate_wait(station.service_model(), &req)
+    })
+}
+
+#[wasm_bindgen(js_name = fuseQueue)]
+pub fn fuse_queue(request_json: &str) -> String {
+    run(request_json, |req: FuseRequest| Ok(queue::fuse(&req)))
+}
+
 /// Parses the request, runs `f`, and serializes either the result or an error envelope.
 fn run<Req, Res, F>(request_json: &str, f: F) -> String
 where
@@ -49,6 +72,57 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
+    use serde_json::Value;
+
+    /// JSON equality where 155 and 155.0 are the same number.
+    fn json_eq(a: &Value, b: &Value) -> bool {
+        match (a, b) {
+            (Value::Number(x), Value::Number(y)) => x.as_f64() == y.as_f64(),
+            (Value::Array(x), Value::Array(y)) => {
+                x.len() == y.len() && x.iter().zip(y).all(|(p, q)| json_eq(p, q))
+            }
+            (Value::Object(x), Value::Object(y)) => {
+                x.len() == y.len()
+                    && x.iter()
+                        .all(|(k, v)| y.get(k).is_some_and(|w| json_eq(v, w)))
+            }
+            _ => a == b,
+        }
+    }
+
+    fn dispatch(function: &str, request: &str) -> String {
+        match function {
+            "walkingRoute" => walking_route(request),
+            "walkingMatrix" => walking_matrix(request),
+            "estimateWait" => estimate_wait(request),
+            "fuseQueue" => fuse_queue(request),
+            other => panic!("unknown fixture function {other}"),
+        }
+    }
+
+    /// Golden fixtures shared with the TypeScript wrapper tests (spec 12.1 test 19).
+    #[test]
+    fn golden_fixtures_match() {
+        for file in [
+            include_str!("../fixtures/routes.json"),
+            include_str!("../fixtures/waits.json"),
+        ] {
+            let fixture: Value = serde_json::from_str(file).unwrap();
+            for case in fixture["cases"].as_array().unwrap() {
+                let request = case["request"].to_string();
+                let function = case["fn"].as_str().unwrap();
+                let first = dispatch(function, &request);
+                // Spec 12.1 test 17: same input, byte-identical output.
+                assert_eq!(first, dispatch(function, &request), "{}", case["name"]);
+                let actual: Value = serde_json::from_str(&first).unwrap();
+                assert!(
+                    json_eq(&actual, &case["expected"]),
+                    "{}: got {actual}",
+                    case["name"]
+                );
+            }
+        }
+    }
 
     #[test]
     fn walking_route_is_deterministic_json() {

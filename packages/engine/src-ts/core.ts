@@ -1,11 +1,24 @@
 import type { z } from "zod";
-import { EngineErrorEnvelope, WalkingRoute, WalkingRouteRequest } from "@throughline/shared";
+import {
+  EngineErrorEnvelope,
+  FuseRequest,
+  FuseResult,
+  WaitEstimate,
+  WaitRequest,
+  WalkingMatrix,
+  WalkingMatrixRequest,
+  WalkingRoute,
+  WalkingRouteRequest,
+} from "@throughline/shared";
 
 /** The raw wasm-bindgen exports: JSON strings in, JSON strings out. */
 export interface RawEngine {
   version(): string;
   campusVersion(): string;
   walkingRoute(requestJson: string): string;
+  walkingMatrix(requestJson: string): string;
+  estimateWait(requestJson: string): string;
+  fuseQueue(requestJson: string): string;
 }
 
 export class EngineCallError extends Error {
@@ -23,7 +36,13 @@ export interface Engine {
   version(): string;
   campusVersion(): string;
   walkingRoute(req: WalkingRouteRequest): WalkingRoute;
+  walkingMatrix(req: WalkingMatrixRequest): WalkingMatrix;
+  estimateWait(req: WaitRequest): WaitEstimate;
+  fuseQueue(req: FuseRequest): FuseResult;
 }
+
+/** Function names usable by golden fixtures. */
+export type EngineFunction = "walkingRoute" | "walkingMatrix" | "estimateWait" | "fuseQueue";
 
 function call<Req, Res>(
   fn: (json: string) => string,
@@ -43,7 +62,10 @@ export function wrapEngine(raw: RawEngine): Engine {
     implementation: "rust-wasm",
     version: () => raw.version(),
     campusVersion: () => raw.campusVersion(),
-    walkingRoute: (req) =>
-      call((json) => raw.walkingRoute(json), WalkingRouteRequest, WalkingRoute, req),
+    walkingRoute: (req) => call((j) => raw.walkingRoute(j), WalkingRouteRequest, WalkingRoute, req),
+    walkingMatrix: (req) =>
+      call((j) => raw.walkingMatrix(j), WalkingMatrixRequest, WalkingMatrix, req),
+    estimateWait: (req) => call((j) => raw.estimateWait(j), WaitRequest, WaitEstimate, req),
+    fuseQueue: (req) => call((j) => raw.fuseQueue(j), FuseRequest, FuseResult, req),
   };
 }

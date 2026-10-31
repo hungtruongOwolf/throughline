@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { Mobility, NodeId } from "./common";
+import { Mobility, NodeId, StationId } from "./common";
 
 /**
  * Request/response shapes of the Engine interface (spec 7.2). The Rust crate mirrors them in
@@ -28,3 +28,39 @@ export const WalkingRoute = z.object({
   steps: z.array(RouteStep),
 });
 export type WalkingRoute = z.infer<typeof WalkingRoute>;
+
+export const WalkingMatrixRequest = z.object({
+  node_ids: z.array(NodeId).min(1),
+  mobility: Mobility,
+});
+export type WalkingMatrixRequest = z.infer<typeof WalkingMatrixRequest>;
+export const WalkingMatrix = z.object({
+  node_ids: z.array(NodeId),
+  seconds: z.array(z.array(z.number().nonnegative())),
+});
+export type WalkingMatrix = z.infer<typeof WalkingMatrix>;
+
+export const WaitRequest = z.object({
+  station_id: StationId,
+  count: z.number().nonnegative(),
+  open_servers: z.number().int().nonnegative().optional(),
+  minutes_until_close: z.number().optional(),
+});
+export type WaitRequest = z.infer<typeof WaitRequest>;
+export const WaitEstimate = z.object({
+  est_wait_min: z.number().nonnegative(),
+  open_servers: z.number().int().positive(),
+});
+export type WaitEstimate = z.infer<typeof WaitEstimate>;
+
+export const FuseRequest = z.object({
+  sensed: z.number().nonnegative().optional(),
+  ticketed: z.number().nonnegative(),
+  frame_age_min: z.number().nonnegative().optional(),
+});
+export type FuseRequest = z.infer<typeof FuseRequest>;
+export const FuseResult = z.object({
+  count_fused: z.number().nonnegative(),
+  source: z.enum(["fused", "tickets"]),
+});
+export type FuseResult = z.infer<typeof FuseResult>;

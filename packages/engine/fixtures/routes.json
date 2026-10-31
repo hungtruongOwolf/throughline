@@ -1,0 +1,558 @@
+{
+  "source": "packages/hospital graph.ts (independent oracle)",
+  "cases": [
+    {
+      "name": "mp1.entrance to mp2.ct2 (walking)",
+      "fn": "walkingRoute",
+      "request": {
+        "from": "mp1.entrance",
+        "to": "mp2.ct2",
+        "mobility": "walking"
+      },
+      "expected": {
+        "nodes": [
+          "mp1.entrance",
+          "mp1.lobby",
+          "mp1.corr_a",
+          "mp2.corr_b",
+          "mp2.imaging_wait",
+          "mp2.ct2"
+        ],
+        "seconds": 155,
+        "steps": [
+          {
+            "kind": "walk",
+            "to_node_id": "mp1.lobby",
+            "to_label": "Main Lobby",
+            "seconds": 25
+          },
+          {
+            "kind": "walk",
+            "to_node_id": "mp1.corr_a",
+            "to_label": "Blue Zone",
+            "seconds": 30
+          },
+          {
+            "kind": "stairs",
+            "to_node_id": "mp2.corr_b",
+            "to_label": "Gold Zone",
+            "seconds": 45,
+            "floor": 2
+          },
+          {
+            "kind": "walk",
+            "to_node_id": "mp2.imaging_wait",
+            "to_label": "Imaging",
+            "seconds": 38
+          },
+          {
+            "kind": "walk",
+            "to_node_id": "mp2.ct2",
+            "to_label": "CT 2",
+            "seconds": 17
+          }
+        ]
+      }
+    },
+    {
+      "name": "mp1.entrance to mp2.ct2 (wheelchair)",
+      "fn": "walkingRoute",
+      "request": {
+        "from": "mp1.entrance",
+        "to": "mp2.ct2",
+        "mobility": "wheelchair"
+      },
+      "expected": {
+        "nodes": [
+          "mp1.entrance",
+          "mp1.lobby",
+          "mp1.corr_a",
+          "mp1.elevA",
+          "mp2.elevA",
+          "mp2.corr_b",
+          "mp2.imaging_wait",
+          "mp2.ct2"
+        ],
+        "seconds": 229,
+        "steps": [
+          {
+            "kind": "walk",
+            "to_node_id": "mp1.lobby",
+            "to_label": "Main Lobby",
+            "seconds": 25
+          },
+          {
+            "kind": "walk",
+            "to_node_id": "mp1.corr_a",
+            "to_label": "Blue Zone",
+            "seconds": 30
+          },
+          {
+            "kind": "walk",
+            "to_node_id": "mp1.elevA",
+            "to_label": "Elevator A",
+            "seconds": 12
+          },
+          {
+            "kind": "elevator",
+            "to_node_id": "mp2.elevA",
+            "to_label": "Elevator A",
+            "seconds": 90,
+            "floor": 2
+          },
+          {
+            "kind": "walk",
+            "to_node_id": "mp2.corr_b",
+            "to_label": "Gold Zone",
+            "seconds": 17
+          },
+          {
+            "kind": "walk",
+            "to_node_id": "mp2.imaging_wait",
+            "to_label": "Imaging",
+            "seconds": 38
+          },
+          {
+            "kind": "walk",
+            "to_node_id": "mp2.ct2",
+            "to_label": "CT 2",
+            "seconds": 17
+          }
+        ]
+      }
+    },
+    {
+      "name": "g2.parking to cc3.infusion (wheelchair)",
+      "fn": "walkingRoute",
+      "request": {
+        "from": "g2.parking",
+        "to": "cc3.infusion",
+        "mobility": "wheelchair"
+      },
+      "expected": {
+        "nodes": [
+          "g2.parking",
+          "g2.bridge",
+          "mp2.bridge_g",
+          "mp2.corr_b",
+          "mp2.bridge_cc",
+          "cc2.bridge_mp",
+          "cc2.corr",
+          "cc2.elevB",
+          "cc3.elevB",
+          "cc3.infusion_wait",
+          "cc3.infusion"
+        ],
+        "seconds": 390,
+        "steps": [
+          {
+            "kind": "walk",
+            "to_node_id": "g2.bridge",
+            "to_label": "Garage Level 2",
+            "seconds": 33
+          },
+          {
+            "kind": "walk",
+            "to_node_id": "mp2.bridge_g",
+            "to_label": "Skybridge",
+            "seconds": 58
+          },
+          {
+            "kind": "walk",
+            "to_node_id": "mp2.corr_b",
+            "to_label": "Gold Zone",
+            "seconds": 50
+          },
+          {
+            "kind": "walk",
+            "to_node_id": "mp2.bridge_cc",
+            "to_label": "Link Bridge",
+            "seconds": 42
+          },
+          {
+            "kind": "walk",
+            "to_node_id": "cc2.bridge_mp",
+            "to_label": "Link Bridge",
+            "seconds": 42
+          },
+          {
+            "kind": "walk",
+            "to_node_id": "cc2.corr",
+            "to_label": "Rose Zone",
+            "seconds": 25
+          },
+          {
+            "kind": "walk",
+            "to_node_id": "cc2.elevB",
+            "to_label": "Elevator B",
+            "seconds": 17
+          },
+          {
+            "kind": "elevator",
+            "to_node_id": "cc3.elevB",
+            "to_label": "Elevator B",
+            "seconds": 90,
+            "floor": 3
+          },
+          {
+            "kind": "walk",
+            "to_node_id": "cc3.infusion_wait",
+            "to_label": "Infusion Center",
+            "seconds": 25
+          },
+          {
+            "kind": "walk",
+            "to_node_id": "cc3.infusion",
+            "to_label": "Infusion Center",
+            "seconds": 8
+          }
+        ]
+      }
+    },
+    {
+      "name": "g2.parking to cc3.infusion (walking)",
+      "fn": "walkingRoute",
+      "request": {
+        "from": "g2.parking",
+        "to": "cc3.infusion",
+        "mobility": "walking"
+      },
+      "expected": {
+        "nodes": [
+          "g2.parking",
+          "g2.bridge",
+          "mp2.bridge_g",
+          "mp2.corr_b",
+          "mp2.bridge_cc",
+          "cc2.bridge_mp",
+          "cc2.corr",
+          "cc2.elevB",
+          "cc3.elevB",
+          "cc3.infusion_wait",
+          "cc3.infusion"
+        ],
+        "seconds": 390,
+        "steps": [
+          {
+            "kind": "walk",
+            "to_node_id": "g2.bridge",
+            "to_label": "Garage Level 2",
+            "seconds": 33
+          },
+          {
+            "kind": "walk",
+            "to_node_id": "mp2.bridge_g",
+            "to_label": "Skybridge",
+            "seconds": 58
+          },
+          {
+            "kind": "walk",
+            "to_node_id": "mp2.corr_b",
+            "to_label": "Gold Zone",
+            "seconds": 50
+          },
+          {
+            "kind": "walk",
+            "to_node_id": "mp2.bridge_cc",
+            "to_label": "Link Bridge",
+            "seconds": 42
+          },
+          {
+            "kind": "walk",
+            "to_node_id": "cc2.bridge_mp",
+            "to_label": "Link Bridge",
+            "seconds": 42
+          },
+          {
+            "kind": "walk",
+            "to_node_id": "cc2.corr",
+            "to_label": "Rose Zone",
+            "seconds": 25
+          },
+          {
+            "kind": "walk",
+            "to_node_id": "cc2.elevB",
+            "to_label": "Elevator B",
+            "seconds": 17
+          },
+          {
+            "kind": "elevator",
+            "to_node_id": "cc3.elevB",
+            "to_label": "Elevator B",
+            "seconds": 90,
+            "floor": 3
+          },
+          {
+            "kind": "walk",
+            "to_node_id": "cc3.infusion_wait",
+            "to_label": "Infusion Center",
+            "seconds": 25
+          },
+          {
+            "kind": "walk",
+            "to_node_id": "cc3.infusion",
+            "to_label": "Infusion Center",
+            "seconds": 8
+          }
+        ]
+      }
+    },
+    {
+      "name": "mp1.lab_draw to cc2.pod_2a (walking)",
+      "fn": "walkingRoute",
+      "request": {
+        "from": "mp1.lab_draw",
+        "to": "cc2.pod_2a",
+        "mobility": "walking"
+      },
+      "expected": {
+        "nodes": [
+          "mp1.lab_draw",
+          "mp1.lab_wait",
+          "mp1.corr_a",
+          "mp2.corr_b",
+          "mp2.bridge_cc",
+          "cc2.bridge_mp",
+          "cc2.corr",
+          "cc2.wait_2a",
+          "cc2.pod_2a"
+        ],
+        "seconds": 234,
+        "steps": [
+          {
+            "kind": "walk",
+            "to_node_id": "mp1.lab_wait",
+            "to_label": "Outpatient Lab",
+            "seconds": 8
+          },
+          {
+            "kind": "walk",
+            "to_node_id": "mp1.corr_a",
+            "to_label": "Blue Zone",
+            "seconds": 35
+          },
+          {
+            "kind": "stairs",
+            "to_node_id": "mp2.corr_b",
+            "to_label": "Gold Zone",
+            "seconds": 45,
+            "floor": 2
+          },
+          {
+            "kind": "walk",
+            "to_node_id": "mp2.bridge_cc",
+            "to_label": "Link Bridge",
+            "seconds": 42
+          },
+          {
+            "kind": "walk",
+            "to_node_id": "cc2.bridge_mp",
+            "to_label": "Link Bridge",
+            "seconds": 42
+          },
+          {
+            "kind": "walk",
+            "to_node_id": "cc2.corr",
+            "to_label": "Rose Zone",
+            "seconds": 25
+          },
+          {
+            "kind": "walk",
+            "to_node_id": "cc2.wait_2a",
+            "to_label": "Clinic 2A",
+            "seconds": 29
+          },
+          {
+            "kind": "walk",
+            "to_node_id": "cc2.pod_2a",
+            "to_label": "Medical Oncology 2A",
+            "seconds": 8
+          }
+        ]
+      }
+    },
+    {
+      "name": "mp1.lab_draw to cc2.pod_2a (wheelchair)",
+      "fn": "walkingRoute",
+      "request": {
+        "from": "mp1.lab_draw",
+        "to": "cc2.pod_2a",
+        "mobility": "wheelchair"
+      },
+      "expected": {
+        "nodes": [
+          "mp1.lab_draw",
+          "mp1.lab_wait",
+          "mp1.corr_a",
+          "mp1.elevA",
+          "mp2.elevA",
+          "mp2.corr_b",
+          "mp2.bridge_cc",
+          "cc2.bridge_mp",
+          "cc2.corr",
+          "cc2.wait_2a",
+          "cc2.pod_2a"
+        ],
+        "seconds": 308,
+        "steps": [
+          {
+            "kind": "walk",
+            "to_node_id": "mp1.lab_wait",
+            "to_label": "Outpatient Lab",
+            "seconds": 8
+          },
+          {
+            "kind": "walk",
+            "to_node_id": "mp1.corr_a",
+            "to_label": "Blue Zone",
+            "seconds": 35
+          },
+          {
+            "kind": "walk",
+            "to_node_id": "mp1.elevA",
+            "to_label": "Elevator A",
+            "seconds": 12
+          },
+          {
+            "kind": "elevator",
+            "to_node_id": "mp2.elevA",
+            "to_label": "Elevator A",
+            "seconds": 90,
+            "floor": 2
+          },
+          {
+            "kind": "walk",
+            "to_node_id": "mp2.corr_b",
+            "to_label": "Gold Zone",
+            "seconds": 17
+          },
+          {
+            "kind": "walk",
+            "to_node_id": "mp2.bridge_cc",
+            "to_label": "Link Bridge",
+            "seconds": 42
+          },
+          {
+            "kind": "walk",
+            "to_node_id": "cc2.bridge_mp",
+            "to_label": "Link Bridge",
+            "seconds": 42
+          },
+          {
+            "kind": "walk",
+            "to_node_id": "cc2.corr",
+            "to_label": "Rose Zone",
+            "seconds": 25
+          },
+          {
+            "kind": "walk",
+            "to_node_id": "cc2.wait_2a",
+            "to_label": "Clinic 2A",
+            "seconds": 29
+          },
+          {
+            "kind": "walk",
+            "to_node_id": "cc2.pod_2a",
+            "to_label": "Medical Oncology 2A",
+            "seconds": 8
+          }
+        ]
+      }
+    },
+    {
+      "name": "mp1.cafe to mp1.elevA (walking)",
+      "fn": "walkingRoute",
+      "request": {
+        "from": "mp1.cafe",
+        "to": "mp1.elevA",
+        "mobility": "walking"
+      },
+      "expected": {
+        "nodes": ["mp1.cafe", "mp1.lobby", "mp1.corr_a", "mp1.elevA"],
+        "seconds": 80,
+        "steps": [
+          {
+            "kind": "walk",
+            "to_node_id": "mp1.lobby",
+            "to_label": "Main Lobby",
+            "seconds": 38
+          },
+          {
+            "kind": "walk",
+            "to_node_id": "mp1.corr_a",
+            "to_label": "Blue Zone",
+            "seconds": 30
+          },
+          {
+            "kind": "walk",
+            "to_node_id": "mp1.elevA",
+            "to_label": "Elevator A",
+            "seconds": 12
+          }
+        ]
+      }
+    },
+    {
+      "name": "cc2.vitals to cc2.vitals (walking)",
+      "fn": "walkingRoute",
+      "request": {
+        "from": "cc2.vitals",
+        "to": "cc2.vitals",
+        "mobility": "walking"
+      },
+      "expected": {
+        "nodes": ["cc2.vitals"],
+        "seconds": 0,
+        "steps": []
+      }
+    },
+    {
+      "name": "unknown node",
+      "fn": "walkingRoute",
+      "request": {
+        "from": "mp1.entrance",
+        "to": "zz9.nowhere",
+        "mobility": "walking"
+      },
+      "expected": {
+        "error": {
+          "code": "unknown_node",
+          "message": "unknown node zz9.nowhere"
+        }
+      }
+    },
+    {
+      "name": "waiting-area matrix (wheelchair)",
+      "fn": "walkingMatrix",
+      "request": {
+        "node_ids": [
+          "mp1.lobby",
+          "mp1.lab_wait",
+          "mp2.imaging_wait",
+          "cc2.wait_2a",
+          "cc2.wait_2b",
+          "cc3.infusion_wait"
+        ],
+        "mobility": "wheelchair"
+      },
+      "expected": {
+        "node_ids": [
+          "mp1.lobby",
+          "mp1.lab_wait",
+          "mp2.imaging_wait",
+          "cc2.wait_2a",
+          "cc2.wait_2b",
+          "cc3.infusion_wait"
+        ],
+        "seconds": [
+          [0, 65, 187, 287, 304, 311],
+          [65, 0, 192, 292, 309, 316],
+          [187, 192, 0, 176, 193, 279],
+          [287, 292, 176, 0, 75, 161],
+          [304, 309, 193, 75, 0, 178],
+          [311, 316, 279, 161, 178, 0]
+        ]
+      }
+    }
+  ]
+}

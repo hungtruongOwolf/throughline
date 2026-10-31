@@ -41,6 +41,57 @@ pub struct WalkingRoute {
     pub steps: Vec<RouteStep>,
 }
 
+#[derive(Debug, Deserialize)]
+pub struct WaitRequest {
+    pub station_id: String,
+    pub count: f64,
+    #[serde(default)]
+    pub open_servers: Option<u32>,
+    #[serde(default)]
+    pub minutes_until_close: Option<f64>,
+}
+
+#[derive(Debug, Serialize, PartialEq)]
+pub struct WaitEstimate {
+    pub est_wait_min: f64,
+    pub open_servers: u32,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct FuseRequest {
+    #[serde(default)]
+    pub sensed: Option<f64>,
+    pub ticketed: f64,
+    #[serde(default)]
+    pub frame_age_min: Option<f64>,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
+#[serde(rename_all = "lowercase")]
+pub enum QueueSource {
+    Fused,
+    Tickets,
+}
+
+#[derive(Debug, Serialize, PartialEq)]
+pub struct FuseResult {
+    pub count_fused: f64,
+    pub source: QueueSource,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct WalkingMatrixRequest {
+    pub node_ids: Vec<String>,
+    pub mobility: Mobility,
+}
+
+/// `seconds[i][j]` is the walking time from `node_ids[i]` to `node_ids[j]`.
+#[derive(Debug, Serialize, PartialEq)]
+pub struct WalkingMatrix {
+    pub node_ids: Vec<String>,
+    pub seconds: Vec<Vec<f64>>,
+}
+
 /// Every function is total: bad input comes back as `{ "error": { code, message } }`.
 #[derive(Debug, Serialize)]
 pub struct EngineError {
