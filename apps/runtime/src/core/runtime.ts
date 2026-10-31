@@ -231,7 +231,11 @@ export class Runtime {
       return;
     }
 
-    const scope = this.contextFor(event);
+    // A fan-out invocation (e.g. replan after an ops action) acts on one named journey.
+    const scope = inv.journey_id
+      ? { ...this.contextFor(event), journey: this.journey(inv.journey_id) }
+      : this.contextFor(event);
+    if (inv.journey_id && !scope.journey) return;
     const ctx: HandlerContext = {
       event,
       capability: inv.capability,
@@ -241,7 +245,7 @@ export class Runtime {
     };
     let { result } = await this.deps.runner.run(agent, ctx);
     result = await this.screenOutbound(result, agent, ctx);
-    this.apply(result, inv.capability, agent, event, depth);
+    this.apply(result, inv.capability, agent, event, depth, inv.journey_id);
   }
 
   /** Spec 6.2: generated patient text with clinical content is blocked; the fallback is sent. */
@@ -270,15 +274,16 @@ export class Runtime {
     agent: Agent,
     event: DomainEvent,
     depth: number,
+    journeyId = event.journey_id,
   ): void {
     const scoped = (e: NewEvent): NewEvent =>
       isOpsEventType(e.type)
         ? { ...e, station_id: e.station_id ?? event.station_id }
-        : { ...e, journey_id: e.journey_id ?? event.journey_id };
+        : { ...e, journey_id: e.journey_id ?? journeyId };
     const next = result.next_events.map(scoped);
 
-    if (event.journey_id && result.journey_patch) {
-      const journey = this.journey(event.journey_id);
+    if (journeyId && result.journey_patch) {
+      const journey = this.journey(journeyId);
       if (journey) this.saveJourney(result.journey_patch(journey));
     }
     if (event.station_id && result.station_patch) {

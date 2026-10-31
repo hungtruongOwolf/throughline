@@ -17,3 +17,8 @@ export function stationDisplay(stationId: string, nodeId?: string): StationDispl
     floor: n?.floor ?? 1,
   };
 }
+
+/** The station's own name ("CT"), not one of its rooms ("CT 1"). */
+export function stationName(stationId: string): string {
+  return campus.stations.find((s) => s.id === stationId)?.name ?? stationId;
+}

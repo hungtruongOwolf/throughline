@@ -13,16 +13,16 @@ Read this section with the `frontend-design` skill loaded. The brief below is th
 
 ## 9.2 Tokens (`apps/web/app/theme.css`, Tailwind v4 `@theme`)
 
-| Token                                                                            | Value                                                     | Use                                                                                 |
-| -------------------------------------------------------------------------------- | --------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| `--paper`                                                                        | `#F6F7F4`                                                 | page background on patient, kiosk, ops, journey control (cool off-white, not cream) |
-| `--ink`                                                                          | `#18223A`                                                 | text; station board background                                                      |
-| `--ink-soft`                                                                     | `#4B5566`                                                 | secondary text                                                                      |
-| `--line`                                                                         | `#0F766E`                                                 | the Throughline when not inside a zone; primary actions; focus ring                 |
-| `--wait-low` / `--wait-mid` / `--wait-high`                                      | `#CFE8E3` / `#D97706` / `#C2410C`                         | queue intensity on the map and boards; always paired with the number                |
-| `--zone-blue` / `--zone-gold` / `--zone-green` / `--zone-rose` / `--zone-violet` | `#3B6FD6` / `#C9971A` / `#3C8C5A` / `#C2506A` / `#7C5CBF` | zone chips, line segments, sign renderer; the only decorative color                 |
-| `--held`                                                                         | `#B45309` on `#FDF1DC`                                    | HELD markers on approvals (the human gate)                                          |
-| `--board-text`                                                                   | `#F4F6F2`                                                 | text on the dark station board                                                      |
+| Token                                                                            | Value                                                          | Use                                                                                 |
+| -------------------------------------------------------------------------------- | -------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `--paper`                                                                        | `#F6F7F4`                                                      | page background on patient, kiosk, ops, journey control (cool off-white, not cream) |
+| `--ink`                                                                          | `#18223A`                                                      | text; station board background                                                      |
+| `--ink-soft`                                                                     | `#4B5566`                                                      | secondary text                                                                      |
+| `--line`                                                                         | `#0F766E`                                                      | the Throughline when not inside a zone; primary actions; focus ring                 |
+| `--wait-low` / `--wait-mid` / `--wait-high`                                      | `#CFE8E3` / `#D97706` / `#C2410C`                              | queue intensity on the map and boards; always paired with the number                |
+| `--zone-blue` / `--zone-gold` / `--zone-green` / `--zone-rose` / `--zone-violet` | `#3B6FD6` / `#C9971A` / `#3C8C5A` / `#C2506A` / `#7C5CBF`      | zone chips, line segments, sign renderer; the only decorative color                 |
+| `--held`                                                                         | `#9A4507` on `#FDF1DC` (brief: #B45309, 4.49:1, DECISIONS #59) | HELD markers on approvals (the human gate)                                          |
+| `--board-text`                                                                   | `#F4F6F2`                                                      | text on the dark station board                                                      |
 
 Type: **Atkinson Hyperlegible** (Google Fonts) for everything read as text, chosen because it was designed for low-vision readers and the first user is 71; **Barlow Condensed** (600/700) for display: station names, floor levels, big numbers, board rows, the sign renderer, because it reads like directional signage. Scale: body 17 on the patient surface (19 for the current stop line), 15 elsewhere, 13 for secondary; display 28 / 40 / 64 / 96 in Barlow Condensed; line length under 70 characters; sentence case everywhere; no letter-spaced capitals.
 
@@ -162,3 +162,15 @@ Question it answers: who is coming to this station, who is here, and what needs 
 - Live rows are never dropped to make room; simulated rows fill the remaining space.
 - Compared with the generic default (a light data table with filters): a departures board with no chrome, no filters, and one action per row.
 - Screenshots: `docs/screens/board-lab-1280.png`, `docs/screens/board-vitals-task-1280.png`. Keyboard-only Start and Done pass in Playwright; axe has no serious or critical violations.
+
+### Command center `/ops` (D2-8)
+
+Question it answers: where is the building backing up, what does the system propose, and what will it change?
+
+- The isometric campus is the hero: three exploded floors (2:1 projection), corridors, stations tinted with the wait tokens and always labeled "CT 25 min", waiting areas hatched with their count. The selected journey is one transit-style line from where the patient is through the stops ahead, colored by zone.
+- Left rail: people in house and the live journeys (initials, ticket, current stop, minutes behind). Right rail: proposals. A proposal is the only card-like element: title in words, the predicted wait as a before/after bar, journeys affected, the what-if evidence, "Predicted by simulation; a manager decides.", and the HELD marker until a manager approves or rejects; then it shows who decided.
+- Bottom strip: the day 7:00 to 17:00 with bottleneck bands from the simulated day and the now marker; the what-if slider re-runs the WASM simulation in the browser on every change and redraws the predicted wait curve (dashed baseline, teal scenario).
+- Station labels for CT/X-ray and the two clinic pods are anchored on opposite sides so neighbours never collide.
+- Compared with the generic default (KPI tiles over a map and a table): no tiles, no table; the map, one rail of decisions, one strip of time.
+- The HELD token was darkened to `#9A4507` because the brief's `#B45309` on `#FDF1DC` measured 4.49:1 (DECISIONS #59).
+- Screenshots: `docs/screens/ops-1536.png`, `docs/screens/patient-replanned-390.png` (the phone after approval, updated over SSE without a reload).

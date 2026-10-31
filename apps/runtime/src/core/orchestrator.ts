@@ -5,6 +5,8 @@ import type { StationState } from "./agent";
 export interface Invocation {
   capability: Capability;
   agent: AgentName;
+  /** Set when a station event fans out to specific journeys. */
+  journey_id?: string;
 }
 
 const one = (capability: Capability, agent: AgentName): Invocation[] => [{ capability, agent }];
@@ -89,6 +91,13 @@ export function route(
       return one("ops_action.propose", "ops");
     case "OpsActionProposed":
       return one("ops_action.apply", "ops");
+    case "OpsActionApplied":
+      // Spec V8: after an approved ops action, every affected journey re-plans.
+      return event.payload.affected_journey_ids.map((journey_id) => ({
+        capability: "itinerary.replan" as const,
+        agent: "itinerary" as const,
+        journey_id,
+      }));
     default:
       return [];
   }

@@ -7,8 +7,9 @@ import type { EventBus } from "./bus/event-bus";
 import type { ClockSpeed, SimClock } from "./bus/sim-clock";
 import type { RuntimeStore } from "./bus/store";
 import type { Runtime } from "./core/runtime";
-import { seedMariaVisitDay } from "./demo/visit-day";
+import { seedDemo } from "./demo/visit-day";
 import { buildBoard, type SimBackground } from "./board";
+import { buildOverview } from "./ops-overview";
 
 export interface AppContext {
   store: RuntimeStore;
@@ -230,10 +231,15 @@ export function createApp(ctx?: AppContext) {
     return c.json(store.review(review.id));
   });
 
-  /** Demo: Maria on Nov 17 after her CT (until the agents play the full scenario). */
+  /** Command center data (spec 9.3): station waits, journeys in house, proposals. */
+  app.get("/api/ops/overview", (c) => c.json(buildOverview(store, runtime, clock, background)));
+
+  /** Demo beats of Maria's Nov 17 (until the agents play the whole scenario). Resets state. */
   app.post("/api/demo/visit-day", async (c) => {
-    await clock.advanceTo("2026-11-17T10:20:00-06:00");
-    return c.json(seedMariaVisitDay(runtime, clock.now()));
+    const beat = c.req.query("beat") === "ct_outage" ? "ct_outage" : "lab";
+    const journey = await seedDemo(ctx, beat);
+    await bus.idle();
+    return c.json(journey);
   });
 
   return app;

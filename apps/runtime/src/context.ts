@@ -8,7 +8,10 @@ import { openDatabase } from "./db/index";
 import type { ModelGateway } from "./models/types";
 import type { AppContext } from "./app";
 import { loadEngine } from "@throughline/engine/node";
-import { SimRequest } from "@throughline/shared";
+import { SimRequest, type Journey } from "@throughline/shared";
+import { createAgents } from "./agents/index";
+import type { StationState } from "./core/agent";
+import { createStation } from "./core/journeys";
 import day from "../../../fixtures/day-2026-11-17.json";
 import { SimBackground } from "./board";
 
@@ -24,6 +27,8 @@ export function createContext(
 ): AppContext {
   const { sqlite } = openDatabase(opts.databasePath);
   const store = new RuntimeStore(sqlite);
+  const engine = loadEngine();
+  const simDay = SimRequest.parse(day);
   const bus = new EventBus();
   const clock = new SimClock(env.SIM_START ?? "2026-11-10T08:00:00-06:00");
   const runner = new AgentRunner(opts.gateway ?? unconfiguredGateway, (r) =>
@@ -34,10 +39,18 @@ export function createContext(
     bus,
     clock,
     runner,
-    agents: opts.agents ?? [],
+    agents:
+      opts.agents ??
+      createAgents({
+        engine,
+        day: simDay,
+        journeys: () => store.listAggregates<Journey>("journey"),
+        station: (id) =>
+          store.loadAggregate<StationState>("station", id)?.value ?? createStation(id),
+      }),
     providerReviewOn: env.PROVIDER_REVIEW_ON !== "false",
   });
   runtime.start();
-  const background = new SimBackground(loadEngine(), SimRequest.parse(day));
+  const background = new SimBackground(engine, simDay);
   return { store, bus, clock, runtime, background };
 }

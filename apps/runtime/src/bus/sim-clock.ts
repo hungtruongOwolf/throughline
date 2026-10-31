@@ -93,6 +93,14 @@ export class SimClock {
     if (next) await this.advanceTo(next.at);
   }
 
+  /** Demo reset: stops the loop, drops every timer, and sets the time (may move backwards). */
+  reset(start: string): void {
+    this.stop();
+    this.timers = [];
+    this.advancing = Promise.resolve();
+    this.nowMs = Date.parse(start);
+  }
+
   /** Drives the clock from wall time at `speed`. */
   start(speed: ClockSpeed, tickMs = 250): void {
     this.speed = speed;

@@ -100,6 +100,13 @@ export class RuntimeStore {
     ).map((r) => JSON.parse(r.json) as ModelCallRecord);
   }
 
+  /** Demo reset: clears the log, aggregates, reviews, and telemetry (not the model cache). */
+  reset(): void {
+    this.sqlite.exec(
+      "DELETE FROM events; DELETE FROM aggregates; DELETE FROM reviews; DELETE FROM model_calls; DELETE FROM runtime_log;",
+    );
+  }
+
   log(level: "info" | "warn" | "error", at: string, entry: Record<string, unknown>): void {
     this.sqlite
       .prepare("INSERT INTO runtime_log (at, level, json) VALUES (?, ?, ?)")

@@ -1,4 +1,4 @@
-import { BoardView, Journey } from "@throughline/shared";
+import { BoardView, Journey, OpsOverview } from "@throughline/shared";
 
 /** The browser talks only to the runtime (spec 8: never to a model provider). */
 export const RUNTIME_URL = process.env.NEXT_PUBLIC_RUNTIME_URL ?? "http://localhost:4000";
@@ -63,4 +63,33 @@ export function subscribeAll(onEvent: () => void): () => void {
   const source = new EventSource(`${RUNTIME_URL}/events/stream`);
   source.addEventListener("domain", () => onEvent());
   return () => source.close();
+}
+
+export async function fetchOverview(): Promise<OpsOverview> {
+  const res = await fetch(`${RUNTIME_URL}/api/ops/overview`, { cache: "no-store" });
+  if (!res.ok) throw new Error(`overview: ${res.status}`);
+  return OpsOverview.parse(await res.json());
+}
+
+export async function resolveReview(
+  reviewId: string,
+  decision: "approved" | "rejected",
+  by: string,
+): Promise<boolean> {
+  const res = await fetch(`${RUNTIME_URL}/api/reviews/${encodeURIComponent(reviewId)}/resolve`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ decision, by }),
+  });
+  return res.ok;
+}
+
+export async function clockCommand(
+  command: { action: "start"; speed: 1 | 10 | 60 } | { action: "stop" } | { action: "jump" },
+): Promise<void> {
+  await fetch(`${RUNTIME_URL}/api/clock`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(command),
+  });
 }
