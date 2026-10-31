@@ -34,9 +34,7 @@ export function SiteHeader({ current }: { current?: (typeof NAV)[number]["href"]
             </Link>
           ))}
         </nav>
-        <span className="ml-auto text-[13px] text-ink-soft">
-          Halden Medical Center (fictional) · synthetic data
-        </span>
+        <span className="ml-auto text-[13px] text-ink-soft">Halden Medical Center</span>
       </div>
     </header>
   );

@@ -16,13 +16,13 @@ test.describe("Maria's journey, step by step", () => {
       [],
     );
 
-    await page.getByRole("button", { name: "Enter the member ID from the card" }).click();
+    await page.getByRole("button", { name: "Save member ID" }).click();
     await expect(
       page.getByRole("heading", { name: "Approve the insurance request" }),
     ).toBeVisible();
     await expect(page.getByText("Waiting for you")).toBeVisible();
-    await page.getByRole("button", { name: "Send the request to the insurer" }).click();
-    await page.getByRole("button", { name: "Skip ahead two days" }).click();
+    await page.getByRole("button", { name: "Send to Lonestar Health Plan" }).click();
+    await page.getByRole("button", { name: "Continue to Thu, Nov 12" }).click();
     await expect(page.getByRole("heading", { name: "Maria confirms" })).toBeVisible();
     await expect(page.getByText(/Please confirm your visit: Tuesday, November 17/)).toBeVisible();
     await expect(page).toHaveURL(/step=confirm/);

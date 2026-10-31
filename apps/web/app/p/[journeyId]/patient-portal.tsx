@@ -710,7 +710,7 @@ export function PatientPortal({
   phase: fixedPhase,
 }: {
   journeyId: string;
-  /** Inside the story: no demo strip, and the story picks the part of care to show. */
+  /** Inside the story: the story picks the part of care to show and owns the actions. */
   embedded?: boolean;
   phase?: Phase;
 }) {
@@ -765,14 +765,6 @@ export function PatientPortal({
 
   return (
     <div className={embedded ? "bg-paper text-ink" : "min-h-dvh bg-paper text-ink"}>
-      {!embedded && (
-        <p className="bg-ink px-6 py-1.5 text-[14px] text-white">
-          Demo: Maria&apos;s patient portal, with synthetic data.{" "}
-          <Link href="/" className="font-bold underline">
-            Back to the demo
-          </Link>
-        </p>
-      )}
       <header className="border-b border-ink/10">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-4 px-6 py-4">
           <p className="font-display text-[24px] font-bold">Halden Medical Center</p>
@@ -835,9 +827,6 @@ export function PatientPortal({
           </div>
         )}
       </main>
-      <footer className="border-t border-ink/10 py-6 text-center text-[14px] text-ink-soft">
-        Synthetic demo data. Not a real patient, hospital, or insurer.
-      </footer>
     </div>
   );
 }

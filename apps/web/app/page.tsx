@@ -51,7 +51,7 @@ const ROLES = [
   {
     href: "/story?step=decide",
     who: "For operations",
-    what: "Where the day is running late, and a simulated fix to approve or reject.",
+    what: "Where the day is running late, and a tested fix to approve or reject.",
     cta: "See the manager's decision",
   },
 ];
@@ -78,7 +78,7 @@ export default function Home() {
               >
                 Follow Maria&apos;s journey
               </Link>
-              <span className="text-[15px] text-ink-soft">About 3 minutes, plays by itself.</span>
+              <span className="text-[15px] text-ink-soft">12 steps, about 3 minutes.</span>
             </div>
           </div>
           <aside className="border-l-[6px] border-line pl-6 text-[15px] text-ink-soft">
@@ -87,7 +87,6 @@ export default function Home() {
               Referred to medical oncology for labs, a CT scan, a new-patient visit, and an
               infusion. Her husband can&apos;t come with her, and she will need a wheelchair.
             </p>
-            <p className="mt-2">Every person and place here is fictional.</p>
           </aside>
         </section>
 
@@ -166,9 +165,6 @@ export default function Home() {
           </div>
         </section>
       </main>
-      <footer className="border-t border-ink/10 py-6 text-center text-[13px] text-ink-soft">
-        Synthetic demo data. Not a real patient, hospital, or insurer.
-      </footer>
     </>
   );
 }

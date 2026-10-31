@@ -21,6 +21,8 @@ export interface StoryStepCopy {
   happened: string;
   screen: Screen;
   action: string;
+  /** A message the actor sends with the action (Maria's text reply). */
+  draft?: string;
   next: string;
 }
 
@@ -33,7 +35,7 @@ export const STEPS: StoryStepCopy[] = [
     happened:
       "Dr. Whitcombe's office faxed a referral for Maria Diaz. Throughline read the fax and the insurance card. One thing was unreadable: the end of her member ID is smudged on the fax.",
     screen: { kind: "intake" },
-    action: "Enter the member ID from the card",
+    action: "Save member ID",
     next: "Throughline checks her insurance and drafts the approval request for the CT scan.",
   },
   {
@@ -44,7 +46,7 @@ export const STEPS: StoryStepCopy[] = [
     happened:
       "Her insurance is active. Her plan must approve the CT scan and the infusion before they can be booked, so Throughline drafted the request. Nothing goes to an insurer without a person.",
     screen: { kind: "auth" },
-    action: "Send the request to the insurer",
+    action: "Send to Lonestar Health Plan",
     next: "The insurer usually answers within two business days.",
   },
   {
@@ -55,7 +57,7 @@ export const STEPS: StoryStepCopy[] = [
     happened:
       "The request is with Lonestar Health Plan. There is nothing for anyone to do until they answer.",
     screen: { kind: "waiting" },
-    action: "Skip ahead two days",
+    action: "Continue to Thu, Nov 12",
     next: "When the insurer approves, Throughline books every appointment in the right order and texts Maria.",
   },
   {
@@ -66,7 +68,8 @@ export const STEPS: StoryStepCopy[] = [
     happened:
       "The insurer approved. Throughline fit all five appointments into one morning, on a day her daughter can drive her, and texted Maria what to expect.",
     screen: { kind: "patient", phase: "before" },
-    action: "Reply as Maria: “Yes. My husband can't come, so I'll need a wheelchair.”",
+    action: "Send",
+    draft: "Yes, I'll be there. But my husband can't come, so I'll need a wheelchair.",
     next: "Throughline confirms, notes the wheelchair, and sends reminders before the day.",
   },
   {
@@ -77,7 +80,7 @@ export const STEPS: StoryStepCopy[] = [
     happened:
       "Maria got a reminder this morning. Her page says exactly what tomorrow looks like and what to do tonight.",
     screen: { kind: "patient", phase: "before" },
-    action: "Go to Tuesday morning: Maria arrives",
+    action: "Continue to Tue, Nov 17, 9:13 am",
     next: "She checks in at the Main Entrance kiosk and gets her plan for the day.",
   },
   {
@@ -88,7 +91,7 @@ export const STEPS: StoryStepCopy[] = [
     happened:
       "Maria checked in. Her daughter pushes her wheelchair. Her page shows her first stop, how many people are ahead, and a step-free way there.",
     screen: { kind: "patient", phase: "visit" },
-    action: "Play the morning",
+    action: "Continue to 9:53 am",
     next: "She has her blood drawn and her vitals checked, then waits for her CT scan. Meanwhile, CT scanner 1 breaks down.",
   },
   {
@@ -99,8 +102,8 @@ export const STEPS: StoryStepCopy[] = [
     happened:
       "CT scanner 1 went down at 9:40. The waiting room camera counts the people waiting, and the wait has jumped. Maria is one of the people waiting.",
     screen: { kind: "station" },
-    action: "Show the operations manager",
-    next: "Throughline simulated what would help and sent the operations manager one proposal.",
+    action: "Open the command center",
+    next: "Throughline works out what would help and sends the operations manager one proposal.",
   },
   {
     id: "decide",
@@ -121,7 +124,7 @@ export const STEPS: StoryStepCopy[] = [
     happened:
       "Maria's page says her scan moved to CT 2, next door, and shows her new times. She doesn't have to ask anyone.",
     screen: { kind: "patient", phase: "visit" },
-    action: "Play until after her doctor's visit",
+    action: "Continue to 11:47 am",
     next: "After her scan she stops at the café and loses track of time. Her next stop notices she is late.",
   },
   {
@@ -132,7 +135,7 @@ export const STEPS: StoryStepCopy[] = [
     happened:
       "Maria wasn't at the vitals desk on time, so Throughline asked if she was on her way. She took a photo of the nearest sign, and Throughline recognized where she was and sent directions from there.",
     screen: { kind: "patient", phase: "visit" },
-    action: "Play until her infusion",
+    action: "Continue to 12:47 pm",
     next: "She sees Dr. Okafor, then goes up to the Infusion Center.",
   },
   {
@@ -143,7 +146,7 @@ export const STEPS: StoryStepCopy[] = [
     happened:
       "During her infusion Maria texted “Is it normal to feel dizzy?” Throughline does not answer medical questions. It told her a nurse would call and opened a task for the nurse.",
     screen: { kind: "patient", phase: "visit" },
-    action: "Finish the day",
+    action: "Continue to 2:35 pm",
     next: "Her infusion ends and she goes home.",
   },
   {
@@ -154,7 +157,7 @@ export const STEPS: StoryStepCopy[] = [
     happened:
       "Maria is home. Her page now shows what happens next: her visit summary, a short check that it made sense, her results, and her next appointment.",
     screen: { kind: "patient", phase: "after" },
-    action: "Start the story again",
+    action: "Start again from the referral",
     next: "",
   },
 ];

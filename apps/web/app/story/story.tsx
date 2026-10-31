@@ -182,9 +182,6 @@ function StationScreen() {
             ))}
           </tbody>
         </table>
-        <p className="mt-4 font-sans text-[14px] text-board-text/70">
-          Grey rows are simulated patients. Only Maria is played step by step.
-        </p>
       </div>
     </Frame>
   );
@@ -350,9 +347,6 @@ export function Story() {
           <span className="text-[16px] text-ink-soft">
             Maria&apos;s journey, step {index + 1} of {STEPS.length}
           </span>
-          <span className="ml-auto text-[13px] text-ink-soft">
-            Fictional hospital, synthetic patient
-          </span>
         </div>
       </header>
 
@@ -369,6 +363,12 @@ export function Story() {
           <p className="mt-3 max-w-[70ch] text-[19px]">{step.happened}</p>
 
           <div className="mt-6 flex flex-wrap items-center gap-4 rounded-[14px] bg-white p-4 ring-1 ring-ink/10">
+            {step.draft && (
+              <p className="w-full rounded-[16px] bg-line/10 px-4 py-3 text-[17px] sm:w-auto sm:flex-1">
+                <span className="block text-[13px] font-bold text-ink-soft">Maria&apos;s text</span>
+                {step.draft}
+              </p>
+            )}
             {step.screen.kind !== "ops" && (
               <button
                 type="button"
@@ -380,15 +380,14 @@ export function Story() {
               </button>
             )}
             {step.screen.kind === "ops" && (
-              <p className="text-[17px] font-bold">Your move: approve the proposal below.</p>
+              <p className="text-[17px] font-bold">Approve or reject the proposal below.</p>
             )}
             {step.next && (
               <p className="max-w-[60ch] text-[16px] text-ink-soft">Next: {step.next}</p>
             )}
             {error && (
               <p role="alert" className="text-[16px] text-wait-high">
-                The demo server didn&apos;t answer. Check that the runtime is running, then try
-                again.
+                Throughline didn&apos;t respond. Try again.
               </p>
             )}
           </div>

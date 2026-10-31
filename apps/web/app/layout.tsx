@@ -16,7 +16,7 @@ const barlow = Barlow_Condensed({
 
 export const metadata: Metadata = {
   title: "Throughline",
-  description: "One thread through the whole hospital visit. Synthetic demo data.",
+  description: "One thread through the whole hospital visit.",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
