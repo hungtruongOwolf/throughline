@@ -8,7 +8,8 @@
     "build": "tsup",
     "start": "node --env-file-if-exists=../../.env dist/index.js",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run --passWithNoTests"
+    "test": "vitest run --passWithNoTests",
+    "seed": "tsx --env-file-if-exists=../../.env scripts/seed.ts"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^9.6.0",

@@ -19,7 +19,8 @@
     "test:e2e": "pnpm --filter @throughline/web test:e2e",
     "render:signs": "pnpm --filter @throughline/hospital render:signs",
     "build:engine": "node scripts/build-engine.mjs",
-    "lint:rust": "cd packages/engine && cargo fmt --check && cargo clippy --quiet --all-targets -- -D warnings"
+    "lint:rust": "cd packages/engine && cargo fmt --check && cargo clippy --quiet --all-targets -- -D warnings",
+    "seed": "pnpm --filter @throughline/runtime seed"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
