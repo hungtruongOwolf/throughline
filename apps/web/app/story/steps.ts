@@ -11,7 +11,9 @@ export type Screen =
   | { kind: "waiting" }
   | { kind: "patient"; phase: Phase }
   | { kind: "station" }
-  | { kind: "ops" };
+  | { kind: "ops" }
+  | { kind: "review" }
+  | { kind: "closed" };
 
 export interface StoryStepCopy {
   id: string;
@@ -21,6 +23,8 @@ export interface StoryStepCopy {
   happened: string;
   screen: Screen;
   action: string;
+  /** A text the actor sends with the action (Maria's answers after the visit). */
+  draft?: string;
   /** A voice note the actor sends with the action (Maria's reply), with what she says. */
   voice?: { src: string; words: string };
   next: string;
@@ -154,12 +158,60 @@ export const STEPS: StoryStepCopy[] = [
   },
   {
     id: "after",
-    rail: "After the visit",
+    rail: "She goes home",
     when: "Tue, Nov 17, 2:35 pm",
+    who: "Maria, going home",
+    happened:
+      "Maria's day is done. Throughline booked her follow-up blood tests and visit for three weeks from now, and drafted a plain-language summary of Dr. Okafor's notes. Her page shows what happens next.",
+    screen: { kind: "patient", phase: "after" },
+    action: "Continue to 4:30 pm",
+    next: "Dr. Okafor checks the summary before it reaches Maria.",
+  },
+  {
+    id: "review",
+    rail: "The doctor checks the summary",
+    when: "Tue, Nov 17, 4:30 pm",
+    who: "Dr. Okafor",
+    happened:
+      "Throughline put Dr. Okafor's own notes beside its plain-language version, section by section. Nothing reaches Maria until she approves it.",
+    screen: { kind: "review" },
+    action: "Approve and send",
+    next: "Maria gets a text that her summary is ready. The next evening, Throughline asks three short questions to check it was clear.",
+  },
+  {
+    id: "teachback",
+    rail: "Did it make sense?",
+    when: "Wed, Nov 18, 5:00 pm",
     who: "Maria, at home",
     happened:
-      "Maria is home. Her page now shows what happens next: her visit summary, a short check that it made sense, her results, and her next appointment.",
+      "Maria read her summary yesterday, and Dr. Okafor has seen her test results. Today Throughline asked three short questions: when is her next blood test, what does she bring, and who does she call.",
     screen: { kind: "patient", phase: "after" },
+    action: "Send",
+    draft:
+      "My next blood test is Monday, December 7. I bring my insurance card and my ID. I'm not sure who to call.",
+    next: "Throughline checks her answers. If one is unclear, a nurse calls her. It never answers medical questions itself.",
+  },
+  {
+    id: "checkin",
+    rail: "A check-in",
+    when: "Fri, Nov 20, 10:05 am",
+    who: "Maria, at home",
+    happened:
+      "Maria wasn't sure who to call, so Throughline put a nurse call on the clinic's list. Today it checks the practical things: her prescription, and a ride to her next visit.",
+    screen: { kind: "patient", phase: "after" },
+    action: "Send",
+    draft:
+      "Yes, I picked up the prescription. My daughter will drive me. No need for a nurse call, thank you.",
+    next: "With every step done, Throughline closes the referral and reports back to the doctor who sent Maria.",
+  },
+  {
+    id: "closed",
+    rail: "The loop is closed",
+    when: "Fri, Nov 20, 10:05 am",
+    who: "Dr. Whitcombe's office",
+    happened:
+      "Dr. Whitcombe faxed Maria's referral ten days ago. Today her office gets one report back: what was done, when, and what is still open.",
+    screen: { kind: "closed" },
     action: "Start again from the referral",
     next: "",
   },

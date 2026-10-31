@@ -313,6 +313,16 @@ export class Runtime {
       return;
     }
     this.emit(next, depth + 1, () => true);
+    for (const reason of result.tasks ?? []) {
+      const review = this.openReview({
+        kind: "task",
+        capability,
+        agent: agent.name,
+        reason,
+        event,
+      });
+      this.requestReview(review, depth);
+    }
   }
 
   // ---- human gates ------------------------------------------------------------------------

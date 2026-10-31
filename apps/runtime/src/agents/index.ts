@@ -12,6 +12,8 @@ import { createEligibilityAgent } from "./eligibility/handler";
 import { createAuthorizationAgent } from "./authorization/handler";
 import { createSchedulerAgent } from "./scheduler/handler";
 import { createPrepAgent } from "./prep/handler";
+import { createDischargeAgent } from "./discharge/handler";
+import { createFollowupAgent } from "./followup/handler";
 
 export interface AgentDeps {
   engine: Engine;
@@ -35,5 +37,7 @@ export function createAgents(deps: AgentDeps): Agent[] {
     createCompanionAgent(deps) as unknown as Agent,
     createMessengerAgent() as unknown as Agent,
     createResultsWatcherAgent(),
+    createDischargeAgent() as unknown as Agent,
+    createFollowupAgent(deps),
   ];
 }

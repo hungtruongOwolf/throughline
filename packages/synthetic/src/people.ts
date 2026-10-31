@@ -188,5 +188,9 @@ export const PATIENT_AVAILABILITY: Record<string, { date: string; from: string; 
     { date: "2026-11-18", from: "09:00", to: "16:30" },
     { date: "2026-11-20", from: "09:00", to: "16:30" },
     { date: "2026-11-24", from: "09:00", to: "16:30" },
+    // Follow-up weeks.
+    { date: "2026-12-07", from: "09:00", to: "16:30" },
+    { date: "2026-12-08", from: "09:00", to: "16:30" },
+    { date: "2026-12-09", from: "09:00", to: "16:30" },
   ],
 };

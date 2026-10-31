@@ -533,57 +533,120 @@ function VisitDay({
   );
 }
 
+const TOPIC_WORDS: Record<string, string> = {
+  next_visit: "your next appointment",
+  bring: "what to bring",
+  who_to_call: "who to call",
+};
+
 function After({ journey }: { journey: Journey }) {
   const summary = journey.summary;
   const visitDone = phaseOf(journey) === "after";
+  const closed = journey.phase === "COMPLETED";
+  const followUps = appointments(journey).filter((a) => a.key.startsWith("appt-o-fu-"));
+  const teachback = journey.teachback;
+  const unclear = Object.entries(teachback?.answers ?? {})
+    .filter(([, v]) => v !== "correct")
+    .map(([k]) => TOPIC_WORDS[k] ?? k);
+  const resulted = journey.orders.filter(
+    (o) => o.status === "resulted" || o.status === "acknowledged",
+  );
+  const reviewed = resulted.length > 0 && resulted.every((o) => o.status === "acknowledged");
+  const checkin = journey.logistics_checkin;
+  const checkinAnswered = checkin?.wants_nurse_call !== undefined;
   return (
     <div>
       <p className="font-display text-[40px] leading-tight font-bold">
-        {visitDone
-          ? "Here is what happens now that your visit is over."
-          : "After your visit, this is what happens, in this order."}
+        {closed
+          ? "Everything from this visit is done. Here is what comes next."
+          : visitDone
+            ? "Here is what happens now that your visit is over."
+            : "After your visit, this is what happens, in this order."}
       </p>
       <ol className="mt-8">
         <LineItem
+          date={followUps[0] ? shortDay(followUps[0].start) : undefined}
+          state={followUps.length > 0 ? "done" : visitDone ? "now" : "later"}
+          title="Your next appointments"
+        >
+          {followUps.length > 0 ? (
+            <ul className="mt-1 space-y-1">
+              {followUps.map((a) => (
+                <li key={a.key}>
+                  <span className="font-bold text-ink">{a.guide.title}</span>, {longDay(a.start)} at{" "}
+                  {amPm(a.start)}. {place(a.station_id)}.
+                </li>
+              ))}
+            </ul>
+          ) : (
+            "We book your follow-up visit and blood tests, then send you the times and how to prepare, the same way as this time."
+          )}
+        </LineItem>
+        <LineItem
+          date={summary?.sent_at ? shortDay(summary.sent_at) : undefined}
           state={summary?.sent_at ? "done" : visitDone ? "now" : "later"}
           title="A summary of your visit, in plain words"
         >
           {summary?.sent_at ? (
-            <ul className="mt-1 space-y-2">
+            <div className="mt-1 space-y-3">
               {summary.draft.map((s) => (
-                <li key={s.heading}>
-                  <span className="font-bold text-ink">{s.heading}.</span> {s.plain}
-                </li>
+                <section key={s.heading}>
+                  <h4 className="font-bold text-ink">{s.heading}</h4>
+                  <p>{s.plain}</p>
+                  <details className="mt-1">
+                    <summary className="cursor-pointer text-[15px] text-line underline">
+                      As Dr. Okafor wrote it
+                    </summary>
+                    <p className="mt-1 text-[15px] text-ink-soft">{s.verbatim}</p>
+                  </details>
+                </section>
               ))}
-            </ul>
+              <p className="text-[15px] text-ink-soft">
+                {summary.reviewed_by
+                  ? `Checked by ${summary.reviewed_by}.`
+                  : "Prepared from your care team's notes; not yet checked by a clinician."}
+              </p>
+            </div>
+          ) : summary ? (
+            "Dr. Okafor is checking your summary. It arrives here and by text once she has."
           ) : (
             "Your care team writes down what you talked about and what comes next. A clinician checks it before it is sent to you here and by text, usually the same day."
           )}
         </LineItem>
         <LineItem
-          state={journey.teachback?.passed ? "done" : "later"}
+          date={teachback?.sent_at ? shortDay(teachback.sent_at) : undefined}
+          state={teachback?.passed !== undefined ? "done" : teachback ? "now" : "later"}
           title="Three short questions to check it made sense"
         >
-          For example, when your next appointment is and who to call. If anything is unclear, a
-          nurse calls you. It is not a test.
+          {teachback?.passed === true
+            ? "You had everything right. Thank you."
+            : teachback?.passed === false
+              ? `Thank you for answering. A nurse will call you to go over ${unclear.join(", ")}.`
+              : teachback
+                ? "We sent you three questions by text: when your next blood test is, what to bring, and who to call. Answer in your own words. It is not a test."
+                : "For example, when your next appointment is and who to call. If anything is unclear, a nurse calls you. It is not a test."}
+        </LineItem>
+        <LineItem state={reviewed ? "done" : "later"} title="Your test results">
+          {reviewed
+            ? "Dr. Okafor has reviewed your test results. She goes over them with you at your next visit."
+            : "Your doctor reviews your results and goes over them with you. We never send results by text."}
         </LineItem>
         <LineItem
-          state={journey.orders.some((o) => o.status === "acknowledged") ? "done" : "later"}
-          title="Your test results"
+          date={checkin?.sent_at ? shortDay(checkin.sent_at) : undefined}
+          state={checkinAnswered ? "done" : checkin ? "now" : "later"}
+          title="A check-in a few days later"
         >
-          Your doctor reviews your results and goes over them with you. You will get a message when
-          they are ready to view. We never send results by text.
-        </LineItem>
-        <LineItem state="later" title="Your next appointment">
-          We book your follow-up visit and blood tests, then send you the times and how to prepare,
-          the same way as this time.
-        </LineItem>
-        <LineItem
-          state={journey.logistics_checkin ? "done" : "later"}
-          title="A check-in call two days later"
-        >
-          Someone from the clinic asks whether you picked up any prescriptions and have a ride for
-          your next visit.
+          {checkinAnswered
+            ? [
+                checkin?.medication_picked_up ? "Prescription picked up." : undefined,
+                checkin?.ride_confirmed ? "Ride to your next visit arranged." : undefined,
+                checkin?.wants_nurse_call ? "A nurse will call you today." : undefined,
+              ]
+                .filter(Boolean)
+                .join(" ") || "Thank you for answering."
+            : checkin
+              ? "We asked by text whether you picked up your prescription and have a ride to your next visit."
+              : "We ask whether you picked up any prescriptions and have a ride to your next visit."}
         </LineItem>
       </ol>
     </div>
@@ -646,13 +709,19 @@ function ToDo({ journey, onConfirm }: { journey: Journey; onConfirm?: () => void
       text: "Read your visit summary when it arrives.",
     });
     items.push({
-      done: !!journey.teachback?.passed,
+      done: journey.teachback?.passed !== undefined,
       text: "Answer three short questions about it.",
     });
     items.push({
-      done: false,
-      text: "Pick up any prescriptions at the Outpatient Pharmacy, Level 1.",
+      done: !!journey.logistics_checkin?.medication_picked_up,
+      text: "Pick up your prescription at the Outpatient Pharmacy, Level 1.",
     });
+    const nextLab = appointments(journey).find((a) => a.key.startsWith("appt-o-fu-"));
+    if (nextLab)
+      items.push({
+        done: !!journey.logistics_checkin?.ride_confirmed,
+        text: `Plan a ride for ${shortDay(nextLab.start)}.`,
+      });
   }
   return (
     <section aria-labelledby="todo-heading" className="border-[3px] border-ink/10 p-5">

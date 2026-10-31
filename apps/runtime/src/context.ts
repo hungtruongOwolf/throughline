@@ -21,6 +21,7 @@ import { createStation } from "./core/journeys";
 import day from "../../../fixtures/day-2026-11-17.json";
 import { SimBackground } from "./board";
 import { startPreVisitSim } from "./sim/pre-visit";
+import { startPostVisitSim } from "./sim/post-visit";
 
 /** Until the provider clients land (D2-2), model agents fall back deterministically. */
 export const unconfiguredGateway: ModelGateway = {
@@ -67,6 +68,7 @@ export function createContext(
   });
   runtime.start();
   startPreVisitSim({ bus, clock, runtime });
+  startPostVisitSim({ bus, clock, runtime });
   const cameras = new CameraBank();
   // SAM goes through the cache: in replay mode the bank's recorded counts are served, a miss
   // falls back to tickets only (spec 6, sensing fallback). Without a key, tickets only.

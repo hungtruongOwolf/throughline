@@ -176,6 +176,43 @@ function reminder(ctx: HandlerContext): HandlerResult {
   };
 }
 
+/** The next booked appointment after now (the follow-up, once the visit is over). */
+function nextBooked(journey: Journey, now: string) {
+  return [...journey.appointments]
+    .filter((a) => a.status === "booked" && Date.parse(a.start) > Date.parse(now))
+    .sort((a, b) => Date.parse(a.start) - Date.parse(b.start))[0];
+}
+
+/** After the visit (spec A2, A5): the teach-back questions and the day-3 logistics check-in. */
+function postVisit(ctx: HandlerContext): HandlerResult {
+  const journey = ctx.journey as Journey;
+  const lang = journey.patient.language;
+  const event = ctx.event as Extract<
+    DomainEvent,
+    { type: "TeachbackSent" } | { type: "LogisticsCheckinSent" }
+  >;
+  const next = nextBooked(journey, ctx.now);
+  const when = next ? whenText(next.start, lang) : "";
+  const teachback = event.type === "TeachbackSent";
+  const text = teachback ? t(lang, "teachback.questions") : t(lang, "checkin.questions", { when });
+  const out = outbound(journey, text, ctx.now);
+  const messages = out.messages.map((m) =>
+    m.text === text ? { ...m, id: event.payload.message_id } : m,
+  );
+  return {
+    summary: teachback ? "teach-back questions sent" : "logistics check-in sent",
+    journey_patch: (j) => ({
+      ...j,
+      outreach_log: [...j.outreach_log, ...messages],
+      ...(teachback
+        ? { teachback: { sent_at: ctx.now, answers: {} } }
+        : { logistics_checkin: { sent_at: ctx.now } }),
+    }),
+    outbound: out.outbound,
+    next_events: [],
+  };
+}
+
 function handoff(ctx: HandlerContext): HandlerResult {
   const journey = ctx.journey as Journey;
   const out = outbound(journey, t(journey.patient.language, "handoff.nurse"), ctx.now);
@@ -222,6 +259,11 @@ export function createMessengerAgent(): ModelAgent<Args> {
       if (ctx.capability === "handoff.request") return handoff(ctx);
       if (ctx.capability === "message.send" && ctx.event.type === "ReminderSent")
         return reminder(ctx);
+      if (
+        ctx.capability === "message.send" &&
+        (ctx.event.type === "TeachbackSent" || ctx.event.type === "LogisticsCheckinSent")
+      )
+        return postVisit(ctx);
       return { summary: `not handled: ${ctx.capability}`, next_events: [] };
     },
   };

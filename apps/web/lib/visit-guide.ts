@@ -68,8 +68,23 @@ const GUIDES: Record<string, Guide> = {
   },
 };
 
-export function guideFor(order: Pick<Order, "kind" | "station_id">): Guide {
+const FOLLOW_UP: Guide = {
+  title: "Follow-up visit with your oncologist",
+  short: "follow-up with Dr. Okafor",
+  what: "You see Dr. Okafor again. She goes over your CT scan and blood tests with you and plans what comes next.",
+  why: "Your blood tests a couple of days before give her what she needs for this visit.",
+  howLong: "About 20 to 30 minutes.",
+  youDo: [
+    "Bring a list of your medicines and your questions.",
+    "Bring someone with you if you like.",
+  ],
+};
+
+export function guideFor(
+  order: Pick<Order, "kind" | "station_id"> & { code_as_written?: string },
+): Guide {
   if (order.station_id === "vitals") return GUIDES.vitals as Guide;
+  if (order.kind === "visit" && /follow-up/i.test(order.code_as_written ?? "")) return FOLLOW_UP;
   return (GUIDES[order.kind] ?? GUIDES.visit) as Guide;
 }
 

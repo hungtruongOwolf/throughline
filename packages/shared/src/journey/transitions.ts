@@ -43,24 +43,25 @@ export const TRANSITIONS: readonly Transition[] = [
   { event: "ItineraryPlanned", from: ["ARRIVED"], to: "PLANNED" },
   { event: "StopStarted", from: ["PLANNED", "ACTIVE"], to: "ACTIVE" },
   { event: "VisitCheckedOut", from: ["ACTIVE"], to: "CHECKED_OUT" },
-  // POST
-  { event: "SummaryDrafted", from: ["CHECKED_OUT"], to: "SUMMARY_DRAFTED" },
+  // POST: follow-ups are booked first so the summary can name the next visit (spec A3, A1).
+  { event: "FollowUpsBooked", from: ["CHECKED_OUT"], to: "FOLLOWUPS_BOOKED", soft: true },
+  { event: "SummaryDrafted", from: ["CHECKED_OUT", "FOLLOWUPS_BOOKED"], to: "SUMMARY_DRAFTED" },
   { event: "SummarySent", from: ["SUMMARY_DRAFTED"], to: "SUMMARY_SENT" },
   { event: "TeachbackSent", from: ["SUMMARY_SENT"], to: "TEACHBACK_PENDING" },
   { event: "TeachbackAnswered", from: ["TEACHBACK_PENDING"], to: "TEACHBACK_DONE", soft: true },
-  {
-    event: "FollowUpsBooked",
-    from: ["SUMMARY_SENT", "TEACHBACK_PENDING", "TEACHBACK_DONE"],
-    to: "FOLLOWUPS_BOOKED",
-    soft: true,
-  },
+  // Results are acknowledged whenever the clinician gets to them; the state moves once the
+  // teach-back is done.
   {
     event: "ResultAcknowledged",
-    from: ["FOLLOWUPS_BOOKED"],
+    from: ["TEACHBACK_DONE"],
     to: "RESULTS_ACKNOWLEDGED",
     soft: true,
   },
-  { event: "ReferralClosed", from: ["RESULTS_ACKNOWLEDGED"], to: "REFERRAL_CLOSED" },
+  {
+    event: "ReferralClosed",
+    from: ["TEACHBACK_DONE", "RESULTS_ACKNOWLEDGED"],
+    to: "REFERRAL_CLOSED",
+  },
 ];
 
 export const TERMINAL_STATES: readonly JourneyState[] = ["REFERRAL_CLOSED"];

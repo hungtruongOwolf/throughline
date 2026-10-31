@@ -19,11 +19,11 @@ export const STATES_BY_PHASE = {
   ],
   VISIT: ["ARRIVED", "PLANNED", "ACTIVE", "CHECKED_OUT"],
   POST: [
+    "FOLLOWUPS_BOOKED",
     "SUMMARY_DRAFTED",
     "SUMMARY_SENT",
     "TEACHBACK_PENDING",
     "TEACHBACK_DONE",
-    "FOLLOWUPS_BOOKED",
     "RESULTS_ACKNOWLEDGED",
   ],
   // ReferralClosed ends the journey: phase COMPLETED (spec A6) is reached through this state.

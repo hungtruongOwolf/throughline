@@ -52,6 +52,8 @@ export interface HandlerResult {
   review_reason?: string;
   /** Generated patient-facing text, screened by the clinical-content classifier before sending. */
   outbound?: OutboundText[];
+  /** Staff tasks to open on the journey (e.g. a nurse call after a failed teach-back). */
+  tasks?: string[];
 }
 
 export interface HandlerContext {
@@ -97,6 +99,8 @@ export interface DeterministicAgent extends AgentDescriptor {
 export interface ModelAgent<Args = unknown> extends AgentDescriptor {
   kind: "model";
   model: ModelSpec<Args>;
+  /** A different model step for some capabilities (e.g. discharge: summary vs. teach-back). */
+  modelFor?: (ctx: HandlerContext) => ModelSpec<unknown> | undefined;
   /** Deterministic fallback when the model fails twice (spec 4.3 step 6). */
   fallback: (ctx: HandlerContext) => HandlerResult | Promise<HandlerResult>;
   /**

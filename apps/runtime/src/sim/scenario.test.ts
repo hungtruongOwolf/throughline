@@ -33,7 +33,8 @@ describe("visit-day scenario (D2-9)", () => {
     };
     expect(summary).toMatchObject({
       done: true,
-      state: "CHECKED_OUT",
+      // Checkout hands over to the after-visit agents: follow-ups booked, summary drafted.
+      state: "SUMMARY_DRAFTED",
       lost: 1,
       located: 1,
       results: 1,
@@ -47,6 +48,7 @@ describe("visit-day scenario (D2-9)", () => {
     expect((firstProposal?.event.occurred_at ?? "").slice(11, 16) <= "09:50").toBe(true);
     expect(summary.applied).toBe(summary.proposals);
     expect(summary.replans).toBeGreaterThanOrEqual(1);
-    expect(ctx.store.reviews("pending")).toEqual([]);
+    // Every visit-day review was handled; only the after-visit summary waits for its clinician.
+    expect(ctx.store.reviews("pending").map((r) => r.capability)).toEqual(["summary.send"]);
   }, 120_000);
 });

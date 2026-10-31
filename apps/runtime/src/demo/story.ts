@@ -28,6 +28,10 @@ export const STORY_STEPS = [
   "lost",
   "question",
   "after",
+  "review",
+  "teachback",
+  "checkin",
+  "closed",
 ] as const;
 export type StoryStep = (typeof STORY_STEPS)[number];
 
@@ -46,7 +50,16 @@ export const STORY_TIMES = {
   lost: at("17", "11:47"),
   question: at("17", "12:47"),
   end: at("17", "14:35"),
+  review: at("17", "16:30"),
+  teachback: at("18", "17:00"),
+  checkin: at("20", "10:05"),
 };
+
+/** Maria's answers after the visit: one teach-back answer unsure, the check-in all fine. */
+export const TEACHBACK_REPLY =
+  "My next blood test is Monday, December 7. I bring my insurance card and my ID. I'm not sure who to call.";
+export const CHECKIN_REPLY =
+  "Yes, I picked up the prescription. My daughter will drive me. No need for a nurse call, thank you.";
 
 export class StoryDriver {
   private index = 0;
@@ -168,6 +181,35 @@ export class StoryDriver {
         await clock.advanceTo(STORY_TIMES.end);
         break;
       case "after":
+        await clock.advanceTo(STORY_TIMES.review);
+        break;
+      case "review": {
+        // Dr. Okafor reads the draft beside her own notes and approves it.
+        const review = store
+          .reviews("pending")
+          .find((r) => r.capability === "summary.send" && r.journey_id === MARIA_JOURNEY_ID);
+        if (review) await runtime.resolve(review.id, "approved", "Dr. Okafor");
+        await bus.idle();
+        await clock.advanceTo(STORY_TIMES.teachback);
+        break;
+      }
+      case "teachback":
+        await runtime.ingest({
+          type: "PatientReplied",
+          journey_id: MARIA_JOURNEY_ID,
+          payload: { channel: "sms_sim", text: TEACHBACK_REPLY, language: "en" },
+        });
+        await bus.idle();
+        await clock.advanceTo(STORY_TIMES.checkin);
+        break;
+      case "checkin":
+        await runtime.ingest({
+          type: "PatientReplied",
+          journey_id: MARIA_JOURNEY_ID,
+          payload: { channel: "sms_sim", text: CHECKIN_REPLY, language: "en" },
+        });
+        break;
+      case "closed":
         return;
     }
     await bus.idle();

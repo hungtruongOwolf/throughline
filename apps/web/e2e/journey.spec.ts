@@ -44,7 +44,8 @@ test.describe("Journey Control (D2-9)", () => {
       state: string;
       itinerary: { stops: { order_id: string; node_id: string }[] };
     };
-    expect(journey.state).toBe("CHECKED_OUT");
+    // Checkout hands over to the after-visit agents: follow-ups booked, summary drafted.
+    expect(journey.state).toBe("SUMMARY_DRAFTED");
     expect(journey.itinerary.stops.find((s) => s.order_id === "o-ct")?.node_id).toBe("mp2.ct2");
     await page.waitForTimeout(3500);
     await page.screenshot({ path: `${SCREENS}journey-control-done-1536.png` });

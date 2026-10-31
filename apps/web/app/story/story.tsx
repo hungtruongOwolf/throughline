@@ -8,6 +8,7 @@ import { clockTime } from "../../lib/format";
 import {
   fetchBoard,
   fetchJourney,
+  fetchJourneyEvents,
   fetchOverview,
   RUNTIME_URL,
   storyCommand,
@@ -214,6 +215,106 @@ function OpsScreen({ onApprove, busy }: { onApprove: () => void; busy: boolean }
   );
 }
 
+function ReviewScreen({ journey }: { journey: Journey | undefined }) {
+  const draft = journey?.summary?.draft ?? [];
+  return (
+    <Frame label="Dr. Okafor's inbox, Halden Medical Center">
+      <div className="p-6">
+        <p className="inline-block rounded-[6px] bg-held-bg px-2 py-0.5 text-[15px] font-bold text-held">
+          Waiting for you
+        </p>
+        <h3 className="mt-2 font-display text-[28px] font-bold">
+          After-visit summary for Maria Diaz
+        </h3>
+        <p className="text-[16px] text-ink-soft">
+          Your notes on the left, exactly as you wrote them. Throughline&apos;s plain-language
+          version on the right. Maria sees both.
+        </p>
+        <div className="mt-5 space-y-4">
+          {draft.map((s) => (
+            <section
+              key={s.heading}
+              className="grid gap-3 border-t border-ink/10 pt-4 md:grid-cols-2"
+            >
+              <div>
+                <h4 className="text-[15px] font-bold text-ink-soft">{s.heading}, as written</h4>
+                <p className="mt-1 text-[16px]">{s.verbatim}</p>
+              </div>
+              <div>
+                <h4 className="text-[15px] font-bold text-ink-soft">In plain words</h4>
+                <p className="mt-1 text-[16px]">{s.plain}</p>
+              </div>
+            </section>
+          ))}
+        </div>
+      </div>
+    </Frame>
+  );
+}
+
+interface ClosureReport {
+  completed_services: string[];
+  dates: string[];
+  pending_items: string[];
+}
+
+function longDay(date: string): string {
+  return new Date(`${date}T12:00:00-06:00`).toLocaleDateString("en-US", {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    timeZone: "America/Chicago",
+  });
+}
+
+function ClosedScreen() {
+  const [report, setReport] = useState<ClosureReport | undefined>();
+  useEffect(() => {
+    void fetchJourneyEvents(JOURNEY)
+      .then((events) => {
+        const closed = events.find((e) => e.event.type === "ReferralClosed");
+        setReport((closed?.event.payload as { report?: ClosureReport } | undefined)?.report);
+      })
+      .catch(() => undefined);
+  }, []);
+  return (
+    <Frame label="Northgate Family Medicine, Dr. Whitcombe's inbox">
+      <div className="max-w-[72ch] p-6 text-[17px]">
+        <p className="text-[15px] text-ink-soft">
+          From Halden Medical Center, Oncology. Re: Maria Diaz, referred Nov 10.
+        </p>
+        <h3 className="mt-2 font-display text-[28px] font-bold">Referral closed</h3>
+        {report ? (
+          <div className="mt-4 space-y-4">
+            <section>
+              <h4 className="font-bold">Done</h4>
+              <ul className="mt-1 list-disc pl-5">
+                {report.completed_services.map((x) => (
+                  <li key={x}>{x}</li>
+                ))}
+              </ul>
+            </section>
+            <section>
+              <h4 className="font-bold">Dates</h4>
+              <p className="mt-1">{report.dates.map(longDay).join(", ")}</p>
+            </section>
+            <section>
+              <h4 className="font-bold">Still open</h4>
+              <ul className="mt-1 list-disc pl-5">
+                {report.pending_items.map((x) => (
+                  <li key={x}>{x}</li>
+                ))}
+              </ul>
+            </section>
+          </div>
+        ) : (
+          <p className="mt-3 text-ink-soft">Loading the report.</p>
+        )}
+      </div>
+    </Frame>
+  );
+}
+
 // ---- the story page --------------------------------------------------------------------
 
 function Rail({ index, onGo }: { index: number; onGo: (i: number) => void }) {
@@ -276,6 +377,10 @@ function ScreenFor({
       return <StationScreen />;
     case "ops":
       return <OpsScreen onApprove={onAct} busy={busy} />;
+    case "review":
+      return <ReviewScreen journey={journey} />;
+    case "closed":
+      return <ClosedScreen />;
     case "patient":
       return (
         <Frame label="Maria's patient page, on her phone or computer">
@@ -363,6 +468,12 @@ export function Story() {
           <p className="mt-3 max-w-[70ch] text-[19px]">{step.happened}</p>
 
           <div className="mt-6 flex flex-wrap items-center gap-4 rounded-[14px] bg-white p-4 ring-1 ring-ink/10">
+            {step.draft && (
+              <p className="w-full rounded-[16px] bg-line/10 px-4 py-3 text-[17px] sm:w-auto sm:flex-1">
+                <span className="block text-[13px] font-bold text-ink-soft">Maria&apos;s text</span>
+                {step.draft}
+              </p>
+            )}
             {step.voice && (
               <div className="w-full rounded-[16px] bg-line/10 px-4 py-3 text-[17px] sm:w-auto sm:flex-1">
                 <span className="block text-[13px] font-bold text-ink-soft">

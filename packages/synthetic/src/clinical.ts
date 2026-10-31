@@ -125,3 +125,33 @@ export const LIS_TURNAROUND_MIN: Record<string, number> = {
   CMP: 60,
   "CT chest/abdomen/pelvis with contrast": 90,
 };
+
+/**
+ * What Dr. Okafor entered at the end of Maria's visit (synthetic). The discharge agent copies
+ * these verbatim and adds a plain-language restatement; it never changes the instructions.
+ */
+export const MARIA_VISIT_NOTES = {
+  author: "Dr. Okafor",
+  sections: [
+    {
+      heading: "What we did today",
+      verbatim:
+        "New patient consultation. CBC, CMP and CT chest/abdomen/pelvis with contrast completed. First infusion given and tolerated well.",
+    },
+    {
+      heading: "What comes next",
+      verbatim:
+        "Repeat CBC and CMP in 3 weeks. Follow-up with Dr. Okafor at least 2 days after labs result, to review the CT and plan the next cycle.",
+    },
+    {
+      heading: "Medicines",
+      verbatim:
+        "Ondansetron 8 mg by mouth every 8 hours as needed for nausea. Continue your home medications.",
+    },
+    {
+      heading: "When to call",
+      verbatim:
+        "Call the clinic at 555-0100 for a temperature of 100.4 F or higher, vomiting that does not stop, or new shortness of breath. After hours, call 555-0199.",
+    },
+  ],
+} as const;

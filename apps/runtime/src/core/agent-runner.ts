@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 import type { ModelCallRecord } from "@throughline/shared";
 import type { ModelGateway, ModelInputItem, ModelResponse } from "../models/types";
-import type { Agent, HandlerContext, HandlerResult, ModelAgent } from "./agent";
+import type { Agent, HandlerContext, HandlerResult, ModelAgent, ModelSpec } from "./agent";
 
 export class RequiredToolError extends Error {
   constructor(
@@ -44,7 +44,7 @@ export class AgentRunner {
     for (let attempt = 0; attempt < 2; attempt++) {
       try {
         const args = await this.loop(modelAgent, ctx, errorNote);
-        return { result: await modelAgent.model.apply(args, ctx), usedFallback: false };
+        return { result: await specFor(modelAgent, ctx).apply(args, ctx), usedFallback: false };
       } catch (e) {
         errorNote = e instanceof Error ? e.message : String(e);
       }
@@ -68,13 +68,13 @@ export class AgentRunner {
       id: randomUUID(),
       at: ctx.now,
       capability: ctx.capability,
-      required_tool: agent.model.requiredTool,
+      required_tool: specFor(agent, ctx).requiredTool,
       ...(ctx.journey ? { journey_id: ctx.journey.id } : {}),
     };
   }
 
   private async loop(agent: ModelAgent<unknown>, ctx: HandlerContext, errorNote?: string) {
-    const spec = agent.model;
+    const spec = specFor(agent, ctx);
     const userText = errorNote
       ? `${spec.input(ctx)}\n\nYour previous attempt failed: ${errorNote}. Call ${spec.requiredTool} exactly once with valid arguments.`
       : spec.input(ctx);
@@ -192,7 +192,7 @@ export class AgentRunner {
   }
 
   private gatewayCall(agent: ModelAgent<unknown>, ctx: HandlerContext, history: ModelInputItem[]) {
-    const spec = agent.model;
+    const spec = specFor(agent, ctx);
     return this.gateway.respond({
       capability: ctx.capability,
       input: [...history],
@@ -202,6 +202,10 @@ export class AgentRunner {
       phiProbe: spec.input(ctx),
     });
   }
+}
+
+function specFor(agent: ModelAgent<unknown>, ctx: HandlerContext): ModelSpec<unknown> {
+  return agent.modelFor?.(ctx) ?? agent.model;
 }
 
 function output(callId: string, value: unknown): ModelInputItem {

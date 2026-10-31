@@ -149,4 +149,18 @@ export const es: Record<CopyKey, string> = {
   "reply.reschedule": "Buscaremos otro día y le enviaremos los nuevos horarios.",
   "reply.noted_wheelchair":
     "Anotado: tendremos una silla de ruedas lista para usted en la entrada.",
+  "summary.ready":
+    "El resumen de su visita de {author} está listo en su página de Throughline: lo que se hizo hoy, lo que sigue y cuándo llamar.",
+  "summary.as_written": "Tal como lo escribió su equipo de atención",
+  "teachback.questions":
+    "Tres preguntas rápidas para saber si nuestros mensajes fueron claros. No es un examen. 1. ¿Cuándo es su próximo análisis? 2. ¿Qué trae a sus citas? 3. ¿A quién llama con preguntas sobre su atención? Responda con sus propias palabras.",
+  "teachback.passed": "Gracias, todo está correcto. Nos vemos el {when}.",
+  "teachback.nurse": "Gracias. Una enfermera le llamará para repasar {topics}.",
+  "teachback.topic.next_visit": "su próxima cita",
+  "teachback.topic.bring": "qué traer",
+  "teachback.topic.who_to_call": "a quién llamar",
+  "checkin.questions":
+    "Le saludamos de Halden Medical Center. ¿Recogió su receta? ¿Tiene quién le lleve a su cita del {when}? ¿Quiere que una enfermera le llame? Responda con sus propias palabras.",
+  "checkin.thanks": "Gracias. Anotamos sus respuestas.",
+  "checkin.nurse": "Gracias. Una enfermera le llamará hoy.",
 };

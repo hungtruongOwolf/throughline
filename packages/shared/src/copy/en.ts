@@ -141,6 +141,20 @@ export const en = {
   "reply.confirmed": "Thank you, you're confirmed. We'll send a reminder before your visit.",
   "reply.reschedule": "We'll look for another day and text you the new times.",
   "reply.noted_wheelchair": "Noted: a wheelchair will be ready for you at the entrance.",
+  "summary.ready":
+    "Your visit summary from {author} is ready on your Throughline page: what you did today, what comes next, and when to call.",
+  "summary.as_written": "As your care team wrote it",
+  "teachback.questions":
+    "Three quick questions to check our messages were clear. It is not a test. 1. When is your next blood test? 2. What do you bring to your visits? 3. Who do you call with questions about your care? Answer in your own words.",
+  "teachback.passed": "Thank you, that is all right. See you on {when}.",
+  "teachback.nurse": "Thank you. A nurse will call you to go over {topics}.",
+  "teachback.topic.next_visit": "your next appointment",
+  "teachback.topic.bring": "what to bring",
+  "teachback.topic.who_to_call": "who to call",
+  "checkin.questions":
+    "Checking in from Halden Medical Center. Did you pick up your prescription? Do you have a ride to your visit on {when}? Would you like a nurse to call you? Answer in your own words.",
+  "checkin.thanks": "Thank you. We have noted your answers.",
+  "checkin.nurse": "Thank you. A nurse will call you today.",
 } as const;
 
 export type CopyKey = keyof typeof en;
@@ -158,4 +172,7 @@ export const PATIENT_SURFACE_PREFIXES = [
   "prep.",
   "reminder.",
   "reply.",
+  "summary.",
+  "teachback.",
+  "checkin.",
 ] as const;

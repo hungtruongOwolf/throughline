@@ -46,9 +46,20 @@ export function route(
     case "PatientReplied": {
       const text = event.payload.text ?? event.payload.transcript ?? "";
       // Symptom or other clinical content never reaches intent handling (spec B7, 6.2).
-      return classifyClinical(text)
-        ? one("handoff.request", "messenger")
-        : one("reply.handle", "messenger");
+      if (classifyClinical(text)) return one("handoff.request", "messenger");
+      // After the visit a reply answers whatever was last asked (spec A2, A5).
+      const journey = ctx.journey;
+      if (journey?.state === "TEACHBACK_PENDING") return one("teachback.run", "discharge");
+      const checkin = journey?.logistics_checkin;
+      if (
+        checkin &&
+        checkin.medication_picked_up === undefined &&
+        checkin.ride_confirmed === undefined &&
+        checkin.wants_nurse_call === undefined
+      ) {
+        return one("logistics.checkin", "followup");
+      }
+      return one("reply.handle", "messenger");
     }
     case "ReplyHandled":
       return event.payload.intent === "reschedule" ? one("schedule.plan", "scheduler") : [];
@@ -76,22 +87,24 @@ export function route(
             { capability: "itinerary.replan", agent: "itinerary" },
           ]
         : one("result.watch", "results_watcher");
+    // Follow-ups are booked first so the summary can name the next visit (spec A3, A1).
     case "VisitCheckedOut":
-      return [
-        { capability: "summary.draft", agent: "discharge" },
-        { capability: "followup.book", agent: "followup" },
-      ];
+      return one("followup.book", "followup");
     // POST
+    case "FollowUpsBooked":
+      return one("summary.draft", "discharge");
     case "SummaryDrafted":
       return one("summary.send", "discharge");
-    case "SummarySent":
+    // The teach-back (SummarySent + 24 h) and the day-3 check-in are sim timers (sim/post-visit).
+    case "TeachbackSent":
+    case "LogisticsCheckinSent":
+      return one("message.send", "messenger");
     case "TeachbackAnswered":
-      return one("teachback.run", "discharge");
-    case "FollowUpsBooked":
     case "ResultAcknowledged":
-      return one("referral.close", "followup");
     case "LogisticsCheckinAnswered":
-      return one("logistics.checkin", "followup");
+      return one("referral.close", "followup");
+    case "ResultAckOverdue":
+      return one("result_ack.track", "results_watcher");
     // OPS
     case "QueueStateUpdated": {
       const { queue } = event.payload;
