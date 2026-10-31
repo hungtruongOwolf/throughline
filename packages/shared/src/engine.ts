@@ -186,6 +186,7 @@ export const SimRequest = z.object({
     .optional(),
   actions: z.array(OpsActionLite).optional(),
   snapshot_every_min: z.number().nonnegative().optional(),
+  include_visits: z.boolean().optional(),
 });
 export type SimRequest = z.infer<typeof SimRequest>;
 
@@ -208,6 +209,17 @@ export const SimResult = z.object({
       finished: z.boolean(),
     }),
   ),
+  visits: z
+    .array(
+      z.object({
+        patient_id: z.string(),
+        station_id: StationId,
+        reach: SimTime,
+        start: SimTime.optional(),
+        end: SimTime.optional(),
+      }),
+    )
+    .optional(),
   kpis: z.object({
     patients: z.number().int(),
     finished: z.number().int(),
@@ -224,6 +236,7 @@ export const SimResult = z.object({
   }),
 });
 export type SimResult = z.infer<typeof SimResult>;
+export type SimVisit = NonNullable<SimResult["visits"]>[number];
 
 export const WhatIfRequest = SimRequest.extend({
   candidates: z.array(OpsActionLite).min(1),

@@ -2,18 +2,20 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { streamSSE } from "hono/streaming";
 import { z } from "zod";
-import { SHARED_VERSION, type Journey } from "@throughline/shared";
+import { SHARED_VERSION, StationId, type Journey } from "@throughline/shared";
 import type { EventBus } from "./bus/event-bus";
 import type { ClockSpeed, SimClock } from "./bus/sim-clock";
 import type { RuntimeStore } from "./bus/store";
 import type { Runtime } from "./core/runtime";
 import { seedMariaVisitDay } from "./demo/visit-day";
+import { buildBoard, type SimBackground } from "./board";
 
 export interface AppContext {
   store: RuntimeStore;
   bus: EventBus;
   clock: SimClock;
   runtime: Runtime;
+  background: SimBackground;
 }
 
 const Resolve = z.object({
@@ -41,7 +43,7 @@ export function createApp(ctx?: AppContext) {
   app.use("*", cors());
   app.get("/health", (c) => c.json({ ok: true, shared: SHARED_VERSION, synthetic: true }));
   if (!ctx) return app;
-  const { store, bus, clock, runtime } = ctx;
+  const { store, bus, clock, runtime, background } = ctx;
 
   app.get("/api/journeys", (c) => c.json(store.listAggregates<Journey>("journey")));
 
@@ -166,6 +168,68 @@ export function createApp(ctx?: AppContext) {
     return event ? c.json({ event }) : c.json({ error: "not allowed now" }, 409);
   });
 
+  /** Station board (spec 9.3): who is coming, who is waiting, tasks. */
+  app.get("/api/stations/:id/board", (c) => {
+    const id = StationId.safeParse(c.req.param("id"));
+    if (!id.success) return c.json({ error: "unknown station" }, 404);
+    return c.json(buildBoard(id.data, clock.now(), store, background));
+  });
+
+  /** Staff actions from the board. Each one becomes an event or resolves a task. */
+  app.post("/api/stations/:id/actions", async (c) => {
+    const id = StationId.safeParse(c.req.param("id"));
+    if (!id.success) return c.json({ error: "unknown station" }, 404);
+    const body = StaffAction.safeParse(await c.req.json().catch(() => ({})));
+    if (!body.success) return c.json({ error: body.error.issues }, 400);
+    const a = body.data;
+    if (a.action === "start" || a.action === "done") {
+      const event = await runtime.ingest({
+        type: a.action === "start" ? "StopStarted" : "StopCompleted",
+        journey_id: a.journey_id,
+        station_id: id.data,
+        payload: { order_id: a.order_id },
+      });
+      return event ? c.json({ event }) : c.json({ error: "not allowed now" }, 409);
+    }
+    if (a.action === "didnt_arrive") {
+      const journey = runtime.journey(a.journey_id);
+      const stop = journey?.itinerary?.stops.find((s) => s.order_id === a.order_id);
+      if (!stop) return c.json({ error: "not found" }, 404);
+      const overdue = Math.max(
+        0,
+        Math.round((Date.parse(clock.now()) - Date.parse(stop.eta_start)) / 60_000),
+      );
+      const event = await runtime.ingest({
+        type: "PatientLost",
+        journey_id: a.journey_id,
+        payload: { expected_node_id: stop.node_id, minutes_overdue: overdue },
+      });
+      return c.json({ event });
+    }
+    if (a.action === "send_help") {
+      return c.json({
+        review: runtime.openTask(a.journey_id, "A volunteer is on the way to help"),
+      });
+    }
+    const review = store.review(a.review_id);
+    if (!review) return c.json({ error: "not found" }, 404);
+    if (review.kind === "handoff" && review.journey_id) {
+      await runtime.ingest({
+        type: "HandoffResolved",
+        journey_id: review.journey_id,
+        payload: { review_id: review.id, by: a.by },
+      });
+    } else {
+      store.saveReview({
+        ...review,
+        status: "resolved",
+        resolved_by: a.by,
+        resolved_at: clock.now(),
+      });
+    }
+    return c.json(store.review(review.id));
+  });
+
   /** Demo: Maria on Nov 17 after her CT (until the agents play the full scenario). */
   app.post("/api/demo/visit-day", async (c) => {
     await clock.advanceTo("2026-11-17T10:20:00-06:00");
@@ -174,6 +238,14 @@ export function createApp(ctx?: AppContext) {
 
   return app;
 }
+
+const StaffAction = z.discriminatedUnion("action", [
+  z.object({ action: z.literal("start"), journey_id: z.string(), order_id: z.string() }),
+  z.object({ action: z.literal("done"), journey_id: z.string(), order_id: z.string() }),
+  z.object({ action: z.literal("didnt_arrive"), journey_id: z.string(), order_id: z.string() }),
+  z.object({ action: z.literal("send_help"), journey_id: z.string() }),
+  z.object({ action: z.literal("resolve_task"), review_id: z.string(), by: z.string().min(1) }),
+]);
 
 const PatientAction = z.discriminatedUnion("action", [
   z.object({ action: z.literal("im_here"), order_id: z.string().min(1) }),

@@ -282,6 +282,9 @@ pub struct SimRequest {
     /// Snapshot interval; 0 turns snapshots off.
     #[serde(default = "default_snapshot")]
     pub snapshot_every_min: f64,
+    /// Also return every visit's reach/start/end times (for station boards).
+    #[serde(default)]
+    pub include_visits: bool,
 }
 
 fn default_snapshot() -> f64 {
@@ -324,10 +327,23 @@ pub struct SimKpis {
 }
 
 #[derive(Debug, Serialize, PartialEq)]
+pub struct VisitTimes {
+    pub patient_id: String,
+    pub station_id: String,
+    pub reach: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end: Option<String>,
+}
+
+#[derive(Debug, Serialize, PartialEq)]
 pub struct SimResult {
     pub snapshots: Vec<Snapshot>,
     pub per_patient: Vec<PatientOutcome>,
     pub kpis: SimKpis,
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub visits: Vec<VisitTimes>,
 }
 
 #[derive(Debug, Deserialize)]

@@ -151,3 +151,14 @@ Question it answers: where do I go next and how long will it take?
 - The sign-photo button sits inside the sheet. Until the companion agent lands (D2-4) the upload fails honestly with the "couldn't read the sign" copy.
 - Compared with the generic default (a chat thread with a map on top): the route is the screen, the map is a cropped corridor, and the conversation is secondary.
 - Screenshots: `docs/screens/patient-visit-390.png`, `docs/screens/patient-directions-390.png`. axe: no serious or critical violations on either.
+
+### Station board `/board/[stationId]` (D2-7)
+
+Question it answers: who is coming to this station, who is here, and what needs a person now?
+
+- The product's one deliberate dark surface: `--ink` background, `--board-text`, Barlow Condensed throughout, rows at 30 px, header at 64/48 px, readable from two meters. Initials and ticket numbers only.
+- Status in words ("walking from Lab draw", "waiting here", "in Lab Draw"). Rows from the simulated day are greyed and tagged "sim", and a footer line says the counts come from the simulation.
+- Actions sit on the live rows only (Start, Done, Didn't arrive), 56 px tall. Tasks (a missed arrival, a patient asking for a person, a volunteer sent) are a held-colored row at the bottom with one button, never a modal.
+- Live rows are never dropped to make room; simulated rows fill the remaining space.
+- Compared with the generic default (a light data table with filters): a departures board with no chrome, no filters, and one action per row.
+- Screenshots: `docs/screens/board-lab-1280.png`, `docs/screens/board-vitals-task-1280.png`. Keyboard-only Start and Done pass in Playwright; axe has no serious or critical violations.

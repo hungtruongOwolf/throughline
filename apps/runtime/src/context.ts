@@ -7,6 +7,10 @@ import { Runtime } from "./core/runtime";
 import { openDatabase } from "./db/index";
 import type { ModelGateway } from "./models/types";
 import type { AppContext } from "./app";
+import { loadEngine } from "@throughline/engine/node";
+import { SimRequest } from "@throughline/shared";
+import day from "../../../fixtures/day-2026-11-17.json";
+import { SimBackground } from "./board";
 
 /** Until the provider clients land (D2-2), model agents fall back deterministically. */
 export const unconfiguredGateway: ModelGateway = {
@@ -34,5 +38,6 @@ export function createContext(
     providerReviewOn: env.PROVIDER_REVIEW_ON !== "false",
   });
   runtime.start();
-  return { store, bus, clock, runtime };
+  const background = new SimBackground(loadEngine(), SimRequest.parse(day));
+  return { store, bus, clock, runtime, background };
 }

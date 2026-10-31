@@ -18,6 +18,7 @@ import { classifyClinical } from "../safety/classifier";
 import type { Agent, HandlerContext, HandlerResult, NewEvent, StationState } from "./agent";
 import type { AgentRunner } from "./agent-runner";
 import { createStation } from "./journeys";
+import { projectJourney } from "./projection";
 import { route, type Invocation } from "./orchestrator";
 import { checkGate } from "./safety-gate";
 
@@ -122,7 +123,10 @@ export class Runtime {
         });
         return undefined;
       }
-      if (to) this.saveJourney({ ...journey, state: to, phase: phaseOf(to) });
+      const projected = projectJourney(journey, event);
+      if (to || projected !== journey) {
+        this.saveJourney(to ? { ...projected, state: to, phase: phaseOf(to) } : projected);
+      }
     }
     this.deps.store.appendEvent(event, depth);
     return event;
@@ -370,6 +374,24 @@ export class Runtime {
     this.saveJourney({ ...(this.journey(journeyId) ?? journey), handoff_open: true });
     this.requestReview(review, 0);
     await this.deps.bus.idle();
+    return review;
+  }
+
+  /** A staff task on a journey (spec V7: a lost patient becomes a task on the station board). */
+  openTask(journeyId: string, reason: string) {
+    const journey = this.journey(journeyId);
+    if (!journey) return undefined;
+    const review: HumanReview = {
+      id: randomUUID(),
+      kind: "task",
+      journey_id: journeyId,
+      reason,
+      capability: "patient.message",
+      agent: "companion",
+      status: "pending",
+    };
+    this.deps.store.saveReview(review);
+    this.requestReview(review, 0);
     return review;
   }
 

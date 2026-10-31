@@ -16,7 +16,8 @@ use crate::queue::round1;
 use crate::time;
 use crate::types::{
     ActionEffect, EngineError, Mobility, OpsActionLite, OpsKind, PatientOutcome, SimKpis,
-    SimRequest, SimResult, Snapshot, StationKpi, WaitStats, WhatIfRequest, WhatIfResult,
+    SimRequest, SimResult, Snapshot, StationKpi, VisitTimes, WaitStats, WhatIfRequest,
+    WhatIfResult,
 };
 
 /// `call_volunteer`: lobby service runs 30% faster for 30 minutes (spec 7.3).
@@ -208,6 +209,9 @@ fn normal(rng: &mut ChaCha8Rng) -> f64 {
     (-2.0 * u1.ln()).sqrt() * (std::f64::consts::TAU * u2).cos()
 }
 
+/// (patient, station, reach, service start, service end) for one visit.
+type VisitLog = (usize, usize, f64, Option<f64>, Option<f64>);
+
 struct Run<'a> {
     world: &'a World,
     prep: &'a Prepared,
@@ -227,6 +231,10 @@ struct Run<'a> {
     finished_at: Vec<Option<f64>>,
     /// Per station: (service start time, wait minutes, patient).
     waits: Vec<Vec<(f64, f64, usize)>>,
+    /// (patient, station, reach, start, end) for every visit, when requested.
+    visits: Option<Vec<VisitLog>>,
+    /// Index into `visits` of each patient's open visit.
+    open_visit: Vec<Option<usize>>,
     snapshots: Vec<Snapshot>,
 }
 
@@ -255,6 +263,8 @@ impl<'a> Run<'a> {
             finished_at: vec![None; prep.patients.len()],
             waits: vec![Vec::new(); n],
             snapshots: Vec::new(),
+            visits: None,
+            open_visit: vec![None; prep.patients.len()],
         }
     }
 
@@ -300,6 +310,9 @@ impl<'a> Run<'a> {
                 break;
             };
             self.busy[s] += 1;
+            if let (Some(v), Some(i)) = (self.visits.as_mut(), self.open_visit[p]) {
+                v[i].3 = Some(self.now);
+            }
             let wait = self.now - reached;
             self.waited[p] += wait;
             self.waits[s].push((self.now, wait, p));
@@ -375,11 +388,18 @@ impl<'a> Run<'a> {
                 }
                 Ev::Reach(p) => {
                     let s = self.station_of(p, self.next_visit[p]);
+                    if let Some(v) = self.visits.as_mut() {
+                        self.open_visit[p] = Some(v.len());
+                        v.push((p, s, self.now, None, None));
+                    }
                     self.queues[s].push_back((p, self.now));
                     self.try_start(s);
                 }
                 Ev::Done(s, p) => {
                     self.busy[s] -= 1;
+                    if let (Some(v), Some(i)) = (self.visits.as_mut(), self.open_visit[p]) {
+                        v[i].4 = Some(self.now);
+                    }
                     let from = self.node_of(p, self.next_visit[p]);
                     self.next_visit[p] += 1;
                     if self.next_visit[p] < self.prep.patients[p].visits.len() {
@@ -445,7 +465,25 @@ fn mean(values: &[f64]) -> f64 {
 pub fn simulate(campus: &Campus, req: &SimRequest) -> Result<SimResult, EngineError> {
     let world = World::new(campus)?;
     let prep = prepare(&world, req)?;
-    let run = Run::new(&world, &prep, req.seed).run(&req.actions)?;
+    let mut run = Run::new(&world, &prep, req.seed);
+    if req.include_visits {
+        run.visits = Some(Vec::new());
+    }
+    let mut run = run.run(&req.actions)?;
+    let fmt = |t: f64| time::format(prep.start_utc + t, prep.offset_min);
+    let visits = run
+        .visits
+        .take()
+        .unwrap_or_default()
+        .into_iter()
+        .map(|(p, s, reach, start, end)| VisitTimes {
+            patient_id: prep.patients[p].id.clone(),
+            station_id: world.station_ids[s].clone(),
+            reach: fmt(reach),
+            start: start.map(fmt),
+            end: end.map(fmt),
+        })
+        .collect();
 
     let per_patient: Vec<PatientOutcome> = prep
         .patients
@@ -488,6 +526,7 @@ pub fn simulate(campus: &Campus, req: &SimRequest) -> Result<SimResult, EngineEr
         snapshots: run.snapshots,
         per_patient,
         kpis,
+        visits,
     })
 }
 
@@ -602,6 +641,7 @@ mod tests {
     fn day() -> SimRequest {
         let mut req: SimRequest =
             serde_json::from_str(include_str!("../../../fixtures/day-2026-11-17.json")).unwrap();
+        req.include_visits = false;
         req.snapshot_every_min = 0.0;
         req
     }
@@ -663,6 +703,23 @@ mod tests {
             .actions
             .push(action(OpsKind::OpenServer, "imaging_ct"));
         assert!(ct_wait(&simulate(c, &helped).unwrap()) < ct_wait(&outage));
+    }
+
+    #[test]
+    fn visit_times_are_ordered_and_cover_every_service() {
+        let mut req = day();
+        req.include_visits = true;
+        let r = simulate(campus().unwrap(), &req).unwrap();
+        let served: u32 = r.kpis.stations.iter().map(|s| s.served).sum();
+        assert_eq!(r.visits.len() as u32, served);
+        for v in &r.visits {
+            let (reach, start, end) = (
+                time::parse(&v.reach).unwrap().utc_min,
+                time::parse(v.start.as_ref().unwrap()).unwrap().utc_min,
+                time::parse(v.end.as_ref().unwrap()).unwrap().utc_min,
+            );
+            assert!(reach <= start + 0.5 && start <= end + 0.5);
+        }
     }
 
     #[test]

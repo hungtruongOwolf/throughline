@@ -12,3 +12,5 @@ export * from "./telemetry";
 export * from "./engine";
 export * from "./copy";
 export * from "./synthetic";
+export * from "./people";
+export * from "./api";
