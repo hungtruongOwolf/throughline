@@ -29,6 +29,7 @@ export function openDatabase(path = databasePath()) {
   const sqlite = new Database(path);
   sqlite.pragma("journal_mode = WAL");
   sqlite.exec(schema.CREATE_TABLES);
+  sqlite.exec(schema.CREATE_RUNTIME_TABLES);
   return { sqlite, db: drizzle(sqlite, { schema }) };
 }
 

@@ -56,3 +56,25 @@ CREATE TABLE IF NOT EXISTS slots (
 );
 CREATE TABLE IF NOT EXISTS meta (key TEXT PRIMARY KEY, value TEXT NOT NULL);
 `;
+
+/** Runtime tables: the append-only event log, aggregates, reviews, telemetry, model cache. */
+export const CREATE_RUNTIME_TABLES = `
+CREATE TABLE IF NOT EXISTS events (
+  seq INTEGER PRIMARY KEY AUTOINCREMENT, id TEXT NOT NULL UNIQUE, type TEXT NOT NULL,
+  journey_id TEXT, station_id TEXT, occurred_at TEXT NOT NULL, depth INTEGER NOT NULL,
+  json TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS events_journey ON events (journey_id, seq);
+CREATE TABLE IF NOT EXISTS aggregates (
+  kind TEXT NOT NULL, id TEXT NOT NULL, version INTEGER NOT NULL, json TEXT NOT NULL,
+  PRIMARY KEY (kind, id)
+);
+CREATE TABLE IF NOT EXISTS reviews (id TEXT PRIMARY KEY, status TEXT NOT NULL, json TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS model_calls (id TEXT PRIMARY KEY, at TEXT NOT NULL, json TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS model_cache (
+  key TEXT PRIMARY KEY, provider TEXT NOT NULL, model TEXT NOT NULL, response TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS runtime_log (
+  seq INTEGER PRIMARY KEY AUTOINCREMENT, at TEXT NOT NULL, level TEXT NOT NULL, json TEXT NOT NULL
+);
+`;
