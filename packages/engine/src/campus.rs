@@ -7,6 +7,7 @@ use std::sync::OnceLock;
 use serde::Deserialize;
 
 use crate::queue::ServiceModel;
+use crate::time::hhmm;
 use crate::types::{EdgeKind, EngineError, Mobility, RouteStep, WalkingMatrix, WalkingRoute};
 
 /// The same file the renderer and the TypeScript graph read, embedded at compile time.
@@ -34,15 +35,45 @@ pub struct ServiceMin {
 }
 
 #[derive(Debug, Deserialize)]
+pub struct OpenClose {
+    pub open: String,
+    pub close: String,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct Hours {
+    /// Weekday names ("mon".."fri") with the regular hours.
+    pub days: Vec<String>,
+    pub open: String,
+    pub close: String,
+    #[serde(default)]
+    pub saturday: Option<OpenClose>,
+}
+
+#[derive(Debug, Deserialize)]
 pub struct Station {
     pub id: String,
+    pub name: String,
     pub nodes: Vec<String>,
     pub waiting_node: Option<String>,
     pub servers: u32,
     pub service_min: ServiceMin,
+    pub hours: Hours,
 }
 
 impl Station {
+    /// Opening and closing minutes after local midnight for a weekday (0 = Monday), if open.
+    pub fn hours_on(&self, weekday: usize) -> Result<Option<(f64, f64)>, EngineError> {
+        const NAMES: [&str; 7] = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
+        if self.hours.days.iter().any(|d| d == NAMES[weekday]) {
+            return Ok(Some((hhmm(&self.hours.open)?, hhmm(&self.hours.close)?)));
+        }
+        match (&self.hours.saturday, weekday) {
+            (Some(sat), 5) => Ok(Some((hhmm(&sat.open)?, hhmm(&sat.close)?))),
+            _ => Ok(None),
+        }
+    }
+
     pub fn service_model(&self) -> ServiceModel {
         ServiceModel {
             servers: self.servers,
@@ -57,9 +88,19 @@ pub struct Campus {
     pub nodes: Vec<Node>,
     pub edges: Vec<Edge>,
     pub stations: Vec<Station>,
+    /// People waiting at the top of each hour (0..23), per station.
+    pub queue_baselines: HashMap<String, Vec<f64>>,
 }
 
 impl Campus {
+    /// Baseline queue at a local hour; 0 when the campus has no row for the station.
+    pub fn baseline(&self, station_id: &str, hour: usize) -> f64 {
+        self.queue_baselines
+            .get(station_id)
+            .and_then(|row| row.get(hour.min(23)).copied())
+            .unwrap_or(0.0)
+    }
+
     pub fn station(&self, id: &str) -> Result<&Station, EngineError> {
         self.stations
             .iter()
@@ -102,7 +143,7 @@ impl PartialOrd for Visit {
 }
 
 /// The campus as an adjacency list for one mobility mode. Wheelchair graphs drop stairs.
-struct Graph<'a> {
+pub(crate) struct Graph<'a> {
     campus: &'a Campus,
     index: HashMap<&'a str, usize>,
     /// `adjacency[n]` lists `(neighbour, edge index)`.
@@ -110,13 +151,13 @@ struct Graph<'a> {
 }
 
 /// Distances and predecessors from one start node.
-struct ShortestPaths {
-    dist: Vec<f64>,
+pub(crate) struct ShortestPaths {
+    pub(crate) dist: Vec<f64>,
     prev: Vec<Option<(usize, usize)>>,
 }
 
 impl<'a> Graph<'a> {
-    fn new(campus: &'a Campus, mobility: Mobility) -> Result<Self, EngineError> {
+    pub(crate) fn new(campus: &'a Campus, mobility: Mobility) -> Result<Self, EngineError> {
         let index: HashMap<&str, usize> = campus
             .nodes
             .iter()
@@ -145,7 +186,7 @@ impl<'a> Graph<'a> {
         })
     }
 
-    fn node(&self, id: &str) -> Result<usize, EngineError> {
+    pub(crate) fn node(&self, id: &str) -> Result<usize, EngineError> {
         self.index
             .get(id)
             .copied()
@@ -153,7 +194,7 @@ impl<'a> Graph<'a> {
     }
 
     /// Dijkstra from `start` to every node (37 nodes, so no early exit is needed).
-    fn shortest_paths(&self, start: usize) -> ShortestPaths {
+    pub(crate) fn shortest_paths(&self, start: usize) -> ShortestPaths {
         let n = self.campus.nodes.len();
         let mut dist = vec![f64::INFINITY; n];
         let mut prev = vec![None; n];

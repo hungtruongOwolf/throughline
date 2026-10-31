@@ -64,3 +64,88 @@ export const FuseResult = z.object({
   source: z.enum(["fused", "tickets"]),
 });
 export type FuseResult = z.infer<typeof FuseResult>;
+
+const SimTime = z.iso.datetime({ offset: true });
+
+export const StopReq = z.object({
+  order_id: z.string().min(1),
+  station_id: StationId,
+  duration_min: z.number().positive(),
+  node_id: NodeId.optional(),
+  must_be_first: z.boolean().optional(),
+  fasting: z.boolean().optional(),
+  not_before: SimTime.optional(),
+  status: z.enum(["pending", "in_service", "done"]).optional(),
+});
+export type StopReq = z.infer<typeof StopReq>;
+
+export const QueueLite = z.object({
+  station_id: StationId,
+  count: z.number().nonnegative(),
+  open_servers: z.number().int().nonnegative().optional(),
+});
+
+export const Constraint = z.discriminatedUnion("kind", [
+  z.object({
+    kind: z.literal("before"),
+    a: z.string(),
+    b: z.string(),
+    min_gap_min: z.number().nonnegative().optional(),
+  }),
+  z.object({
+    kind: z.literal("after_event"),
+    order: z.string(),
+    event: z.enum(["result_ready", "provider_signoff"]),
+    lead_min: z.number().nonnegative(),
+    after_order: z.string().optional(),
+    ready_at: SimTime.optional(),
+  }),
+]);
+export type Constraint = z.infer<typeof Constraint>;
+
+export const ItineraryRequest = z.object({
+  now: SimTime,
+  location: NodeId,
+  mobility: Mobility,
+  stops: z.array(StopReq).min(1).max(8),
+  queues: z.array(QueueLite).optional(),
+  constraints: z.array(Constraint).optional(),
+});
+export type ItineraryRequest = z.infer<typeof ItineraryRequest>;
+
+export const PlannedStop = z.object({
+  order_id: z.string(),
+  station_id: StationId,
+  node_id: NodeId,
+  eta_arrive: SimTime,
+  eta_start: SimTime,
+  eta_end: SimTime,
+  people_ahead: z.number().int().nonnegative(),
+  est_wait_min: z.number().nonnegative(),
+  walk_seconds: z.number().nonnegative(),
+});
+export type PlannedStop = z.infer<typeof PlannedStop>;
+
+export const ItineraryPlan = z.object({
+  stops: z.array(PlannedStop),
+  total_minutes: z.number().nonnegative(),
+  walking_seconds: z.number().nonnegative(),
+  reason: z.array(z.string()),
+});
+export type ItineraryPlan = z.infer<typeof ItineraryPlan>;
+
+export const ReplanRequest = ItineraryRequest.extend({ current: ItineraryPlan });
+export type ReplanRequest = z.infer<typeof ReplanRequest>;
+
+export const StopDiff = z.object({
+  order_id: z.string(),
+  change: z.enum(["moved_earlier", "moved_later", "swapped_station"]),
+  from: z.string(),
+  to: z.string(),
+});
+export const ReplanResult = z.object({
+  plan: ItineraryPlan,
+  diff: z.array(StopDiff),
+  reason: z.array(z.string()),
+});
+export type ReplanResult = z.infer<typeof ReplanResult>;

@@ -1,0 +1,567 @@
+{
+  "source": "reviewed engine snapshot (scripts/gen-itinerary-fixtures.ts)",
+  "cases": [
+    {
+      "name": "Maria, Nov 17, wheelchair",
+      "fn": "planItinerary",
+      "request": {
+        "now": "2026-11-17T09:12:00-06:00",
+        "location": "mp1.lobby",
+        "mobility": "wheelchair",
+        "stops": [
+          {
+            "order_id": "o-cbc",
+            "station_id": "lab_draw",
+            "duration_min": 10
+          },
+          {
+            "order_id": "o-ct",
+            "station_id": "imaging_ct",
+            "duration_min": 25,
+            "node_id": "mp2.ct1",
+            "not_before": "2026-11-17T09:50:00-06:00"
+          },
+          {
+            "order_id": "o-vitals",
+            "station_id": "vitals",
+            "duration_min": 5
+          },
+          {
+            "order_id": "o-visit",
+            "station_id": "clinic_2a",
+            "duration_min": 20,
+            "not_before": "2026-11-17T11:00:00-06:00"
+          },
+          {
+            "order_id": "o-infusion",
+            "station_id": "infusion",
+            "duration_min": 120
+          }
+        ],
+        "queues": [
+          {
+            "station_id": "lab_draw",
+            "count": 8
+          },
+          {
+            "station_id": "imaging_ct",
+            "count": 2
+          }
+        ],
+        "constraints": [
+          {
+            "kind": "after_event",
+            "order": "o-visit",
+            "event": "result_ready",
+            "lead_min": 45,
+            "after_order": "o-cbc"
+          },
+          {
+            "kind": "before",
+            "a": "o-vitals",
+            "b": "o-visit",
+            "min_gap_min": 0
+          },
+          {
+            "kind": "after_event",
+            "order": "o-infusion",
+            "event": "provider_signoff",
+            "lead_min": 35,
+            "after_order": "o-visit"
+          }
+        ]
+      },
+      "expected": {
+        "stops": [
+          {
+            "order_id": "o-ct",
+            "station_id": "imaging_ct",
+            "node_id": "mp2.ct1",
+            "eta_arrive": "2026-11-17T09:15:00-06:00",
+            "eta_start": "2026-11-17T09:50:00-06:00",
+            "eta_end": "2026-11-17T10:15:00-06:00",
+            "people_ahead": 2,
+            "est_wait_min": 28.3,
+            "walk_seconds": 199
+          },
+          {
+            "order_id": "o-cbc",
+            "station_id": "lab_draw",
+            "node_id": "mp1.lab_draw",
+            "eta_arrive": "2026-11-17T10:19:00-06:00",
+            "eta_start": "2026-11-17T10:28:00-06:00",
+            "eta_end": "2026-11-17T10:38:00-06:00",
+            "people_ahead": 9,
+            "est_wait_min": 9,
+            "walk_seconds": 212
+          },
+          {
+            "order_id": "o-vitals",
+            "station_id": "vitals",
+            "node_id": "cc2.vitals",
+            "eta_arrive": "2026-11-17T10:42:00-06:00",
+            "eta_start": "2026-11-17T10:50:00-06:00",
+            "eta_end": "2026-11-17T10:55:00-06:00",
+            "people_ahead": 3,
+            "est_wait_min": 7.5,
+            "walk_seconds": 292
+          },
+          {
+            "order_id": "o-visit",
+            "station_id": "clinic_2a",
+            "node_id": "cc2.pod_2a",
+            "eta_arrive": "2026-11-17T10:56:00-06:00",
+            "eta_start": "2026-11-17T11:23:00-06:00",
+            "eta_end": "2026-11-17T11:43:00-06:00",
+            "people_ahead": 5,
+            "est_wait_min": 25,
+            "walk_seconds": 58
+          },
+          {
+            "order_id": "o-infusion",
+            "station_id": "infusion",
+            "node_id": "cc3.infusion",
+            "eta_arrive": "2026-11-17T11:45:00-06:00",
+            "eta_start": "2026-11-17T12:18:00-06:00",
+            "eta_end": "2026-11-17T14:18:00-06:00",
+            "people_ahead": 4,
+            "est_wait_min": 20,
+            "walk_seconds": 177
+          }
+        ],
+        "total_minutes": 303,
+        "walking_seconds": 938,
+        "reason": [
+          "CT at its booked time 9:50",
+          "Medical Oncology 2A waits for Lab draw, ready about 11:23",
+          "Infusion Center waits for Medical Oncology 2A, ready about 12:18",
+          "Done about 14:18"
+        ]
+      }
+    },
+    {
+      "name": "Maria replan after CT 1 goes down",
+      "fn": "replanItinerary",
+      "request": {
+        "now": "2026-11-17T09:47:00-06:00",
+        "location": "mp2.imaging_wait",
+        "mobility": "wheelchair",
+        "stops": [
+          {
+            "order_id": "o-cbc",
+            "station_id": "lab_draw",
+            "duration_min": 10
+          },
+          {
+            "order_id": "o-ct",
+            "station_id": "imaging_ct",
+            "duration_min": 25,
+            "node_id": "mp2.ct2"
+          },
+          {
+            "order_id": "o-vitals",
+            "station_id": "vitals",
+            "duration_min": 5
+          },
+          {
+            "order_id": "o-visit",
+            "station_id": "clinic_2a",
+            "duration_min": 20,
+            "not_before": "2026-11-17T11:00:00-06:00"
+          },
+          {
+            "order_id": "o-infusion",
+            "station_id": "infusion",
+            "duration_min": 120
+          }
+        ],
+        "queues": [
+          {
+            "station_id": "lab_draw",
+            "count": 7
+          },
+          {
+            "station_id": "imaging_ct",
+            "count": 1,
+            "open_servers": 1
+          }
+        ],
+        "constraints": [
+          {
+            "kind": "after_event",
+            "order": "o-visit",
+            "event": "result_ready",
+            "lead_min": 45,
+            "after_order": "o-cbc"
+          },
+          {
+            "kind": "before",
+            "a": "o-vitals",
+            "b": "o-visit",
+            "min_gap_min": 0
+          },
+          {
+            "kind": "after_event",
+            "order": "o-infusion",
+            "event": "provider_signoff",
+            "lead_min": 35,
+            "after_order": "o-visit"
+          }
+        ],
+        "current": {
+          "stops": [
+            {
+              "order_id": "o-ct",
+              "station_id": "imaging_ct",
+              "node_id": "mp2.ct1",
+              "eta_arrive": "2026-11-17T09:15:00-06:00",
+              "eta_start": "2026-11-17T09:50:00-06:00",
+              "eta_end": "2026-11-17T10:15:00-06:00",
+              "people_ahead": 2,
+              "est_wait_min": 28.3,
+              "walk_seconds": 199
+            },
+            {
+              "order_id": "o-cbc",
+              "station_id": "lab_draw",
+              "node_id": "mp1.lab_draw",
+              "eta_arrive": "2026-11-17T10:19:00-06:00",
+              "eta_start": "2026-11-17T10:28:00-06:00",
+              "eta_end": "2026-11-17T10:38:00-06:00",
+              "people_ahead": 9,
+              "est_wait_min": 9,
+              "walk_seconds": 212
+            },
+            {
+              "order_id": "o-vitals",
+              "station_id": "vitals",
+              "node_id": "cc2.vitals",
+              "eta_arrive": "2026-11-17T10:42:00-06:00",
+              "eta_start": "2026-11-17T10:50:00-06:00",
+              "eta_end": "2026-11-17T10:55:00-06:00",
+              "people_ahead": 3,
+              "est_wait_min": 7.5,
+              "walk_seconds": 292
+            },
+            {
+              "order_id": "o-visit",
+              "station_id": "clinic_2a",
+              "node_id": "cc2.pod_2a",
+              "eta_arrive": "2026-11-17T10:56:00-06:00",
+              "eta_start": "2026-11-17T11:23:00-06:00",
+              "eta_end": "2026-11-17T11:43:00-06:00",
+              "people_ahead": 5,
+              "est_wait_min": 25,
+              "walk_seconds": 58
+            },
+            {
+              "order_id": "o-infusion",
+              "station_id": "infusion",
+              "node_id": "cc3.infusion",
+              "eta_arrive": "2026-11-17T11:45:00-06:00",
+              "eta_start": "2026-11-17T12:18:00-06:00",
+              "eta_end": "2026-11-17T14:18:00-06:00",
+              "people_ahead": 4,
+              "est_wait_min": 20,
+              "walk_seconds": 177
+            }
+          ],
+          "total_minutes": 303,
+          "walking_seconds": 938,
+          "reason": [
+            "CT at its booked time 9:50",
+            "Medical Oncology 2A waits for Lab draw, ready about 11:23",
+            "Infusion Center waits for Medical Oncology 2A, ready about 12:18",
+            "Done about 14:18"
+          ]
+        }
+      },
+      "expected": {
+        "plan": {
+          "stops": [
+            {
+              "order_id": "o-ct",
+              "station_id": "imaging_ct",
+              "node_id": "mp2.ct2",
+              "eta_arrive": "2026-11-17T09:47:00-06:00",
+              "eta_start": "2026-11-17T10:13:00-06:00",
+              "eta_end": "2026-11-17T10:38:00-06:00",
+              "people_ahead": 1,
+              "est_wait_min": 25.3,
+              "walk_seconds": 17
+            },
+            {
+              "order_id": "o-cbc",
+              "station_id": "lab_draw",
+              "node_id": "mp1.lab_draw",
+              "eta_arrive": "2026-11-17T10:41:00-06:00",
+              "eta_start": "2026-11-17T10:50:00-06:00",
+              "eta_end": "2026-11-17T11:00:00-06:00",
+              "people_ahead": 9,
+              "est_wait_min": 9,
+              "walk_seconds": 217
+            },
+            {
+              "order_id": "o-vitals",
+              "station_id": "vitals",
+              "node_id": "cc2.vitals",
+              "eta_arrive": "2026-11-17T11:05:00-06:00",
+              "eta_start": "2026-11-17T11:10:00-06:00",
+              "eta_end": "2026-11-17T11:15:00-06:00",
+              "people_ahead": 2,
+              "est_wait_min": 5,
+              "walk_seconds": 292
+            },
+            {
+              "order_id": "o-visit",
+              "station_id": "clinic_2a",
+              "node_id": "cc2.pod_2a",
+              "eta_arrive": "2026-11-17T11:16:00-06:00",
+              "eta_start": "2026-11-17T11:45:00-06:00",
+              "eta_end": "2026-11-17T12:05:00-06:00",
+              "people_ahead": 5,
+              "est_wait_min": 25,
+              "walk_seconds": 58
+            },
+            {
+              "order_id": "o-infusion",
+              "station_id": "infusion",
+              "node_id": "cc3.infusion",
+              "eta_arrive": "2026-11-17T12:08:00-06:00",
+              "eta_start": "2026-11-17T12:40:00-06:00",
+              "eta_end": "2026-11-17T14:40:00-06:00",
+              "people_ahead": 3,
+              "est_wait_min": 15,
+              "walk_seconds": 177
+            }
+          ],
+          "total_minutes": 293,
+          "walking_seconds": 761,
+          "reason": [
+            "CT: about 25 minutes in line",
+            "Medical Oncology 2A waits for Lab draw, ready about 11:45",
+            "Infusion Center waits for Medical Oncology 2A, ready about 12:40",
+            "Done about 14:40"
+          ]
+        },
+        "diff": [
+          {
+            "order_id": "o-ct",
+            "change": "swapped_station",
+            "from": "mp2.ct1",
+            "to": "mp2.ct2"
+          },
+          {
+            "order_id": "o-cbc",
+            "change": "moved_later",
+            "from": "2026-11-17T10:28:00-06:00",
+            "to": "2026-11-17T10:50:00-06:00"
+          },
+          {
+            "order_id": "o-vitals",
+            "change": "moved_later",
+            "from": "2026-11-17T10:50:00-06:00",
+            "to": "2026-11-17T11:10:00-06:00"
+          },
+          {
+            "order_id": "o-visit",
+            "change": "moved_later",
+            "from": "2026-11-17T11:23:00-06:00",
+            "to": "2026-11-17T11:45:00-06:00"
+          },
+          {
+            "order_id": "o-infusion",
+            "change": "moved_later",
+            "from": "2026-11-17T12:18:00-06:00",
+            "to": "2026-11-17T12:40:00-06:00"
+          }
+        ],
+        "reason": [
+          "CT moved from CT 1 to CT 2",
+          "Lab draw moved later, now about 10:50",
+          "Vitals moved later, now about 11:10",
+          "Medical Oncology 2A moved later, now about 11:45",
+          "Infusion Center moved later, now about 12:40"
+        ]
+      }
+    },
+    {
+      "name": "seven stops",
+      "fn": "planItinerary",
+      "request": {
+        "now": "2026-11-17T09:12:00-06:00",
+        "location": "mp1.lobby",
+        "mobility": "wheelchair",
+        "stops": [
+          {
+            "order_id": "o-cbc",
+            "station_id": "lab_draw",
+            "duration_min": 10
+          },
+          {
+            "order_id": "o-ct",
+            "station_id": "imaging_ct",
+            "duration_min": 25,
+            "node_id": "mp2.ct1",
+            "not_before": "2026-11-17T09:50:00-06:00"
+          },
+          {
+            "order_id": "o-vitals",
+            "station_id": "vitals",
+            "duration_min": 5
+          },
+          {
+            "order_id": "o-visit",
+            "station_id": "clinic_2a",
+            "duration_min": 20,
+            "not_before": "2026-11-17T11:00:00-06:00"
+          },
+          {
+            "order_id": "o-infusion",
+            "station_id": "infusion",
+            "duration_min": 120
+          },
+          {
+            "order_id": "o-xray",
+            "station_id": "imaging_xray",
+            "duration_min": 10
+          },
+          {
+            "order_id": "o-rx",
+            "station_id": "pharmacy",
+            "duration_min": 8
+          }
+        ],
+        "queues": [
+          {
+            "station_id": "lab_draw",
+            "count": 8
+          },
+          {
+            "station_id": "imaging_ct",
+            "count": 2
+          }
+        ],
+        "constraints": [
+          {
+            "kind": "after_event",
+            "order": "o-visit",
+            "event": "result_ready",
+            "lead_min": 45,
+            "after_order": "o-cbc"
+          },
+          {
+            "kind": "before",
+            "a": "o-vitals",
+            "b": "o-visit",
+            "min_gap_min": 0
+          },
+          {
+            "kind": "after_event",
+            "order": "o-infusion",
+            "event": "provider_signoff",
+            "lead_min": 35,
+            "after_order": "o-visit"
+          },
+          {
+            "kind": "before",
+            "a": "o-infusion",
+            "b": "o-rx",
+            "min_gap_min": 0
+          }
+        ]
+      },
+      "expected": {
+        "stops": [
+          {
+            "order_id": "o-ct",
+            "station_id": "imaging_ct",
+            "node_id": "mp2.ct1",
+            "eta_arrive": "2026-11-17T09:15:00-06:00",
+            "eta_start": "2026-11-17T09:50:00-06:00",
+            "eta_end": "2026-11-17T10:15:00-06:00",
+            "people_ahead": 2,
+            "est_wait_min": 28.3,
+            "walk_seconds": 199
+          },
+          {
+            "order_id": "o-cbc",
+            "station_id": "lab_draw",
+            "node_id": "mp1.lab_draw",
+            "eta_arrive": "2026-11-17T10:19:00-06:00",
+            "eta_start": "2026-11-17T10:28:00-06:00",
+            "eta_end": "2026-11-17T10:38:00-06:00",
+            "people_ahead": 9,
+            "est_wait_min": 9,
+            "walk_seconds": 212
+          },
+          {
+            "order_id": "o-vitals",
+            "station_id": "vitals",
+            "node_id": "cc2.vitals",
+            "eta_arrive": "2026-11-17T10:42:00-06:00",
+            "eta_start": "2026-11-17T10:50:00-06:00",
+            "eta_end": "2026-11-17T10:55:00-06:00",
+            "people_ahead": 3,
+            "est_wait_min": 7.5,
+            "walk_seconds": 292
+          },
+          {
+            "order_id": "o-visit",
+            "station_id": "clinic_2a",
+            "node_id": "cc2.pod_2a",
+            "eta_arrive": "2026-11-17T10:56:00-06:00",
+            "eta_start": "2026-11-17T11:23:00-06:00",
+            "eta_end": "2026-11-17T11:43:00-06:00",
+            "people_ahead": 5,
+            "est_wait_min": 25,
+            "walk_seconds": 58
+          },
+          {
+            "order_id": "o-xray",
+            "station_id": "imaging_xray",
+            "node_id": "mp2.xray",
+            "eta_arrive": "2026-11-17T11:46:00-06:00",
+            "eta_start": "2026-11-17T12:06:00-06:00",
+            "eta_end": "2026-11-17T12:16:00-06:00",
+            "people_ahead": 2,
+            "est_wait_min": 20,
+            "walk_seconds": 205
+          },
+          {
+            "order_id": "o-infusion",
+            "station_id": "infusion",
+            "node_id": "cc3.infusion",
+            "eta_arrive": "2026-11-17T12:21:00-06:00",
+            "eta_start": "2026-11-17T12:36:00-06:00",
+            "eta_end": "2026-11-17T14:36:00-06:00",
+            "people_ahead": 3,
+            "est_wait_min": 15,
+            "walk_seconds": 308
+          },
+          {
+            "order_id": "o-rx",
+            "station_id": "pharmacy",
+            "node_id": "mp1.pharmacy",
+            "eta_arrive": "2026-11-17T14:42:00-06:00",
+            "eta_start": "2026-11-17T14:54:00-06:00",
+            "eta_end": "2026-11-17T15:02:00-06:00",
+            "people_ahead": 3,
+            "est_wait_min": 12,
+            "walk_seconds": 331
+          }
+        ],
+        "total_minutes": 347,
+        "walking_seconds": 1605,
+        "reason": [
+          "CT at its booked time 9:50",
+          "Medical Oncology 2A waits for Lab draw, ready about 11:23",
+          "X-ray: about 20 minutes in line",
+          "Infusion Center: about 15 minutes in line",
+          "Outpatient Pharmacy: about 12 minutes in line",
+          "Done about 15:02"
+        ]
+      }
+    }
+  ]
+}

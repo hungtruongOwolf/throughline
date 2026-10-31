@@ -1,0 +1,44 @@
+{
+  "now": "2026-11-17T09:12:00-06:00",
+  "location": "mp1.lobby",
+  "mobility": "wheelchair",
+  "stops": [
+    { "order_id": "o-cbc", "station_id": "lab_draw", "duration_min": 10 },
+    {
+      "order_id": "o-ct",
+      "station_id": "imaging_ct",
+      "duration_min": 25,
+      "node_id": "mp2.ct1",
+      "not_before": "2026-11-17T09:50:00-06:00"
+    },
+    { "order_id": "o-vitals", "station_id": "vitals", "duration_min": 5 },
+    {
+      "order_id": "o-visit",
+      "station_id": "clinic_2a",
+      "duration_min": 20,
+      "not_before": "2026-11-17T11:00:00-06:00"
+    },
+    { "order_id": "o-infusion", "station_id": "infusion", "duration_min": 120 }
+  ],
+  "queues": [
+    { "station_id": "lab_draw", "count": 8 },
+    { "station_id": "imaging_ct", "count": 2 }
+  ],
+  "constraints": [
+    {
+      "kind": "after_event",
+      "order": "o-visit",
+      "event": "result_ready",
+      "lead_min": 45,
+      "after_order": "o-cbc"
+    },
+    { "kind": "before", "a": "o-vitals", "b": "o-visit", "min_gap_min": 0 },
+    {
+      "kind": "after_event",
+      "order": "o-infusion",
+      "event": "provider_signoff",
+      "lead_min": 35,
+      "after_order": "o-visit"
+    }
+  ]
+}

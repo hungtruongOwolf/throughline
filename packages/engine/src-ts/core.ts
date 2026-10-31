@@ -3,6 +3,10 @@ import {
   EngineErrorEnvelope,
   FuseRequest,
   FuseResult,
+  ItineraryPlan,
+  ItineraryRequest,
+  ReplanRequest,
+  ReplanResult,
   WaitEstimate,
   WaitRequest,
   WalkingMatrix,
@@ -19,6 +23,8 @@ export interface RawEngine {
   walkingMatrix(requestJson: string): string;
   estimateWait(requestJson: string): string;
   fuseQueue(requestJson: string): string;
+  planItinerary(requestJson: string): string;
+  replanItinerary(requestJson: string): string;
 }
 
 export class EngineCallError extends Error {
@@ -39,10 +45,18 @@ export interface Engine {
   walkingMatrix(req: WalkingMatrixRequest): WalkingMatrix;
   estimateWait(req: WaitRequest): WaitEstimate;
   fuseQueue(req: FuseRequest): FuseResult;
+  planItinerary(req: ItineraryRequest): ItineraryPlan;
+  replanItinerary(req: ReplanRequest): ReplanResult;
 }
 
 /** Function names usable by golden fixtures. */
-export type EngineFunction = "walkingRoute" | "walkingMatrix" | "estimateWait" | "fuseQueue";
+export type EngineFunction =
+  | "walkingRoute"
+  | "walkingMatrix"
+  | "estimateWait"
+  | "fuseQueue"
+  | "planItinerary"
+  | "replanItinerary";
 
 function call<Req, Res>(
   fn: (json: string) => string,
@@ -67,5 +81,7 @@ export function wrapEngine(raw: RawEngine): Engine {
       call((j) => raw.walkingMatrix(j), WalkingMatrixRequest, WalkingMatrix, req),
     estimateWait: (req) => call((j) => raw.estimateWait(j), WaitRequest, WaitEstimate, req),
     fuseQueue: (req) => call((j) => raw.fuseQueue(j), FuseRequest, FuseResult, req),
+    planItinerary: (req) => call((j) => raw.planItinerary(j), ItineraryRequest, ItineraryPlan, req),
+    replanItinerary: (req) => call((j) => raw.replanItinerary(j), ReplanRequest, ReplanResult, req),
   };
 }

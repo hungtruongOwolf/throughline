@@ -1,0 +1,3 @@
+# exFAT has no hard links; incremental caches only produce copy warnings there.
+[build]
+incremental = false

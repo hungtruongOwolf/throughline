@@ -31,7 +31,7 @@ function run(fn: EngineFunction, request: unknown): unknown {
   }
 }
 
-describe.each(["routes.json", "waits.json"])(
+describe.each(["routes.json", "waits.json", "itinerary.json"])(
   "golden fixtures %s through the wrapper (tests 17, 19)",
   (file) => {
     it.each(load(file).map((c) => [c.name, c] as const))("%s", (_, c) => {
@@ -45,3 +45,15 @@ describe.each(["routes.json", "waits.json"])(
     });
   },
 );
+
+describe("itinerary performance (spec 7.3)", () => {
+  it("solves the seven-stop fixture in under 5 ms (CI fails above 2x)", () => {
+    const seven = load("itinerary.json").find((c) => c.name === "seven stops");
+    if (!seven) throw new Error("missing seven-stop fixture");
+    run("planItinerary", seven.request);
+    const runs = 30;
+    const started = performance.now();
+    for (let i = 0; i < runs; i++) run("planItinerary", seven.request);
+    expect((performance.now() - started) / runs).toBeLessThan(10);
+  });
+});
