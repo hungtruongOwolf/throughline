@@ -8,7 +8,9 @@ export const IsoTime = z.iso.datetime({ offset: true });
 export const IsoDate = z.iso.date();
 
 export const Id = z.string().min(1);
-export const NodeId = z.string().regex(/^[a-z0-9]+\.[a-z0-9_]+$/, "node ids look like mp1.lobby");
+export const NodeId = z
+  .string()
+  .regex(/^[a-z0-9]+\.[A-Za-z0-9_]+$/, "node ids look like mp1.lobby");
 export const StationId = z.enum([
   "registration",
   "lab_draw",

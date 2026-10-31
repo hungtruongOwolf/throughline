@@ -4,7 +4,8 @@ Build window: Oct 27 – Nov 4, 2026. Everything in this repository was written 
 
 ## Timeline
 
-| Date       | What was built                                                                                                                                                                                                                               |
-| ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 2026-10-30 | Build spec (`docs/SPEC.md`); toolchain set up (Rust + wasm-pack, Modal CLI); monorepo scaffold: pnpm + Turborepo, Next.js 15 web app, Hono runtime, shared package, lint/typecheck/test/build, CI, docs                                      |
-| 2026-10-30 | `packages/shared`: zod schemas for Journey, events (full catalog + partition), capabilities and gates, agent grants, transition table, HumanReview, OpsAction, QueueState, ModelCallRecord, memory allowlist, EN/ES copy; tests 1, 8, 14, 15 |
+| Date       | What was built                                                                                                                                                                                                                                                                     |
+| ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2026-10-30 | Build spec (`docs/SPEC.md`); toolchain set up (Rust + wasm-pack, Modal CLI); monorepo scaffold: pnpm + Turborepo, Next.js 15 web app, Hono runtime, shared package, lint/typecheck/test/build, CI, docs                                                                            |
+| 2026-10-30 | `packages/shared`: zod schemas for Journey, events (full catalog + partition), capabilities and gates, agent grants, transition table, HumanReview, OpsAction, QueueState, ModelCallRecord, memory allowlist, EN/ES copy; tests 1, 8, 14, 15                                       |
+| 2026-10-31 | `packages/hospital`: `campus.json` (37 nodes, 39 edges, 10 stations, 6 camera waiting areas, hour-of-day queue baselines, 37 signs), Dijkstra routes with the wheelchair filter, walking matrix, sign localizer, SVG sign and kiosk ticket renderers, `pnpm render:signs`; test 21 |

@@ -1,0 +1,1319 @@
+{
+  "version": "halden-0.1.0",
+  "synthetic": true,
+  "name": "Halden Medical Center",
+  "note": "Fictional campus. Walking times, service times, and queue baselines are assumptions, not measurements.",
+  "walking_speed_mps": 1.2,
+  "elevator_seconds": 90,
+  "stairs_seconds_per_floor": 45,
+  "nodes": [
+    {
+      "id": "mp1.entrance",
+      "building": "MP",
+      "floor": 1,
+      "x": 10,
+      "y": 30,
+      "kind": "entrance",
+      "zone": "blue",
+      "label": "Main Entrance"
+    },
+    {
+      "id": "mp1.lobby",
+      "building": "MP",
+      "floor": 1,
+      "x": 30,
+      "y": 30,
+      "kind": "lobby",
+      "zone": "blue",
+      "label": "Main Lobby"
+    },
+    {
+      "id": "mp1.registration",
+      "building": "MP",
+      "floor": 1,
+      "x": 30,
+      "y": 50,
+      "kind": "station",
+      "zone": "blue",
+      "label": "Registration & Check-in"
+    },
+    {
+      "id": "mp1.cafe",
+      "building": "MP",
+      "floor": 1,
+      "x": 50,
+      "y": 10,
+      "kind": "amenity",
+      "zone": "blue",
+      "label": "Café"
+    },
+    {
+      "id": "mp1.elevA",
+      "building": "MP",
+      "floor": 1,
+      "x": 60,
+      "y": 15,
+      "kind": "elevator",
+      "zone": "blue",
+      "label": "Elevator A"
+    },
+    {
+      "id": "mp1.corr_a",
+      "building": "MP",
+      "floor": 1,
+      "x": 60,
+      "y": 30,
+      "kind": "junction",
+      "zone": "blue",
+      "label": "Blue Zone"
+    },
+    {
+      "id": "mp1.lab_wait",
+      "building": "MP",
+      "floor": 1,
+      "x": 85,
+      "y": 50,
+      "kind": "waiting",
+      "zone": "blue",
+      "label": "Outpatient Lab"
+    },
+    {
+      "id": "mp1.lab_draw",
+      "building": "MP",
+      "floor": 1,
+      "x": 95,
+      "y": 50,
+      "kind": "station",
+      "zone": "blue",
+      "label": "Lab Draw"
+    },
+    {
+      "id": "mp1.pharmacy",
+      "building": "MP",
+      "floor": 1,
+      "x": 100,
+      "y": 15,
+      "kind": "station",
+      "zone": "blue",
+      "label": "Outpatient Pharmacy"
+    },
+    {
+      "id": "mp1.garden_door",
+      "building": "MP",
+      "floor": 1,
+      "x": 115,
+      "y": 30,
+      "kind": "door",
+      "zone": "blue",
+      "label": "Garden Link"
+    },
+    {
+      "id": "mp2.elevA",
+      "building": "MP",
+      "floor": 2,
+      "x": 60,
+      "y": 15,
+      "kind": "elevator",
+      "zone": "gold",
+      "label": "Elevator A"
+    },
+    {
+      "id": "mp2.corr_b",
+      "building": "MP",
+      "floor": 2,
+      "x": 75,
+      "y": 30,
+      "kind": "junction",
+      "zone": "gold",
+      "label": "Gold Zone"
+    },
+    {
+      "id": "mp2.imaging_wait",
+      "building": "MP",
+      "floor": 2,
+      "x": 95,
+      "y": 45,
+      "kind": "waiting",
+      "zone": "gold",
+      "label": "Imaging"
+    },
+    {
+      "id": "mp2.ct1",
+      "building": "MP",
+      "floor": 2,
+      "x": 105,
+      "y": 55,
+      "kind": "station",
+      "zone": "gold",
+      "label": "CT 1"
+    },
+    {
+      "id": "mp2.ct2",
+      "building": "MP",
+      "floor": 2,
+      "x": 110,
+      "y": 45,
+      "kind": "station",
+      "zone": "gold",
+      "label": "CT 2"
+    },
+    {
+      "id": "mp2.xray",
+      "building": "MP",
+      "floor": 2,
+      "x": 100,
+      "y": 60,
+      "kind": "station",
+      "zone": "gold",
+      "label": "X-ray"
+    },
+    {
+      "id": "mp2.financial",
+      "building": "MP",
+      "floor": 2,
+      "x": 90,
+      "y": 15,
+      "kind": "station",
+      "zone": "gold",
+      "label": "Financial Counseling"
+    },
+    {
+      "id": "mp2.bridge_g",
+      "building": "MP",
+      "floor": 2,
+      "x": 40,
+      "y": 55,
+      "kind": "bridge",
+      "zone": "gold",
+      "label": "Skybridge"
+    },
+    {
+      "id": "mp2.bridge_cc",
+      "building": "MP",
+      "floor": 2,
+      "x": 120,
+      "y": 30,
+      "kind": "bridge",
+      "zone": "gold",
+      "label": "Link Bridge"
+    },
+    {
+      "id": "g2.bridge",
+      "building": "G",
+      "floor": 2,
+      "x": 40,
+      "y": 80,
+      "kind": "bridge",
+      "zone": "gold",
+      "label": "Garage Level 2"
+    },
+    {
+      "id": "g2.parking",
+      "building": "G",
+      "floor": 2,
+      "x": 40,
+      "y": 100,
+      "kind": "parking",
+      "zone": "gold",
+      "label": "Patient Parking"
+    },
+    {
+      "id": "gl.walkway",
+      "building": "GL",
+      "floor": 1,
+      "x": 150,
+      "y": 30,
+      "kind": "walkway",
+      "zone": "green",
+      "label": "Garden Link"
+    },
+    {
+      "id": "cc1.lobby",
+      "building": "CC",
+      "floor": 1,
+      "x": 185,
+      "y": 30,
+      "kind": "lobby",
+      "zone": "green",
+      "label": "Cancer Center Lobby"
+    },
+    {
+      "id": "cc1.elevB",
+      "building": "CC",
+      "floor": 1,
+      "x": 200,
+      "y": 15,
+      "kind": "elevator",
+      "zone": "green",
+      "label": "Elevator B"
+    },
+    {
+      "id": "cc2.elevB",
+      "building": "CC",
+      "floor": 2,
+      "x": 200,
+      "y": 15,
+      "kind": "elevator",
+      "zone": "rose",
+      "label": "Elevator B"
+    },
+    {
+      "id": "cc2.bridge_mp",
+      "building": "CC",
+      "floor": 2,
+      "x": 170,
+      "y": 30,
+      "kind": "bridge",
+      "zone": "rose",
+      "label": "Link Bridge"
+    },
+    {
+      "id": "cc2.corr",
+      "building": "CC",
+      "floor": 2,
+      "x": 200,
+      "y": 30,
+      "kind": "junction",
+      "zone": "rose",
+      "label": "Rose Zone"
+    },
+    {
+      "id": "cc2.vitals",
+      "building": "CC",
+      "floor": 2,
+      "x": 215,
+      "y": 20,
+      "kind": "station",
+      "zone": "rose",
+      "label": "Vitals"
+    },
+    {
+      "id": "cc2.wait_2a",
+      "building": "CC",
+      "floor": 2,
+      "x": 215,
+      "y": 45,
+      "kind": "waiting",
+      "zone": "rose",
+      "label": "Clinic 2A"
+    },
+    {
+      "id": "cc2.pod_2a",
+      "building": "CC",
+      "floor": 2,
+      "x": 230,
+      "y": 45,
+      "kind": "station",
+      "zone": "rose",
+      "label": "Medical Oncology 2A"
+    },
+    {
+      "id": "cc2.wait_2b",
+      "building": "CC",
+      "floor": 2,
+      "x": 185,
+      "y": 45,
+      "kind": "waiting",
+      "zone": "rose",
+      "label": "Clinic 2B"
+    },
+    {
+      "id": "cc2.pod_2b",
+      "building": "CC",
+      "floor": 2,
+      "x": 170,
+      "y": 45,
+      "kind": "station",
+      "zone": "rose",
+      "label": "Medical Oncology 2B"
+    },
+    {
+      "id": "cc2.nurse",
+      "building": "CC",
+      "floor": 2,
+      "x": 200,
+      "y": 45,
+      "kind": "staff",
+      "zone": "rose",
+      "label": "Nurse Station"
+    },
+    {
+      "id": "cc3.elevB",
+      "building": "CC",
+      "floor": 3,
+      "x": 200,
+      "y": 15,
+      "kind": "elevator",
+      "zone": "violet",
+      "label": "Elevator B"
+    },
+    {
+      "id": "cc3.infusion_wait",
+      "building": "CC",
+      "floor": 3,
+      "x": 215,
+      "y": 30,
+      "kind": "waiting",
+      "zone": "violet",
+      "label": "Infusion Center"
+    },
+    {
+      "id": "cc3.infusion",
+      "building": "CC",
+      "floor": 3,
+      "x": 230,
+      "y": 40,
+      "kind": "station",
+      "zone": "violet",
+      "label": "Infusion Center"
+    },
+    {
+      "id": "cc3.lounge",
+      "building": "CC",
+      "floor": 3,
+      "x": 180,
+      "y": 40,
+      "kind": "amenity",
+      "zone": "violet",
+      "label": "Patient & Family Lounge"
+    }
+  ],
+  "edges": [
+    {
+      "a": "mp1.entrance",
+      "b": "mp1.lobby",
+      "seconds": 25,
+      "kind": "walk"
+    },
+    {
+      "a": "mp1.lobby",
+      "b": "mp1.registration",
+      "seconds": 17,
+      "kind": "walk"
+    },
+    {
+      "a": "mp1.lobby",
+      "b": "mp1.cafe",
+      "seconds": 38,
+      "kind": "walk"
+    },
+    {
+      "a": "mp1.lobby",
+      "b": "mp1.corr_a",
+      "seconds": 30,
+      "kind": "walk"
+    },
+    {
+      "a": "mp1.corr_a",
+      "b": "mp1.elevA",
+      "seconds": 12,
+      "kind": "walk"
+    },
+    {
+      "a": "mp1.corr_a",
+      "b": "mp1.lab_wait",
+      "seconds": 35,
+      "kind": "walk"
+    },
+    {
+      "a": "mp1.lab_wait",
+      "b": "mp1.lab_draw",
+      "seconds": 8,
+      "kind": "walk"
+    },
+    {
+      "a": "mp1.corr_a",
+      "b": "mp1.pharmacy",
+      "seconds": 42,
+      "kind": "walk"
+    },
+    {
+      "a": "mp1.corr_a",
+      "b": "mp1.garden_door",
+      "seconds": 50,
+      "kind": "walk"
+    },
+    {
+      "a": "mp1.garden_door",
+      "b": "gl.walkway",
+      "seconds": 48,
+      "kind": "walk"
+    },
+    {
+      "a": "gl.walkway",
+      "b": "cc1.lobby",
+      "seconds": 47,
+      "kind": "walk"
+    },
+    {
+      "a": "mp1.elevA",
+      "b": "mp2.elevA",
+      "seconds": 90,
+      "kind": "elevator"
+    },
+    {
+      "a": "mp1.corr_a",
+      "b": "mp2.corr_b",
+      "seconds": 45,
+      "kind": "stairs"
+    },
+    {
+      "a": "mp2.elevA",
+      "b": "mp2.corr_b",
+      "seconds": 17,
+      "kind": "walk"
+    },
+    {
+      "a": "mp2.corr_b",
+      "b": "mp2.imaging_wait",
+      "seconds": 38,
+      "kind": "walk"
+    },
+    {
+      "a": "mp2.imaging_wait",
+      "b": "mp2.ct1",
+      "seconds": 12,
+      "kind": "walk"
+    },
+    {
+      "a": "mp2.imaging_wait",
+      "b": "mp2.ct2",
+      "seconds": 17,
+      "kind": "walk"
+    },
+    {
+      "a": "mp2.imaging_wait",
+      "b": "mp2.xray",
+      "seconds": 21,
+      "kind": "walk"
+    },
+    {
+      "a": "mp2.corr_b",
+      "b": "mp2.financial",
+      "seconds": 25,
+      "kind": "walk"
+    },
+    {
+      "a": "mp2.corr_b",
+      "b": "mp2.bridge_g",
+      "seconds": 50,
+      "kind": "walk"
+    },
+    {
+      "a": "mp2.bridge_g",
+      "b": "g2.bridge",
+      "seconds": 58,
+      "kind": "walk"
+    },
+    {
+      "a": "g2.bridge",
+      "b": "g2.parking",
+      "seconds": 33,
+      "kind": "walk"
+    },
+    {
+      "a": "mp2.corr_b",
+      "b": "mp2.bridge_cc",
+      "seconds": 42,
+      "kind": "walk"
+    },
+    {
+      "a": "mp2.bridge_cc",
+      "b": "cc2.bridge_mp",
+      "seconds": 42,
+      "kind": "walk"
+    },
+    {
+      "a": "cc2.bridge_mp",
+      "b": "cc2.corr",
+      "seconds": 25,
+      "kind": "walk"
+    },
+    {
+      "a": "cc1.lobby",
+      "b": "cc1.elevB",
+      "seconds": 21,
+      "kind": "walk"
+    },
+    {
+      "a": "cc1.elevB",
+      "b": "cc2.elevB",
+      "seconds": 90,
+      "kind": "elevator"
+    },
+    {
+      "a": "cc2.elevB",
+      "b": "cc3.elevB",
+      "seconds": 90,
+      "kind": "elevator"
+    },
+    {
+      "a": "cc1.elevB",
+      "b": "cc3.elevB",
+      "seconds": 90,
+      "kind": "elevator"
+    },
+    {
+      "a": "cc2.elevB",
+      "b": "cc2.corr",
+      "seconds": 17,
+      "kind": "walk"
+    },
+    {
+      "a": "cc2.corr",
+      "b": "cc2.vitals",
+      "seconds": 21,
+      "kind": "walk"
+    },
+    {
+      "a": "cc2.corr",
+      "b": "cc2.wait_2a",
+      "seconds": 29,
+      "kind": "walk"
+    },
+    {
+      "a": "cc2.wait_2a",
+      "b": "cc2.pod_2a",
+      "seconds": 8,
+      "kind": "walk"
+    },
+    {
+      "a": "cc2.corr",
+      "b": "cc2.wait_2b",
+      "seconds": 46,
+      "kind": "walk"
+    },
+    {
+      "a": "cc2.wait_2b",
+      "b": "cc2.pod_2b",
+      "seconds": 8,
+      "kind": "walk"
+    },
+    {
+      "a": "cc2.corr",
+      "b": "cc2.nurse",
+      "seconds": 12,
+      "kind": "walk"
+    },
+    {
+      "a": "cc3.elevB",
+      "b": "cc3.infusion_wait",
+      "seconds": 25,
+      "kind": "walk"
+    },
+    {
+      "a": "cc3.infusion_wait",
+      "b": "cc3.infusion",
+      "seconds": 8,
+      "kind": "walk"
+    },
+    {
+      "a": "cc3.elevB",
+      "b": "cc3.lounge",
+      "seconds": 33,
+      "kind": "walk"
+    }
+  ],
+  "stations": [
+    {
+      "id": "registration",
+      "name": "Registration",
+      "nodes": ["mp1.registration"],
+      "waiting_node": "mp1.lobby",
+      "servers": 6,
+      "service_min": {
+        "mean": 3,
+        "sd": 1.5
+      },
+      "hours": {
+        "days": ["mon", "tue", "wed", "thu", "fri"],
+        "open": "06:30",
+        "close": "17:00"
+      },
+      "notes": "4 kiosks + 2 desks; kiosk path is faster"
+    },
+    {
+      "id": "lab_draw",
+      "name": "Lab draw",
+      "nodes": ["mp1.lab_draw"],
+      "waiting_node": "mp1.lab_wait",
+      "servers": 6,
+      "service_min": {
+        "mean": 6,
+        "sd": 2
+      },
+      "hours": {
+        "days": ["mon", "tue", "wed", "thu", "fri"],
+        "open": "07:00",
+        "close": "16:00",
+        "saturday": {
+          "open": "07:00",
+          "close": "12:00"
+        }
+      },
+      "result_turnaround_min": {
+        "CBC": 45,
+        "CMP": 60
+      }
+    },
+    {
+      "id": "imaging_ct",
+      "name": "CT",
+      "nodes": ["mp2.ct1", "mp2.ct2"],
+      "waiting_node": "mp2.imaging_wait",
+      "servers": 2,
+      "service_min": {
+        "mean": 25,
+        "sd": 6
+      },
+      "hours": {
+        "days": ["mon", "tue", "wed", "thu", "fri"],
+        "open": "07:30",
+        "close": "17:00"
+      },
+      "result_turnaround_min": {
+        "CT": 90
+      }
+    },
+    {
+      "id": "imaging_xray",
+      "name": "X-ray",
+      "nodes": ["mp2.xray"],
+      "waiting_node": "mp2.imaging_wait",
+      "servers": 1,
+      "service_min": {
+        "mean": 10,
+        "sd": 3
+      },
+      "hours": {
+        "days": ["mon", "tue", "wed", "thu", "fri"],
+        "open": "07:30",
+        "close": "17:00"
+      }
+    },
+    {
+      "id": "vitals",
+      "name": "Vitals",
+      "nodes": ["cc2.vitals"],
+      "waiting_node": "cc2.corr",
+      "servers": 2,
+      "service_min": {
+        "mean": 5,
+        "sd": 1.5
+      },
+      "hours": {
+        "days": ["mon", "tue", "wed", "thu", "fri"],
+        "open": "07:30",
+        "close": "16:30"
+      },
+      "notes": "must precede provider"
+    },
+    {
+      "id": "clinic_2a",
+      "name": "Medical Oncology 2A",
+      "nodes": ["cc2.pod_2a"],
+      "waiting_node": "cc2.wait_2a",
+      "servers": 4,
+      "service_min": {
+        "mean": 20,
+        "sd": 7
+      },
+      "hours": {
+        "days": ["mon", "tue", "wed", "thu", "fri"],
+        "open": "08:00",
+        "close": "16:30"
+      }
+    },
+    {
+      "id": "clinic_2b",
+      "name": "Medical Oncology 2B",
+      "nodes": ["cc2.pod_2b"],
+      "waiting_node": "cc2.wait_2b",
+      "servers": 4,
+      "service_min": {
+        "mean": 20,
+        "sd": 7
+      },
+      "hours": {
+        "days": ["mon", "tue", "wed", "thu", "fri"],
+        "open": "08:00",
+        "close": "16:30"
+      }
+    },
+    {
+      "id": "infusion",
+      "name": "Infusion Center",
+      "nodes": ["cc3.infusion"],
+      "waiting_node": "cc3.infusion_wait",
+      "servers": 24,
+      "service_min": {
+        "mean": 120,
+        "sd": 40
+      },
+      "hours": {
+        "days": ["mon", "tue", "wed", "thu", "fri"],
+        "open": "07:00",
+        "close": "18:00"
+      },
+      "lead_after_signoff_min": 35
+    },
+    {
+      "id": "pharmacy",
+      "name": "Outpatient Pharmacy",
+      "nodes": ["mp1.pharmacy"],
+      "waiting_node": null,
+      "servers": 2,
+      "service_min": {
+        "mean": 8,
+        "sd": 3
+      },
+      "hours": {
+        "days": ["mon", "tue", "wed", "thu", "fri"],
+        "open": "08:00",
+        "close": "18:00"
+      }
+    },
+    {
+      "id": "financial",
+      "name": "Financial Counseling",
+      "nodes": ["mp2.financial"],
+      "waiting_node": null,
+      "servers": 2,
+      "service_min": {
+        "mean": 15,
+        "sd": 5
+      },
+      "hours": {
+        "days": ["mon", "tue", "wed", "thu", "fri"],
+        "open": "08:00",
+        "close": "16:00"
+      }
+    }
+  ],
+  "waiting_areas": [
+    {
+      "node_id": "mp1.lobby",
+      "seats": 60,
+      "camera_id": "cam-lobby"
+    },
+    {
+      "node_id": "mp1.lab_wait",
+      "seats": 24,
+      "camera_id": "cam-lab"
+    },
+    {
+      "node_id": "mp2.imaging_wait",
+      "seats": 30,
+      "camera_id": "cam-imaging"
+    },
+    {
+      "node_id": "cc2.wait_2a",
+      "seats": 28,
+      "camera_id": "cam-2a"
+    },
+    {
+      "node_id": "cc2.wait_2b",
+      "seats": 28,
+      "camera_id": "cam-2b"
+    },
+    {
+      "node_id": "cc3.infusion_wait",
+      "seats": 20,
+      "camera_id": "cam-infusion"
+    }
+  ],
+  "queue_baselines": {
+    "registration": [0, 0, 0, 0, 0, 0, 1, 5, 8, 9, 8, 7, 5, 6, 6, 5, 3, 0, 0, 0, 0, 0, 0, 0],
+    "lab_draw": [0, 0, 0, 0, 0, 0, 0, 5, 9, 10, 9, 8, 6, 7, 7, 5, 0, 0, 0, 0, 0, 0, 0, 0],
+    "imaging_ct": [0, 0, 0, 0, 0, 0, 0, 3, 5, 5, 5, 4, 3, 4, 3, 3, 2, 0, 0, 0, 0, 0, 0, 0],
+    "imaging_xray": [0, 0, 0, 0, 0, 0, 0, 2, 3, 3, 3, 2, 2, 2, 2, 2, 1, 0, 0, 0, 0, 0, 0, 0],
+    "vitals": [0, 0, 0, 0, 0, 0, 0, 2, 3, 3, 3, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0],
+    "clinic_2a": [0, 0, 0, 0, 0, 0, 0, 0, 5, 6, 5, 5, 4, 4, 4, 3, 0, 0, 0, 0, 0, 0, 0, 0],
+    "clinic_2b": [0, 0, 0, 0, 0, 0, 0, 0, 5, 6, 5, 5, 4, 4, 4, 3, 0, 0, 0, 0, 0, 0, 0, 0],
+    "infusion": [0, 0, 0, 0, 0, 0, 0, 3, 5, 5, 5, 4, 3, 4, 3, 3, 2, 1, 0, 0, 0, 0, 0, 0],
+    "pharmacy": [0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 3, 2, 3, 3, 2, 1, 1, 0, 0, 0, 0, 0, 0],
+    "financial": [0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0]
+  },
+  "signs": [
+    {
+      "sign_id": "sign.mp1.entrance",
+      "node_id": "mp1.entrance",
+      "lines": ["Main Entrance"],
+      "arrows": [
+        {
+          "target_node_id": "mp1.lobby",
+          "direction": "right"
+        }
+      ],
+      "zone": "blue"
+    },
+    {
+      "sign_id": "sign.mp1.lobby",
+      "node_id": "mp1.lobby",
+      "lines": ["Main Lobby", "Welcome Desk"],
+      "arrows": [
+        {
+          "target_node_id": "mp1.entrance",
+          "direction": "left"
+        },
+        {
+          "target_node_id": "mp1.registration",
+          "direction": "ahead"
+        },
+        {
+          "target_node_id": "mp1.cafe",
+          "direction": "right"
+        },
+        {
+          "target_node_id": "mp1.corr_a",
+          "direction": "right"
+        }
+      ],
+      "zone": "blue"
+    },
+    {
+      "sign_id": "sign.mp1.registration",
+      "node_id": "mp1.registration",
+      "lines": ["Registration & Check-in"],
+      "arrows": [],
+      "zone": "blue"
+    },
+    {
+      "sign_id": "sign.mp1.cafe",
+      "node_id": "mp1.cafe",
+      "lines": ["Café"],
+      "arrows": [],
+      "zone": "blue"
+    },
+    {
+      "sign_id": "sign.mp1.elevA",
+      "node_id": "mp1.elevA",
+      "lines": ["Elevator A"],
+      "arrows": [
+        {
+          "target_node_id": "mp1.corr_a",
+          "direction": "ahead"
+        },
+        {
+          "target_node_id": "mp2.elevA",
+          "direction": "up"
+        }
+      ],
+      "zone": "blue"
+    },
+    {
+      "sign_id": "sign.mp1.corr_a",
+      "node_id": "mp1.corr_a",
+      "lines": ["Blue Zone"],
+      "arrows": [
+        {
+          "target_node_id": "mp1.lobby",
+          "direction": "left"
+        },
+        {
+          "target_node_id": "mp1.elevA",
+          "direction": "back"
+        },
+        {
+          "target_node_id": "mp1.lab_wait",
+          "direction": "right"
+        },
+        {
+          "target_node_id": "mp1.pharmacy",
+          "direction": "right"
+        },
+        {
+          "target_node_id": "mp1.garden_door",
+          "direction": "right"
+        },
+        {
+          "target_node_id": "mp2.corr_b",
+          "direction": "up"
+        }
+      ],
+      "zone": "blue"
+    },
+    {
+      "sign_id": "sign.mp1.lab_wait",
+      "node_id": "mp1.lab_wait",
+      "lines": ["Outpatient Lab", "Waiting"],
+      "arrows": [],
+      "zone": "blue"
+    },
+    {
+      "sign_id": "sign.mp1.lab_draw",
+      "node_id": "mp1.lab_draw",
+      "lines": ["Lab Draw"],
+      "arrows": [],
+      "zone": "blue"
+    },
+    {
+      "sign_id": "sign.mp1.pharmacy",
+      "node_id": "mp1.pharmacy",
+      "lines": ["Outpatient Pharmacy"],
+      "arrows": [],
+      "zone": "blue"
+    },
+    {
+      "sign_id": "sign.mp1.garden_door",
+      "node_id": "mp1.garden_door",
+      "lines": ["Garden Link → Cancer Center"],
+      "arrows": [
+        {
+          "target_node_id": "mp1.corr_a",
+          "direction": "left"
+        },
+        {
+          "target_node_id": "gl.walkway",
+          "direction": "right"
+        }
+      ],
+      "zone": "blue"
+    },
+    {
+      "sign_id": "sign.mp2.elevA",
+      "node_id": "mp2.elevA",
+      "lines": ["Elevator A", "Level 2"],
+      "arrows": [
+        {
+          "target_node_id": "mp1.elevA",
+          "direction": "down"
+        },
+        {
+          "target_node_id": "mp2.corr_b",
+          "direction": "right"
+        }
+      ],
+      "zone": "gold"
+    },
+    {
+      "sign_id": "sign.mp2.corr_b",
+      "node_id": "mp2.corr_b",
+      "lines": ["Gold Zone"],
+      "arrows": [
+        {
+          "target_node_id": "mp1.corr_a",
+          "direction": "down"
+        },
+        {
+          "target_node_id": "mp2.elevA",
+          "direction": "left"
+        },
+        {
+          "target_node_id": "mp2.imaging_wait",
+          "direction": "right"
+        },
+        {
+          "target_node_id": "mp2.financial",
+          "direction": "right"
+        },
+        {
+          "target_node_id": "mp2.bridge_g",
+          "direction": "left"
+        },
+        {
+          "target_node_id": "mp2.bridge_cc",
+          "direction": "right"
+        }
+      ],
+      "zone": "gold"
+    },
+    {
+      "sign_id": "sign.mp2.imaging_wait",
+      "node_id": "mp2.imaging_wait",
+      "lines": ["Imaging", "Waiting"],
+      "arrows": [],
+      "zone": "gold"
+    },
+    {
+      "sign_id": "sign.mp2.ct1",
+      "node_id": "mp2.ct1",
+      "lines": ["CT 1"],
+      "arrows": [],
+      "zone": "gold"
+    },
+    {
+      "sign_id": "sign.mp2.ct2",
+      "node_id": "mp2.ct2",
+      "lines": ["CT 2"],
+      "arrows": [],
+      "zone": "gold"
+    },
+    {
+      "sign_id": "sign.mp2.xray",
+      "node_id": "mp2.xray",
+      "lines": ["X-ray"],
+      "arrows": [],
+      "zone": "gold"
+    },
+    {
+      "sign_id": "sign.mp2.financial",
+      "node_id": "mp2.financial",
+      "lines": ["Financial Counseling"],
+      "arrows": [],
+      "zone": "gold"
+    },
+    {
+      "sign_id": "sign.mp2.bridge_g",
+      "node_id": "mp2.bridge_g",
+      "lines": ["Skybridge → Parking Garage"],
+      "arrows": [
+        {
+          "target_node_id": "mp2.corr_b",
+          "direction": "right"
+        },
+        {
+          "target_node_id": "g2.bridge",
+          "direction": "ahead"
+        }
+      ],
+      "zone": "gold"
+    },
+    {
+      "sign_id": "sign.mp2.bridge_cc",
+      "node_id": "mp2.bridge_cc",
+      "lines": ["Link Bridge → Cancer Center Level 2"],
+      "arrows": [
+        {
+          "target_node_id": "mp2.corr_b",
+          "direction": "left"
+        },
+        {
+          "target_node_id": "cc2.bridge_mp",
+          "direction": "right"
+        }
+      ],
+      "zone": "gold"
+    },
+    {
+      "sign_id": "sign.g2.bridge",
+      "node_id": "g2.bridge",
+      "lines": ["Garage Level 2", "Skybridge"],
+      "arrows": [
+        {
+          "target_node_id": "mp2.bridge_g",
+          "direction": "back"
+        },
+        {
+          "target_node_id": "g2.parking",
+          "direction": "ahead"
+        }
+      ],
+      "zone": "gold"
+    },
+    {
+      "sign_id": "sign.g2.parking",
+      "node_id": "g2.parking",
+      "lines": ["Patient Parking"],
+      "arrows": [],
+      "zone": "gold"
+    },
+    {
+      "sign_id": "sign.gl.walkway",
+      "node_id": "gl.walkway",
+      "lines": ["Garden Link"],
+      "arrows": [
+        {
+          "target_node_id": "mp1.garden_door",
+          "direction": "left"
+        },
+        {
+          "target_node_id": "cc1.lobby",
+          "direction": "right"
+        }
+      ],
+      "zone": "green"
+    },
+    {
+      "sign_id": "sign.cc1.lobby",
+      "node_id": "cc1.lobby",
+      "lines": ["Cancer Center Lobby"],
+      "arrows": [
+        {
+          "target_node_id": "gl.walkway",
+          "direction": "left"
+        },
+        {
+          "target_node_id": "cc1.elevB",
+          "direction": "right"
+        }
+      ],
+      "zone": "green"
+    },
+    {
+      "sign_id": "sign.cc1.elevB",
+      "node_id": "cc1.elevB",
+      "lines": ["Elevator B"],
+      "arrows": [
+        {
+          "target_node_id": "cc1.lobby",
+          "direction": "left"
+        },
+        {
+          "target_node_id": "cc2.elevB",
+          "direction": "up"
+        },
+        {
+          "target_node_id": "cc3.elevB",
+          "direction": "up"
+        }
+      ],
+      "zone": "green"
+    },
+    {
+      "sign_id": "sign.cc2.elevB",
+      "node_id": "cc2.elevB",
+      "lines": ["Elevator B", "Level 2"],
+      "arrows": [
+        {
+          "target_node_id": "cc1.elevB",
+          "direction": "down"
+        },
+        {
+          "target_node_id": "cc3.elevB",
+          "direction": "up"
+        },
+        {
+          "target_node_id": "cc2.corr",
+          "direction": "ahead"
+        }
+      ],
+      "zone": "rose"
+    },
+    {
+      "sign_id": "sign.cc2.bridge_mp",
+      "node_id": "cc2.bridge_mp",
+      "lines": ["Link Bridge → Main Pavilion"],
+      "arrows": [
+        {
+          "target_node_id": "mp2.bridge_cc",
+          "direction": "left"
+        },
+        {
+          "target_node_id": "cc2.corr",
+          "direction": "right"
+        }
+      ],
+      "zone": "rose"
+    },
+    {
+      "sign_id": "sign.cc2.corr",
+      "node_id": "cc2.corr",
+      "lines": ["Rose Zone"],
+      "arrows": [
+        {
+          "target_node_id": "cc2.bridge_mp",
+          "direction": "left"
+        },
+        {
+          "target_node_id": "cc2.elevB",
+          "direction": "back"
+        },
+        {
+          "target_node_id": "cc2.vitals",
+          "direction": "right"
+        },
+        {
+          "target_node_id": "cc2.wait_2a",
+          "direction": "right"
+        },
+        {
+          "target_node_id": "cc2.wait_2b",
+          "direction": "left"
+        },
+        {
+          "target_node_id": "cc2.nurse",
+          "direction": "ahead"
+        }
+      ],
+      "zone": "rose"
+    },
+    {
+      "sign_id": "sign.cc2.vitals",
+      "node_id": "cc2.vitals",
+      "lines": ["Vitals"],
+      "arrows": [],
+      "zone": "rose"
+    },
+    {
+      "sign_id": "sign.cc2.wait_2a",
+      "node_id": "cc2.wait_2a",
+      "lines": ["Clinic 2A", "Waiting"],
+      "arrows": [],
+      "zone": "rose"
+    },
+    {
+      "sign_id": "sign.cc2.pod_2a",
+      "node_id": "cc2.pod_2a",
+      "lines": ["Medical Oncology 2A"],
+      "arrows": [],
+      "zone": "rose"
+    },
+    {
+      "sign_id": "sign.cc2.wait_2b",
+      "node_id": "cc2.wait_2b",
+      "lines": ["Clinic 2B", "Waiting"],
+      "arrows": [],
+      "zone": "rose"
+    },
+    {
+      "sign_id": "sign.cc2.pod_2b",
+      "node_id": "cc2.pod_2b",
+      "lines": ["Medical Oncology 2B"],
+      "arrows": [],
+      "zone": "rose"
+    },
+    {
+      "sign_id": "sign.cc2.nurse",
+      "node_id": "cc2.nurse",
+      "lines": ["Nurse Station"],
+      "arrows": [],
+      "zone": "rose"
+    },
+    {
+      "sign_id": "sign.cc3.elevB",
+      "node_id": "cc3.elevB",
+      "lines": ["Elevator B", "Level 3"],
+      "arrows": [
+        {
+          "target_node_id": "cc2.elevB",
+          "direction": "down"
+        },
+        {
+          "target_node_id": "cc1.elevB",
+          "direction": "down"
+        },
+        {
+          "target_node_id": "cc3.infusion_wait",
+          "direction": "right"
+        },
+        {
+          "target_node_id": "cc3.lounge",
+          "direction": "ahead"
+        }
+      ],
+      "zone": "violet"
+    },
+    {
+      "sign_id": "sign.cc3.infusion_wait",
+      "node_id": "cc3.infusion_wait",
+      "lines": ["Infusion Center", "Waiting"],
+      "arrows": [],
+      "zone": "violet"
+    },
+    {
+      "sign_id": "sign.cc3.infusion",
+      "node_id": "cc3.infusion",
+      "lines": ["Infusion Center"],
+      "arrows": [],
+      "zone": "violet"
+    },
+    {
+      "sign_id": "sign.cc3.lounge",
+      "node_id": "cc3.lounge",
+      "lines": ["Patient & Family Lounge"],
+      "arrows": [],
+      "zone": "violet"
+    }
+  ]
+}

@@ -21,6 +21,9 @@ export const en = {
   "board.start": "Start",
   "board.done": "Done",
   "board.didnt_arrive": "Didn't arrive",
+  "ticket.number": "Ticket {number}",
+  "ticket.first_stops": "Your first stops",
+  "ticket.level": "Level {floor}",
   "intake.send_to_payer": "Send to payer",
   "review.approve_send": "Approve and send",
   "handoff.nurse":
@@ -30,4 +33,10 @@ export const en = {
 export type CopyKey = keyof typeof en;
 
 /** Keys rendered on the patient phone or kiosk; checked for forbidden characters. */
-export const PATIENT_SURFACE_PREFIXES = ["patient.", "disclosure.", "handoff.", "footer."] as const;
+export const PATIENT_SURFACE_PREFIXES = [
+  "patient.",
+  "disclosure.",
+  "handoff.",
+  "footer.",
+  "ticket.",
+] as const;

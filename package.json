@@ -16,7 +16,8 @@
     "format": "prettier --write .",
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",
-    "test:e2e": "pnpm --filter @throughline/web test:e2e"
+    "test:e2e": "pnpm --filter @throughline/web test:e2e",
+    "render:signs": "pnpm --filter @throughline/hospital render:signs"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

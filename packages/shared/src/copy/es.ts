@@ -23,6 +23,9 @@ export const es: Record<CopyKey, string> = {
   "board.start": "Iniciar",
   "board.done": "Listo",
   "board.didnt_arrive": "No llegó",
+  "ticket.number": "Turno {number}",
+  "ticket.first_stops": "Sus primeras paradas",
+  "ticket.level": "Piso {floor}",
   "intake.send_to_payer": "Enviar a la aseguradora",
   "review.approve_send": "Aprobar y enviar",
   "handoff.nurse":
