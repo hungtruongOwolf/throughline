@@ -1,0 +1,33 @@
+{
+  "name": "throughline",
+  "private": true,
+  "version": "0.0.1",
+  "description": "One thread through the whole hospital visit, run by a fleet of agents. Meta Global AI Developer Hackathon 2026.",
+  "license": "MIT",
+  "packageManager": "pnpm@10.29.1",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "turbo run dev --parallel",
+    "build": "turbo run build",
+    "lint": "eslint . && prettier --check .",
+    "format": "prettier --write .",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "test:e2e": "pnpm --filter @throughline/web test:e2e"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^26.6.6",
+    "eslint": "^10.14.0",
+    "globals": "^17.13.0",
+    "prettier": "^3.9.10",
+    "tsup": "^9.0.0",
+    "turbo": "^2.11.10",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.72.1",
+    "vite-tsconfig-paths": "^6.1.1",
+    "vitest": "^5.0.5"
+  }
+}

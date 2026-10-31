@@ -1,0 +1,42 @@
+node_modules/
+.pnpm-store/
+.turbo/
+.next/
+out/
+dist/
+coverage/
+*.tsbuildinfo
+next-env.d.ts
+
+# secrets
+.env
+.env.local
+.env.*.local
+
+# data
+data/
+*.sqlite
+*.sqlite-journal
+!fixtures/model-cache.sqlite
+
+# rust / wasm
+target/
+packages/engine/pkg-web/
+packages/engine/pkg-node/
+apps/web/public/engine_bg.wasm
+
+# playwright
+test-results/
+playwright-report/
+playwright/.cache/
+
+# python
+__pycache__/
+.venv/
+
+# os / editor
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea/

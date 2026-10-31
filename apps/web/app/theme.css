@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+/* The only place colors are defined (spec 9.2). */
+@theme {
+  --color-paper: #f6f7f4;
+  --color-ink: #18223a;
+  --color-ink-soft: #4b5566;
+  --color-line: #0f766e;
+  --color-wait-low: #cfe8e3;
+  --color-wait-mid: #d97706;
+  --color-wait-high: #c2410c;
+  --color-zone-blue: #3b6fd6;
+  --color-zone-gold: #c9971a;
+  --color-zone-green: #3c8c5a;
+  --color-zone-rose: #c2506a;
+  --color-zone-violet: #7c5cbf;
+  --color-held: #b45309;
+  --color-held-bg: #fdf1dc;
+  --color-board-text: #f4f6f2;
+
+  --font-text: var(--font-atkinson), system-ui, sans-serif;
+  --font-display: var(--font-barlow), system-ui, sans-serif;
+}
+
+html {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-text);
+  font-size: 15px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-line);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0s !important;
+    animation-duration: 0s !important;
+  }
+}

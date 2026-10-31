@@ -1,0 +1,8 @@
+pnpm-lock.yaml
+docs/SPEC.md
+.next
+dist
+coverage
+packages/engine/pkg-web
+packages/engine/pkg-node
+packages/engine/target

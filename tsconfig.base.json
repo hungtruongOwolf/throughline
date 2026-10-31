@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2023"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "exactOptionalPropertyTypes": false,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": ".",
+    "paths": {
+      "@throughline/shared": ["./packages/shared/src/index.ts"],
+      "@throughline/shared/*": ["./packages/shared/src/*"],
+      "@throughline/hospital": ["./packages/hospital/src/index.ts"],
+      "@throughline/hospital/*": ["./packages/hospital/*"],
+      "@throughline/engine": ["./packages/engine/src-ts/index.ts"],
+      "@throughline/synthetic": ["./packages/synthetic/src/index.ts"]
+    }
+  }
+}
