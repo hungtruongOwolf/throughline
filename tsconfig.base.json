@@ -20,8 +20,8 @@
       "@throughline/shared/*": ["./packages/shared/src/*"],
       "@throughline/hospital": ["./packages/hospital/src/index.ts"],
       "@throughline/hospital/*": ["./packages/hospital/*"],
-      "@throughline/engine": ["./packages/engine/src-ts/index.ts"],
-      "@throughline/synthetic": ["./packages/synthetic/src/index.ts"]
+      "@throughline/synthetic": ["./packages/synthetic/src/index.ts"],
+      "@throughline/engine/*": ["./packages/engine/src-ts/*"]
     },
     "allowImportingTsExtensions": true,
     "noEmit": true

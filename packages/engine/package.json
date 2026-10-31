@@ -1,0 +1,15 @@
+{
+  "name": "@throughline/engine",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./node": "./src-ts/node.ts",
+    "./web": "./src-ts/web.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run && cargo test --quiet",
+    "route": "tsx scripts/route.ts"
+  }
+}

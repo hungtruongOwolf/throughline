@@ -12,12 +12,14 @@
   "scripts": {
     "dev": "turbo run dev --parallel",
     "build": "turbo run build",
-    "lint": "eslint . && prettier --check .",
+    "lint": "eslint . && prettier --check . && pnpm lint:rust",
     "format": "prettier --write .",
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",
     "test:e2e": "pnpm --filter @throughline/web test:e2e",
-    "render:signs": "pnpm --filter @throughline/hospital render:signs"
+    "render:signs": "pnpm --filter @throughline/hospital render:signs",
+    "build:engine": "node scripts/build-engine.mjs",
+    "lint:rust": "cd packages/engine && cargo fmt --check && cargo clippy --quiet --all-targets -- -D warnings"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

@@ -9,5 +9,6 @@ export * from "./journey/transitions";
 export * from "./ops";
 export * from "./events";
 export * from "./telemetry";
+export * from "./engine";
 export * from "./copy";
 export * from "./synthetic";
