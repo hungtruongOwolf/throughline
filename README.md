@@ -104,4 +104,4 @@ Deploy: [`docs/DEPLOY.md`](docs/DEPLOY.md).
 
 ## Credits
 
-The architecture pattern (event → capability → gate → handler, park-and-replay) is inspired by the open EIR project. Fonts: Atkinson Hyperlegible (Braille Institute), Barlow Condensed, Courier Prime. The film (`video/`) is built with Remotion (free license for individuals); music: "Mountains" by Andrew Ev (Mixkit License); sound effects from Mixkit and Pixabay. License: MIT.
+The architecture pattern (event → capability → gate → handler, park-and-replay) is inspired by the open EIR project. Fonts: Atkinson Hyperlegible (Braille Institute), Barlow Condensed, Courier Prime. The film (`video/`) is built with Remotion (free license for individuals); music: "Mountains" by Andrew Ev (Mixkit License); sound effects from Mixkit and Pixabay; narration voice generated with Kokoro-82M (Apache 2.0). License: MIT.

@@ -1,6 +1,6 @@
 # Demo video script
 
-Read at a natural pace. Each numbered line is one recording: save it as `video/public/audio/vo3/vNN.wav` (NN = the line number) and the film re-times itself to your voice (`python scripts/build-timeline3.py`, then render `Throughline3`).
+Read at a natural pace. Each numbered line is one recording: save it as `video/public/audio/vo4/vNN.wav` (NN = the line number), update the line lengths in `video/narration4.json`, and the film re-times itself to your voice (`python scripts/build-timeline4.py`, then render `Throughline4`).
 
 ## 1. The problem (motion graphics)
 

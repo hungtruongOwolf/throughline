@@ -55,7 +55,7 @@ const FOCUS: Record<string, Rect> = {
 };
 
 /** A desktop recording, framed and gently moving so the screen never feels pasted on. */
-function Screen({ row }: { row: Row3 }) {
+export function Screen({ row }: { row: Row3 }) {
   const f = useCurrentFrame();
   const enter = useSpring(0, { damping: 200 }, 18);
   const d = useDrift(row.name + row.line, 0.4, 8);
@@ -100,7 +100,7 @@ function Screen({ row }: { row: Row3 }) {
 }
 
 /** A phone recording (Maria's app), the staff link at the top cropped away. */
-function PhoneScreen({ row }: { row: Row3 }) {
+export function PhoneScreen({ row }: { row: Row3 }) {
   const enter = useSpring(0, { damping: 200 }, 18);
   const d = useDrift(row.name + row.line, 0.5, 8);
   const W = 470;
