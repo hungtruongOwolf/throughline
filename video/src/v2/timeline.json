@@ -1,0 +1,297 @@
+{
+ "fps": 30,
+ "bpm": 120,
+ "total": 5160,
+ "marks": {
+  "D1": 25,
+  "BRK": 56,
+  "D2": 62,
+  "OUT": 80,
+  "LOGO": 83
+ },
+ "shots": [
+  {
+   "id": 1,
+   "beat": "COLD-OPEN",
+   "start": 60,
+   "vo": 145,
+   "text": "A hundred and fifty-five million US emergency visits a year. Each one's a chain.",
+   "dur": 165
+  },
+  {
+   "id": 2,
+   "beat": "PROBLEM-1",
+   "start": 225,
+   "vo": 119,
+   "text": "Before the visit, it's referrals, insurers, and a fight for a time slot.",
+   "dur": 135
+  },
+  {
+   "id": 3,
+   "beat": "PROBLEM-2",
+   "start": 360,
+   "vo": 152,
+   "text": "During, it's hallways and waiting rooms. After, it's results and phone tag.",
+   "dur": 165
+  },
+  {
+   "id": 4,
+   "beat": "PROBLEM-3",
+   "start": 525,
+   "vo": 115,
+   "text": "Every link is a different person. Nobody holds the whole line.",
+   "dur": 135
+  },
+  {
+   "id": 5,
+   "beat": "PRICE-1",
+   "start": 660,
+   "vo": 116,
+   "text": "The price? About a quarter of US health spending is waste.",
+   "dur": 135
+  },
+  {
+   "id": 6,
+   "beat": "PRICE-2",
+   "start": 795,
+   "vo": 97,
+   "text": "Doctors and their staff lose thirteen hours a week to prior auth.",
+   "dur": 105
+  },
+  {
+   "id": 7,
+   "beat": "PRICE-3",
+   "start": 900,
+   "vo": 102,
+   "text": "And one abnormal test result in fourteen never reaches the patient.",
+   "dur": 120
+  },
+  {
+   "id": 8,
+   "beat": "HIT-1",
+   "start": 1020,
+   "vo": 0,
+   "dur": 60
+  },
+  {
+   "id": 9,
+   "beat": "MARIA-1",
+   "start": 1080,
+   "vo": 146,
+   "text": "Meet Maria. Seventy-one. Her doctor spotted something on a scan.",
+   "dur": 165
+  },
+  {
+   "id": 10,
+   "beat": "MARIA-2",
+   "start": 1245,
+   "vo": 155,
+   "text": "So Dr. Whitcombe faxes a referral to Halden Medical Center. Yes, a fax.",
+   "dur": 165
+  },
+  {
+   "id": 11,
+   "beat": "DROP",
+   "start": 1410,
+   "vo": 75,
+   "text": "That fax is where Throughline grabs the thread.",
+   "dur": 90
+  },
+  {
+   "id": "TITLE",
+   "beat": "TITLE",
+   "start": 1500,
+   "vo": 0,
+   "dur": 120
+  },
+  {
+   "id": 12,
+   "beat": "IDEA",
+   "start": 1620,
+   "vo": 143,
+   "text": "Thirteen agents pass Maria's case hand to hand. People sign off at the gates.",
+   "dur": 150
+  },
+  {
+   "id": 13,
+   "beat": "HANDOFF-1",
+   "start": 1770,
+   "vo": 178,
+   "text": "Intake reads the fax. Smudged member ID? It asks the coordinator instead of guessing.",
+   "dur": 195
+  },
+  {
+   "id": 14,
+   "beat": "HANDOFF-2",
+   "start": 1965,
+   "vo": 126,
+   "text": "One answer wakes Coverage, which flags the scan and tosses it to Prior auth.",
+   "dur": 135
+  },
+  {
+   "id": 15,
+   "beat": "HANDOFF-3",
+   "start": 2100,
+   "vo": 117,
+   "text": "Prior auth drafts the whole request, with a source next to every line.",
+   "dur": 135
+  },
+  {
+   "id": 16,
+   "beat": "GATE-1",
+   "start": 2235,
+   "vo": 193,
+   "text": "The coordinator approves. By hand, that's twenty-four minutes. Here, it's already written.",
+   "dur": 210
+  },
+  {
+   "id": 17,
+   "beat": "HANDOFF-4",
+   "start": 2445,
+   "vo": 153,
+   "text": "Scheduling takes the baton. It's a Rust engine, because schedules should be exact.",
+   "dur": 165
+  },
+  {
+   "id": 18,
+   "beat": "HANDOFF-5",
+   "start": 2610,
+   "vo": 165,
+   "text": "Maria's voice note says wheelchair. Messaging hears it, Itinerary reroutes around the stairs.",
+   "dur": 210
+  },
+  {
+   "id": 19,
+   "beat": "HIT-2",
+   "start": 2820,
+   "vo": 0,
+   "dur": 60
+  },
+  {
+   "id": 20,
+   "beat": "DAY-1",
+   "start": 2880,
+   "vo": 143,
+   "text": "Visit day. One of two CT scanners is down, and nobody's said a word.",
+   "dur": 150
+  },
+  {
+   "id": 21,
+   "beat": "DAY-2",
+   "start": 3030,
+   "vo": 114,
+   "text": "Waiting-room sensing counts heads in the camera frames and sees the line swell.",
+   "dur": 120
+  },
+  {
+   "id": 22,
+   "beat": "HANDOFF-6",
+   "start": 3150,
+   "vo": 77,
+   "text": "It hands the problem straight to the Ops planner.",
+   "dur": 90
+  },
+  {
+   "id": 23,
+   "beat": "DAY-3",
+   "start": 3240,
+   "vo": 101,
+   "text": "The planner plays out the next ninety minutes twenty different ways.",
+   "dur": 120
+  },
+  {
+   "id": 24,
+   "beat": "DAY-4",
+   "start": 3360,
+   "vo": 133,
+   "text": "Best fix? Average CT wait drops from seventeen minutes to five.",
+   "dur": 150
+  },
+  {
+   "id": 25,
+   "beat": "GATE-2",
+   "start": 3510,
+   "vo": 156,
+   "text": "The operations lead approves. Seven patients re-planned, and every phone gets the why.",
+   "dur": 210
+  },
+  {
+   "id": "DROP2",
+   "beat": "DROP2",
+   "start": 3720,
+   "vo": 0,
+   "dur": 60
+  },
+  {
+   "id": 26,
+   "beat": "AFTER-1",
+   "start": 3780,
+   "vo": 158,
+   "text": "Once Maria's home, Discharge puts the doctor's notes in plain words, and the doctor signs off.",
+   "dur": 165
+  },
+  {
+   "id": 27,
+   "beat": "AFTER-2",
+   "start": 3945,
+   "vo": 113,
+   "text": "Still unsure the next day? Discharge hands her to a nurse.",
+   "dur": 120
+  },
+  {
+   "id": 28,
+   "beat": "AFTER-3",
+   "start": 4065,
+   "vo": 142,
+   "text": "Results watch guards her test. Follow-up books the next visit and closes the loop.",
+   "dur": 150
+  },
+  {
+   "id": 29,
+   "beat": "TECH-1",
+   "start": 4215,
+   "vo": 162,
+   "text": "Muse Spark reads and drafts. Voice Transcribe listens. SAM counts.",
+   "dur": 180
+  },
+  {
+   "id": 30,
+   "beat": "TECH-2",
+   "start": 4395,
+   "vo": 119,
+   "text": "The planner runs on Muse Spark Open, open weights, on Baseten.",
+   "dur": 135
+  },
+  {
+   "id": 31,
+   "beat": "SCALE",
+   "start": 4530,
+   "vo": 170,
+   "text": "And it's not one hospital. Northgate alone: five buildings, a fourteen-floor tower.",
+   "dur": 210
+  },
+  {
+   "id": 32,
+   "beat": "HIT-3",
+   "start": 4740,
+   "vo": 0,
+   "dur": 60
+  },
+  {
+   "id": 33,
+   "beat": "CLOSE-1",
+   "start": 4800,
+   "vo": 63,
+   "text": "Nobody had to hold Maria's thread.",
+   "dur": 75
+  },
+  {
+   "id": 34,
+   "beat": "CLOSE-2",
+   "start": 4875,
+   "vo": 67,
+   "text": "This time, Throughline held it.",
+   "dur": 285
+  }
+ ]
+}

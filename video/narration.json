@@ -1,82 +1,172 @@
 [
  {
   "id": 1,
-  "text": "Every year in the US there are about a hundred and fifty-five million emergency visits, and hundreds of millions more outpatient visits. Behind every one of them is a chain."
+  "beat": "COLD-OPEN",
+  "text": "A hundred and fifty-five million US emergency visits a year. Each one's a chain."
  },
  {
   "id": 2,
-  "text": "A referral, the insurance, the visit, the results, the follow-up. Each link is a different person in a different system, and the first one is often still a fax. Nobody holds the whole line."
+  "beat": "PROBLEM-1",
+  "text": "Before the visit, it's referrals, insurers, and a fight for a time slot."
  },
  {
   "id": 3,
-  "text": "And that costs something. About a quarter of US health spending is waste, much of it paperwork and handoffs. A doctor and their staff spend about thirteen hours a week on prior authorization. And one abnormal test result in fourteen never reaches the patient."
+  "beat": "PROBLEM-2",
+  "text": "During, it's hallways and waiting rooms. After, it's results and phone tag."
  },
  {
   "id": 4,
-  "text": "The problem isn't any one step. It's the gaps between them."
+  "beat": "PROBLEM-3",
+  "text": "Every link is a different person. Nobody holds the whole line."
  },
  {
   "id": 5,
-  "text": "Take Maria. She's seventy-one. Her doctor found something on a scan, and her office faxed a referral to a specialist."
+  "beat": "PRICE-1",
+  "text": "The price? About a quarter of US health spending is waste."
  },
  {
   "id": 6,
-  "text": "Throughline gives Maria one thread, from that fax to the follow-up. Thirteen agents carry it, one to the next, and a person steps in only where a person should."
+  "beat": "PRICE-2",
+  "text": "Doctors and their staff lose thirteen hours a week to prior auth."
  },
  {
   "id": 7,
-  "text": "The fax comes in, and Intake reads it. The member number's smudged, so it doesn't guess. It asks Jordan, the coordinator. One answer, and Jordan's done."
+  "beat": "PRICE-3",
+  "text": "And one abnormal test result in fourteen never reaches the patient."
  },
  {
   "id": 8,
-  "text": "That answer wakes Coverage, which sees the scan needs the insurer's permission, and Prior auth writes the whole request. Nothing goes to an insurer without a person, so Jordan reads it, and approves. By hand, that's about twenty-four minutes."
+  "beat": "HIT-1",
+  "text": "[MUSIC HIT - no VO]"
  },
  {
   "id": 9,
-  "text": "Scheduling fits everything into as few trips as it can. That one isn't a language model. It's a Rust engine, because a schedule should be exact."
+  "beat": "MARIA-1",
+  "text": "Meet Maria. Seventy-one. Her doctor spotted something on a scan."
  },
  {
   "id": 10,
-  "text": "Maria confirms by voice note, and says she'll need a wheelchair. The messaging agent catches it, so a chair waits at the door, and every route she gets skips the stairs. Nobody typed that in."
+  "beat": "MARIA-2",
+  "text": "So Dr. Whitcombe faxes a referral to Halden Medical Center. Yes, a fax."
  },
  {
   "id": 11,
-  "text": "On the day, every stop is its own line. When one backs up, everyone behind it waits."
+  "beat": "DROP",
+  "text": "That fax is where Throughline grabs the thread."
  },
  {
   "id": 12,
-  "text": "This morning, one of the two CT scanners is down, and nobody's said a word. But the waiting-room agent is counting people in the camera frames, sees the line grow, and tells the Ops planner."
+  "beat": "IDEA",
+  "text": "Thirteen agents pass Maria's case hand to hand. People sign off at the gates."
  },
  {
   "id": 13,
-  "text": "The planner plays the next ninety minutes out twenty times, once for each fix it knows, and comes back with one. Open a slot on the other scanner, and move people over."
+  "beat": "HANDOFF-1",
+  "text": "Intake reads the fax. Smudged member ID? It asks the coordinator instead of guessing."
  },
  {
   "id": 14,
-  "text": "The average CT wait goes from seventeen minutes to five, and only seven patients have to move."
+  "beat": "HANDOFF-2",
+  "text": "One answer wakes Coverage, which flags the scan and tosses it to Prior auth."
  },
  {
   "id": 15,
-  "text": "Sam, the operations lead, approves, and everyone affected gets a text saying what changed. If Maria gets lost, she photographs a sign, and it sends her the way from there."
+  "beat": "HANDOFF-3",
+  "text": "Prior auth drafts the whole request, with a source next to every line."
  },
  {
   "id": 16,
-  "text": "Once she's home, the thread keeps going. Discharge puts her instructions in plain words, next to the doctor's, and checks the next day that she understood. If she isn't sure, it hands her to a nurse."
+  "beat": "GATE-1",
+  "text": "The coordinator approves. By hand, that's twenty-four minutes. Here, it's already written."
  },
  {
   "id": 17,
-  "text": "Results watch stays on her test until the doctor signs off. Follow-up books her next visit, and reports back to the doctor who sent the fax."
+  "beat": "HANDOFF-4",
+  "text": "Scheduling takes the baton. It's a Rust engine, because schedules should be exact."
  },
  {
   "id": 18,
-  "text": "The thinking runs on Meta's models. Muse Spark reads and drafts. The Ops planner runs on Spark Open, on Baseten, so a hospital could run it itself. Voice Transcribe hears the voice notes, and SAM does the counting."
+  "beat": "HANDOFF-5",
+  "text": "Maria's voice note says wheelchair. Messaging hears it, Itinerary reroutes around the stairs."
  },
  {
   "id": 19,
-  "text": "And it isn't built for one building. Northgate University Hospital has five buildings, and a fourteen-floor tower."
+  "beat": "HIT-2",
+  "text": "[MUSIC HIT - no VO]"
  },
  {
   "id": 20,
-  "text": "Nobody had to hold Maria's thread. Throughline did."
+  "beat": "DAY-1",
+  "text": "Visit day. One of two CT scanners is down, and nobody's said a word."
+ },
+ {
+  "id": 21,
+  "beat": "DAY-2",
+  "text": "Waiting-room sensing counts heads in the camera frames and sees the line swell."
+ },
+ {
+  "id": 22,
+  "beat": "HANDOFF-6",
+  "text": "It hands the problem straight to the Ops planner."
+ },
+ {
+  "id": 23,
+  "beat": "DAY-3",
+  "text": "The planner plays out the next ninety minutes twenty different ways."
+ },
+ {
+  "id": 24,
+  "beat": "DAY-4",
+  "text": "Best fix? Average CT wait drops from seventeen minutes to five."
+ },
+ {
+  "id": 25,
+  "beat": "GATE-2",
+  "text": "The operations lead approves. Seven patients re-planned, and every phone gets the why."
+ },
+ {
+  "id": 26,
+  "beat": "AFTER-1",
+  "text": "Once Maria's home, Discharge puts the doctor's notes in plain words, and the doctor signs off."
+ },
+ {
+  "id": 27,
+  "beat": "AFTER-2",
+  "text": "Still unsure the next day? Discharge hands her to a nurse."
+ },
+ {
+  "id": 28,
+  "beat": "AFTER-3",
+  "text": "Results watch guards her test. Follow-up books the next visit and closes the loop."
+ },
+ {
+  "id": 29,
+  "beat": "TECH-1",
+  "text": "Muse Spark reads and drafts. Voice Transcribe listens. SAM counts."
+ },
+ {
+  "id": 30,
+  "beat": "TECH-2",
+  "text": "The planner runs on Muse Spark Open, open weights, on Baseten."
+ },
+ {
+  "id": 31,
+  "beat": "SCALE",
+  "text": "And it's not one hospital. Northgate alone: five buildings, a fourteen-floor tower."
+ },
+ {
+  "id": 32,
+  "beat": "HIT-3",
+  "text": "[MUSIC HIT - no VO]"
+ },
+ {
+  "id": 33,
+  "beat": "CLOSE-1",
+  "text": "Nobody had to hold Maria's thread."
+ },
+ {
+  "id": 34,
+  "beat": "CLOSE-2",
+  "text": "This time, Throughline held it."
  }
 ]

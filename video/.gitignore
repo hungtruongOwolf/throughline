@@ -2,3 +2,4 @@ node_modules/
 out/
 public/clips/*.webm
 public/audio/bed-*.wav
+public/audio/music2/
