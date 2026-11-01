@@ -1,111 +1,110 @@
-# Demo video script (4:00)
+# Demo video script (about 4:00)
 
-Read it out loud once before you record. It is written to be spoken: short sentences, the odd "uh" or self-correction so it sounds like a person. Do not smooth those out.
+This is meant to be spoken, not read. It follows one patient, Maria, from the fax to the follow-up, so every part leads into the next. Read it out loud once; where a sentence is hard to say, change it to how you would say it.
 
-Pace: about 140 words a minute. The talking parts are about 560 words; the rest of the four minutes is the screen working while you say nothing. Leave the pauses in. If a take goes wrong halfway, keep going and say the line again.
+Quay 1080p at https://throughline-zeta-ten.vercel.app, zoom 110%, other tabs closed.
 
-Record at 1080p on https://throughline-zeta-ten.vercel.app. Browser zoom 110%. Close other tabs. Open the front page first.
+Stage directions are in _italics_. When one says "pause", say nothing and let the screen work.
 
-The thing this video must land: **the agents hand work to each other with nobody pressing a button, and a person only steps in where a person should.** Every demo beat below shows one handoff.
+---
 
-## Numbers you may say, and where they come from
+## 1. Maria (0:00 to 0:50)
 
-Say "about" where marked. Say "one study" or "older patients" where the study was narrow.
+_Screen: the 3D hospital turning slowly on the front page._
 
-| What you say                                                                                        | Source                                          |
-| --------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
-| About 155 million emergency visits a year in the US                                                 | CDC NHAMCS, 2022                                |
-| Hospital outpatient visits are in the hundreds of millions a year                                   | CDC Health, United States (832 million in 2015) |
-| A typical Medicare patient sees about 2 primary care doctors and 5 specialists, in 4 practices      | Pham et al., NEJM, 2007                         |
-| A visit takes about 2 hours of the patient's time; about 20 minutes is with the doctor              | Ray et al., JAMA Intern Med, 2015               |
-| Doctors and staff spend about 13 hours a week on prior authorization                                | AMA survey, 2024                                |
-| A manual prior authorization takes about 24 minutes                                                 | CAQH Index, 2024                                |
-| 1 in 14 abnormal outpatient test results is never communicated to the patient                       | Casalino et al., Arch Intern Med, 2009          |
-| 79% of older patients with a medication change at discharge did not understand a change             | J Gen Intern Med, 2012                          |
-| About 1 in 5 Medicare patients is back in hospital within 30 days; half had no office visit between | Jencks et al., NEJM, 2009                       |
-| Failure of care coordination wastes an estimated $27 to $78 billion a year                          | Shrank et al., JAMA, 2019                       |
-
-Our own numbers, checkable in the repo: 13 agents, 30 referrals in the book, 3 hospitals, intake read 10 of 10 faxes, the classifier handled 60 of 60 messages with no false alarms.
-
-Do not say: a percentage of referrals sent by fax, a national no-show cost, a wayfinding dollar cost. No source we trust.
-
-## The script
-
-**0:00 to 0:55. The problem, wide. Screen: the 3D hospital turning slowly on the front page. Nothing else.**
-
-> Okay. Think about how many people walk into a hospital in a year.
+> Let me tell you about Maria. She's seventy-one, and her doctor just found something on a scan. He wants her to see a cancer specialist, so his office does what most offices still do. They fax it.
 >
-> In the US, about a hundred and fifty-five million emergency visits, and hospital outpatient visits in the hundreds of millions on top of that.
+> And a fax isn't a person. It lands in a pile. Somebody has to read it. Somebody calls the insurance. Somebody asks permission for the scan, and doctors and their staff spend about thirteen hours a week on that alone. And somebody has to find her a time.
 >
-> And a visit isn't one thing. It's a chain. Before: a referral, often still a fax, then the insurance, then permission from the insurer, then finding a time. Doctors and their staff spend about thirteen hours a week on prior authorization alone.
+> Then the visit itself. A big building she's never been in. About two hours of her day, and maybe twenty minutes of it with the doctor. And then she goes home, and most older patients don't understand at least one change to their medicine.
 >
-> During: you find the building, the room, you wait. About two hours of your day, about twenty minutes with the doctor.
->
-> After: you go home with instructions. Most older patients with a medication change don't understand at least one of the changes. One in fourteen abnormal results never reaches the patient.
->
-> And a typical Medicare patient has about two primary doctors and five specialists, in four practices. Nobody runs the whole line. Estimated cost of that, tens of billions a year.
+> Nobody did anything wrong here. It's just that nobody owns the whole thing, from the fax to the follow-up.
 
-**0:55 to 1:20. The idea. Screen: front page, staff list and the patient door.**
+## 2. The idea (0:50 to 1:10)
 
-> So, Throughline. One thread per patient, from the referral to the follow-up. And thirteen agents that pick up the thread, one after another, on their own. A person only steps in at the moments that need a person.
->
-> Let me show you one patient, start to finish.
+_Screen: front page, staff list and patient door._
 
-**1:20 to 2:15. Before. Screen: sign in as Jordan, Inbox, then the patient record timeline filling in. Let the timeline scroll; don't talk over every line.**
+> So that's what Throughline does. Maria gets one thread, start to finish, and thirteen agents pass it along, one to the next. People step in only where it actually needs a person. Let me show you.
 
-> A fax arrives. Nobody clicks anything.
->
-> Intake reads it. Patient, doctor, diagnosis, copied exactly as written. The member ID is smudged, so it doesn't guess, it asks Jordan, the coordinator. Jordan answers from the insurance card.
->
-> _(pause, let the timeline move)_
->
-> The moment that's answered, Coverage wakes up. Checks the plan, the copay, which services need the insurer's approval. That finds a CT scan needs one. So Prior auth drafts the request, from the payer's rules, with the source of every line beside it.
->
-> _(open the draft, click Approve)_
->
-> This is one of the places a person signs. A manual one is about twenty-four minutes. Here Jordan checks it and approves it, and it goes. The insurer says yes.
->
-> And Scheduling picks it up. Every service the doctor ordered, in the right order, in as few trips as possible, around when the patient can come. That's a Rust engine, not a language model, because a schedule should be exact.
->
-> Then Visit prep sends her plan. And when Maria answers by voice note, "I need a wheelchair", Patient messaging understands it, remembers it, and the Itinerary agent redraws her route to use only elevators. Nobody typed that in.
+## 3. Before the visit (1:10 to 2:20)
 
-**2:15 to 3:05. During. Screen: Today, then the patient app on a phone-sized window.**
+_Screen: sign in as Jordan, open the new referral's patient record so the timeline fills in. Don't click anything for the first few seconds._
 
-> Now the visit day. This is the hospital, right now.
+> Maria's fax just arrived. I'm not going to click anything.
 >
-> Waiting-room sensing counts the people in each waiting room from camera frames. It sees the CT line growing, and CT one is down. Sensing tells Ops.
+> _(pause, let the timeline start)_
 >
-> Ops runs the rest of the day with each possible fix, and proposes the best one. Move three patients to the other scanner. It tested that first, in a simulation, before it bothered anybody.
+> The first agent, Intake, has read it. And the insurance number's smudged, so it doesn't guess. It asks Jordan, the coordinator. Jordan checks the card, types it in, and that's all Jordan has to do.
+>
+> Because the second that lands, Coverage wakes up and finds the scan needs the insurer's permission. And that wakes up Prior auth, which writes the whole request, with its sources next to every line.
+>
+> _(open the draft)_
+>
+> Now this is a place for a person. Nothing goes to an insurer without one. So Jordan reads it, and approves.
 >
 > _(click Approve)_
 >
-> A person signs. And right away, Itinerary re-plans every affected patient, and Visit companion tells Maria, on her phone, with the reason. She never asked.
+> Doing that by hand takes about twenty-four minutes. This one was already written.
 >
-> _(on the phone view)_ If she gets lost, she sends a photo of a sign, and the companion works out where she is and gives her step-free directions.
-
-**3:05 to 3:30. After. Screen: patient record, the after-visit part of the timeline.**
-
-> After. Discharge restates the doctor's notes in plain words, right next to the original, and the doctor approves it. A day later it checks, with a couple of questions, that she understood. If an answer is wrong it doesn't explain, it hands it to a nurse.
+> Then Scheduling books everything the doctor ordered, in as few trips as it can. That one's not a language model, by the way. It's a Rust engine, because a schedule should be exact.
 >
-> Results watch keeps track of the test until the doctor has acknowledged it. And Follow-up books the next labs and visit, checks in on day three, and sends the closing report back to the referring doctor.
+> And when Maria answers her plan with a voice note, saying she's going to need a wheelchair, the messaging agent hears that, and the Itinerary agent redraws her route to use elevators. Nobody typed that in.
 
-**3:30 to 3:50. The models, and more than one hospital. Screen: Agents page, then the hospital picker, Northgate in 3D.**
+## 4. The visit day (2:20 to 3:10)
 
-> It runs on Meta's models. Muse Spark reads and drafts. The Ops planner runs on Spark Open, the open-weights one, on Baseten, because a hospital might want a model it can run itself. Muse Voice Transcribe for voice notes, SAM for counting people. Every run is logged: which agent, which model, what it saw, what it did.
+_Screen: Today, then the patient app in a phone-sized window._
+
+> Now it's the day of the visit. This is the hospital, live. And one of the two CT scanners is down, and nobody's told anyone.
 >
-> And it isn't one hospital. _(pick Northgate)_ Five buildings, a fourteen-floor tower. A new hospital can add itself, and patients can ask for a visit there too.
-
-**3:50 to 4:00. Close. Screen: Today, Northgate, 3D.**
-
-> Thirty referrals a week, ten minutes saved on each, that's five hours a week back, for one clinic. But the real point is the thread. Nobody has to hold it anymore.
+> But there's an agent that counts the people in each waiting room, from the camera frames. It sees the CT line growing, and tells the Ops planner. And the planner does something I really like. Before it bothers anybody, it runs the rest of the day with every possible fix, and comes back with one. Move three patients to the other scanner.
 >
-> That's Throughline. Thanks for watching.
+> _(click Approve)_
+>
+> Sam, the operations lead, approves it. And right away Maria's phone tells her what changed, and why. She never asked.
+>
+> _(on the phone view)_
+>
+> And if she gets lost anyway, she takes a photo of a sign, and it tells her where she is, and the way to the elevator.
+
+## 5. After the visit (3:10 to 3:35)
+
+_Screen: the patient record, the after-visit part of the timeline._
+
+> And when she's gone home, the thread keeps going. Discharge rewrites the doctor's notes in plain words, right next to the original, and checks the next day that she understood. If she didn't, it doesn't try to explain. It hands her to a nurse.
+>
+> Another agent watches her test result until the doctor has signed off. And Follow-up books her next visit and sends the report back to the doctor who sent the fax.
+
+## 6. What it runs on (3:35 to 3:55)
+
+_Screen: the Agents page, then the hospital picker and Northgate in 3D._
+
+> All of this runs on Meta's models. Muse Spark does the reading and the drafting. The Ops planner runs on Spark Open, the open-weights one, on Baseten, because a hospital might want to run that part on its own hardware. Voice notes go through Muse Voice Transcribe, and SAM does the counting. Every step is logged, so you can always ask why it did something, and open the answer.
+>
+> And it isn't one hospital. _(pick Northgate)_ This one has five buildings and a fourteen-floor tower, and a new hospital can add itself.
+
+## 7. Close (3:55 to 4:05)
+
+_Screen: Today, Northgate._
+
+> Thirty referrals a week, ten minutes saved on each, that's five hours back. But honestly, the bigger thing is Maria. Nobody had to hold her thread. Throughline did. Thanks for watching.
+
+---
+
+## Numbers, and where they come from
+
+| You say                                                    | Source                           |
+| ---------------------------------------------------------- | -------------------------------- |
+| Staff spend about 13 hours a week on prior authorization   | AMA survey, 2024                 |
+| About 2 hours of the day, about 20 minutes with the doctor | Ray et al., JAMA Intern Med 2015 |
+| Most older patients miss at least one medication change    | J Gen Intern Med, 2012           |
+| Doing a prior auth by hand takes about 24 minutes          | CAQH Index, 2024                 |
+
+Everything else you say about the product is from the repo: 13 agents, five buildings and a fourteen-floor tower at Northgate. "Thirty referrals, ten minutes each, five hours" is arithmetic, not a measurement.
 
 ## Before you record
 
-- Reload the site so the hospital is at its starting state (it restores itself after 10 idle minutes).
-- To show the chain from the start, use **New referral** in Referrals: it receives a fax and the agents begin in front of you. Then open that patient's record so the timeline fills in as you talk. Maria's record is already past that point.
-- Sign in as Jordan. Make sure the prior-auth item is in the Inbox before the take.
-- Use Halden until the models part, then switch to Northgate.
-- Before you say which model reads the fax, open the Agents page and check which model the intake agent lists. Say that name.
-- Upload to YouTube, put the link in `docs/DEVPOST.md` (the Video line). Check the contest rules for the video length limit. If it is three minutes, cut the "After" section and the "During" patient-phone lines.
+- Reload the site so the hospital is at its starting state.
+- Use **New referral** in Referrals to receive a fax, then open that patient's record so the timeline fills in while you talk. Maria's own record has already passed these steps.
+- Sign in as Jordan. For the Ops part, sign in as Sam or use the Today page.
+- Before you say which model reads the fax, open the Agents page and check what the intake agent lists. Say that name.
+- If the contest limit is three minutes, cut section 5, the phone lines in section 4, and the last paragraph of section 1.
