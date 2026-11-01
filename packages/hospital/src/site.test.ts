@@ -23,7 +23,10 @@ describe("hospital sites", () => {
       const queue = [start];
       while (queue.length)
         for (const v of adj.get(queue.shift() as string) ?? [])
-          if (!seen.has(v)) (seen.add(v), queue.push(v));
+          if (!seen.has(v)) {
+            seen.add(v);
+            queue.push(v);
+          }
       for (const stop of site.day) expect(seen.has(stop), stop).toBe(true);
       for (const s of site.stations) expect(seen.has(s.node_id), s.node_id).toBe(true);
     },
