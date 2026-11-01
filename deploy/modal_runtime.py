@@ -63,6 +63,8 @@ ADMIN = modal.Secret.from_dict({"ADMIN_TOKEN": os.environ.get("ADMIN_TOKEN", "")
     secrets=[ADMIN],
     min_containers=1,
     max_containers=1,
+    # Any US region, so a busy zone never leaves the runtime unscheduled.
+    region="us",
     scaledown_window=30 * 60,
     timeout=24 * 60 * 60,
 )

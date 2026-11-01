@@ -17,7 +17,8 @@ for (const path of pages) {
     timeout: 120_000,
   });
   await page.waitForTimeout(2500);
-  const name = path === "/" ? "home" : path.replaceAll("/", "_").slice(1);
+  const name =
+    path === "/" ? "home" : path.replace(/[^a-z0-9]+/gi, "_").replace(/^_/, "") || "home";
   await page.screenshot({ path: `${out}/${name}.png`, fullPage: false });
   console.log("shot", path);
 }

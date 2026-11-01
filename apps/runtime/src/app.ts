@@ -14,6 +14,7 @@ import { seedReferral } from "./demo/referral";
 import { STORY_STEPS, StoryDriver, type StoryStep } from "./demo/story";
 import { buildBoard, type SimBackground } from "./board";
 import { buildOverview } from "./ops-overview";
+import { campus, siteFloor, sites } from "@throughline/hospital";
 import { locateFromPhoto } from "./locate";
 import { transcribe } from "./models/voice";
 import type { World } from "./sim/pre-visit";
@@ -174,8 +175,34 @@ export function createApp(ctx?: AppContext) {
 
   // ---- the staff platform (docs/PLATFORM-DESIGN.md) ----------------------------------------
   /** The hospital this workspace serves, and the hospitals on this deployment. */
-  app.get("/api/hospital", (c) => c.json(HOSPITALS[0]));
-  app.get("/api/hospitals", (c) => c.json([...HOSPITALS, ...ctx.setups]));
+  const SITES = sites(campus);
+  const sized = (h: Hospital): Hospital => {
+    const site = SITES[h.id];
+    return site
+      ? {
+          ...h,
+          buildings: site.buildings.filter((b) => b.name).length,
+          floors: Math.max(...site.buildings.map((b) => b.floors)),
+          forecasts: h.id === HOSPITALS[0]?.id,
+        }
+      : h;
+  };
+  app.get("/api/hospital", (c) => c.json(sized(HOSPITALS[0] as Hospital)));
+  app.get("/api/hospitals", (c) => c.json([...HOSPITALS, ...ctx.setups].map(sized)));
+  /** A hospital's buildings, floors, rooms, and walks, for the 3D view and wayfinding. */
+  app.get("/api/hospitals/:id/site", (c) => {
+    const site = SITES[c.req.param("id")];
+    return site ? c.json(site) : c.json({ error: "this campus is not mapped yet" }, 404);
+  });
+  /** Who is waiting where in a hospital right now. The live workspace reads its own floor. */
+  app.get("/api/hospitals/:id/floor", (c) => {
+    const id = c.req.param("id");
+    const site = SITES[id];
+    if (!site) return c.json({ error: "this campus is not mapped yet" }, 404);
+    if (id === HOSPITALS[0]?.id)
+      return c.json(buildOverview(store, runtime, clock, background).stations);
+    return c.json(siteFloor(site, clock.now()));
+  });
   /** A hospital asks to join: it gets a workspace in setup, listed beside the live ones. */
   const Setup = z.object({
     name: z.string().min(3).max(100),

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState, type ReactNode } from "react";
 import type { Hospital } from "@throughline/shared";
 import { RUNTIME_URL } from "../../lib/runtime";
+import { useHospitals } from "../../lib/session";
 
 /**
  * Add your hospital: a hospital joins Throughline. Five steps, one screen each, with example
@@ -81,6 +82,7 @@ export default function AddHospital() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(false);
   const [done, setDone] = useState<Hospital | undefined>();
+  const { choose, refresh } = useHospitals();
   const toggle = (set: (f: (v: string[]) => string[]) => void) => (v: string) =>
     set((cur) => (cur.includes(v) ? cur.filter((x) => x !== v) : [...cur, v]));
 
@@ -109,7 +111,10 @@ export default function AddHospital() {
         }),
       });
       if (!res.ok) throw new Error();
-      setDone((await res.json()) as Hospital);
+      const added = (await res.json()) as Hospital;
+      setDone(added);
+      refresh();
+      choose(added.id);
     } catch {
       setError(true);
     } finally {
@@ -125,8 +130,8 @@ export default function AddHospital() {
             {done.name} is being set up
           </h1>
           <p className="mt-2 text-[18px]">
-            Your workspace is listed under Hospitals on Throughline as Setting up. Here is what
-            happens next, in order:
+            Your workspace is open and listed under Hospitals on Throughline as Setting up. Here is
+            what happens next, in order:
           </p>
           <ol className="mt-6 space-y-3">
             {[

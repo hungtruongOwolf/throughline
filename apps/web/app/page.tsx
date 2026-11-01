@@ -5,11 +5,11 @@ import { useRouter } from "next/navigation";
 import { useState, type ReactNode } from "react";
 import { agentProfile, STAFF } from "@throughline/shared";
 import { Hospital3D } from "../components/Hospital3DLazy";
-import { HospitalSwitcher } from "../components/hospital-switcher";
+import { HospitalPicker, HospitalSwitcher } from "../components/hospital-switcher";
 import { AgentGlyph, hhmm, shortDate, StageRail } from "../components/ui";
 import { fetchHospital, fetchReferrals } from "../lib/platform";
-import { fetchOverview } from "../lib/runtime";
 import { useHospital, useLive, useUser } from "../lib/session";
+import { useFloor } from "../lib/site";
 
 function Arrow() {
   return (
@@ -112,7 +112,10 @@ export default function FrontDoor() {
   const hospital = useHospital();
   const router = useRouter();
   const { data } = useLive(fetchHospital);
-  const { data: floor } = useLive(fetchOverview);
+  const floor = useFloor();
+  const inBuilding = hospital.forecasts
+    ? data?.in_building
+    : floor.reduce((n, s) => n + s.count, 0);
   const [patient, setPatient] = useState<"closed" | "open" | "code">("closed");
   const counts = Object.fromEntries((data?.stages ?? []).map((s) => [s.stage, s.count]));
   return (
@@ -137,11 +140,12 @@ export default function FrontDoor() {
             Thirteen agents do the routine work for every patient in flight. Your staff approve what
             matters. This is {hospital.short_name} right now:{" "}
             {data
-              ? `${data.in_building} people in the building, ${data.referrals_in_progress} referrals in progress, ${data.waiting_on_staff} decisions waiting on staff.`
+              ? `${inBuilding ?? 0} people in the building, ${data.referrals_in_progress} referrals in progress, ${data.waiting_on_staff} decisions waiting on staff.`
               : "connecting."}
           </p>
+          <HospitalPicker />
           <div className="mt-2 -mb-4">
-            <Hospital3D stations={floor?.stations ?? []} height={500} />
+            <Hospital3D height={500} />
           </div>
           <div className="overflow-x-auto rounded-[4px] border border-rule bg-panel px-4 pt-4 pb-2 shadow-[0_10px_30px_-20px_rgba(24,34,58,0.5)]">
             <div className="min-w-[560px]">

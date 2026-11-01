@@ -391,4 +391,9 @@ export interface Hospital {
   phone_href: string;
   payers: string[];
   status: "live" | "setting_up";
+  /** The size of its site, once the campus is mapped. */
+  buildings?: number;
+  floors?: number;
+  /** True where the floor model runs, so staff can forecast waits and try changes. */
+  forecasts?: boolean;
 }

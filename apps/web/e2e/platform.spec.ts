@@ -171,12 +171,43 @@ test.describe("the staff platform", () => {
       page.getByRole("heading", { name: "Riverbend Regional Hospital is being set up" }),
     ).toBeVisible();
     await page.getByRole("link", { name: "Back to the front page" }).click();
+    // The new workspace is the one open now, waiting for its floor plans to be mapped.
     await page
-      .getByRole("button", { name: /Halden Medical Center/ })
-      .first()
+      .getByRole("button", { name: /Riverbend Regional Hospital/, expanded: false })
       .click();
-    await expect(page.getByRole("menuitem", { name: /Riverbend Regional Hospital/ })).toContainText(
-      "Setting up",
+    await expect(
+      page.getByRole("menuitemradio", { name: /Riverbend Regional Hospital/ }),
+    ).toContainText("Setting up");
+    await expect(page.getByText(/once your floor plans are mapped/)).toBeVisible();
+  });
+
+  test("any hospital can be chosen, each with its own campus", async ({ page }) => {
+    await page.addInitScript(() => {
+      if (location.pathname !== "/") window.localStorage.setItem("tl_user", "sam");
+    });
+    await page.goto("/");
+    const picker = page.getByRole("radiogroup", { name: "Hospital" });
+    await picker.getByRole("radio", { name: /Northgate University Hospital/ }).click();
+    await expect(picker.getByRole("radio", { name: /Northgate/ })).toHaveAttribute(
+      "aria-checked",
+      "true",
     );
+    await expect(picker.getByRole("radio", { name: /Northgate/ })).toContainText("14 floors");
+    await expect(
+      page.getByRole("img", { name: /Northgate University Hospital in 3D, 5 buildings/ }),
+    ).toBeVisible();
+    await page.reload();
+    await expect(
+      page.getByRole("button", { name: /Northgate University Hospital/, expanded: false }),
+    ).toBeVisible();
+    await page.goto("/today");
+    await expect(
+      page.getByRole("heading", { name: "Every station, longest wait first" }),
+    ).toBeVisible();
+    await page
+      .getByRole("button", { name: /Northgate University Hospital/, expanded: false })
+      .click();
+    await page.getByRole("menuitemradio", { name: /Halden Medical Center/ }).click();
+    await expect(page.getByText("Select a station to forecast it.")).toBeVisible();
   });
 });

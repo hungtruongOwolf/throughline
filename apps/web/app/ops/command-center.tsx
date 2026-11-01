@@ -10,6 +10,8 @@ import { WaitCurve } from "../../components/WaitCurve";
 import { clockTime } from "../../lib/format";
 import { fetchOverview, resolveReview, subscribeAll } from "../../lib/runtime";
 import { stationName } from "../../lib/stations";
+import { useHospital } from "../../lib/session";
+import { useFloor } from "../../lib/site";
 
 const MANAGER = "Operations manager";
 const DAY = day as SimRequest;
@@ -38,6 +40,64 @@ function waitSeries(engine: Engine, station: StationId, now: string, extra: numb
   return result.snapshots.filter((s) => s.station_id === station).map((s) => s.est_wait_min);
 }
 
+/** A hospital whose schedules are not imported yet: its floor right now, without forecasts. */
+function FloorOnly() {
+  const hospital = useHospital();
+  const floor = useFloor();
+  const [station, setStation] = useState<string | undefined>();
+  const sorted = [...floor].sort((a, b) => b.est_wait_min - a.est_wait_min);
+  const picked = floor.find((s) => s.id === station);
+  return (
+    <div className="grid min-h-full grid-cols-1 bg-canvas text-ink lg:grid-cols-[minmax(0,1fr)_380px]">
+      <header className="flex flex-wrap items-baseline gap-x-6 gap-y-1 px-6 pt-5 lg:col-span-2">
+        <h1 className="font-figure text-[22px] font-semibold">Today on the floor</h1>
+        <p className="text-[15px] text-ink-soft">
+          {hospital.name}: {floor.reduce((n, s) => n + s.count, 0)} people waiting across{" "}
+          {hospital.buildings ?? 1} buildings.{" "}
+          {sorted[0] && sorted[0].est_wait_min >= 10
+            ? `Longest wait: ${sorted[0].name}, about ${sorted[0].est_wait_min} minutes.`
+            : "Waits are short everywhere."}
+        </p>
+      </header>
+      <main className="min-h-0 px-2">
+        <Hospital3D selected={station} onSelect={setStation} height={600} />
+      </main>
+      <aside aria-label="Stations" className="px-6 pt-2 pb-6">
+        {picked && (
+          <p className="mb-3 rounded-[6px] bg-panel p-3 text-[15px]">
+            <span className="font-bold">{picked.name}</span>: {picked.count} waiting, about{" "}
+            {picked.est_wait_min} minutes, {picked.servers} staffed.
+          </p>
+        )}
+        <h2 className="font-figure text-[18px] font-semibold">Every station, longest wait first</h2>
+        <ul className="mt-2 divide-y divide-rule rounded-[6px] bg-panel">
+          {sorted.map((s) => (
+            <li key={s.id}>
+              <button
+                type="button"
+                onClick={() => setStation(s.id)}
+                aria-pressed={s.id === station}
+                className={`flex w-full items-center justify-between gap-3 px-3 py-2 text-left text-[14px] ${
+                  s.id === station ? "bg-agent-tint font-bold" : ""
+                }`}
+              >
+                <span>{s.name}</span>
+                <span className="text-ink-soft tabular-nums">
+                  {s.est_wait_min} min, {s.count} waiting
+                </span>
+              </button>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-4 text-[13px] text-ink-soft">
+          Forecasts and staffing changes turn on once this hospital&apos;s clinic and imaging
+          schedules are imported.
+        </p>
+      </aside>
+    </div>
+  );
+}
+
 /**
  * Command center (spec 9.3): the isometric campus is the hero; journeys on the left,
  * proposals on the right, the day strip with the clock and the what-if slider at the bottom.
@@ -46,6 +106,7 @@ export function CommandCenter({
   by = MANAGER,
   onApproved,
 }: { by?: string; onApproved?: () => void } = {}) {
+  const hospital = useHospital();
   const [overview, setOverview] = useState<OpsOverview | undefined>();
   const [offline, setOffline] = useState(false);
   const [station, setStation] = useState<StationId>("imaging_ct");
@@ -98,6 +159,8 @@ export function CommandCenter({
     });
   };
 
+  if (hospital.id && !hospital.forecasts) return <FloorOnly />;
+
   if (!overview) {
     return (
       <p className="p-8">{offline ? t("en", "ops.unavailable") : t("en", "patient.loading")}</p>
@@ -127,7 +190,7 @@ export function CommandCenter({
         <Hospital3D
           stations={overview.stations}
           selected={station}
-          onSelect={setStation}
+          onSelect={(id) => setStation(id as StationId)}
           height={560}
         />
       </main>

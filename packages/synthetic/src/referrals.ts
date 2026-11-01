@@ -539,7 +539,7 @@ export function referralSpec(journeyId: string): ReferralSpec | undefined {
   return [...REFERRALS, ...FAX_LINE].find((s) => s.id === journeyId);
 }
 
-/** The hospitals on this deployment. Halden is the one with a live floor and referral book. */
+/** The hospitals on this deployment. Each one is a workspace with its own site. */
 export const HOSPITALS = [
   {
     id: "halden",
@@ -550,6 +550,28 @@ export const HOSPITALS = [
     phone: "555-0100",
     phone_href: "+15550100",
     payers: ["Lonestar Health Plan"],
+    status: "live" as const,
+  },
+  {
+    id: "northgate",
+    name: "Northgate University Hospital",
+    short_name: "Northgate",
+    city: "Marlow",
+    specialties: ["Cardiology", "Neurology", "Medical oncology", "Orthopedics"],
+    phone: "555-0300",
+    phone_href: "+15550300",
+    payers: ["Lonestar Health Plan", "Medicare", "Blue Cross Blue Shield"],
+    status: "live" as const,
+  },
+  {
+    id: "st-brennan",
+    name: "St. Brennan Regional Medical Center",
+    short_name: "St. Brennan",
+    city: "Bayview",
+    specialties: ["Orthopedics", "Gastroenterology", "Pediatrics"],
+    phone: "555-0200",
+    phone_href: "+15550200",
+    payers: ["Lonestar Health Plan", "Aetna", "Medicaid"],
     status: "live" as const,
   },
 ];

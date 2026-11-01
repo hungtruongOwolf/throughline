@@ -160,18 +160,58 @@ const NO_HOSPITAL: Hospital = {
   status: "live",
 };
 
-const HospitalContext = createContext<Hospital>(NO_HOSPITAL);
-
-/** Loads the hospital's name, phone, and payers once; every screen reads them from here. */
-export function HospitalProvider({ children }: { children: ReactNode }) {
-  const [hospital, setHospital] = useState<Hospital>(NO_HOSPITAL);
-  useEffect(() => {
-    void fetch(`${RUNTIME_URL}/api/hospital`)
-      .then((r) => (r.ok ? (r.json() as Promise<Hospital>) : NO_HOSPITAL))
-      .then(setHospital)
-      .catch(() => undefined);
-  }, []);
-  return <HospitalContext.Provider value={hospital}>{children}</HospitalContext.Provider>;
+interface Hospitals {
+  hospital: Hospital;
+  list: Hospital[];
+  /** Switches the workspace; remembered on this device. */
+  choose: (id: string) => void;
+  /** Reloads the list, such as after a hospital is added. */
+  refresh: () => void;
 }
 
-export const useHospital = () => useContext(HospitalContext);
+const HospitalContext = createContext<Hospitals>({
+  hospital: NO_HOSPITAL,
+  list: [],
+  choose: () => undefined,
+  refresh: () => undefined,
+});
+const PICK = "throughline.hospital";
+
+/** Loads the hospitals once and keeps the chosen one; every screen reads it from here. */
+export function HospitalProvider({ children }: { children: ReactNode }) {
+  const [list, setList] = useState<Hospital[]>([]);
+  const [picked, setPicked] = useState<string | undefined>();
+  const [tick, setTick] = useState(0);
+  useEffect(() => {
+    try {
+      const fromUrl = new URLSearchParams(window.location.search).get("hospital");
+      setPicked(fromUrl ?? window.localStorage.getItem(PICK) ?? undefined);
+    } catch {
+      // storage can be off; the first hospital is the default
+    }
+  }, []);
+  useEffect(() => {
+    void fetch(`${RUNTIME_URL}/api/hospitals`)
+      .then((r) => (r.ok ? (r.json() as Promise<Hospital[]>) : []))
+      .then(setList)
+      .catch(() => undefined);
+  }, [tick]);
+  const choose = useCallback((id: string) => {
+    setPicked(id);
+    try {
+      window.localStorage.setItem(PICK, id);
+    } catch {
+      // the choice still holds for this visit
+    }
+  }, []);
+  const refresh = useCallback(() => setTick((t) => t + 1), []);
+  const hospital = list.find((h) => h.id === picked) ?? list[0] ?? NO_HOSPITAL;
+  const value = useMemo(
+    () => ({ hospital, list, choose, refresh }),
+    [hospital, list, choose, refresh],
+  );
+  return <HospitalContext.Provider value={value}>{children}</HospitalContext.Provider>;
+}
+
+export const useHospital = () => useContext(HospitalContext).hospital;
+export const useHospitals = () => useContext(HospitalContext);
