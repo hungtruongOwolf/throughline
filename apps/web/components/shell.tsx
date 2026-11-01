@@ -3,9 +3,9 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import { agentProfile, STAFF, type JourneyRow } from "@throughline/shared";
+import { AGENT_CATALOG, agentProfile, STAFF, type JourneyRow } from "@throughline/shared";
 import { fetchHospital, fetchReferrals } from "../lib/platform";
-import { useLive, useStream, useUser } from "../lib/session";
+import { useHospital, useLive, useStream, useUser } from "../lib/session";
 import { HospitalSwitcher } from "./hospital-switcher";
 import { NewReferralDialog } from "./new-referral";
 import { AgentGlyph, Avatar, Drawer, hhmm, shortDate } from "./ui";
@@ -217,7 +217,7 @@ function Sidebar() {
         />
         <NavItem href="/referrals" label="Referrals" count={inProgress} />
         <NavItem href="/today" label="Today" />
-        <NavItem href="/agents" label="Agents" count={13} />
+        <NavItem href="/agents" label="Agents" count={AGENT_CATALOG.length} />
       </div>
       <p className="mt-6 px-6 text-[12px] font-bold text-white/50">Patient-facing</p>
       <div className="mt-1 space-y-0.5 px-3">
@@ -378,13 +378,13 @@ function TopBar({ onMenu }: { onMenu: () => void }) {
       <button
         type="button"
         onClick={() => setActivity(true)}
-        className="flex items-center gap-2 rounded-[6px] px-2 py-1.5 text-[13px] hover:bg-canvas"
+        className="flex min-h-9 min-w-9 items-center gap-2 rounded-[6px] px-2 py-1.5 text-[13px] hover:bg-canvas"
       >
         <span
           aria-hidden
           className={`h-2 w-2 rounded-full ${working > 0 ? "bg-agent agent-working" : "bg-rule"}`}
         />
-        <span className="hidden sm:inline">
+        <span className="sr-only sm:not-sr-only">
           {working > 0 ? `${working} agents working` : "Agent activity"}
         </span>
       </button>
@@ -438,8 +438,41 @@ export function AppShell({ children }: { children: ReactNode }) {
       )}
       <div className="flex min-w-0 flex-1 flex-col">
         <TopBar onMenu={() => setMenu(true)} />
-        <main className="min-h-0 flex-1 overflow-y-auto">{children}</main>
+        <main className="min-h-0 flex-1 overflow-y-auto">
+          <NewWorkspace>{children}</NewWorkspace>
+        </main>
       </div>
+    </div>
+  );
+}
+
+/** Screens that hold one hospital's referrals and people. */
+const RECORD_PAGES = ["/inbox", "/referrals", "/patients"];
+
+/**
+ * A hospital that has just joined has no referrals yet. Its workspace says so and points at what
+ * works today, instead of showing another hospital's patients under its name.
+ */
+function NewWorkspace({ children }: { children: ReactNode }) {
+  const hospital = useHospital();
+  const path = usePathname();
+  const isRecord = RECORD_PAGES.some((p) => path.startsWith(p));
+  if (!hospital.id || hospital.forecasts || !isRecord) return <>{children}</>;
+  return (
+    <div className="mx-auto max-w-[640px] p-8">
+      <h1 className="font-display text-[32px] leading-tight font-bold">
+        {hospital.name} has no referrals yet
+      </h1>
+      <p className="mt-3 text-[17px] text-ink-soft">
+        Referrals appear here once the hospital&apos;s fax line and schedules are connected. Until
+        then you can look at the campus and how busy each station is right now.
+      </p>
+      <Link
+        href="/today"
+        className="mt-6 inline-flex min-h-12 items-center rounded-[6px] bg-agent px-5 text-[17px] font-bold text-white"
+      >
+        Open Today on the floor
+      </Link>
     </div>
   );
 }

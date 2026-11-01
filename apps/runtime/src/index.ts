@@ -23,7 +23,10 @@ if (process.env.POPULATE !== "false") {
   );
   setInterval(() => {
     const { dirty, at } = context.activity;
-    if (dirty && Date.now() - at > RESTORE_AFTER_IDLE_MS) void restoreHospital(context);
+    if (dirty && Date.now() - at > RESTORE_AFTER_IDLE_MS)
+      restoreHospital(context).catch((e) =>
+        console.error(JSON.stringify({ msg: "restore failed", e: String(e) })),
+      );
   }, 60_000).unref();
 }
 

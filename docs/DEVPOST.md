@@ -8,7 +8,7 @@
 
 **Links:**
 
-- Demo: https://throughline-zeta-ten.vercel.app (open "Follow Maria's journey")
+- Demo: https://throughline-zeta-ten.vercel.app (sign in as "Jordan Park, referral coordinator", or open the patient app with an example visit code)
 - Code: https://github.com/hungtruongOwolf/throughline
 - Video: _(add after upload)_
 
@@ -18,7 +18,7 @@ In the US, a visit to a specialist often costs a patient about two hours for twe
 
 ## What it does
 
-Throughline is the patient-access and visit-day workspace for a hospital's oncology service. The live site opens on Halden Medical Center on the morning of Nov 17: about 30 referrals at every stage, 54 people in the building, a CT scanner down, and the work waiting for each person. Staff sign in as themselves (coordinator, nurse navigator, oncologist, operations lead):
+Throughline is a multi-hospital patient-access and visit-day workspace. Choose a hospital from the front page (three are listed, including campuses of up to 14 floors) or add your own. The live workspace is Halden Medical Center on the morning of Nov 17: about 30 referrals at every stage, 54 people in the building, a CT scanner down, and the work waiting for each person. Staff sign in as themselves (coordinator, nurse navigator, oncologist, operations lead):
 
 - **Inbox:** every decision an agent parked for a person, with the agent's draft beside its source (the fax, the payer rule, the doctor's notes, the conversation) and one action.
 - **Referrals:** every patient, the stage, who holds the next move, and the next step.
@@ -72,4 +72,4 @@ TypeScript · Rust · WebAssembly · Next.js · React · Hono · SQLite · Muse 
 
 ## Disclosure (keep on the page)
 
-All patients, providers, documents, the hospital, the insurer, SMS, cameras, the lab system, and the clock are simulated with synthetic data generated in the repo. The demo replays a recorded live run of the models. Throughline does not diagnose, triage, or interpret results.
+All patients, providers, documents, the hospitals, the insurers, SMS, cameras, the lab system, and the clock are simulated with synthetic data generated in the repo. The demo replays a recorded live run of the models. Throughline does not diagnose, triage, or interpret results.

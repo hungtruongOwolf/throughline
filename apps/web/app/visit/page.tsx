@@ -272,6 +272,30 @@ export default function BookVisit() {
     );
   }
 
+  if (hospital.id && !hospital.forecasts)
+    return (
+      <div className="min-h-dvh bg-canvas px-6 py-10 text-ink">
+        <div className="mx-auto max-w-[640px]">
+          <h1 className="font-display text-[36px] leading-tight font-bold">
+            Book by phone for now
+          </h1>
+          <p className="mt-3 text-[18px]">
+            Online booking for {hospital.name} opens once its schedules are connected. Call{" "}
+            <a className="font-bold text-agent underline" href={`tel:${hospital.phone_href}`}>
+              {hospital.phone}
+            </a>{" "}
+            and the team will set up your visit.
+          </p>
+          <Link
+            href="/"
+            className="mt-6 inline-flex min-h-12 items-center rounded-[6px] bg-agent px-5 text-[17px] font-bold text-white"
+          >
+            Back to the front page
+          </Link>
+        </div>
+      </div>
+    );
+
   return (
     <div className="min-h-dvh bg-canvas text-ink">
       <header className="mx-auto flex max-w-[860px] items-center gap-3 px-6 pt-6">

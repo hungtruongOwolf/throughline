@@ -59,9 +59,9 @@ function FloorOnly() {
             : "Waits are short everywhere."}
         </p>
       </header>
-      <main className="min-h-0 px-2">
+      <section aria-label="Campus" className="min-h-0 px-2">
         <Hospital3D selected={station} onSelect={setStation} height={600} />
-      </main>
+      </section>
       <aside aria-label="Stations" className="px-6 pt-2 pb-6">
         {picked && (
           <p className="mb-3 rounded-[6px] bg-panel p-3 text-[15px]">
@@ -186,14 +186,14 @@ export function CommandCenter({
         </span>
       </header>
 
-      <main className="min-h-0 px-2">
+      <section aria-label="Campus" className="min-h-0 px-2">
         <Hospital3D
           stations={overview.stations}
           selected={station}
           onSelect={(id) => setStation(id as StationId)}
           height={560}
         />
-      </main>
+      </section>
 
       <aside aria-label={t("en", "ops.proposals")} className="px-6 pt-2 lg:overflow-y-auto">
         <h2 className="font-display text-[28px] font-bold">{t("en", "ops.proposals")}</h2>

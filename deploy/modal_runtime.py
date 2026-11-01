@@ -55,6 +55,8 @@ app = modal.App("throughline-runtime")
 
 # The development routes (restore, clock jump) need this token. It is read from the deployer's
 # environment and travels to the container as a Modal secret, never through the repo.
+if not os.environ.get("ADMIN_TOKEN"):
+    raise SystemExit("Set ADMIN_TOKEN before deploying: the development routes stay closed without it.")
 ADMIN = modal.Secret.from_dict({"ADMIN_TOKEN": os.environ.get("ADMIN_TOKEN", "")})
 
 
@@ -80,6 +82,7 @@ def runtime() -> None:
         "MODEL_CACHE_PATH": "/app/fixtures/model-cache.sqlite",
         "OPS_BRAIN": "open",
         "TIER_MODE": "cloud_only",
+        "NODE_ENV": "production",
         "ADMIN_TOKEN": os.environ.get("ADMIN_TOKEN", ""),
     }
     subprocess.Popen(

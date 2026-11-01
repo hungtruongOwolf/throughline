@@ -1,34 +1,98 @@
-# Demo script
+# Demo video script (3:00)
 
-Copy of SPEC.md sections 10.3–10.5. Voice-over lines are added on Day 4.
+Read it out loud once before you record. It is written to be spoken, not read: short sentences, a few places where you correct yourself, one place where you admit something is not finished. Keep those. A flawless read sounds like an ad; a judge trusts the person who says "this part is rough".
 
-## 10.3 The scripted scenario (Maria Diaz, synthetic patient 001, Spanish-speaking, 71)
+Rough pace: 140 words a minute, so about 400 words of speech. Leave the pauses in. If a take goes wrong halfway, keep going and say the line again. That is how people talk.
 
-- Nov 10, 08:12 — referral fax and insurance card arrive. Extraction finds everything except the member id suffix → `ClarificationNeeded`, coordinator answers from the card crop. Eligibility: active, $40 specialist copay, CT requires authorization.
-- Nov 10, 08:20 — prior-auth packet drafted; HELD; coordinator submits; synthetic payer approves Nov 12.
-- Nov 12, 09:00 — scheduler proposes two visit days: Nov 14 08:00 labs; Nov 17 09:30 CT, 10:40 vitals, 11:00 Dr. Okafor (2A), 12:30 infusion. Alternative: Nov 18/21. Prep plan sent in Spanish with three cards; reminders at 72 h and 24 h.
-- Nov 13, 17:05 — Maria replies by voice: "Sí, confirmo. Pero mi esposo no puede venir, voy a necesitar una silla de ruedas." → intent confirm + `mobility = wheelchair` + `companion_present = false`; itinerary rules switch to elevator-only; a volunteer escort task is created for arrival.
-- Nov 17, 09:12 — kiosk check-in in Spanish; itinerary printed; the line appears on her phone and on the ops map.
-- Nov 17, 09:40 — disruption: CT 1 down until 10:25. Sensing shows imaging wait climbing (frames with SAM boxes visible in the ops corner). 09:46 `BottleneckDetected`.
-- Nov 17, 09:47 — ops proposes "move 3 scheduled CT 1 patients to CT 2 and open the 10:00 CT 2 slot" with what-if evidence (wait 22 → 13 min, 4 journeys affected); manager approves; replan: Maria's CT moves to CT 2 at 10:05 and vitals moves after CT; her phone shows the swap with the reason.
-- Nov 17, 09:58 — she lingers at the café; `PatientLost` timer nudges her; she photographs the "Elevator A" sign; directions to Level 2 by elevator; SAM highlights the elevator doors in her photo.
-- Nov 17, 10:52 — labs resulted (status only); provider stop can start; 11:05 Dr. Okafor; 11:35 provider sign-off → infusion pharmacy prep 35 min → 12:15 infusion chair; 14:30 checkout. KPIs: planned 310 min vs actual 318; 2 replans; 1 direction request.
-- Nov 17, 14:31 — summary drafted beside the provider's verbatim instructions; provider approves; sent in Spanish with the disclosure line. Nov 18 teach-back: one wrong answer ("when is your next visit") → nurse call task. Follow-ups booked: repeat labs Dec 5, visit Dec 8. Nov 19: CT read acknowledged late → `ResultAckOverdue` clinician task at 48 h → acknowledged. Nov 20 logistics check-in: ride confirmed. Referral closed with a report to Northgate Family Medicine.
+Record at 1080p on https://throughline-zeta-ten.vercel.app. Browser zoom 110%. Close other tabs. Open the front page first.
 
-## 10.4 The 3-minute video (recorded on the Journey Control page, 1080p, English voice-over, captions)
+## Numbers you may say, and where they come from
 
-| Time      | Beat                                                                                                                                                                                                                | On screen                                                         |
-| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
-| 0:00–0:15 | One sentence of problem: 121 minutes at the hospital, 20 with a clinician; staff spend half an hour a week giving directions; 79% of patients misunderstand a medication change.                                    | The line draws across the three phases                            |
-| 0:15–0:55 | Before: fax in → packet with source crops → HELD auth → approve → plan with explanation and alternative → prep cards → voice reply in Spanish → wheelchair memory → plan updates                                    | Intake screen, then the phone frame; clock at 60×                 |
-| 0:55–2:05 | Visit day: kiosk → the line on the map → CT 1 down → SAM counts climbing → proposal with what-if slider → approve → her phone swaps stops with the reason → sign photo → directions → results → infusion → checkout | Journey Control with the three frames; clock at 10× between beats |
-| 2:05–2:40 | After: summary beside verbatim instructions → approve → Spanish summary with disclosure → teach-back miss → nurse task → follow-ups booked → result ack overdue → closed report                                     | Review screen, phone frame, cascade                               |
-| 2:40–3:00 | Proof drawer: live call counts per Meta model, Spark Open toggle, Glimmer private tier, engine version, "Simulated in this demo" list; one line on what we did not build (no clinical outputs)                      | Proof drawer, then the README                                     |
+Say "reported" or "about" where marked. Do not round them up.
 
-## 10.5 Backups and failure handling during the demo
+| What you say                                                         | Source                                                                                      |
+| -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| About half of specialty referrals are never completed                | Weiner et al., J Eval Clin Pract, 2010. Adults 65+, one US academic setting. Old and narrow |
+| Physicians and their staff spend about 13 hours a week on prior auth | AMA physician survey, 2024                                                                  |
+| 39 prior auth requests per physician per week                        | Same AMA survey                                                                             |
+| A manual prior auth takes about 24 minutes (16 through a portal)     | CAQH Index, 2024                                                                            |
+| A new-patient appointment takes 31 days on average in big US cities  | AMN Healthcare wait-time survey, 2025                                                       |
+| Montage Health reported referral turnaround of 23 days down to 1.5   | Vendor case study (Notable), 2025. Say "reported"                                           |
+| Mayo reviews complex referrals in under 24 hours with AI triage      | Mayo news and Becker's, seen in summaries only. Say "reported", or leave it out             |
 
-- `MODEL_CACHE=replay` runs the identical scenario from recorded responses; the proof panel labels every replayed call. The judges' public deployment runs this mode by default with a "Run live" switch.
-- Each phase can be jumped to from the scrubber; `pnpm demo:reset` restores the start state in < 5 s.
-- If the Modal Glimmer endpoint is cold, `TIER_MODE=cloud_only` is applied automatically after a 20 s timeout and the panel says so; if Spark Open is unreachable, `OPS_BRAIN=cloud` is used and recorded.
-- If the voice path fails, the typed reply path is identical and the script continues.
-- The video is recorded in segments per phase so a single failure never forces a full re-record; a full dry run is done on Day 4 evening and again on Day 5 morning.
+Do not say: a fax percentage (no reliable US number), a national no-show cost, or a wayfinding dollar cost. We could not find a source we trust.
+
+Our own numbers, all checkable in the repo: 13 agents, 30 referrals in the book, 3 hospitals, 215 runtime tests, intake read 10 of 10 faxes correctly, the classifier handled 60 of 60 messages with no false alarms, and 156 live model calls were recorded.
+
+## The script
+
+**0:00 to 0:25. The problem. Screen: the front page, 3D hospital turning slowly.**
+
+> Okay. So, a referral. A doctor sends a patient to a specialist, and in a lot of hospitals that referral is still a fax.
+>
+> There's an old study of older adults where about half of specialty referrals just never got completed. It's old, one hospital, so take it as a hint, not a law. But anyone who works in a clinic nods when you say it.
+>
+> And the work around it is heavy. The AMA says doctors and their staff spend around thirteen hours a week on prior authorization alone.
+
+**0:25 to 1:05. The solution, staff side. Screen: click Jordan Park, Inbox.**
+
+> This is Throughline. I'm signed in as the referral coordinator, Jordan.
+>
+> Thirteen agents do the routine part. This one, intake, read a faxed referral and pulled out the patient, the doctor, the reason. And, uh, here, it couldn't read the member ID on the card. So it didn't guess. It asked Jordan.
+>
+> That's the rule everywhere. The agent drafts, a person signs off at the steps that matter. Insurance submission, a change to the day's schedule. Nothing goes out without a person.
+>
+> _(click Approve on the prior-auth item)_
+>
+> A manual prior auth is about twenty-four minutes of someone's time, that's the CAQH number. Here the packet is already built. Jordan checks it and approves it.
+
+**1:05 to 1:40. The models. Screen: Agents page, then one agent's run.**
+
+> It runs on Meta's models. Muse Spark reads the fax and writes the drafts. The operations agent runs on Spark Open, the open-weights one, hosted on Baseten. I picked that on purpose, because a hospital might want its own model on its own hardware.
+>
+> Voice notes go through Muse Voice Transcribe. And SAM counts the people in the waiting-room frames, so the wait times on the map aren't just guesses.
+>
+> Every run is written down. What the agent saw, what it did, which model. So when someone asks "why did it do that", you can open it.
+
+**1:40 to 2:15. The day of the visit. Screen: Today, then click the CT scanner.**
+
+> Now the day of the visit. This is the hospital right now. CT one is down.
+>
+> The ops agent noticed the wait climbing and proposed moving three patients to CT two. It tested that in a simulation first. The engine for that is written in Rust, running in the browser.
+>
+> I'm... honestly I'm still not happy with how the forecast chart looks. It's accurate, it's just not pretty. I ran out of time on that.
+>
+> _(approve)_
+>
+> And the patient's phone updates, with the reason.
+
+**2:15 to 2:40. The patient. Screen: patient app on a phone-sized window, then the map.**
+
+> This is what the patient sees. One plan. One next step. No login to remember.
+>
+> If she gets lost, she sends a photo of a sign, and gets directions from where she's standing. Step-free if she needs it.
+>
+> And it's not one hospital. _(open the hospital picker, choose Northgate)_ This one has five buildings, a fourteen-floor tower. Same platform. A new hospital can add itself.
+
+**2:40 to 3:00. Impact and honesty. Screen: Today, Northgate, 3D.**
+
+> So what would this change? Here's my back-of-the-envelope, and it's an assumption, not a measurement. If a clinic handles thirty referrals a week and the agent saves just ten minutes on each, that's five hours a week back. For one clinic.
+>
+> What it is not: everything you saw is fictional. The hospitals, the patients, the insurers. The model answers on the live site are replayed from a real recorded run, so it works without keys. Nothing here diagnoses anyone.
+>
+> The fax is a boring problem. Boring problems are where people fall through. That's Throughline. Thanks for watching.
+
+## Where it is deliberately imperfect
+
+Keep at least two. They are the point.
+
+- "uh, here, it couldn't read the member ID" at 0:25.
+- "honestly I'm still not happy with how the forecast chart looks" at 1:40.
+- "take it as a hint, not a law" at 0:00. It is a caveat a careful person would say.
+
+## Before you record
+
+- Reload the site so the hospital is at its starting state (it restores itself after 10 idle minutes).
+- Sign in as Jordan. Make sure the prior-auth item is still in the Inbox. If you approved it in an earlier take, use New referral to bring in another fax.
+- Choose Halden for the first two minutes, then switch to Northgate at the end.
+- Upload to YouTube as unlisted or public, put the link in `docs/DEVPOST.md` (the Video line), and check it is under 3:00.

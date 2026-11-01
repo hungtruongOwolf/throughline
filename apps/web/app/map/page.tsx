@@ -1,11 +1,12 @@
 import { SiteHeader } from "../../components/SiteHeader";
+import { LiveWorkspace } from "../../lib/session";
 import { FindYourWay } from "./find-your-way";
 
 export const metadata = { title: "Find your way · Throughline" };
 
 export default function MapPage() {
   return (
-    <>
+    <LiveWorkspace>
       <SiteHeader current="/map" />
       <main className="mx-auto max-w-6xl px-6 py-8">
         <h1 className="font-display text-[40px] font-bold">Find your way</h1>
@@ -17,6 +18,6 @@ export default function MapPage() {
           <FindYourWay />
         </div>
       </main>
-    </>
+    </LiveWorkspace>
   );
 }

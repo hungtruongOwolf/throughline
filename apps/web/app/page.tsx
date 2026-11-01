@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, type ReactNode } from "react";
-import { agentProfile, STAFF } from "@throughline/shared";
+import { AGENT_CATALOG, agentProfile, STAFF } from "@throughline/shared";
 import { Hospital3D } from "../components/Hospital3DLazy";
 import { HospitalPicker, HospitalSwitcher } from "../components/hospital-switcher";
 import { AgentGlyph, hhmm, shortDate, StageRail } from "../components/ui";
@@ -137,8 +137,8 @@ export default function FrontDoor() {
             Every referral, from the fax to the follow-up.
           </h1>
           <p className="mt-3 max-w-[60ch] text-[17px] text-ink-soft">
-            Thirteen agents do the routine work for every patient in flight. Your staff approve what
-            matters. This is {hospital.short_name} right now:{" "}
+            {AGENT_CATALOG.length} agents do the routine work for every patient in flight. Your
+            staff approve what matters. This is {hospital.short_name} right now:{" "}
             {data
               ? `${inBuilding ?? 0} people in the building, ${data.referrals_in_progress} referrals in progress, ${data.waiting_on_staff} decisions waiting on staff.`
               : "connecting."}

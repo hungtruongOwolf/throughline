@@ -52,7 +52,7 @@ export default function ReferralsPage() {
     if (stage && r.stage !== stage) return false;
     if (tab === "needs") return r.waiting_on.kind === "staff";
     if (tab === "mine") return r.waiting_on.kind === "staff" && r.waiting_on.who === user?.role;
-    if (tab === "open") return r.stage !== "Closed";
+    if (tab === "open") return stage === "Closed" || r.stage !== "Closed";
     return true;
   });
   return (

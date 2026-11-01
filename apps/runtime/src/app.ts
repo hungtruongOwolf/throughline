@@ -59,7 +59,13 @@ const ClockCommand = z.discriminatedUnion("action", [
     speed: z.union([z.literal(1), z.literal(10), z.literal(60), z.literal(600)]),
   }),
   z.object({ action: z.literal("stop") }),
-  z.object({ action: z.literal("advance"), minutes: z.number().positive() }),
+  z.object({
+    action: z.literal("advance"),
+    minutes: z
+      .number()
+      .positive()
+      .max(24 * 60),
+  }),
   z.object({ action: z.literal("jump") }),
 ]);
 
@@ -68,10 +74,17 @@ const ClockCommand = z.discriminatedUnion("action", [
  * (spec 4.3 step 1).
  */
 /** Rebuilds the hospital as of Nov 17, 9:53 am and lets the clock run in real time. */
-export async function restoreHospital(ctx: AppContext): Promise<void> {
-  await populate(ctx);
-  ctx.activity.dirty = false;
-  if (process.env.CLOCK_SPEED !== "0") ctx.clock.start(1);
+let restoring: Promise<void> | undefined;
+export function restoreHospital(ctx: AppContext): Promise<void> {
+  // One rebuild at a time: a second request waits for the one already running.
+  restoring ??= (async () => {
+    await populate(ctx);
+    ctx.activity.dirty = false;
+    if (process.env.CLOCK_SPEED !== "0") ctx.clock.start(1);
+  })().finally(() => {
+    restoring = undefined;
+  });
+  return restoring;
 }
 
 export function createApp(ctx?: AppContext) {
@@ -80,6 +93,8 @@ export function createApp(ctx?: AppContext) {
   // Development routes reset or drive the hospital; when ADMIN_TOKEN is set they need it.
   const adminOnly = async (c: Context, next: () => Promise<void>) => {
     const token = process.env.ADMIN_TOKEN;
+    // A production deployment with no token keeps these routes closed rather than open.
+    if (!token && process.env.NODE_ENV === "production") return c.json({ error: "not found" }, 404);
     if (token && c.req.header("x-admin-token") !== token)
       return c.json({ error: "not found" }, 404);
     await next();
@@ -129,6 +144,7 @@ export function createApp(ctx?: AppContext) {
   app.post("/api/reviews/:id/resolve", async (c) => {
     const review = store.review(c.req.param("id"));
     if (!review) return c.json({ error: "not found" }, 404);
+    if (review.status !== "pending") return c.json({ error: "already decided" }, 409);
     const body = Resolve.safeParse(await c.req.json().catch(() => ({})));
     if (!body.success) return c.json({ error: body.error.issues }, 400);
     const { decision, by } = body.data;
@@ -205,16 +221,22 @@ export function createApp(ctx?: AppContext) {
   });
   /** A hospital asks to join: it gets a workspace in setup, listed beside the live ones. */
   const Setup = z.object({
-    name: z.string().min(3).max(100),
-    city: z.string().min(2).max(60),
-    specialties: z.array(z.string().max(60)).min(1).max(8),
-    phone: z.string().min(7).max(30),
-    payers: z.array(z.string().max(80)).min(1).max(10),
-    contact: z.string().min(2).max(80),
+    name: z.string().trim().min(3).max(100),
+    city: z.string().trim().min(2).max(60),
+    specialties: z.array(z.string().trim().min(1).max(60)).min(1).max(8),
+    phone: z.string().trim().min(7).max(30),
+    payers: z.array(z.string().trim().min(1).max(80)).min(1).max(10),
+    contact: z.string().trim().min(2).max(80),
   });
   app.post("/api/hospitals", async (c) => {
     const body = Setup.safeParse(await c.req.json().catch(() => ({})));
     if (!body.success) return c.json({ error: body.error.issues }, 400);
+    // A hospital joins once, and the list on a long-lived runtime stays small.
+    const taken = [...HOSPITALS, ...ctx.setups].some(
+      (x) => x.name.toLowerCase() === body.data.name.toLowerCase(),
+    );
+    if (taken) return c.json({ error: "that hospital is already on Throughline" }, 409);
+    if (ctx.setups.length >= 20) return c.json({ error: "too many setups; try later" }, 429);
     const h = {
       id: `setup-${ctx.setups.length + 1}`,
       name: body.data.name,
@@ -270,9 +292,13 @@ export function createApp(ctx?: AppContext) {
     referral_fax: z.string().optional(),
     doctor: z.string().max(120).optional(),
     patient: z.object({
-      name: z.string().min(2).max(80),
-      dob: z.iso.date(),
-      phone: z.string().min(7).max(30),
+      name: z.string().trim().min(2).max(80),
+      dob: z.iso
+        .date()
+        .refine((d) => d <= new Date().toISOString().slice(0, 10) && d > "1900-01-01", {
+          message: "date of birth is not valid",
+        }),
+      phone: z.string().trim().min(7).max(30),
       mobility: z.enum(["walking", "wheelchair"]),
       companion: z.boolean(),
     }),
@@ -286,6 +312,8 @@ export function createApp(ctx?: AppContext) {
     const body = VisitRequest.safeParse(await c.req.json().catch(() => ({})));
     if (!body.success) return c.json({ error: body.error.issues }, 400);
     const req = body.data;
+    if (req.referral_fax && !faxLine(ctx).some((s) => s.id === req.referral_fax))
+      return c.json({ error: "that fax is not on the line" }, 404);
     const n = ctx.received.size + 1 + ctx.requests;
     ctx.requests += 1;
     const patientId = `pt-${900 + n}`;

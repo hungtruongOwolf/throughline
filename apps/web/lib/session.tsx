@@ -215,3 +215,14 @@ export function HospitalProvider({ children }: { children: ReactNode }) {
 
 export const useHospital = () => useContext(HospitalContext).hospital;
 export const useHospitals = () => useContext(HospitalContext);
+
+/**
+ * Patient plans and the building map belong to the hospital that holds the journey, whichever
+ * hospital a staff member has open: inside, every name and phone number is that hospital's.
+ */
+export function LiveWorkspace({ children }: { children: ReactNode }) {
+  const outer = useContext(HospitalContext);
+  const live = outer.list.find((h) => h.forecasts) ?? outer.list[0] ?? outer.hospital;
+  const value = useMemo(() => ({ ...outer, hospital: live }), [outer, live]);
+  return <HospitalContext.Provider value={value}>{children}</HospitalContext.Provider>;
+}

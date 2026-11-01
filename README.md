@@ -2,7 +2,7 @@
 
 Throughline follows a cancer patient through her hospital visit, from the faxed referral to the closed loop weeks later. Agents do the administrative work around the care: reading the referral, the insurance approval request, scheduling, the plan for the day, directions inside the hospital, and the follow-up. A person signs off at every step that matters. Built for the Meta Global AI Developer Hackathon (Oct 27 to Nov 4, 2026).
 
-**Try it:** https://throughline-zeta-ten.vercel.app. The front page shows Halden Medical Center on the morning of Nov 17: about 30 referrals in progress, a CT scanner down, and the work waiting for each person. Sign in as the referral coordinator, the nurse, the oncologist, or the operations lead (no password), or open the patient app with an example visit code. **New referral** receives a fax from the fax line and the agents start on it in front of you.
+**Try it:** https://throughline-zeta-ten.vercel.app. The front page opens on Halden Medical Center on the morning of Nov 17: about 30 referrals in progress, a CT scanner down, and the work waiting for each person. Two more hospitals with multi-building campuses (Northgate, up to 14 floors; St. Brennan, up to 10) can be chosen from the front page, and **Add your hospital** sets up another. Sign in as the referral coordinator, the nurse, the oncologist, or the operations lead (no password), or open the patient app with an example visit code. **New referral** receives a fax from the fax line and the agents start on it in front of you.
 
 > Throughline is administrative software. It never diagnoses, triages, interprets results, or gives medication advice. A medical question always goes to a nurse.
 
@@ -56,7 +56,7 @@ Measured with live calls (`docs/evals/`):
 - the patient, the providers, the documents, the hospital, and the insurer;
 - the SMS channel, the lab system, the cameras (frames generated with Muse Image), and the clock.
 
-All of it is synthetic, generated in this repo, and every record carries `synthetic: true`.
+The hospitals (Halden, Northgate, St. Brennan) and the insurers are fictional. All of it is synthetic, generated in this repo, and every record carries `synthetic: true`.
 
 **The public demo replays a recorded live run.** Every model output on the site came from a real call to the models above. That call was recorded in `fixtures/model-cache.sqlite`, and the deployed runtime serves it without API keys. To run it live, use `MODEL_CACHE=off` with keys (see Setup). See [`docs/DO-NOT-CLAIM.md`](docs/DO-NOT-CLAIM.md).
 
@@ -74,19 +74,21 @@ You need Node 22, pnpm 10, Rust stable with `wasm32-unknown-unknown`, and wasm-p
 pnpm install
 pnpm build:engine
 cp .env.example .env    # replay works without keys; add META_API_KEY / BASETEN_API_KEY for live
-pnpm dev                # runtime on :4000, web on :3000 → http://localhost:3000/story
+pnpm dev                # runtime on :4000, web on :3000 → http://localhost:3000
 ```
 
 Checks: `pnpm lint`, `pnpm typecheck`, `pnpm test` (runtime, engine, shared), and `pnpm test:e2e` (Playwright).
 
-Re-record the live run: `pnpm --filter @throughline/runtime record:story`.
+No API keys are needed to run it: `fixtures/model-cache.sqlite` is committed and `MODEL_CACHE=replay` serves every model output from it. The hospital is rebuilt at boot.
+
+Re-record the live run: `pnpm --filter @throughline/runtime record:population`.
 
 Deploy: [`docs/DEPLOY.md`](docs/DEPLOY.md).
 
 ## Repo
 
 - `apps/runtime`: Node service with agents, gates, event log, sim clock, model clients, and the record/replay cache.
-- `apps/web`: Next.js app with the story, the patient page, wayfinding, the command center, and the station boards.
+- `apps/web`: Next.js app with the staff workspace (Inbox, Referrals, patient record, Agents, Today), the patient app, wayfinding, and the station boards.
 - `packages/engine`: Rust engine for scheduling, the discrete-event queue simulation, and what-if.
 - `packages/shared`: types, events, state machine, and copy.
 - `packages/synthetic`: data generators.
