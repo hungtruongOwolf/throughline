@@ -11,9 +11,22 @@ export default defineConfig({
       command: "npx tsx src/index.ts",
       cwd: "../runtime",
       url: "http://localhost:4000/health",
-      env: { DATABASE_URL: "file::memory:", RUNTIME_PORT: "4000", SYNTHETIC_ONLY: "true" },
+      // Replay the recorded live run, exactly as the deployed runtime does (no keys, no calls).
+      env: {
+        DATABASE_URL: "file::memory:",
+        RUNTIME_PORT: "4000",
+        SYNTHETIC_ONLY: "true",
+        MODEL_CACHE: "replay",
+        MODEL_CACHE_PATH: "../../fixtures/model-cache.sqlite",
+        OPS_BRAIN: "open",
+      },
       reuseExistingServer: true,
     },
-    { command: "pnpm start", url: "http://localhost:3000", reuseExistingServer: true },
+    {
+      command: "pnpm start",
+      url: "http://localhost:3000",
+      env: { DEV_PAGES: "1" },
+      reuseExistingServer: true,
+    },
   ],
 });
