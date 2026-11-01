@@ -1,13 +1,13 @@
 {
  "fps": 30,
  "bpm": 120,
- "total": 5580,
+ "total": 5640,
  "marks": {
   "D1": 28,
-  "BRK": 61,
-  "D2": 67,
-  "OUT": 86,
-  "LOGO": 90
+  "BRK": 62,
+  "D2": 68,
+  "OUT": 87,
+  "LOGO": 91
  },
  "shots": [
   {
@@ -79,12 +79,12 @@
    "start": 1260,
    "vo": 131,
    "text": "Take Maria, who is seventy-one and whose doctor has just found something on a scan.",
-   "dur": 150
+   "dur": 165
   },
   {
    "id": 10,
    "beat": "MARIA-2",
-   "start": 1410,
+   "start": 1425,
    "vo": 146,
    "text": "Dr. Whitcombe refers her to Halden Medical Center the way most offices still do, by fax.",
    "dur": 165
@@ -92,10 +92,10 @@
   {
    "id": 11,
    "beat": "DROP",
-   "start": 1575,
+   "start": 1590,
    "vo": 78,
    "text": "That fax is where Throughline picks up the thread.",
-   "dur": 105
+   "dur": 90
   },
   {
    "id": "TITLE",
@@ -134,20 +134,20 @@
    "start": 2325,
    "vo": 104,
    "text": "Prior auth drafts the whole request and shows the source of every line.",
-   "dur": 120
+   "dur": 135
   },
   {
    "id": 16,
    "beat": "GATE-1",
-   "start": 2445,
+   "start": 2460,
    "vo": 154,
    "text": "The coordinator only has to read it and approve, instead of spending twenty-four minutes writing it by hand.",
-   "dur": 165
+   "dur": 210
   },
   {
    "id": 17,
    "beat": "HANDOFF-4",
-   "start": 2610,
+   "start": 2670,
    "vo": 166,
    "text": "Scheduling then fits every appointment into as few trips as possible, using an exact engine written in Rust.",
    "dur": 180
@@ -155,7 +155,7 @@
   {
    "id": 18,
    "beat": "HANDOFF-5",
-   "start": 2790,
+   "start": 2850,
    "vo": 229,
    "text": "Visit prep sends Maria her plan, and when she replies with a voice note about a wheelchair, Messaging understands it and Itinerary routes her around the stairs.",
    "dur": 270
@@ -163,14 +163,14 @@
   {
    "id": 19,
    "beat": "HIT-2",
-   "start": 3060,
+   "start": 3120,
    "vo": 0,
    "dur": 60
   },
   {
    "id": 20,
    "beat": "DAY-1",
-   "start": 3120,
+   "start": 3180,
    "vo": 157,
    "text": "On the day of her visit, one of the two CT scanners breaks down, and nobody raises the alarm.",
    "dur": 165
@@ -178,7 +178,7 @@
   {
    "id": 21,
    "beat": "DAY-2",
-   "start": 3285,
+   "start": 3345,
    "vo": 120,
    "text": "The waiting-room agent counts the people in the camera frames and sees the line growing.",
    "dur": 135
@@ -186,7 +186,7 @@
   {
    "id": 22,
    "beat": "HANDOFF-6",
-   "start": 3420,
+   "start": 3480,
    "vo": 79,
    "text": "It passes the problem straight to the Ops planner.",
    "dur": 90
@@ -194,7 +194,7 @@
   {
    "id": 23,
    "beat": "DAY-3",
-   "start": 3510,
+   "start": 3570,
    "vo": 131,
    "text": "The planner plays out the next ninety minutes twenty times to compare every fix it knows.",
    "dur": 150
@@ -202,30 +202,30 @@
   {
    "id": 24,
    "beat": "DAY-4",
-   "start": 3660,
+   "start": 3720,
    "vo": 123,
    "text": "The best option brings the average CT wait down from seventeen minutes to five.",
-   "dur": 135
+   "dur": 150
   },
   {
    "id": 25,
    "beat": "GATE-2",
-   "start": 3795,
+   "start": 3870,
    "vo": 186,
    "text": "The operations lead approves it, seven patients are re-planned, and the Visit companion tells each of them what changed and why.",
-   "dur": 225
+   "dur": 210
   },
   {
    "id": "DROP2",
    "beat": "DROP2",
-   "start": 4020,
+   "start": 4080,
    "vo": 0,
    "dur": 60
   },
   {
    "id": 26,
    "beat": "AFTER-1",
-   "start": 4080,
+   "start": 4140,
    "vo": 172,
    "text": "When Maria gets home, the Discharge agent puts the doctor's notes into plain words, and the doctor signs off.",
    "dur": 180
@@ -233,7 +233,7 @@
   {
    "id": 27,
    "beat": "AFTER-2",
-   "start": 4260,
+   "start": 4320,
    "vo": 112,
    "text": "If she is still unsure the next day, Discharge hands her to a nurse.",
    "dur": 120
@@ -241,7 +241,7 @@
   {
    "id": 28,
    "beat": "AFTER-3",
-   "start": 4380,
+   "start": 4440,
    "vo": 152,
    "text": "Results watch makes sure her test is acknowledged, and Follow-up books her next visit to close the loop.",
    "dur": 165
@@ -249,7 +249,7 @@
   {
    "id": 29,
    "beat": "TECH-1",
-   "start": 4545,
+   "start": 4605,
    "vo": 179,
    "text": "The agents that read, write, and listen run on Muse Spark and Voice Transcribe, and SAM does the counting.",
    "dur": 195
@@ -257,7 +257,7 @@
   {
    "id": 30,
    "beat": "TECH-2",
-   "start": 4740,
+   "start": 4800,
    "vo": 135,
    "text": "The Ops planner runs on Muse Spark Open, an open-weights model hosted on Baseten.",
    "dur": 150
@@ -265,7 +265,7 @@
   {
    "id": 31,
    "beat": "SCALE",
-   "start": 4890,
+   "start": 4950,
    "vo": 167,
    "text": "And it is built for more than one hospital, because Northgate alone has five buildings and a fourteen-floor tower.",
    "dur": 210
@@ -273,14 +273,14 @@
   {
    "id": 32,
    "beat": "HIT-3",
-   "start": 5100,
+   "start": 5160,
    "vo": 0,
    "dur": 60
   },
   {
    "id": 33,
    "beat": "CLOSE-1",
-   "start": 5160,
+   "start": 5220,
    "vo": 76,
    "text": "Nobody had to hold Maria's thread by hand.",
    "dur": 135
@@ -288,7 +288,7 @@
   {
    "id": 34,
    "beat": "CLOSE-2",
-   "start": 5295,
+   "start": 5355,
    "vo": 77,
    "text": "This time, Throughline held it for her.",
    "dur": 285

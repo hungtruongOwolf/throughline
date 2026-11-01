@@ -6,13 +6,13 @@
 set -euo pipefail
 OUT="${1:-.}"; mkdir -p "$OUT"; cd "$OUT"
 
-DUR=186          # seconds (93 bars)
+DUR=188          # seconds (94 bars)
 HAT_IN=8         # bar: quiet hats/ticks enter (tension)
 D1=28            # bar: DROP 1 = product reveal (t = 32 s, frame 960)
-BRK=61           # bar: breakdown, the human gate
-D2=67            # bar: DROP 2 (t = 112 s)
-OUT_BAR=86       # bar: outro
-LOGO=90          # bar: final impact on the logo
+BRK=62           # bar: breakdown, the human gate
+D2=68            # bar: DROP 2 (t = 112 s)
+OUT_BAR=87       # bar: outro
+LOGO=91          # bar: final impact on the logo
 SR=48000
 q() { ffmpeg -hide_banner -loglevel error -y "$@"; }
 

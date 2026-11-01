@@ -6,6 +6,8 @@ import json, math, subprocess
 
 BEAT, BAR, GAP = 15, 60, 6
 LOGO_IN_CLOSE = 105  # frame of CLOSE-2 where the logo lands on the final impact
+# Scenes were animated against these lengths; a shorter shot would cut their timing apart.
+MIN_DUR = {"MARIA-1": 165, "HANDOFF-3": 135, "GATE-1": 210, "DAY-4": 150}
 up = lambda f, q: int(math.ceil(f / q) * q)
 
 lines = json.load(open("narration.json", encoding="utf-8"))
@@ -35,7 +37,7 @@ for l in lines:
             start += BEAT
         marks["LOGO"] = (start + LOGO_IN_CLOSE) // BAR
     tl.append(dict(id=l["id"], beat=b, start=start, vo=vo, text=l["text"]))
-    at = start + vo + GAP
+    at = max(start + vo + GAP, start + MIN_DUR.get(b, 0))
 
 end = max(at, tl[-1]["start"] + LOGO_IN_CLOSE + 3 * BAR)
 total = up(end, BAR)
