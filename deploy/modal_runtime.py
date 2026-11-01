@@ -1,12 +1,15 @@
 """Deploys the Throughline runtime to Modal in replay mode (DEPLOY.md).
 
 The container serves the recorded live run from fixtures/model-cache.sqlite: no API keys are
-sent to it and it makes no model calls. One container holds the in-memory event store, so
-max_containers is 1; it scales to zero when idle and the story resets on the next visit.
+sent to it and it makes no model calls. At boot it builds the hospital as of Nov 17, 9:53 am
+(apps/runtime/src/demo/population.ts) and restores it after visitors leave it idle. One
+container holds the in-memory event store, so max_containers is 1, and min_containers keeps it
+warm for visitors.
 
     modal deploy deploy/modal_runtime.py
 """
 
+import os
 import subprocess
 from pathlib import Path
 
@@ -50,7 +53,19 @@ image = (
 app = modal.App("throughline-runtime")
 
 
-@app.function(image=image, max_containers=1, scaledown_window=30 * 60, timeout=24 * 60 * 60)
+# The development routes (restore, clock jump) need this token. It is read from the deployer's
+# environment and travels to the container as a Modal secret, never through the repo.
+ADMIN = modal.Secret.from_dict({"ADMIN_TOKEN": os.environ.get("ADMIN_TOKEN", "")})
+
+
+@app.function(
+    image=image,
+    secrets=[ADMIN],
+    min_containers=1,
+    max_containers=1,
+    scaledown_window=30 * 60,
+    timeout=24 * 60 * 60,
+)
 @modal.concurrent(max_inputs=200)
 @modal.web_server(PORT, startup_timeout=180)
 def runtime() -> None:
@@ -63,6 +78,7 @@ def runtime() -> None:
         "MODEL_CACHE_PATH": "/app/fixtures/model-cache.sqlite",
         "OPS_BRAIN": "open",
         "TIER_MODE": "cloud_only",
+        "ADMIN_TOKEN": os.environ.get("ADMIN_TOKEN", ""),
     }
     subprocess.Popen(
         ["npx", "tsx", "src/index.ts"],

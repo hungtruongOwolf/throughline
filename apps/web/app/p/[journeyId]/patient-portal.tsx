@@ -3,7 +3,9 @@
 import Link from "next/link";
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 import type { Journey, Message, Stop as ItineraryStop } from "@throughline/shared";
+import { PatientComposer } from "../../../components/patient-composer";
 import { Wayfinding } from "../../../components/Wayfinding";
+import { useUser } from "../../../lib/session";
 import { clockTime } from "../../../lib/format";
 import {
   fetchJourney,
@@ -595,7 +597,7 @@ function After({ journey }: { journey: Journey }) {
                   <p>{s.plain}</p>
                   <details className="mt-1">
                     <summary className="cursor-pointer text-[15px] text-line underline">
-                      As Dr. Okafor wrote it
+                      As your doctor wrote it
                     </summary>
                     <p className="mt-1 text-[15px] text-ink-soft">{s.verbatim}</p>
                   </details>
@@ -608,7 +610,7 @@ function After({ journey }: { journey: Journey }) {
               </p>
             </div>
           ) : summary ? (
-            "Dr. Okafor is checking your summary. It arrives here and by text once she has."
+            "Your doctor is checking your summary. It arrives here and by text once it is signed."
           ) : (
             "Your care team writes down what you talked about and what comes next. A clinician checks it before it is sent to you here and by text, usually the same day."
           )}
@@ -628,7 +630,7 @@ function After({ journey }: { journey: Journey }) {
         </LineItem>
         <LineItem state={reviewed ? "done" : "later"} title="Your test results">
           {reviewed
-            ? "Dr. Okafor has reviewed your test results. She goes over them with you at your next visit."
+            ? "Your doctor has reviewed your test results and goes over them with you at your next visit."
             : "Your doctor reviews your results and goes over them with you. We never send results by text."}
         </LineItem>
         <LineItem
@@ -789,6 +791,7 @@ export function PatientPortal({
   const [phase, setPhase] = useState<Phase | undefined>();
   const [notice, setNotice] = useState<string | undefined>();
 
+  const { user } = useUser();
   const refresh = useCallback(() => {
     Promise.all([fetchJourney(journeyId), fetchJourneyEvents(journeyId).catch(() => [])])
       .then(([j, e]) => {
@@ -837,6 +840,11 @@ export function PatientPortal({
       <header className="border-b border-ink/10">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-4 px-6 py-4">
           <p className="font-display text-[24px] font-bold">Halden Medical Center</p>
+          {user && !embedded && (
+            <Link href={`/patients/${journeyId}`} className="text-[15px] text-line underline">
+              Back to staff view
+            </Link>
+          )}
           <p className="ml-auto text-[16px]">{journey?.patient.display_name ?? ""}</p>
           <button
             type="button"
@@ -891,6 +899,7 @@ export function PatientPortal({
                   Medical questions always go to a nurse, who calls you back.
                 </p>
               </section>
+              {!embedded && <PatientComposer journeyId={journeyId} onSent={refresh} />}
               <Messages messages={journey.outreach_log} />
             </aside>
           </div>

@@ -2,11 +2,15 @@
 
 Throughline follows a cancer patient through her hospital visit, from the faxed referral to the closed loop weeks later. Agents do the administrative work around the care: reading the referral, the insurance approval request, scheduling, the plan for the day, directions inside the hospital, and the follow-up. A person signs off at every step that matters. Built for the Meta Global AI Developer Hackathon (Oct 27 to Nov 4, 2026).
 
-**Try it:** https://throughline-zeta-ten.vercel.app. Open "Follow Maria's journey". It has 16 steps; each shows the screen of the person acting, one action, and what happens next.
+**Try it:** https://throughline-zeta-ten.vercel.app. The front page shows Halden Medical Center on the morning of Nov 17: about 30 referrals in progress, a CT scanner down, and the work waiting for each person. Sign in as the referral coordinator, the nurse, the oncologist, or the operations lead (no password), or open the patient app with an example visit code. **New referral** receives a fax from the fax line and the agents start on it in front of you.
 
 > Throughline is administrative software. It never diagnoses, triages, interprets results, or gives medication advice. A medical question always goes to a nurse.
 
-## Maria's journey
+## What it does
+
+Every screen is built for a person with a job: the coordinator's **Inbox** puts each agent draft beside its source (the fax, the payer rule, the doctor's notes) with one decision; **Referrals** shows who holds the next move for every patient; each **patient record** is a timeline of what each agent did, with the model it ran on; **Agents** shows the 13 agents with their runs, how often they finished on their own, waited for staff, or handed to a nurse, and their guardrails; **Today** is the visit-day command center. One of the referrals, Maria Diaz, is followed below.
+
+### One referral, end to end
 
 | Phase     | What happens                                                                                                                                                                                                                                                                                                                                                                       | Who decides                                 |
 | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |

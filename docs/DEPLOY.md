@@ -25,8 +25,9 @@ The container starts the runtime with these settings:
 - `OPS_BRAIN=open`
 - an in-memory event store
 
-There is one container at most, because the event store lives in memory. It scales to zero after
-30 idle minutes. A cold start takes about 6 seconds, and the story resets when it starts.
+At boot the runtime builds the hospital as of Nov 17, 9:53 am (`apps/runtime/src/demo/population.ts`, about 2 seconds in replay) and lets the clock run in real time; after 10 idle minutes following a visitor's change it rebuilds it. The development routes (`/api/admin/*`, `/api/story*`, `/api/demo/*`, clock changes) need the `x-admin-token` header; deploy with `ADMIN_TOKEN` set in your shell (it travels as a Modal secret).
+
+There is one container at most, because the event store lives in memory. `min_containers=1` keeps it warm for visitors.
 
 ## Web on Vercel
 
@@ -56,7 +57,7 @@ You need `META_API_KEY` and `BASETEN_API_KEY` in `.env`. Re-record after any cha
 prompt or a tool:
 
 ```sh
-pnpm --filter @throughline/runtime record:story
+pnpm --filter @throughline/runtime record:population
 ```
 
 The script plays the whole story with live models; only requests that are not yet in the cache

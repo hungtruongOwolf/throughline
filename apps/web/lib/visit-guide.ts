@@ -49,8 +49,8 @@ const GUIDES: Record<string, Guide> = {
   },
   visit: {
     title: "First visit with your oncologist",
-    short: "first visit with Dr. Okafor",
-    what: "You meet Dr. Okafor, a cancer doctor, for the first time. You talk about your scan and blood tests together, and about what comes next.",
+    short: "first visit with your oncologist",
+    what: "You meet your oncologist, a cancer doctor, for the first time. You talk about your scan and blood tests together, and about what comes next.",
     why: "This is the main reason for your referral. Everything else that morning is so your doctor has what they need.",
     howLong: "About 20 to 40 minutes.",
     youDo: [
@@ -61,7 +61,7 @@ const GUIDES: Record<string, Guide> = {
   infusion: {
     title: "Infusion, only if your doctor decides",
     short: "infusion",
-    what: "If Dr. Okafor decides to start treatment that day, the infusion center gives it to you through an IV while you sit in a recliner.",
+    what: "If your oncologist decides to start treatment that day, the infusion center gives it to you through an IV while you sit in a recliner.",
     why: "Your referral asks for it if your doctor signs off, so a chair is held for you right after your visit. Your doctor will tell you whether you need it.",
     howLong: "About 2 hours if it happens.",
     youDo: ["Bring something to read or a charged phone, and a snack."],
@@ -70,8 +70,8 @@ const GUIDES: Record<string, Guide> = {
 
 const FOLLOW_UP: Guide = {
   title: "Follow-up visit with your oncologist",
-  short: "follow-up with Dr. Okafor",
-  what: "You see Dr. Okafor again. She goes over your CT scan and blood tests with you and plans what comes next.",
+  short: "follow-up with your oncologist",
+  what: "You see your oncologist again, who goes over your CT scan and blood tests with you and plans what comes next.",
   why: "Your blood tests a couple of days before give her what she needs for this visit.",
   howLong: "About 20 to 30 minutes.",
   youDo: [

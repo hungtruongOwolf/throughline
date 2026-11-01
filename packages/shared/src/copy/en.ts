@@ -7,7 +7,7 @@ export const en = {
     "You're texting with Throughline, an AI assistant at Halden Medical Center. For medical questions reply NURSE and a person will call you.",
   "disclosure.summary_unreviewed":
     "This summary was prepared with AI from your care team's notes and has not been reviewed by a clinician. For questions about your care, call the clinic at 555-0100 or reply NURSE.",
-  "ops.proposal_footer": "Predicted by simulation; a manager decides.",
+  "ops.proposal_footer": "Forecast from the rest of the day, run with and without the change; a manager decides.",
   "patient.show_way": "Show me the way",
   "patient.im_here": "I'm here",
   "patient.talk_to_person": "Talk to a person",
@@ -97,7 +97,7 @@ export const en = {
   "ops.source_sim": "Waits come from the waiting room cameras and check-ins.",
   "ops.whatif_label": "Extra servers at {station} from now",
   "ops.whatif_result": "Predicted peak wait {peak} min, now {now} min",
-  "ops.whatif_running": "Simulating",
+  "ops.whatif_running": "Forecasting",
   "ops.speed": "Speed",
   "ops.pause": "Pause",
   "ops.next_beat": "Next beat",
