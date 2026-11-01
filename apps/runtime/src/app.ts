@@ -43,8 +43,20 @@ export interface AppContext {
   requests: number;
   /** Hospitals that asked to join since the last restore. */
   setups: Hospital[];
+  /** Visit requests waiting for a person at a hospital whose schedules are not connected yet. */
+  queued: Record<string, QueuedVisit[]>;
   /** Last visitor change (POST) and whether the hospital differs from the restored one. */
   activity: { dirty: boolean; at: number };
+}
+
+export interface QueuedVisit {
+  id: string;
+  at: string;
+  service: string;
+  patient: string;
+  phone: string;
+  days: string[];
+  mobility: string;
 }
 
 const Resolve = z.object({
@@ -219,6 +231,8 @@ export function createApp(ctx?: AppContext) {
       return c.json(buildOverview(store, runtime, clock, background).stations);
     return c.json(siteFloor(site, clock.now()));
   });
+  /** The visit requests a hospital has received that its staff schedule by hand. */
+  app.get("/api/hospitals/:id/requests", (c) => c.json(ctx.queued[c.req.param("id")] ?? []));
   /** A hospital asks to join: it gets a workspace in setup, listed beside the live ones. */
   const Setup = z.object({
     name: z.string().trim().min(3).max(100),
@@ -303,6 +317,7 @@ export function createApp(ctx?: AppContext) {
       companion: z.boolean(),
     }),
     member_id: z.string().max(40).optional(),
+    hospital_id: z.string().max(60).optional(),
     days: z
       .array(z.object({ date: z.iso.date(), part: z.enum(["morning", "afternoon", "any"]) }))
       .min(1)
@@ -312,6 +327,25 @@ export function createApp(ctx?: AppContext) {
     const body = VisitRequest.safeParse(await c.req.json().catch(() => ({})));
     if (!body.success) return c.json({ error: body.error.issues }, 400);
     const req = body.data;
+    // A hospital whose schedules are not connected keeps the request for its own staff to
+    // schedule by phone; the agents that book from live schedules stay with the live workspace.
+    if (req.hospital_id && req.hospital_id !== HOSPITALS[0]?.id) {
+      if (![...HOSPITALS, ...ctx.setups].some((h) => h.id === req.hospital_id))
+        return c.json({ error: "that hospital is not on Throughline" }, 404);
+      const list = (ctx.queued[req.hospital_id] ??= []);
+      if (list.length >= 50) return c.json({ error: "too many requests; try later" }, 429);
+      const id = `req-${req.hospital_id}-${list.length + 1}`;
+      list.push({
+        id,
+        at: clock.now(),
+        service: req.service,
+        patient: req.patient.name,
+        phone: req.patient.phone,
+        days: req.days.map((d) => `${d.date} ${d.part}`),
+        mobility: req.patient.mobility,
+      });
+      return c.json({ id, visit_code: null, queued: true });
+    }
     if (req.referral_fax && !faxLine(ctx).some((s) => s.id === req.referral_fax))
       return c.json({ error: "that fax is not on the line" }, 404);
     const n = ctx.received.size + 1 + ctx.requests;

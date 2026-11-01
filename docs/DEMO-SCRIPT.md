@@ -1,98 +1,102 @@
-# Demo video script (3:00)
+# Demo video script (4:00)
 
-Read it out loud once before you record. It is written to be spoken, not read: short sentences, a few places where you correct yourself, one place where you admit something is not finished. Keep those. A flawless read sounds like an ad; a judge trusts the person who says "this part is rough".
+Read it out loud once before you record. It is written to be spoken: short sentences, a few places where you correct yourself, one place where you admit something is not finished. Keep those. A flawless read sounds like an ad.
 
-Rough pace: 140 words a minute, so about 400 words of speech. Leave the pauses in. If a take goes wrong halfway, keep going and say the line again. That is how people talk.
+Pace: about 140 words a minute. The talking parts below are about 520 words; the rest of the four minutes is the screen doing things while you say nothing. Leave the pauses in. If a take goes wrong halfway, keep going and say the line again.
 
 Record at 1080p on https://throughline-zeta-ten.vercel.app. Browser zoom 110%. Close other tabs. Open the front page first.
 
 ## Numbers you may say, and where they come from
 
-Say "reported" or "about" where marked. Do not round them up.
+Say "about" and "reported" where marked. Say "older adults" or "one study" where the study was narrow. Do not round up.
 
-| What you say                                                         | Source                                                                                      |
-| -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| About half of specialty referrals are never completed                | Weiner et al., J Eval Clin Pract, 2010. Adults 65+, one US academic setting. Old and narrow |
-| Physicians and their staff spend about 13 hours a week on prior auth | AMA physician survey, 2024                                                                  |
-| 39 prior auth requests per physician per week                        | Same AMA survey                                                                             |
-| A manual prior auth takes about 24 minutes (16 through a portal)     | CAQH Index, 2024                                                                            |
-| A new-patient appointment takes 31 days on average in big US cities  | AMN Healthcare wait-time survey, 2025                                                       |
-| Montage Health reported referral turnaround of 23 days down to 1.5   | Vendor case study (Notable), 2025. Say "reported"                                           |
-| Mayo reviews complex referrals in under 24 hours with AI triage      | Mayo news and Becker's, seen in summaries only. Say "reported", or leave it out             |
+| What you say                                                                                               | Source                                                                              |
+| ---------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| About 155 million emergency visits a year in the US                                                        | CDC NHAMCS, 2022                                                                    |
+| Hospital outpatient visits are in the hundreds of millions a year                                          | CDC Health, United States (832 million in 2015). Old, so say "hundreds of millions" |
+| A typical Medicare patient sees about 2 primary care doctors and 5 specialists, in 4 practices             | Pham et al., NEJM, 2007. Old data, say "a typical Medicare patient"                 |
+| A visit takes about 2 hours of the patient's time; about 20 minutes is with the doctor                     | Ray et al., JAMA Intern Med, 2015                                                   |
+| Doctors and staff spend about 13 hours a week on prior authorization                                       | AMA survey, 2024                                                                    |
+| A manual prior authorization takes about 24 minutes                                                        | CAQH Index, 2024                                                                    |
+| About half of specialty referrals were not completed                                                       | Weiner et al., 2010. Adults 65+, one setting. Say "one study"                       |
+| 1 in 14 abnormal outpatient test results is never communicated to the patient                              | Casalino et al., Arch Intern Med, 2009                                              |
+| 78% of emergency patients misunderstood part of their discharge instructions                               | Engel et al., Ann Emerg Med, 2009                                                   |
+| 79% of older patients with a medication change at discharge did not understand a change                    | J Gen Intern Med, 2012. Say "older patients"                                        |
+| About 1 in 5 Medicare patients is back in hospital within 30 days, and half had no office visit in between | Jencks et al., NEJM, 2009 (2003-04 data). Say "one big Medicare study"              |
+| Failure of care coordination wastes an estimated $27 to $78 billion a year                                 | Shrank et al., JAMA, 2019. Say "estimated"                                          |
 
-Do not say: a fax percentage (no reliable US number), a national no-show cost, or a wayfinding dollar cost. We could not find a source we trust.
+Do not say: a percentage of referrals sent by fax, a national no-show cost, a wayfinding dollar cost. No source we trust. Mayo and Montage figures are vendor or news reports; leave them out of the voice-over.
 
-Our own numbers, all checkable in the repo: 13 agents, 30 referrals in the book, 3 hospitals, 215 runtime tests, intake read 10 of 10 faxes correctly, the classifier handled 60 of 60 messages with no false alarms, and 156 live model calls were recorded.
+Our own numbers, checkable in the repo: 13 agents, 30 referrals in the book, 3 hospitals, 215 runtime tests, intake read 10 of 10 faxes, the classifier handled 60 of 60 messages with no false alarms, 156 live model calls recorded.
 
 ## The script
 
-**0:00 to 0:25. The problem. Screen: the front page, 3D hospital turning slowly.**
+**0:00 to 1:10. The problem, wide. Screen: the 3D hospital turning slowly on the front page. Nothing else.**
 
-> Okay. So, a referral. A doctor sends a patient to a specialist, and in a lot of hospitals that referral is still a fax.
+> Okay. Think about how many people walk into a hospital in a year.
 >
-> There's an old study of older adults where about half of specialty referrals just never got completed. It's old, one hospital, so take it as a hint, not a law. But anyone who works in a clinic nods when you say it.
+> In the US it's about a hundred and fifty-five million emergency visits. And hospital outpatient visits are in the hundreds of millions on top of that.
 >
-> And the work around it is heavy. The AMA says doctors and their staff spend around thirteen hours a week on prior authorization alone.
+> Now think about what one of those visits actually is. It's not one thing. It's a chain. Before, a doctor sends a referral, often still by fax. Someone checks the insurance, someone asks the insurer for permission, someone finds a time. The AMA says doctors and their staff spend around thirteen hours a week on prior authorization alone.
+>
+> Then, during, you show up. You find the building, you find the room, you wait. One study put the whole visit at about two hours of your time, and about twenty minutes of it with the doctor.
+>
+> And after. You go home with instructions. One study found most older patients with a medication change at discharge didn't understand at least one of the changes. One in fourteen abnormal test results never gets back to the patient. And about one in five Medicare patients is back in hospital within a month. In that same study, half of them hadn't seen an outpatient doctor in between.
+>
+> A typical Medicare patient has about two primary doctors and five specialists, in four different practices. Nobody is in charge of the whole line. People are, uh, improvising. And the cost of that, one estimate, is tens of billions a year.
 
-**0:25 to 1:05. The solution, staff side. Screen: click Jordan Park, Inbox.**
+**1:10 to 1:40. The idea. Screen: front page, staff list and patient door.**
 
-> This is Throughline. I'm signed in as the referral coordinator, Jordan.
+> So this is Throughline. The idea is simple. Give each patient one thread, from the referral to the follow-up, and put agents on the routine work along that thread. A person signs off on the steps that matter.
 >
-> Thirteen agents do the routine part. This one, intake, read a faxed referral and pulled out the patient, the doctor, the reason. And, uh, here, it couldn't read the member ID on the card. So it didn't guess. It asked Jordan.
->
-> That's the rule everywhere. The agent drafts, a person signs off at the steps that matter. Insurance submission, a change to the day's schedule. Nothing goes out without a person.
->
-> _(click Approve on the prior-auth item)_
->
-> A manual prior auth is about twenty-four minutes of someone's time, that's the CAQH number. Here the packet is already built. Jordan checks it and approves it.
+> Let me show you the three parts.
 
-**1:05 to 1:40. The models. Screen: Agents page, then one agent's run.**
+**1:40 to 2:15. Before. Screen: sign in as Jordan, Inbox, open the prior-auth item.**
 
-> It runs on Meta's models. Muse Spark reads the fax and writes the drafts. The operations agent runs on Spark Open, the open-weights one, hosted on Baseten. I picked that on purpose, because a hospital might want its own model on its own hardware.
+> Before. I'm Jordan, the referral coordinator. A fax came in, and the intake agent read it. Patient, doctor, reason. And here, it couldn't read the member ID, so it didn't guess, it asked Jordan.
 >
-> Voice notes go through Muse Voice Transcribe. And SAM counts the people in the waiting-room frames, so the wait times on the map aren't just guesses.
+> _(open the prior-auth draft, approve it)_
 >
-> Every run is written down. What the agent saw, what it did, which model. So when someone asks "why did it do that", you can open it.
+> The packet for the insurer is already built, with the sources beside it. A manual one is about twenty-four minutes. Here Jordan checks it and approves. Nothing goes to the insurer without a person.
 
-**1:40 to 2:15. The day of the visit. Screen: Today, then click the CT scanner.**
+**2:15 to 3:00. During. Screen: Today, CT scanner, then the patient app and the map.**
 
-> Now the day of the visit. This is the hospital right now. CT one is down.
+> During. This is the hospital right now. The CT scanner is down, and the wait is climbing.
 >
-> The ops agent noticed the wait climbing and proposed moving three patients to CT two. It tested that in a simulation first. The engine for that is written in Rust, running in the browser.
->
-> I'm... honestly I'm still not happy with how the forecast chart looks. It's accurate, it's just not pretty. I ran out of time on that.
+> The ops agent proposed moving three patients to the other scanner. It ran a simulation first, in Rust, in the browser. I'm... honestly I'm not happy with how the forecast chart looks. It's accurate. It's just not pretty. I ran out of time.
 >
 > _(approve)_
 >
-> And the patient's phone updates, with the reason.
+> And the patient's phone updates, with the reason. This is the patient app. One plan, one next step. If she's lost, she sends a photo of a sign and gets directions from where she's standing, step-free if she needs it.
 
-**2:15 to 2:40. The patient. Screen: patient app on a phone-sized window, then the map.**
+**3:00 to 3:25. After. Screen: patient record timeline, the follow-up and results.**
 
-> This is what the patient sees. One plan. One next step. No login to remember.
->
-> If she gets lost, she sends a photo of a sign, and gets directions from where she's standing. Step-free if she needs it.
->
-> And it's not one hospital. _(open the hospital picker, choose Northgate)_ This one has five buildings, a fourteen-floor tower. Same platform. A new hospital can add itself.
+> After. The discharge summary is drafted beside the doctor's own words, the doctor approves it, and then the patient gets it in her language. A day later an agent asks a couple of check-in questions. If an answer's wrong, it doesn't explain, it hands it to a nurse. And a result nobody has acknowledged gets flagged to a clinician instead of sitting there.
 
-**2:40 to 3:00. Impact and honesty. Screen: Today, Northgate, 3D.**
+**3:25 to 3:45. The models, and more than one hospital. Screen: Agents page, then the hospital picker, Northgate in 3D.**
 
-> So what would this change? Here's my back-of-the-envelope, and it's an assumption, not a measurement. If a clinic handles thirty referrals a week and the agent saves just ten minutes on each, that's five hours a week back. For one clinic.
+> It runs on Meta's models. Muse Spark reads and drafts. The operations agent runs on Spark Open, the open-weights one, on Baseten, because a hospital might want a model it can host itself. Muse Voice Transcribe for voice notes, SAM for counting people in the waiting room. Every run is logged, which model, what it saw.
 >
-> What it is not: everything you saw is fictional. The hospitals, the patients, the insurers. The model answers on the live site are replayed from a real recorded run, so it works without keys. Nothing here diagnoses anyone.
+> And it isn't one hospital. _(pick Northgate)_ Five buildings, a fourteen-floor tower. A new hospital can add itself, and patients can request a visit there too.
+
+**3:45 to 4:00. Impact and honesty. Screen: Today, Northgate.**
+
+> What would it change? My back-of-the-envelope, and it's an assumption: a clinic with thirty referrals a week, ten minutes saved on each, that's five hours a week back. For one clinic.
 >
-> The fax is a boring problem. Boring problems are where people fall through. That's Throughline. Thanks for watching.
+> And to be straight about it, everything here is fictional, the hospitals, the patients, the insurers. The model answers on the live site are replayed from a real recorded run. It never diagnoses anyone. Thanks for watching.
 
 ## Where it is deliberately imperfect
 
 Keep at least two. They are the point.
 
-- "uh, here, it couldn't read the member ID" at 0:25.
-- "honestly I'm still not happy with how the forecast chart looks" at 1:40.
-- "take it as a hint, not a law" at 0:00. It is a caveat a careful person would say.
+- "People are, uh, improvising" at 1:00.
+- "honestly I'm not happy with how the forecast chart looks" at 2:30.
+- "it couldn't read the member ID, so it didn't guess" is a real moment of the product failing safely. Say it plainly.
 
 ## Before you record
 
 - Reload the site so the hospital is at its starting state (it restores itself after 10 idle minutes).
-- Sign in as Jordan. Make sure the prior-auth item is still in the Inbox. If you approved it in an earlier take, use New referral to bring in another fax.
-- Choose Halden for the first two minutes, then switch to Northgate at the end.
-- Upload to YouTube as unlisted or public, put the link in `docs/DEVPOST.md` (the Video line), and check it is under 3:00.
+- Sign in as Jordan. Make sure the prior-auth item is still in the Inbox. If an earlier take approved it, use New referral to bring in another fax.
+- Use Halden until the models part, then switch to Northgate.
+- Before you say "intake read a faxed referral", open the Agents page and check which model the intake agent shows. Say that name.
+- Upload to YouTube, put the link in `docs/DEVPOST.md` (the Video line), and check it is under 4:00 if the hackathon allows four minutes. If the rules say three, cut the "After" section and the first paragraph of the problem.

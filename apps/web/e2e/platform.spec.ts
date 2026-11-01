@@ -147,6 +147,32 @@ test.describe("the staff platform", () => {
     await page.screenshot({ path: `${SCREENS}visit-sent.png`, fullPage: true });
   });
 
+  test("a visit can be requested at any hospital and lands in that hospital's queue", async ({
+    page,
+  }) => {
+    await page.addInitScript(() => {
+      if (location.pathname === "/inbox") window.localStorage.setItem("tl_user", "jordan");
+    });
+    await page.goto("/visit?hospital=northgate");
+    await expect(page.getByRole("heading", { name: "Book a visit", exact: true })).toBeVisible();
+    const next = page.getByRole("button", { name: "Continue" });
+    await page.getByRole("button", { name: /A first visit with a cancer specialist/ }).click();
+    await next.click();
+    await expect(page.getByRole("button", { name: /Yes, my doctor faxed it/ })).toHaveCount(0);
+    await page.getByRole("button", { name: /Not yet/ }).click();
+    await page.getByLabel("Your doctor's name").fill("Dr. Lee");
+    await next.click();
+    await page.getByRole("button", { name: "Fill with example details" }).click();
+    await next.click();
+    await page.getByRole("button", { name: "Use this example card" }).click();
+    await next.click();
+    await page.getByRole("button", { name: "Pick example days" }).click();
+    await next.click();
+    await page.getByRole("button", { name: "Send request" }).click();
+    await expect(page.getByRole("heading", { name: "Request sent" })).toBeVisible();
+    await expect(page.getByText(/Northgate University Hospital has your request/)).toBeVisible();
+  });
+
   test("a new hospital joins Throughline and appears beside Halden", async ({ page }) => {
     await page.goto("/");
     await page

@@ -4,7 +4,12 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { AGENT_CATALOG, agentProfile, STAFF, type JourneyRow } from "@throughline/shared";
-import { fetchHospital, fetchReferrals } from "../lib/platform";
+import {
+  fetchHospital,
+  fetchQueuedVisits,
+  fetchReferrals,
+  type QueuedVisit,
+} from "../lib/platform";
 import { useHospital, useLive, useStream, useUser } from "../lib/session";
 import { HospitalSwitcher } from "./hospital-switcher";
 import { NewReferralDialog } from "./new-referral";
@@ -456,17 +461,44 @@ const RECORD_PAGES = ["/inbox", "/referrals", "/patients"];
 function NewWorkspace({ children }: { children: ReactNode }) {
   const hospital = useHospital();
   const path = usePathname();
+  const { version } = useStream();
+  const [queued, setQueued] = useState<QueuedVisit[]>([]);
   const isRecord = RECORD_PAGES.some((p) => path.startsWith(p));
-  if (!hospital.id || hospital.forecasts || !isRecord) return <>{children}</>;
+  const away = !!hospital.id && !hospital.forecasts && isRecord;
+  useEffect(() => {
+    if (!away) return;
+    let alive = true;
+    void fetchQueuedVisits(hospital.id)
+      .then((q) => alive && setQueued(q))
+      .catch(() => undefined);
+    return () => {
+      alive = false;
+    };
+  }, [away, hospital.id, version]);
+  if (!away) return <>{children}</>;
   return (
-    <div className="mx-auto max-w-[640px] p-8">
+    <div className="mx-auto max-w-[760px] p-8">
       <h1 className="font-display text-[32px] leading-tight font-bold">
-        {hospital.name} has no referrals yet
+        {queued.length
+          ? `${queued.length} visit request${queued.length > 1 ? "s" : ""}`
+          : `${hospital.name} has no referrals yet`}
       </h1>
       <p className="mt-3 text-[17px] text-ink-soft">
-        Referrals appear here once the hospital&apos;s fax line and schedules are connected. Until
-        then you can look at the campus and how busy each station is right now.
+        Patients can request visits online. Until this hospital&apos;s fax line and schedules are
+        connected, your team calls each one to choose times.
       </p>
+      {queued.length > 0 && (
+        <ul className="mt-5 divide-y divide-rule rounded-[6px] bg-panel">
+          {queued.map((q) => (
+            <li key={q.id} className="px-4 py-3 text-[15px]">
+              <span className="font-bold">{q.patient}</span>, {q.phone}
+              <span className="block text-[13px] text-ink-soft">
+                {q.service.replace("_", " ")}, {q.mobility}. Days: {q.days.join(", ")}
+              </span>
+            </li>
+          ))}
+        </ul>
+      )}
       <Link
         href="/today"
         className="mt-6 inline-flex min-h-12 items-center rounded-[6px] bg-agent px-5 text-[17px] font-bold text-white"

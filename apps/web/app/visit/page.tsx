@@ -152,6 +152,32 @@ function Example({ onClick, children }: { onClick: () => void; children: ReactNo
 }
 
 /** After sending: the request's progress as the agents work on it. */
+/** A hospital whose schedules are not connected keeps the request for its own staff. */
+function SentToStaff() {
+  const hospital = useHospital();
+  return (
+    <div className="mx-auto max-w-[720px]">
+      <h1 className="font-display text-[44px] leading-tight font-bold">Request sent</h1>
+      <p className="mt-2 text-[18px]">
+        {hospital.name} has your request. Someone from the team calls you to choose your times,
+        usually the next working day. If you need to talk sooner, call{" "}
+        <a className="font-bold text-agent underline" href={`tel:${hospital.phone_href}`}>
+          {hospital.phone}
+        </a>
+        .
+      </p>
+      <div className="mt-8">
+        <Link
+          href="/"
+          className="inline-flex min-h-12 items-center rounded-[6px] bg-agent px-5 text-[17px] font-bold text-white"
+        >
+          Back to the front page
+        </Link>
+      </div>
+    </div>
+  );
+}
+
 function Sent({ id, code }: { id: string; code: string }) {
   const { data: timeline } = useLive(() => fetchTimeline(id), [id]);
   const steps = (timeline ?? []).filter(
@@ -226,7 +252,7 @@ export default function BookVisit() {
   const [days, setDays] = useState<Record<string, "morning" | "afternoon" | "any">>({});
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(false);
-  const [sent, setSent] = useState<{ id: string; code: string } | undefined>();
+  const [sent, setSent] = useState<{ id: string; code: string | null } | undefined>();
   useEffect(() => {
     void fetchFaxLine()
       .then(setFaxes)
@@ -254,6 +280,7 @@ export default function BookVisit() {
         ...(hasReferral && fax ? { referral_fax: fax } : { doctor: doctor.trim() }),
         patient: { name: name.trim(), dob, phone: phone.trim(), mobility, companion },
         member_id: member.trim(),
+        ...(hospital.id ? { hospital_id: hospital.id } : {}),
         days: Object.entries(days).map(([date, part]) => ({ date, part })),
       });
       setSent({ id: r.id, code: r.visit_code });
@@ -267,34 +294,10 @@ export default function BookVisit() {
   if (sent) {
     return (
       <div className="min-h-dvh bg-canvas px-6 py-10 text-ink">
-        <Sent id={sent.id} code={sent.code} />
+        {sent.code ? <Sent id={sent.id} code={sent.code} /> : <SentToStaff />}
       </div>
     );
   }
-
-  if (hospital.id && !hospital.forecasts)
-    return (
-      <div className="min-h-dvh bg-canvas px-6 py-10 text-ink">
-        <div className="mx-auto max-w-[640px]">
-          <h1 className="font-display text-[36px] leading-tight font-bold">
-            Book by phone for now
-          </h1>
-          <p className="mt-3 text-[18px]">
-            Online booking for {hospital.name} opens once its schedules are connected. Call{" "}
-            <a className="font-bold text-agent underline" href={`tel:${hospital.phone_href}`}>
-              {hospital.phone}
-            </a>{" "}
-            and the team will set up your visit.
-          </p>
-          <Link
-            href="/"
-            className="mt-6 inline-flex min-h-12 items-center rounded-[6px] bg-agent px-5 text-[17px] font-bold text-white"
-          >
-            Back to the front page
-          </Link>
-        </div>
-      </div>
-    );
 
   return (
     <div className="min-h-dvh bg-canvas text-ink">
@@ -309,7 +312,7 @@ export default function BookVisit() {
       </header>
       <main className="mx-auto max-w-[860px] px-6 pt-8 pb-16">
         <h1 className="font-display text-[40px] leading-tight font-bold">
-          Book a visit with Oncology
+          Book a visit{hospital.forecasts ? " with Oncology" : ""}
         </h1>
         <div className="mt-6">
           <RouteSteps at={at} />
@@ -352,47 +355,51 @@ export default function BookVisit() {
 
             {at === 1 && (
               <>
-                <Choice
-                  selected={hasReferral === true}
-                  onClick={() => setHasReferral(true)}
-                  title="Yes, my doctor faxed it"
-                >
-                  We find it on our fax line and read it for you.
-                </Choice>
-                {hasReferral === true && (
-                  <div className="rounded-[6px] bg-canvas p-4">
-                    <p className="text-[15px] font-bold">Which one is yours?</p>
-                    <div className="mt-2 grid gap-3 sm:grid-cols-[1fr_200px]">
-                      <ul className="space-y-2">
-                        {faxes.map((f) => (
-                          <li key={f.id}>
-                            <button
-                              type="button"
-                              onClick={() => setFax(f.id)}
-                              aria-pressed={fax === f.id}
-                              className={`w-full rounded-[6px] border-2 bg-panel px-3 py-2 text-left text-[15px] ${
-                                fax === f.id ? "border-agent" : "border-rule"
-                              }`}
-                            >
-                              <span className="font-bold">{f.practice}</span>, for {f.patient}
-                            </button>
-                          </li>
-                        ))}
-                      </ul>
-                      {chosen && (
-                        <img
-                          src={documentUrl(chosen.fax)}
-                          alt={`Referral from ${chosen.practice}`}
-                          className="w-full rounded-[4px] ring-1 ring-rule"
-                        />
-                      )}
-                    </div>
-                    {!fax && faxes[0] && (
-                      <Example onClick={() => setFax(faxes[0]?.id)}>
-                        Use an example referral
-                      </Example>
+                {hospital.forecasts && (
+                  <>
+                    <Choice
+                      selected={hasReferral === true}
+                      onClick={() => setHasReferral(true)}
+                      title="Yes, my doctor faxed it"
+                    >
+                      We find it on our fax line and read it for you.
+                    </Choice>
+                    {hasReferral === true && (
+                      <div className="rounded-[6px] bg-canvas p-4">
+                        <p className="text-[15px] font-bold">Which one is yours?</p>
+                        <div className="mt-2 grid gap-3 sm:grid-cols-[1fr_200px]">
+                          <ul className="space-y-2">
+                            {faxes.map((f) => (
+                              <li key={f.id}>
+                                <button
+                                  type="button"
+                                  onClick={() => setFax(f.id)}
+                                  aria-pressed={fax === f.id}
+                                  className={`w-full rounded-[6px] border-2 bg-panel px-3 py-2 text-left text-[15px] ${
+                                    fax === f.id ? "border-agent" : "border-rule"
+                                  }`}
+                                >
+                                  <span className="font-bold">{f.practice}</span>, for {f.patient}
+                                </button>
+                              </li>
+                            ))}
+                          </ul>
+                          {chosen && (
+                            <img
+                              src={documentUrl(chosen.fax)}
+                              alt={`Referral from ${chosen.practice}`}
+                              className="w-full rounded-[4px] ring-1 ring-rule"
+                            />
+                          )}
+                        </div>
+                        {!fax && faxes[0] && (
+                          <Example onClick={() => setFax(faxes[0]?.id)}>
+                            Use an example referral
+                          </Example>
+                        )}
+                      </div>
                     )}
-                  </div>
+                  </>
                 )}
                 <Choice
                   selected={hasReferral === false}

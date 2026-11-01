@@ -14,7 +14,13 @@
 
 ## Inspiration
 
-In the US, a visit to a specialist often costs a patient about two hours for twenty minutes with the doctor. Only about half of referrals ever become a booked appointment. Staff spend time every week giving directions. After the visit, most patients misunderstand at least one change to their medication, and some abnormal results never reach them. None of this is clinical work. It is the administration around the care, and it is where people fall through the gaps.
+The US has about 155 million emergency visits a year (CDC, 2022) and hundreds of millions of hospital outpatient visits on top. Each one is a chain, and nobody owns the whole chain. A typical Medicare patient sees about two primary care doctors and five specialists across four practices (Pham, NEJM 2007).
+
+- **Before:** a referral often arrives by fax. Doctors and staff spend about 13 hours a week on prior authorization (AMA survey, 2024); a manual one takes about 24 minutes (CAQH, 2024). In one older study about half of specialty referrals were never completed (Weiner, 2010).
+- **During:** one study put a visit at about two hours of the patient's time and about 20 minutes with the doctor (Ray, JAMA Intern Med 2015). Staff give directions and patients wait without knowing why.
+- **After:** most older patients with a medication change at discharge did not understand at least one change (79%, J Gen Intern Med 2012). About 1 in 14 abnormal outpatient results is never communicated (Casalino, 2009). About 1 in 5 Medicare patients is readmitted within 30 days, and half of those had no office visit in between (Jencks, NEJM 2009).
+
+None of this is clinical work. It is the coordination around the care, and it is where people fall through the gaps. Several of these studies are old or narrow; we cite them as signals, not as today's national rates.
 
 ## What it does
 

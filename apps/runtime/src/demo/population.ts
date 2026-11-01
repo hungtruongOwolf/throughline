@@ -301,6 +301,7 @@ export async function populate(ctx: AppContext): Promise<void> {
   ctx.received.clear();
   ctx.requests = 0;
   ctx.setups.length = 0;
+  ctx.queued = {};
 }
 
 /** The faxes on the fax line that have not been received since the last restore. */

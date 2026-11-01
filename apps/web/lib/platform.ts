@@ -84,7 +84,20 @@ export interface VisitRequest {
     companion: boolean;
   };
   member_id?: string;
+  hospital_id?: string;
   days: { date: string; part: "morning" | "afternoon" | "any" }[];
 }
 export const requestVisit = (body: VisitRequest) =>
-  post<{ id: string; visit_code: string }>("/api/visit-requests", body);
+  post<{ id: string; visit_code: string | null; queued?: boolean }>("/api/visit-requests", body);
+
+export interface QueuedVisit {
+  id: string;
+  at: string;
+  service: string;
+  patient: string;
+  phone: string;
+  days: string[];
+  mobility: string;
+}
+export const fetchQueuedVisits = (hospitalId: string) =>
+  get<QueuedVisit[]>(`/api/hospitals/${hospitalId}/requests`);
