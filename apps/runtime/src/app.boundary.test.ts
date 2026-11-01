@@ -69,7 +69,7 @@ describe("input at the edges", () => {
     expect(ok.status).toBe(200);
   });
 
-  it("will not fast-forward the clock by more than a day", async () => {
+  it("will not fast-forward the clock by more than a week", async () => {
     const a = app();
     expect((await post(a, "/api/clock", { action: "advance", minutes: 1e9 })).status).toBe(400);
   });

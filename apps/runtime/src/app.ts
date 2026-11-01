@@ -64,7 +64,7 @@ const ClockCommand = z.discriminatedUnion("action", [
     minutes: z
       .number()
       .positive()
-      .max(24 * 60),
+      .max(7 * 24 * 60),
   }),
   z.object({ action: z.literal("jump") }),
 ]);
