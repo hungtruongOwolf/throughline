@@ -1,6 +1,7 @@
 import { AbsoluteFill, Audio, Freeze, interpolate, OffthreadVideo, Sequence, staticFile, useCurrentFrame } from "remotion";
 import timeline from "./timeline.json";
 import narration from "../../narration3.json";
+import built from "./v2-built.json";
 import { Finish, useDrift, useSpring, useT } from "../v2/fx";
 import { sceneFor } from "../v2/Film2";
 import { Gates, Stages } from "./scenes";
@@ -10,6 +11,8 @@ import { C } from "../theme";
 export type Row3 = { line: number; kind: "anim" | "clip" | "phone" | "still" | "new"; name: string; start: number; dur: number; vo: number; part: string; from?: number; to?: number };
 export const SHOTS3 = timeline.shots as Row3[];
 export const TOTAL3 = timeline.total;
+/** The length each v2 scene was animated for. */
+const BUILT: Record<string, number> = Object.fromEntries((built.shots as { beat: string; dur: number }[]).map((s) => [s.beat, s.dur]));
 const TEXT = Object.fromEntries((narration as { id: number; text: string }[]).map((n) => [n.id, n.text]));
 
 /** A real recording at 1x: plays its segment, then holds the last frame. */
@@ -32,12 +35,37 @@ function Recording({ src, from, to, dur, phone }: { src: string; from: number; t
   );
 }
 
+/** Where the camera settles in each recording (recording pixels, 1920x1080). */
+type Rect = { x: number; y: number; w: number; h: number };
+const FOCUS: Record<string, Rect> = {
+  "11": { x: 500, y: 0, w: 1420, h: 799 },
+  "12": { x: 120, y: 20, w: 1300, h: 731 },
+  "13": { x: 360, y: 50, w: 1560, h: 878 },
+  "14": { x: 120, y: 40, w: 1300, h: 731 },
+  "15": { x: 360, y: 50, w: 1560, h: 878 },
+  "18": { x: 140, y: 70, w: 1460, h: 821 },
+  "22": { x: 900, y: 60, w: 1020, h: 574 },
+  "23": { x: 360, y: 30, w: 1560, h: 878 },
+  "24": { x: 360, y: 30, w: 1560, h: 878 },
+  "25": { x: 120, y: 30, w: 1300, h: 731 },
+  "26": { x: 120, y: 0, w: 1300, h: 731 },
+  "27": { x: 280, y: 30, w: 1640, h: 922 },
+  "31": { x: 140, y: 30, w: 1500, h: 844 },
+};
+
 /** A desktop recording, framed and gently moving so the screen never feels pasted on. */
 function Screen({ row }: { row: Row3 }) {
   const f = useCurrentFrame();
   const enter = useSpring(0, { damping: 200 }, 18);
   const d = useDrift(row.name + row.line, 0.4, 8);
   const push = interpolate(f, [0, row.dur], [1, 1.035]);
+  // the camera moves from the whole screen to where the action is
+  const r = FOCUS[String(row.line)];
+  const k = useT(8, 34);
+  const zoom = r ? 1 + (Math.min(1920 / r.w, 1080 / r.h) - 1) * k : 1;
+  const cx = r ? (r.x + r.w / 2) * k + 960 * (1 - k) : 960;
+  const cy = r ? (r.y + r.h / 2) * k + 540 * (1 - k) : 540;
+  const scale = 1800 / 1920;
   return (
     <AbsoluteFill style={{ background: C.ink, alignItems: "center", justifyContent: "center" }}>
       <AbsoluteFill style={{ background: "radial-gradient(ellipse at 50% 45%, rgba(45,212,191,.10), transparent 65%)" }} />
@@ -51,7 +79,20 @@ function Screen({ row }: { row: Row3 }) {
           transform: `translate(${d.x}px, ${d.y + (1 - enter) * 30}px) scale(${push * (0.97 + 0.03 * enter)})`,
         }}
       >
-        <Recording src={row.name} from={row.from!} to={row.to!} dur={row.dur} phone={false} />
+        <div style={{ width: 1800, height: 1012, overflow: "hidden", position: "relative" }}>
+          <div
+            style={{
+              position: "absolute",
+              left: 0,
+              top: 0,
+              width: 1800,
+              transformOrigin: "0 0",
+              transform: `translate(${900 - cx * scale * zoom}px, ${506 - cy * scale * zoom}px) scale(${zoom})`,
+            }}
+          >
+            <Recording src={row.name} from={row.from!} to={row.to!} dur={row.dur} phone={false} />
+          </div>
+        </div>
       </div>
     </AbsoluteFill>
   );
@@ -102,13 +143,35 @@ function Proposal({ row }: { row: Row3 }) {
   );
 }
 
+/** A held frame keeps drifting a little, so it never looks paused. */
+function Hold({ frames, children }: { frames: number; children: React.ReactNode }) {
+  const f = useCurrentFrame();
+  const z = interpolate(f, [0, frames], [1, 1.04]);
+  return <AbsoluteFill style={{ transform: `scale(${z})` }}>{children}</AbsoluteFill>;
+}
+
 function Visual({ row }: { row: Row3 }) {
   if (row.kind === "clip") return <Screen row={row} />;
   if (row.kind === "phone") return <PhoneScreen row={row} />;
   if (row.kind === "still") return <Proposal row={row} />;
   if (row.kind === "new") return row.name === "Gates" ? <Gates dur={row.dur} /> : <Stages dur={row.dur} />;
   const { C: Scene } = sceneFor(row.name);
-  return <Scene dur={row.dur} vo={row.vo} start={row.start} text={TEXT[row.line] ?? ""} />;
+  // scenes that pace themselves to whatever length they get play the whole shot
+  const stretches = row.name === "CLOSE-1";
+  const len = stretches ? row.dur : Math.min(row.dur, BUILT[row.name] ?? row.dur);
+  const scene = <Scene dur={len} vo={row.vo} start={row.start} text={TEXT[row.line] ?? ""} />;
+  if (row.dur <= len) return scene;
+  // the scene plays at the length it was animated for, then its last frame holds under the voice
+  return (
+    <>
+      <Sequence durationInFrames={len}>{scene}</Sequence>
+      <Sequence from={len}>
+        <Hold frames={row.dur - len}>
+          <Freeze frame={len - 1}>{scene}</Freeze>
+        </Hold>
+      </Sequence>
+    </>
+  );
 }
 
 const VO_SPANS = SHOTS3.filter((s) => s.vo > 0).map((s) => [s.start, s.start + s.vo] as const);
