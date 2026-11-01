@@ -1,0 +1,19 @@
+# The web app builds from the whole workspace (packages via tsconfig paths). Unlike .gitignore,
+# the built engine (pkg-web, engine_bg.wasm) is uploaded: Vercel has no Rust toolchain.
+node_modules
+.next
+.turbo
+.git
+target
+data
+test-results
+playwright-report
+coverage
+.env
+.env.*
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+__pycache__
+packages/engine/pkg-node
+docs/screens

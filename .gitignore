@@ -42,3 +42,7 @@ Thumbs.db
 .idea/
 *.sqlite-wal
 *.sqlite-shm
+__pycache__/
+
+.vercel
+.env*
