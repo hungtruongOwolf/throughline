@@ -41,7 +41,7 @@ const VOICES = SHOTS4.filter((s) => s.vo > 0).map((s) => ({ line: s.line, at: s.
 const ducked = (f: number) => {
   let g = 1;
   for (const v of VOICES)
-    g = Math.min(g, interpolate(f, [v.at - 8, v.at, v.at + v.len, v.at + v.len + 14], [1, 0.3, 0.3, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }));
+    g = Math.min(g, interpolate(f, [v.at - 8, v.at, v.at + v.len, v.at + v.len + 14], [1, 0.22, 0.22, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }));
   return g;
 };
 
@@ -63,7 +63,7 @@ export function Film4() {
         </Sequence>
       ))}
       {/* "Mountains" by Andrew Ev (Mixkit License), a middle section repeated to fit */}
-      <Audio src={staticFile("audio/mountains-v4.wav")} volume={(f) => 0.6 * ducked(f)} />
+      <Audio src={staticFile("audio/mountains-v4.wav")} volume={(f) => 0.35 * ducked(f)} />
     </AbsoluteFill>
   );
 }
