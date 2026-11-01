@@ -1,0 +1,82 @@
+[
+ {
+  "id": 1,
+  "text": "Every year in the US there are about a hundred and fifty-five million emergency visits, and hundreds of millions more outpatient visits. Behind every one of them is a chain."
+ },
+ {
+  "id": 2,
+  "text": "A referral, the insurance, the visit, the results, the follow-up. Each link is a different person in a different system, and the first one is often still a fax. Nobody holds the whole line."
+ },
+ {
+  "id": 3,
+  "text": "And that costs something. About a quarter of US health spending is waste, much of it paperwork and handoffs. A doctor and their staff spend about thirteen hours a week on prior authorization. And one abnormal test result in fourteen never reaches the patient."
+ },
+ {
+  "id": 4,
+  "text": "The problem isn't any one step. It's the gaps between them."
+ },
+ {
+  "id": 5,
+  "text": "Take Maria. She's seventy-one. Her doctor found something on a scan, and her office faxed a referral to a specialist."
+ },
+ {
+  "id": 6,
+  "text": "Throughline gives Maria one thread, from that fax to the follow-up. Thirteen agents carry it, one to the next, and a person steps in only where a person should."
+ },
+ {
+  "id": 7,
+  "text": "The fax comes in, and Intake reads it. The member number's smudged, so it doesn't guess. It asks Jordan, the coordinator. One answer, and Jordan's done."
+ },
+ {
+  "id": 8,
+  "text": "That answer wakes Coverage, which sees the scan needs the insurer's permission, and Prior auth writes the whole request. Nothing goes to an insurer without a person, so Jordan reads it, and approves. By hand, that's about twenty-four minutes."
+ },
+ {
+  "id": 9,
+  "text": "Scheduling fits everything into as few trips as it can. That one isn't a language model. It's a Rust engine, because a schedule should be exact."
+ },
+ {
+  "id": 10,
+  "text": "Maria confirms by voice note, and says she'll need a wheelchair. The messaging agent catches it, so a chair waits at the door, and every route she gets skips the stairs. Nobody typed that in."
+ },
+ {
+  "id": 11,
+  "text": "On the day, every stop is its own line. When one backs up, everyone behind it waits."
+ },
+ {
+  "id": 12,
+  "text": "This morning, one of the two CT scanners is down, and nobody's said a word. But the waiting-room agent is counting people in the camera frames, sees the line grow, and tells the Ops planner."
+ },
+ {
+  "id": 13,
+  "text": "The planner plays the next ninety minutes out twenty times, once for each fix it knows, and comes back with one. Open a slot on the other scanner, and move people over."
+ },
+ {
+  "id": 14,
+  "text": "The average CT wait goes from seventeen minutes to five, and only seven patients have to move."
+ },
+ {
+  "id": 15,
+  "text": "Sam, the operations lead, approves, and everyone affected gets a text saying what changed. If Maria gets lost, she photographs a sign, and it sends her the way from there."
+ },
+ {
+  "id": 16,
+  "text": "Once she's home, the thread keeps going. Discharge puts her instructions in plain words, next to the doctor's, and checks the next day that she understood. If she isn't sure, it hands her to a nurse."
+ },
+ {
+  "id": 17,
+  "text": "Results watch stays on her test until the doctor signs off. Follow-up books her next visit, and reports back to the doctor who sent the fax."
+ },
+ {
+  "id": 18,
+  "text": "The thinking runs on Meta's models. Muse Spark reads and drafts. The Ops planner runs on Spark Open, on Baseten, so a hospital could run it itself. Voice Transcribe hears the voice notes, and SAM does the counting."
+ },
+ {
+  "id": 19,
+  "text": "And it isn't built for one building. Northgate University Hospital has five buildings, and a fourteen-floor tower."
+ },
+ {
+  "id": 20,
+  "text": "Nobody had to hold Maria's thread. Throughline did."
+ }
+]

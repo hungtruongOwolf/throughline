@@ -1,0 +1,20 @@
+{
+  "name": "throughline-video",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "studio": "remotion studio src/index.ts",
+    "render": "remotion render src/index.ts Throughline out/throughline.mp4",
+    "draft": "remotion render src/index.ts Throughline out/draft.mp4 --scale=0.6666666666666666"
+  },
+  "dependencies": {
+    "@remotion/cli": "^4.0.539",
+    "@remotion/google-fonts": "^4.0.539",
+    "@remotion/media-utils": "^4.0.539",
+    "@types/react": "^19.1.8",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "remotion": "^4.0.539",
+    "typescript": "^5.8.3"
+  }
+}

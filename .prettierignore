@@ -8,3 +8,4 @@ packages/engine/pkg-node
 packages/engine/target
 .claude/skills/
 fixtures/documents/*-truth.json
+video/
