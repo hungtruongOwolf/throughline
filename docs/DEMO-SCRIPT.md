@@ -1,4 +1,4 @@
-# Demo video script (about 4:00)
+# Demo video script (about 4:20)
 
 This is meant to be spoken, not read. It follows one patient, Maria, from the fax to the follow-up, so every part leads into the next. Read it out loud once; where a sentence is hard to say, change it to how you would say it.
 
@@ -8,25 +8,27 @@ Stage directions are in _italics_. When one says "pause", say nothing and let th
 
 ---
 
-## 1. Maria (0:00 to 0:50)
+## 1. The problem, and why it is big (0:00 to 1:20)
 
 _Screen: the 3D hospital turning slowly on the front page._
 
-> Let me tell you about Maria. She's seventy-one, and her doctor just found something on a scan. He wants her to see a cancer specialist, so his office does what most offices still do. They fax it.
+> Every year in the US there are about a hundred and fifty-five million emergency visits, and hundreds of millions more outpatient visits to hospitals. And behind every one of those is a chain.
 >
-> And a fax isn't a person. It lands in a pile. Somebody has to read it. Somebody calls the insurance. Somebody asks permission for the scan, and doctors and their staff spend about thirteen hours a week on that alone. And somebody has to find her a time.
+> Before: a referral, the insurance, the insurer's permission, finding a time. During: finding the building, the room, the waiting. After: the instructions, the test results, the follow-up. Every link is a different person, in a different system, and in a lot of places the first link is still a fax. A typical Medicare patient sees about two primary care doctors and five specialists, in four different practices. And nobody is in charge of the whole line.
 >
-> Then the visit itself. A big building she's never been in. About two hours of her day, and maybe twenty minutes of it with the doctor. And then she goes home, and most older patients don't understand at least one change to their medicine.
+> That has a price. Researchers estimate that about a quarter of what the US spends on health care is waste, hundreds of billions of dollars, and a big piece of it is simply work that isn't coordinated. Doctors and their staff spend about thirteen hours a week just on prior authorization. A visit takes about two hours of the patient's day, and twenty minutes of that is with the doctor. Most older patients go home not understanding at least one change to their medicine. And about one in fourteen abnormal test results never gets back to the patient at all.
 >
-> Nobody did anything wrong here. It's just that nobody owns the whole thing, from the fax to the follow-up.
+> So the problem isn't any one step. It's the gaps between them. Let me show you what that looks like for one person.
 
-## 2. The idea (0:50 to 1:10)
+## 2. Maria, and the idea (1:20 to 1:50)
 
 _Screen: front page, staff list and patient door._
 
-> So that's what Throughline does. Maria gets one thread, start to finish, and thirteen agents pass it along, one to the next. People step in only where it actually needs a person. Let me show you.
+> This is Maria. She's seventy-one, her doctor found something on a scan, and his office faxed a referral to a specialist. That fax is the start of everything I just described.
+>
+> So Throughline gives Maria one thread, from that fax to the follow-up, and thirteen agents pass it along, one to the next. People step in only where it actually needs a person.
 
-## 3. Before the visit (1:10 to 2:20)
+## 3. Before the visit (1:50 to 2:50)
 
 _Screen: sign in as Jordan, open the new referral's patient record so the timeline fills in. Don't click anything for the first few seconds._
 
@@ -50,7 +52,7 @@ _Screen: sign in as Jordan, open the new referral's patient record so the timeli
 >
 > And when Maria answers her plan with a voice note, saying she's going to need a wheelchair, the messaging agent hears that, and the Itinerary agent redraws her route to use elevators. Nobody typed that in.
 
-## 4. The visit day (2:20 to 3:10)
+## 4. The visit day (2:50 to 3:30)
 
 _Screen: Today, then the patient app in a phone-sized window._
 
@@ -66,7 +68,7 @@ _Screen: Today, then the patient app in a phone-sized window._
 >
 > And if she gets lost anyway, she takes a photo of a sign, and it tells her where she is, and the way to the elevator.
 
-## 5. After the visit (3:10 to 3:35)
+## 5. After the visit (3:30 to 3:50)
 
 _Screen: the patient record, the after-visit part of the timeline._
 
@@ -74,7 +76,7 @@ _Screen: the patient record, the after-visit part of the timeline._
 >
 > Another agent watches her test result until the doctor has signed off. And Follow-up books her next visit and sends the report back to the doctor who sent the fax.
 
-## 6. What it runs on (3:35 to 3:55)
+## 6. What it runs on (3:50 to 4:10)
 
 _Screen: the Agents page, then the hospital picker and Northgate in 3D._
 
@@ -82,7 +84,7 @@ _Screen: the Agents page, then the hospital picker and Northgate in 3D._
 >
 > And it isn't one hospital. _(pick Northgate)_ This one has five buildings and a fourteen-floor tower, and a new hospital can add itself.
 
-## 7. Close (3:55 to 4:05)
+## 7. Close (4:10 to 4:20)
 
 _Screen: Today, Northgate._
 
@@ -94,6 +96,11 @@ _Screen: Today, Northgate._
 
 | You say                                                    | Source                           |
 | ---------------------------------------------------------- | -------------------------------- |
+| About 155 million emergency visits a year                  | CDC NHAMCS, 2022                 |
+| Outpatient visits in the hundreds of millions              | CDC Health, United States        |
+| 2 primary doctors and 5 specialists, in 4 practices        | Pham et al., NEJM 2007           |
+| A quarter of US health spending is waste (estimated)       | Shrank et al., JAMA 2019         |
+| 1 in 14 abnormal results never reaches the patient         | Casalino et al., 2009            |
 | Staff spend about 13 hours a week on prior authorization   | AMA survey, 2024                 |
 | About 2 hours of the day, about 20 minutes with the doctor | Ray et al., JAMA Intern Med 2015 |
 | Most older patients miss at least one medication change    | J Gen Intern Med, 2012           |
