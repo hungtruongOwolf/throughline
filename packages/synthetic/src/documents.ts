@@ -40,7 +40,9 @@ function usDate(iso: string): string {
  * member id suffix is smudged, a correct extraction leaves it out and asks.
  */
 export function referralAsWritten(spec: ReferralSpec) {
-  const visible = spec.smudged ? spec.memberId.slice(0, spec.memberId.lastIndexOf("-") + 1) : spec.memberId;
+  const visible = spec.smudged
+    ? spec.memberId.slice(0, spec.memberId.lastIndexOf("-") + 1)
+    : spec.memberId;
   return {
     sent_at: faxTime(spec.receivedAt),
     from: spec.practice.name,
@@ -191,7 +193,9 @@ export async function generateReferralDocuments(
   const image = await pdf.embedPng(referralFaxPng);
   page.drawImage(image, { x: 0, y: 0, width: 612, height: 792 });
   const referralFaxPdf = Buffer.from(await pdf.save({ useObjectStreams: false }));
-  const insuranceCardPng = await sharp(render(cardSvg(spec), 1012)).png().toBuffer();
+  const insuranceCardPng = await sharp(render(cardSvg(spec), 1012))
+    .png()
+    .toBuffer();
   return { referralFaxPng, referralFaxPdf, insuranceCardPng };
 }
 

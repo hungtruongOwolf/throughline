@@ -1,170 +1,209 @@
-import Link from "next/link";
-import { SiteHeader } from "../components/SiteHeader";
+"use client";
 
-const STAGES = [
-  {
-    title: "Referral",
-    when: "Nov 10",
-    text: "A faxed referral is read, the missing member ID is asked for, insurance is checked.",
-  },
-  {
-    title: "Insurance",
-    when: "Nov 10–12",
-    text: "The prior authorization is drafted and waits for a coordinator before it goes to the payer.",
-  },
-  {
-    title: "Scheduled",
-    when: "Nov 12",
-    text: "Five services fit into two trips, mornings only, with prep and reminders by text.",
-  },
-  {
-    title: "Visit day",
-    when: "Nov 17",
-    text: "A live plan on her phone, step-free directions, and a new order when a CT scanner goes down.",
-  },
-  {
-    title: "After the visit",
-    when: "Nov 17 on",
-    text: "A plain-language summary, a teach-back check, follow-ups booked, results acknowledged.",
-  },
-];
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { agentProfile, STAFF, type StaffRole } from "@throughline/shared";
+import { AgentGlyph, Avatar, hhmm, StageRail } from "../components/ui";
+import { fetchHospital, fetchReferrals } from "../lib/platform";
+import { useLive, useUser } from "../lib/session";
 
-const ROLES = [
-  {
-    href: "/story?step=arrive",
-    who: "For patients",
-    what: "What's next, where it is, how long it takes, and how to get there without stairs.",
-    cta: "See Maria's page on her visit day",
-  },
-  {
-    href: "/story?step=fax",
-    who: "For intake coordinators",
-    what: "Only the referrals that need a person: a missing field, an authorization to approve.",
-    cta: "See the coordinator's screen",
-  },
-  {
-    href: "/story?step=outage",
-    who: "For station staff",
-    what: "Who is arriving, who is waiting, who needs a wheelchair, at the CT desk.",
-    cta: "See the CT desk",
-  },
-  {
-    href: "/story?step=decide",
-    who: "For operations",
-    what: "Where the day is running late, and a tested fix to approve or reject.",
-    cta: "See the manager's decision",
-  },
-];
+const ROLE_WORD: Record<StaffRole, string> = {
+  coordinator: "waiting",
+  nurse: "waiting",
+  clinician: "waiting",
+  ops: "waiting",
+};
 
-export default function Home() {
+function PatientEntry() {
+  const [open, setOpen] = useState(false);
+  const [code, setCode] = useState("");
+  const [missing, setMissing] = useState(false);
+  const router = useRouter();
+  const go = async () => {
+    const want = code.trim().toLowerCase();
+    const rows = await fetchReferrals().catch(() => []);
+    const hit = rows.find((r) => r.mrn === want || r.id === want);
+    if (hit) router.push(`/p/${hit.id}`);
+    else setMissing(true);
+  };
+  if (!open) {
+    return (
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className="mt-3 w-full rounded-[8px] border border-dashed border-rule px-4 py-3 text-left text-[14px] text-ink-soft hover:bg-canvas"
+      >
+        I&apos;m a patient
+      </button>
+    );
+  }
   return (
-    <>
-      <SiteHeader current="/" />
-      <main className="mx-auto max-w-6xl px-6">
-        <section className="grid gap-10 py-14 md:grid-cols-[1.2fr_1fr] md:items-end">
-          <div>
-            <h1 className="font-display text-[56px] leading-[1.02] font-bold md:text-[72px]">
-              One thread through the whole hospital visit.
-            </h1>
-            <p className="mt-6 max-w-[60ch] text-[19px] text-ink-soft">
-              Throughline guides a cancer patient from the referral fax to the follow-up, and helps
-              the hospital keep the day on track. AI agents do the paperwork and the planning; a
-              person approves anything that matters.
-            </p>
-            <div className="mt-8 flex flex-wrap items-center gap-4">
-              <Link
-                href="/story"
-                className="inline-flex min-h-12 items-center rounded-[12px] bg-line px-6 text-[17px] font-bold text-white"
-              >
-                Follow Maria&apos;s journey
-              </Link>
-              <span className="text-[15px] text-ink-soft">12 steps, about 3 minutes.</span>
+    <form
+      className="mt-3 rounded-[8px] border border-rule bg-panel p-4"
+      onSubmit={(e) => {
+        e.preventDefault();
+        void go();
+      }}
+    >
+      <label className="block text-[14px] font-bold" htmlFor="visit-code">
+        Your visit code
+      </label>
+      <p className="text-[13px] text-ink-soft">It is in the text message with your plan.</p>
+      <div className="mt-2 flex gap-2">
+        <input
+          id="visit-code"
+          value={code}
+          onChange={(e) => {
+            setCode(e.target.value);
+            setMissing(false);
+          }}
+          inputMode="numeric"
+          className="h-10 min-w-0 flex-1 rounded-[6px] border border-rule px-3 text-[15px] tabular-nums"
+        />
+        <button
+          type="submit"
+          className="h-10 rounded-[6px] bg-agent px-4 text-[14px] font-bold text-white"
+        >
+          Open my visit
+        </button>
+      </div>
+      <button
+        type="button"
+        onClick={() => setCode("000001")}
+        className="mt-2 text-[13px] text-agent underline"
+      >
+        Use an example code
+      </button>
+      {missing && <p className="mt-2 text-[13px] text-urgent">We could not find that code.</p>}
+    </form>
+  );
+}
+
+/**
+ * The front door (section 4.1): the hospital as it is right now on the left, and who you are
+ * on the right. Staff sign in by picking themselves; patients use their visit code.
+ */
+export default function SignIn() {
+  const { signIn } = useUser();
+  const router = useRouter();
+  const { data } = useLive(fetchHospital);
+  const counts = Object.fromEntries((data?.stages ?? []).map((s) => [s.stage, s.count]));
+  return (
+    <div className="min-h-dvh bg-canvas text-ink">
+      <div className="mx-auto grid max-w-[1320px] gap-10 px-6 py-10 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:py-16">
+        <section
+          aria-label="The hospital right now"
+          className="min-w-0 rounded-[8px] border border-rule bg-panel p-6"
+        >
+          <div className="flex items-baseline justify-between">
+            <h2 className="font-figure text-[20px] font-semibold">Referrals in progress</h2>
+            <span className="font-figure text-[14px] text-ink-soft tabular-nums">
+              {data?.now ? `Tue, Nov 17, ${hhmm(data.now)}` : ""}
+            </span>
+          </div>
+          <div className="mt-6 overflow-x-auto">
+            <div className="min-w-[560px]">
+              <StageRail counts={counts} size="hospital" />
             </div>
           </div>
-          <aside className="border-l-[6px] border-line pl-6 text-[15px] text-ink-soft">
-            <p className="font-display text-[28px] font-bold text-ink">Maria Diaz, 71</p>
-            <p className="mt-2">
-              Referred to medical oncology for labs, a CT scan, a new-patient visit, and an
-              infusion. Her husband can&apos;t come with her, and she will need a wheelchair.
-            </p>
-          </aside>
-        </section>
-
-        <section aria-labelledby="journey-heading" className="py-6">
-          <h2 id="journey-heading" className="font-display text-[28px] font-bold">
-            Her journey, end to end
-          </h2>
-          <ol className="relative mt-6 grid gap-6 md:grid-cols-5">
-            <span
-              aria-hidden
-              className="absolute top-[11px] right-0 left-0 hidden h-[6px] bg-line md:block"
-            />
-            {STAGES.map((s, i) => (
-              <li key={s.title} className="relative">
-                <span
-                  aria-hidden
-                  className="relative z-10 block h-7 w-7 border-[6px] border-line bg-paper"
-                />
-                <p className="mt-3 text-[13px] text-ink-soft">
-                  {i + 1}. {s.when}
-                </p>
-                <p className="font-display text-[24px] font-bold">{s.title}</p>
-                <p className="mt-1 text-[15px] text-ink-soft">{s.text}</p>
+          <h3 className="mt-8 text-[13px] font-bold text-ink-soft">What the agents just did</h3>
+          <ul className="mt-2 divide-y divide-rule border-y border-rule">
+            {(data?.feed ?? []).slice(0, 6).map((f) => (
+              <li key={f.run_id} className="row-in flex items-center gap-3 py-2.5 text-[14px]">
+                <span className="w-16 shrink-0 font-figure text-ink-soft tabular-nums">
+                  {hhmm(f.at)}
+                </span>
+                <AgentGlyph name={f.agent} />
+                <span className="min-w-0 flex-1 truncate">
+                  <span className="font-bold">{agentProfile(f.agent)?.label}</span> {f.summary}
+                  {f.patient ? `, ${f.patient}` : ""}
+                </span>
               </li>
             ))}
-          </ol>
-        </section>
-
-        <section aria-labelledby="roles-heading" className="py-12">
-          <h2 id="roles-heading" className="font-display text-[28px] font-bold">
-            See it as the people who use it
-          </h2>
-          <ul className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            {ROLES.map((r) => (
-              <li key={r.href}>
-                <Link
-                  href={r.href}
-                  className="flex h-full flex-col rounded-[12px] bg-white p-6 ring-1 ring-ink/10 hover:ring-line"
-                >
-                  <span className="font-display text-[24px] font-bold">{r.who}</span>
-                  <span className="mt-2 flex-1 text-[15px] text-ink-soft">{r.what}</span>
-                  <span className="mt-4 font-bold text-line">{r.cta}</span>
-                </Link>
-              </li>
-            ))}
+            {!data && (
+              <li className="py-2.5 text-[14px] text-ink-soft">Connecting to the hospital.</li>
+            )}
           </ul>
+          {data && (
+            <p className="mt-5 text-[15px]">
+              {data.in_building} people in the building today, {data.referrals_in_progress}{" "}
+              referrals in progress, {data.waiting_on_staff} waiting on staff.
+            </p>
+          )}
         </section>
 
-        <section
-          aria-labelledby="how-heading"
-          className="grid gap-8 border-t border-ink/10 py-12 md:grid-cols-3"
-        >
-          <h2 id="how-heading" className="sr-only">
-            How it works
-          </h2>
-          <div>
-            <p className="font-display text-[22px] font-bold">Agents with a human gate</p>
-            <p className="mt-2 text-[15px] text-ink-soft">
-              Each step is an agent with a narrow permission. Sending an authorization or changing
-              capacity waits for a person. Medical questions always go to a nurse.
-            </p>
-          </div>
-          <div>
-            <p className="font-display text-[22px] font-bold">A planning engine in Rust</p>
-            <p className="mt-2 text-[15px] text-ink-soft">
-              Scheduling, the visit-day route, walking times, queue waits, and the what-if
-              simulation run in a Rust engine, in the browser and on the server.
-            </p>
-          </div>
-          <div>
-            <p className="font-display text-[22px] font-bold">Built on Meta models</p>
-            <p className="mt-2 text-[15px] text-ink-soft">
-              Muse Spark reads faxes and signs and writes messages, SAM counts waiting rooms. Every
-              model step has a fallback that works without it.
-            </p>
-          </div>
+        <section aria-label="Sign in" className="min-w-0">
+          <p className="flex items-center gap-2">
+            <span aria-hidden className="block h-[6px] w-7 bg-agent" />
+            <span className="font-display text-[30px] font-bold">Throughline</span>
+          </p>
+          <p className="mt-1 text-[15px] text-ink-soft">Halden Medical Center</p>
+          <h1 className="mt-6 max-w-[30ch] text-[22px] leading-snug">
+            Referrals, visit days and follow-up, run by 13 agents and approved by your staff.
+          </h1>
+          <h2 className="mt-8 text-[13px] font-bold text-ink-soft">Sign in as</h2>
+          <ul className="mt-2 space-y-2">
+            {STAFF.map((s) => {
+              const waiting = data?.waiting_by_role[s.role];
+              return (
+                <li key={s.id}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      signIn(s.id);
+                      router.push(s.home);
+                    }}
+                    className="flex w-full items-center gap-3 rounded-[8px] border border-rule bg-panel px-4 py-3 text-left hover:border-agent"
+                  >
+                    <Avatar initials={s.initials} size={36} />
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-[15px] font-bold">{s.name}</span>
+                      <span className="block text-[13px] text-ink-soft">{s.title}</span>
+                    </span>
+                    {waiting !== undefined && (
+                      <span
+                        className={`rounded-full px-2 py-0.5 text-[13px] tabular-nums ${
+                          waiting > 0 ? "bg-staff-bg text-staff" : "text-ink-soft"
+                        }`}
+                      >
+                        {waiting} {ROLE_WORD[s.role]}
+                      </span>
+                    )}
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+          <PatientEntry />
         </section>
-      </main>
-    </>
+      </div>
+
+      <section className="border-t border-rule bg-panel">
+        <div className="mx-auto grid max-w-[1320px] gap-8 px-6 py-10 md:grid-cols-3">
+          <div>
+            <h2 className="font-figure text-[18px] font-semibold">Agents do the routine work</h2>
+            <p className="mt-2 text-[14px] text-ink-soft">
+              Reading faxes, checking coverage, drafting prior auths, booking every test in the
+              right order, guiding patients through the building, and closing the loop with the
+              referring doctor.
+            </p>
+          </div>
+          <div>
+            <h2 className="font-figure text-[18px] font-semibold">People approve what matters</h2>
+            <p className="mt-2 text-[14px] text-ink-soft">
+              Nothing goes to a payer, changes the floor, or reaches a patient as a summary without
+              a person. Every decision shows the agent&apos;s draft beside its source.
+            </p>
+          </div>
+          <div>
+            <h2 className="font-figure text-[18px] font-semibold">Patients get one plan</h2>
+            <p className="mt-2 text-[14px] text-ink-soft">
+              One page with the next step, how long the wait is, and the way there. Medical
+              questions always go to a nurse.
+            </p>
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }

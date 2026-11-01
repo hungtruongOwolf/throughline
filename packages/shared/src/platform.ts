@@ -2,6 +2,8 @@ import type { AgentName } from "./capabilities";
 import type { JourneyState } from "./journey/states";
 import type { Journey } from "./journey/types";
 import type { HumanReview } from "./ops";
+import type { DomainEvent } from "./events";
+import type { AgentRun, ModelCallRecord } from "./telemetry";
 
 /** How each agent is named and credited on screen (docs/PLATFORM-DESIGN.md section 5). */
 export interface AgentProfile {
@@ -269,4 +271,111 @@ const STAGE_OF: Record<JourneyState, Stage> = {
 
 export function stageOf(journey: Pick<Journey, "state">): Stage {
   return STAGE_OF[journey.state];
+}
+
+// ---- read models served by the runtime (apps/runtime/src/platform.ts) -------------------
+
+export type InboxKind = "handoff" | "approval" | "question" | "task";
+
+export interface InboxItem {
+  id: string;
+  kind: InboxKind;
+  /** What the person is asked to do, in plain words. */
+  title: string;
+  role: StaffRole;
+  agent: string;
+  capability: string;
+  reason: string;
+  journey_id?: string;
+  patient?: string;
+  station_id?: string;
+  opened_at: string;
+  status: "pending" | "resolved" | "rejected";
+  resolved_by?: string;
+  resolved_at?: string;
+  note?: string;
+  /** For questions: which field and the agent's question. */
+  question?: { field: string; text: string };
+  review?: HumanReview;
+}
+
+export interface JourneyRow {
+  id: string;
+  patient: string;
+  mrn: string;
+  language: string;
+  mobility: string;
+  referring_provider: string;
+  service: string;
+  stage: Stage;
+  state: string;
+  received_at: string;
+  updated_at: string;
+  waiting_on: { kind: "agent" | "staff" | "patient" | "payer" | "none"; who: string };
+  next_step: string;
+  flags: string[];
+}
+
+export interface AgentStats {
+  name: string;
+  label: string;
+  glyph: string;
+  job: string;
+  runs_on: string;
+  uses_model: boolean;
+  guardrails: string[];
+  group: string;
+  runs: number;
+  finished_alone: number;
+  waited_for_staff: number;
+  handed_to_nurse: number;
+  used_template: number;
+  staff_changed: number | null;
+  staff_decided: number;
+  median_ms: number | null;
+  waiting_now: number;
+  last_run_at?: string;
+}
+
+export interface RunView extends AgentRun {
+  label: string;
+  patient?: string;
+  model_calls: ModelCallRecord[];
+  trigger_event?: DomainEvent;
+  emitted_events: DomainEvent[];
+}
+
+export interface FeedEntry {
+  run_id: string;
+  agent: string;
+  label: string;
+  glyph: string;
+  at: string;
+  patient?: string;
+  journey_id?: string;
+  summary: string;
+  outcome: AgentRun["outcome"];
+}
+
+export type TimelineEntry =
+  | {
+      kind: "agent";
+      at: string;
+      run: FeedEntry & { used_template: boolean; model?: string; latency_ms?: number };
+    }
+  | { kind: "staff"; at: string; who: string; text: string; note?: string }
+  | { kind: "patient"; at: string; text: string; channel: string }
+  | { kind: "outside"; at: string; who: string; text: string }
+  | { kind: "waiting"; at: string; role: StaffRole; text: string; item_id: string };
+
+export interface HospitalOverview {
+  /** The hospital clock. */
+  now: string;
+  stages: { stage: Stage; count: number }[];
+  referrals_in_progress: number;
+  in_building: number;
+  waiting_on_staff: number;
+  waiting_by_role: Record<StaffRole, number>;
+  runs_today: number;
+  feed: FeedEntry[];
 }

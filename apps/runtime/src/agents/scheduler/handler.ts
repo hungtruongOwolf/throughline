@@ -205,7 +205,9 @@ function plan(ctx: HandlerContext, deps: SchedulerDeps): HandlerResult {
     // No slot fits the dependencies and the patient's times: a coordinator books by hand.
     return {
       summary: `no schedule found: ${e instanceof Error ? e.message : String(e)}`,
-      tasks: [`Book ${journey.patient.display_name} by hand: no open slot fits the orders and their times`],
+      tasks: [
+        `Book ${journey.patient.display_name} by hand: no open slot fits the orders and their times`,
+      ],
       next_events: [],
     };
   }

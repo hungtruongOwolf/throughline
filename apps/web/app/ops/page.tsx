@@ -1,7 +1,6 @@
-import { CommandCenter } from "./command-center";
+import { redirect } from "next/navigation";
 
-export const metadata = { title: "Command center · Halden Medical Center" };
-
+/** The command center lives in the staff workspace now. */
 export default function OpsPage() {
-  return <CommandCenter />;
+  redirect("/today");
 }

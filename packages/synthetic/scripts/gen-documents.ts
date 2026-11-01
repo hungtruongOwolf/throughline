@@ -29,4 +29,6 @@ for (const spec of [...REFERRALS, ...FAX_LINE]) {
     )}\n`,
   );
 }
-console.log(`wrote documents for ${REFERRALS.length + FAX_LINE.length} referrals to fixtures/documents/`);
+console.log(
+  `wrote documents for ${REFERRALS.length + FAX_LINE.length} referrals to fixtures/documents/`,
+);

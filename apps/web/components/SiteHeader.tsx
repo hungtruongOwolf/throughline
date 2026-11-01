@@ -1,9 +1,6 @@
 import Link from "next/link";
 
-export const NAV = [
-  { href: "/story", label: "Maria's journey" },
-  { href: "/map", label: "Find your way" },
-] as const;
+export const NAV = [{ href: "/map", label: "Find your way" }] as const;
 
 /** One header for every staff and judge surface, so people always know where they are. */
 export function SiteHeader({ current }: { current?: (typeof NAV)[number]["href"] | "/" }) {

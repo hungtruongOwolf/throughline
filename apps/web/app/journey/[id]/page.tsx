@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 
-/** The old Journey Control page; Maria's journey is now one story. */
-export default function JourneyPage() {
-  redirect("/story");
+/** Old Journey Control links open the patient's record. */
+export default async function JourneyPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  redirect(`/patients/${id}`);
 }

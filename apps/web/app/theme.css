@@ -18,8 +18,21 @@
   --color-held-bg: #fdf1dc;
   --color-board-text: #f4f6f2;
 
+  /* Staff platform (docs/PLATFORM-DESIGN.md section 7): color only where it means something. */
+  --color-canvas: #f4f6f5;
+  --color-panel: #ffffff;
+  --color-rule: #d9dfdc;
+  --color-agent: #0f766e;
+  --color-agent-tint: #e3f1ef;
+  --color-staff: #9a4507;
+  --color-staff-bg: #fdf1dc;
+  --color-urgent: #b42318;
+  --color-urgent-bg: #fdecea;
+  --color-slate: #64748b;
+
   --font-text: var(--font-atkinson), system-ui, sans-serif;
   --font-display: var(--font-barlow), system-ui, sans-serif;
+  --font-figure: var(--font-barlow-semi), var(--font-barlow), system-ui, sans-serif;
 }
 
 html {
@@ -63,4 +76,29 @@ html {
 }
 .here-pulse {
   animation: here-pulse 2s ease-in-out infinite;
+}
+
+/* An agent at work: a slow shimmer on its row or node (the one ambient motion). */
+@keyframes agent-shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: 200px 0;
+  }
+}
+.agent-working {
+  background-image: linear-gradient(90deg, transparent, var(--color-agent-tint), transparent);
+  background-size: 200px 100%;
+  background-repeat: no-repeat;
+  animation: agent-shimmer 1.6s linear infinite;
+}
+@keyframes row-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+.row-in {
+  animation: row-in 0.25s ease-out;
 }

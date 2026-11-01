@@ -7,14 +7,14 @@ const SCREENS = fileURLToPath(new URL("../../../docs/screens/", import.meta.url)
 test.describe("command center (D2-8)", () => {
   test.use({ viewport: { width: 1536, height: 960 } });
 
-  test.beforeEach(async ({ request }) => {
-    expect(
-      (await request.post("http://localhost:4000/api/demo/visit-day?beat=ct_outage")).ok(),
-    ).toBe(true);
+  test.beforeEach(async ({ request, context }) => {
+    // The hospital as it opens: CT 1 down, the change held for the operations lead.
+    expect((await request.post("http://localhost:4000/api/admin/restore")).ok()).toBe(true);
+    await context.addInitScript(() => window.localStorage.setItem("tl_user", "sam"));
   });
 
   test("shows the CT outage proposal on the map view, held for a manager", async ({ page }) => {
-    await page.goto("/ops");
+    await page.goto("/today");
     const proposal = page.getByRole("article", { name: /CT 2/ });
     await expect(proposal).toBeVisible();
     await expect(proposal.getByText("Held for a manager")).toBeVisible();
@@ -37,9 +37,9 @@ test.describe("command center (D2-8)", () => {
     await phone.goto("/p/maria-001");
     await expect(phone.getByRole("heading", { name: "CT 1" })).toBeVisible();
 
-    await page.goto("/ops");
+    await page.goto("/today");
     await page.getByRole("button", { name: "Approve" }).click();
-    await expect(page.getByText("Approved by Operations manager")).toBeVisible();
+    await expect(page.getByText("Approved by Sam Whitfield")).toBeVisible();
 
     // No reload: the phone hears ItineraryReplanned on the event stream.
     await expect(phone.getByRole("heading", { name: "CT 2" })).toBeVisible();
@@ -47,7 +47,7 @@ test.describe("command center (D2-8)", () => {
   });
 
   test("the what-if slider re-runs the simulation in the browser", async ({ page }) => {
-    await page.goto("/ops");
+    await page.goto("/today");
     const status = page.getByRole("status").filter({ hasText: "Predicted peak wait" });
     await expect(status).toBeVisible();
     const before = await status.textContent();

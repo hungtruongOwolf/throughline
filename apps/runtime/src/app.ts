@@ -19,6 +19,7 @@ import { transcribe } from "./models/voice";
 import type { World } from "./sim/pre-visit";
 import { agentRuns, agentStats, inbox, journeyRows, overview, runView, timeline } from "./platform";
 import { faxLine, populate, receiveReferral } from "./demo/population";
+import { referralSpec } from "@throughline/synthetic";
 import { loadEngine } from "@throughline/engine/node";
 import { VisitDayScenario } from "./sim/scenario";
 import type { ModelCache } from "./models/cache";
@@ -181,6 +182,17 @@ export function createApp(ctx?: AppContext) {
       })),
     ),
   );
+  /** The insurance card on file for a referral (what the coordinator reads the member ID from). */
+  app.get("/api/journeys/:id/insurance-card", (c) => {
+    const journey = runtime.journey(c.req.param("id"));
+    const card = journey?.referral.documents.find((d) => d.kind === "insurance_card");
+    const specId = card?.uri.match(/\/api\/documents\/(.+)-insurance-card\.png$/)?.[1];
+    const spec =
+      specId === "maria" ? referralSpec("maria-001") : specId ? referralSpec(specId) : undefined;
+    if (!card || !spec) return c.json({ error: "not found" }, 404);
+    return c.json({ image: card.uri, member_id: spec.memberId, payer: "Lonestar Health Plan" });
+  });
+
   /** Receives a fax from the fax line: a new journey opens and the agents start on it. */
   app.post("/api/referrals", async (c) => {
     const body = z.object({ fax: z.string() }).safeParse(await c.req.json().catch(() => ({})));
@@ -196,7 +208,10 @@ export function createApp(ctx?: AppContext) {
 
   const Role = z.enum(["coordinator", "nurse", "clinician", "ops"]).optional();
   app.get("/api/overview", (c) =>
-    c.json(overview(store, buildOverview(store, runtime, clock, background).in_house)),
+    c.json({
+      ...overview(store, buildOverview(store, runtime, clock, background).in_house),
+      now: clock.now(),
+    }),
   );
   app.get("/api/inbox", (c) => {
     const role = Role.safeParse(c.req.query("role") || undefined);

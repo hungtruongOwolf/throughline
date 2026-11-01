@@ -65,7 +65,7 @@ export async function receiveReferral(
   const base = createJourney({
     id: journeyId,
     patient: spec.patient,
-    referring_provider: spec.practice.name,
+    referring_provider: spec.practice.provider,
     service_requested: "Referral received by fax",
     now: ctx.clock.now(),
   });

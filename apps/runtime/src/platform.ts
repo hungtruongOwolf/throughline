@@ -8,10 +8,17 @@ import {
   type DomainEvent,
   type HumanReview,
   type Journey,
-  type ModelCallRecord,
   type StaffRole,
+  type InboxItem,
+  type InboxKind,
+  type JourneyRow,
+  type AgentStats,
+  type RunView,
+  type FeedEntry,
+  type TimelineEntry,
 } from "@throughline/shared";
 import { campus } from "@throughline/hospital";
+import { describeRun } from "./describe";
 import type { RuntimeStore } from "./bus/store";
 
 /**
@@ -39,30 +46,6 @@ function openedAt(store: RuntimeStore): Map<string, string> {
 }
 
 // ---- inbox --------------------------------------------------------------------------------
-
-export type InboxKind = "handoff" | "approval" | "question" | "task";
-
-export interface InboxItem {
-  id: string;
-  kind: InboxKind;
-  /** What the person is asked to do, in plain words. */
-  title: string;
-  role: StaffRole;
-  agent: string;
-  capability: string;
-  reason: string;
-  journey_id?: string;
-  patient?: string;
-  station_id?: string;
-  opened_at: string;
-  status: "pending" | "resolved" | "rejected";
-  resolved_by?: string;
-  resolved_at?: string;
-  note?: string;
-  /** For questions: which field and the agent's question. */
-  question?: { field: string; text: string };
-  review?: HumanReview;
-}
 
 function titleFor(r: HumanReview): string {
   if (r.kind === "handoff") return "Nurse handoff";
@@ -139,23 +122,6 @@ export function inbox(
 }
 
 // ---- referral rows ------------------------------------------------------------------------
-
-export interface JourneyRow {
-  id: string;
-  patient: string;
-  mrn: string;
-  language: string;
-  mobility: string;
-  referring_provider: string;
-  service: string;
-  stage: (typeof STAGES)[number];
-  state: string;
-  received_at: string;
-  updated_at: string;
-  waiting_on: { kind: "agent" | "staff" | "patient" | "payer" | "none"; who: string };
-  next_step: string;
-  flags: string[];
-}
 
 function firstVisit(j: Journey): string | undefined {
   return j.appointments
@@ -269,27 +235,6 @@ export function journeyRows(store: RuntimeStore): JourneyRow[] {
 
 // ---- agents -------------------------------------------------------------------------------
 
-export interface AgentStats {
-  name: string;
-  label: string;
-  glyph: string;
-  job: string;
-  runs_on: string;
-  uses_model: boolean;
-  guardrails: string[];
-  group: string;
-  runs: number;
-  finished_alone: number;
-  waited_for_staff: number;
-  handed_to_nurse: number;
-  used_template: number;
-  staff_changed: number | null;
-  staff_decided: number;
-  median_ms: number | null;
-  waiting_now: number;
-  last_run_at?: string;
-}
-
 export function agentStats(store: RuntimeStore): AgentStats[] {
   const runs = store.runs();
   const reviews = store.reviews();
@@ -321,14 +266,6 @@ export function agentStats(store: RuntimeStore): AgentStats[] {
   });
 }
 
-export interface RunView extends AgentRun {
-  label: string;
-  patient?: string;
-  model_calls: ModelCallRecord[];
-  trigger_event?: DomainEvent;
-  emitted_events: DomainEvent[];
-}
-
 export function runView(store: RuntimeStore, run: AgentRun): RunView {
   const all = new Map(store.events().map((e) => [e.event.id, e.event]));
   const trigger = all.get(run.trigger.event_id);
@@ -352,18 +289,6 @@ export function agentRuns(store: RuntimeStore, agent: string, limit = 40): RunVi
 
 // ---- overview -----------------------------------------------------------------------------
 
-export interface FeedEntry {
-  run_id: string;
-  agent: string;
-  label: string;
-  glyph: string;
-  at: string;
-  patient?: string;
-  journey_id?: string;
-  summary: string;
-  outcome: AgentRun["outcome"];
-}
-
 export function feedEntry(store: RuntimeStore, r: AgentRun): FeedEntry {
   const p = agentProfile(r.agent);
   return {
@@ -374,7 +299,7 @@ export function feedEntry(store: RuntimeStore, r: AgentRun): FeedEntry {
     at: r.at,
     ...(nameOf(store, r.journey_id) ? { patient: nameOf(store, r.journey_id) } : {}),
     ...(r.journey_id ? { journey_id: r.journey_id } : {}),
-    summary: r.summary,
+    summary: describeRun(r) ?? r.summary,
     outcome: r.outcome,
   };
 }
@@ -387,7 +312,7 @@ export function overview(store: RuntimeStore, inBuilding: number) {
   const runs = store.runs();
   // Sensing runs every tick on every camera; the feed shows work done for patients and stations.
   const feed = runs
-    .filter((r) => r.agent !== "sensing" || r.outcome !== "applied")
+    .filter((r) => describeRun(r) !== undefined)
     .slice(-8)
     .reverse()
     .map((r) => feedEntry(store, r));
@@ -410,24 +335,13 @@ export function overview(store: RuntimeStore, inBuilding: number) {
 
 // ---- timeline -----------------------------------------------------------------------------
 
-export type TimelineEntry =
-  | {
-      kind: "agent";
-      at: string;
-      run: FeedEntry & { used_template: boolean; model?: string; latency_ms?: number };
-    }
-  | { kind: "staff"; at: string; who: string; text: string; note?: string }
-  | { kind: "patient"; at: string; text: string; channel: string }
-  | { kind: "outside"; at: string; who: string; text: string }
-  | { kind: "waiting"; at: string; role: StaffRole; text: string; item_id: string };
-
 export function timeline(store: RuntimeStore, journeyId: string): TimelineEntry[] {
   const entries: { seq: number; entry: TimelineEntry }[] = [];
   const runs = store.runs({ journeyId });
   const events = store.events({ journeyId });
   const seqOf = new Map(events.map((e) => [e.event.id, e.seq]));
   for (const r of runs) {
-    if (r.agent === "sensing") continue;
+    if (describeRun(r) === undefined) continue;
     const call = r.model_call_ids[0] ? store.modelCall(r.model_call_ids[0]) : undefined;
     entries.push({
       seq: seqOf.get(r.trigger.event_id) ?? 0,
@@ -518,7 +432,9 @@ export function timeline(store: RuntimeStore, journeyId: string): TimelineEntry[
       });
     }
   }
-  return entries.sort((a, b) => a.seq - b.seq).map((e) => e.entry);
+  // In time order; same-minute entries keep the order they happened in.
+  const key = (e: { seq: number; entry: TimelineEntry }) => e.entry.at || "9999";
+  return entries.sort((a, b) => key(a).localeCompare(key(b)) || a.seq - b.seq).map((e) => e.entry);
 }
 
 /** Places a staff decision after the last event at or before its time. */

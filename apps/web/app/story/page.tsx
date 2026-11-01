@@ -1,7 +1,6 @@
-import { Story } from "./story";
+import { redirect } from "next/navigation";
 
-export const metadata = { title: "Maria's journey, Throughline" };
-
+/** The old guided story: the product now opens on the whole hospital. */
 export default function StoryPage() {
-  return <Story />;
+  redirect("/");
 }

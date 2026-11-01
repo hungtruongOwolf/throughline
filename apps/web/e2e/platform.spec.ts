@@ -1,0 +1,99 @@
+import { fileURLToPath } from "node:url";
+import AxeBuilder from "@axe-core/playwright";
+import { expect, test, type Page } from "@playwright/test";
+
+const SCREENS = fileURLToPath(new URL("../../../docs/screens/", import.meta.url));
+const RUNTIME = "http://localhost:4000";
+
+async function noSeriousAxe(page: Page) {
+  // Rows fade in for 250 ms; check colors once they have settled.
+  await page.waitForTimeout(400);
+  const axe = await new AxeBuilder({ page }).analyze();
+  expect(axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical")).toEqual(
+    [],
+  );
+}
+
+test.describe("the staff platform", () => {
+  test.use({ viewport: { width: 1440, height: 900 } });
+
+  test.beforeEach(async ({ request }) => {
+    // Every test starts from the hospital as it opens on Nov 17 at 9:53 am.
+    expect((await request.post(`${RUNTIME}/api/admin/restore`)).ok()).toBe(true);
+  });
+
+  test("the front door shows the hospital and signs a coordinator into their inbox", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    await expect(page.getByRole("heading", { name: "Referrals in progress" })).toBeVisible();
+    await expect(page.getByText(/people in the building today/)).toBeVisible();
+    await page.evaluate(() => document.fonts.ready);
+    await page.screenshot({ path: `${SCREENS}platform-home.png` });
+    await noSeriousAxe(page);
+
+    await page.getByRole("button", { name: /Jordan Park/ }).click();
+    await expect(page).toHaveURL(/\/inbox/);
+    await expect(page.getByRole("heading", { name: "Approve insurance submission" })).toBeVisible();
+    await expect(page.getByText("Draft: prior authorization request")).toBeVisible();
+    await page.screenshot({ path: `${SCREENS}platform-inbox.png` });
+    await noSeriousAxe(page);
+
+    await page.getByRole("button", { name: "Approve and submit" }).click();
+    await expect(page.getByText("Submitted to Lonestar Health Plan")).toBeVisible();
+  });
+
+  test("a fax from the fax line becomes a record the agents work on", async ({ page }) => {
+    await page.addInitScript(() => window.localStorage.setItem("tl_user", "jordan"));
+    await page.goto("/referrals");
+    await page.getByRole("button", { name: "New referral" }).click();
+    await expect(page.getByText(/Fax line, 3 waiting/)).toBeVisible();
+    await page.getByRole("button", { name: "Receive referral" }).click();
+    await expect(page).toHaveURL(/\/patients\/ref-v1/);
+    await expect(page.getByText("read the faxed referral")).toBeVisible();
+    await expect(page.getByText("drafted the prior authorization request")).toBeVisible();
+    await expect(page.getByText(/Waiting on Jordan Park/).first()).toBeVisible();
+    await page.screenshot({ path: `${SCREENS}platform-record.png` });
+    await noSeriousAxe(page);
+  });
+
+  test("an intake question is answered from the insurance card", async ({ page }) => {
+    await page.addInitScript(() => window.localStorage.setItem("tl_user", "jordan"));
+    await page.goto("/inbox");
+    await page
+      .getByRole("button", { name: /Answer an intake question/ })
+      .first()
+      .click();
+    await page.getByRole("button", { name: "Fill from insurance card" }).click();
+    await expect(page.getByLabel("Member ID")).toHaveValue(/^LHP-\d{6}-0\d$/);
+    await page.getByRole("button", { name: "Send answer" }).click();
+    await expect(page.getByText(/Answer sent/)).toBeVisible();
+  });
+
+  test("the nurse closes a handoff with the protocol reply", async ({ page }) => {
+    await page.addInitScript(() => window.localStorage.setItem("tl_user", "renee"));
+    await page.goto("/inbox");
+    await expect(page.getByRole("heading", { name: "Nurse handoff" })).toBeVisible();
+    await page.getByRole("button", { name: "Insert protocol reply" }).click();
+    await page.getByRole("button", { name: "Send as nurse" }).click();
+    await expect(page.getByText("Sent. The handoff is closed.")).toBeVisible();
+  });
+
+  test("the agent roster shows all 13 agents, their numbers, and the open-weights brain", async ({
+    page,
+  }) => {
+    await page.addInitScript(() => window.localStorage.setItem("tl_user", "sam"));
+    await page.goto("/agents");
+    await expect(page.getByText(/13 agents ran/)).toBeVisible();
+    await expect(page.locator("tbody tr[tabindex]")).toHaveCount(13);
+    await page.getByRole("row", { name: /Ops planner/ }).click();
+    await expect(
+      page
+        .getByRole("dialog")
+        .getByText(/Muse Spark Open/)
+        .first(),
+    ).toBeVisible();
+    await page.screenshot({ path: `${SCREENS}platform-agents.png` });
+    await noSeriousAxe(page);
+  });
+});

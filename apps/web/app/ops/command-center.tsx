@@ -8,7 +8,7 @@ import { IsoMap, type MapRoute } from "../../components/IsoMap";
 import { Proposal } from "../../components/Proposal";
 import { WaitCurve } from "../../components/WaitCurve";
 import { clockTime } from "../../lib/format";
-import { clockCommand, fetchOverview, resolveReview, subscribeAll } from "../../lib/runtime";
+import { fetchOverview, resolveReview, subscribeAll } from "../../lib/runtime";
 import { stationName } from "../../lib/stations";
 
 const MANAGER = "Operations manager";
@@ -42,7 +42,10 @@ function waitSeries(engine: Engine, station: StationId, now: string, extra: numb
  * Command center (spec 9.3): the isometric campus is the hero; journeys on the left,
  * proposals on the right, the day strip with the clock and the what-if slider at the bottom.
  */
-export function CommandCenter() {
+export function CommandCenter({
+  by = MANAGER,
+  onApproved,
+}: { by?: string; onApproved?: () => void } = {}) {
   const [overview, setOverview] = useState<OpsOverview | undefined>();
   const [offline, setOffline] = useState(false);
   const [selectedJourney, setSelectedJourney] = useState<string | undefined>();
@@ -111,7 +114,8 @@ export function CommandCenter() {
 
   const decide = (reviewId: string, decision: "approved" | "rejected") => {
     setBusy(true);
-    void resolveReview(reviewId, decision, MANAGER).finally(() => {
+    if (decision === "approved") onApproved?.();
+    void resolveReview(reviewId, decision, by).finally(() => {
       setBusy(false);
       refresh();
     });
@@ -124,34 +128,12 @@ export function CommandCenter() {
   }
 
   return (
-    <div className="grid h-dvh grid-cols-[240px_1fr_360px] grid-rows-[64px_1fr_190px] bg-paper text-ink">
+    <div className="grid h-full min-h-[760px] grid-cols-[240px_1fr_360px] grid-rows-[56px_1fr_190px] bg-canvas text-ink">
       <header className="col-span-3 flex items-center justify-between gap-6 px-6">
-        <div className="flex items-baseline gap-6">
-          <h1 className="font-bold">{t("en", "hospital.name")}</h1>
-          <span className="font-display text-[22px] font-semibold tabular-nums">
-            {dateLabel(now)}, {clockTime(now)}
-          </span>
-        </div>
-        <div className="flex items-center gap-2" role="group" aria-label={t("en", "ops.speed")}>
-          {([1, 10, 60] as const).map((speed) => (
-            <button
-              key={speed}
-              type="button"
-              aria-pressed={overview.running && overview.speed === speed}
-              onClick={() => void clockCommand({ action: "start", speed }).then(refresh)}
-              className={`min-h-12 min-w-12 rounded-[12px] px-2 font-display text-[18px] font-semibold ${overview.running && overview.speed === speed ? "bg-ink text-paper" : ""}`}
-            >
-              {speed}x
-            </button>
-          ))}
-          <button
-            type="button"
-            onClick={() => void clockCommand({ action: "stop" }).then(refresh)}
-            className="min-h-12 rounded-[12px] px-3 text-[15px] font-bold"
-          >
-            {t("en", "ops.pause")}
-          </button>
-        </div>
+        <h1 className="font-figure text-[22px] font-semibold">Today on the floor</h1>
+        <span className="font-figure text-[15px] text-ink-soft tabular-nums">
+          {dateLabel(now)}, {clockTime(now)}
+        </span>
       </header>
 
       <nav aria-label={t("en", "ops.journeys_label")} className="overflow-y-auto px-6 pt-2">
@@ -172,7 +154,7 @@ export function CommandCenter() {
                   {j.initials} <span className="text-[16px] text-ink-soft">{j.ticket}</span>
                 </span>
                 <span className="text-[13px]">
-                  {j.current ?? ""},{" "}
+                  {j.current ? `${j.current}, ` : ""}
                   {j.minutes_behind > 0
                     ? t("en", "ops.minutes_behind", { minutes: j.minutes_behind })
                     : t("en", "ops.on_plan")}
