@@ -12,7 +12,10 @@ await context.addInitScript(() => {
 });
 const page = await context.newPage();
 for (const path of pages) {
-  await page.goto(`${process.env.BASE ?? "http://localhost:3000"}${path}`, { waitUntil: "networkidle", timeout: 120_000 });
+  await page.goto(`${process.env.BASE ?? "http://localhost:3000"}${path}`, {
+    waitUntil: "networkidle",
+    timeout: 120_000,
+  });
   await page.waitForTimeout(2500);
   const name = path === "/" ? "home" : path.replaceAll("/", "_").slice(1);
   await page.screenshot({ path: `${out}/${name}.png`, fullPage: false });

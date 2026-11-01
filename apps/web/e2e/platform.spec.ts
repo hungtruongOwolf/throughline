@@ -96,4 +96,23 @@ test.describe("the staff platform", () => {
     await page.screenshot({ path: `${SCREENS}platform-agents.png` });
     await noSeriousAxe(page);
   });
+
+  test("a lost patient sends a photo of a sign and gets the way from there", async ({
+    page,
+    request,
+  }) => {
+    // Sam approves the CT 2 change, so Maria has to walk to CT 2.
+    const items = (await (await request.get(`${RUNTIME}/api/inbox?role=ops`)).json()) as {
+      id: string;
+    }[];
+    await request.post(`${RUNTIME}/api/reviews/${items[0]?.id}/resolve`, {
+      data: { decision: "approved", by: "Sam Whitfield" },
+    });
+    await page.goto("/p/maria-001");
+    await expect(page.getByRole("heading", { name: /Lost\? Send a photo/ })).toBeVisible();
+    await page.getByRole("button", { name: /Photo of the Café sign/ }).click();
+    await expect(page.getByText(/Found you/)).toBeVisible();
+    await expect(page.getByText(/Directions to CT 2/).first()).toBeVisible();
+    await page.screenshot({ path: `${SCREENS}patient-sign-photo.png`, fullPage: true });
+  });
 });

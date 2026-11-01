@@ -319,6 +319,18 @@ export function createApp(ctx?: AppContext) {
     return located ? c.json(located) : c.json({ error: "sign not readable" }, 422);
   });
 
+  /** The committed sign photos (examples for the patient app's "Lost?" photo). */
+  app.get("/api/signs/:file", async (c) => {
+    const file = c.req.param("file");
+    if (!/^\d{2}\.webp$/.test(file)) return c.json({ error: "not found" }, 404);
+    try {
+      const bytes = await readFile(fileURLToPath(new URL(file, SIGNS_DIR)));
+      return c.body(new Uint8Array(bytes), 200, { "content-type": "image/webp" });
+    } catch {
+      return c.json({ error: "not found" }, 404);
+    }
+  });
+
   /** Station board (spec 9.3): who is coming, who is waiting, tasks. */
   app.get("/api/stations/:id/board", (c) => {
     const id = StationId.safeParse(c.req.param("id"));
@@ -549,6 +561,7 @@ export function createApp(ctx?: AppContext) {
 
 const DOCUMENTS_DIR = new URL("../../../fixtures/documents/", import.meta.url);
 const VOICE_DIR = new URL("../../../fixtures/voice/", import.meta.url);
+const SIGNS_DIR = new URL("../../../packages/synthetic/signs/", import.meta.url);
 
 const Clarify = z.object({
   field: z.string().min(1),

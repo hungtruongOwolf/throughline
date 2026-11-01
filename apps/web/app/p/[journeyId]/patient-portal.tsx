@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 import type { Journey, Message, Stop as ItineraryStop } from "@throughline/shared";
 import { PatientComposer } from "../../../components/patient-composer";
+import { SignPhoto } from "../../../components/sign-photo";
 import { Wayfinding } from "../../../components/Wayfinding";
 import { useUser } from "../../../lib/session";
 import { clockTime } from "../../../lib/format";
@@ -395,9 +396,11 @@ function Before({
 function VisitDay({
   journey,
   onImHere,
+  onLocated,
 }: {
   journey: Journey;
   onImHere: (orderId: string) => void;
+  onLocated: () => void;
 }) {
   const stops = journey.itinerary?.stops ?? [];
   if (journey.phase === "PRE" || stops.length === 0) {
@@ -507,6 +510,7 @@ function VisitDay({
               />
             </div>
           )}
+          <SignPhoto journeyId={journey.id} onLocated={onLocated} />
         </section>
       )}
 
@@ -879,7 +883,9 @@ export function PatientPortal({
               {shown === "before" && (
                 <Before journey={journey} events={events} {...(embedded ? {} : { onConfirm })} />
               )}
-              {shown === "visit" && <VisitDay journey={journey} onImHere={onImHere} />}
+              {shown === "visit" && (
+                <VisitDay journey={journey} onImHere={onImHere} onLocated={refresh} />
+              )}
               {shown === "after" && <After journey={journey} />}
             </div>
             <aside>
