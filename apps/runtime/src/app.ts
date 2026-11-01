@@ -1,4 +1,4 @@
-import { Hono } from "hono";
+import { Hono, type Context } from "hono";
 import { cors } from "hono/cors";
 import { streamSSE } from "hono/streaming";
 import { z } from "zod";
@@ -18,6 +18,7 @@ import { locateFromPhoto } from "./locate";
 import { transcribe } from "./models/voice";
 import type { World } from "./sim/pre-visit";
 import { agentRuns, agentStats, inbox, journeyRows, overview, runView, timeline } from "./platform";
+import { faxLine, populate, receiveReferral } from "./demo/population";
 import { loadEngine } from "@throughline/engine/node";
 import { VisitDayScenario } from "./sim/scenario";
 import type { ModelCache } from "./models/cache";
@@ -35,6 +36,8 @@ export interface AppContext {
   world: World;
   /** Fax-line referrals received since the last restore. */
   received: Set<string>;
+  /** Last visitor change (POST) and whether the hospital differs from the restored one. */
+  activity: { dirty: boolean; at: number };
 }
 
 const Resolve = z.object({
@@ -57,12 +60,45 @@ const ClockCommand = z.discriminatedUnion("action", [
  * HTTP API. Routes persist and publish events, then return; they never run workflows
  * (spec 4.3 step 1).
  */
+/** Rebuilds the hospital as of Nov 17, 9:53 am and lets the clock run in real time. */
+export async function restoreHospital(ctx: AppContext): Promise<void> {
+  await populate(ctx);
+  ctx.activity.dirty = false;
+  if (process.env.CLOCK_SPEED !== "0") ctx.clock.start(1);
+}
+
 export function createApp(ctx?: AppContext) {
   const app = new Hono();
   app.use("*", cors());
+  // Development routes reset or drive the hospital; when ADMIN_TOKEN is set they need it.
+  const adminOnly = async (c: Context, next: () => Promise<void>) => {
+    const token = process.env.ADMIN_TOKEN;
+    if (token && c.req.header("x-admin-token") !== token)
+      return c.json({ error: "not found" }, 404);
+    await next();
+  };
+  app.use("/api/demo/*", adminOnly);
+  app.use("/api/story", adminOnly);
+  app.use("/api/story/*", adminOnly);
+  app.use("/api/admin/*", adminOnly);
+  app.on("POST", "/api/clock", adminOnly);
+
   app.get("/health", (c) => c.json({ ok: true, shared: SHARED_VERSION, synthetic: true }));
   if (!ctx) return app;
   const { store, bus, clock, runtime, background } = ctx;
+  // Visitors change the hospital; an idle runtime restores it (index.ts).
+  app.use("/api/*", async (c, next) => {
+    if (c.req.method === "POST" && !c.req.path.startsWith("/api/admin")) {
+      ctx.activity.dirty = true;
+      ctx.activity.at = Date.now();
+    }
+    await next();
+  });
+  /** Rebuilds the Nov 17 hospital (demo/population.ts). */
+  app.post("/api/admin/restore", async (c) => {
+    await restoreHospital(ctx);
+    return c.json({ now: clock.now() });
+  });
 
   app.get("/api/journeys", (c) => c.json(store.listAggregates<Journey>("journey")));
 
@@ -131,6 +167,33 @@ export function createApp(ctx?: AppContext) {
   });
 
   // ---- the staff platform (docs/PLATFORM-DESIGN.md) ----------------------------------------
+  /** The faxes waiting on the fax line (receiving one starts a journey). */
+  app.get("/api/fax-line", (c) =>
+    c.json(
+      faxLine(ctx).map((s) => ({
+        id: s.id,
+        patient: s.patient.display_name,
+        practice: s.practice.name,
+        provider: s.practice.provider,
+        arrived_at: s.receivedAt,
+        pages: 1,
+        fax: `/api/documents/${s.id}-referral-fax.png`,
+      })),
+    ),
+  );
+  /** Receives a fax from the fax line: a new journey opens and the agents start on it. */
+  app.post("/api/referrals", async (c) => {
+    const body = z.object({ fax: z.string() }).safeParse(await c.req.json().catch(() => ({})));
+    if (!body.success) return c.json({ error: body.error.issues }, 400);
+    const spec = faxLine(ctx).find((s) => s.id === body.data.fax);
+    if (!spec) return c.json({ error: "that fax was already received" }, 409);
+    ctx.received.add(spec.id);
+    const id = `ref-v${ctx.received.size}`;
+    await receiveReferral(ctx, spec, id);
+    await bus.idle();
+    return c.json(runtime.journey(id));
+  });
+
   const Role = z.enum(["coordinator", "nurse", "clinician", "ops"]).optional();
   app.get("/api/overview", (c) =>
     c.json(overview(store, buildOverview(store, runtime, clock, background).in_house)),
