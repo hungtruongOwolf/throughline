@@ -18,7 +18,15 @@ In the US, a visit to a specialist often costs a patient about two hours for twe
 
 ## What it does
 
-Throughline follows Maria, 71, through a new oncology referral in 16 steps:
+Throughline is the patient-access and visit-day workspace for a hospital's oncology service. The live site opens on Halden Medical Center on the morning of Nov 17: about 30 referrals at every stage, 54 people in the building, a CT scanner down, and the work waiting for each person. Staff sign in as themselves (coordinator, nurse navigator, oncologist, operations lead):
+
+- **Inbox:** every decision an agent parked for a person, with the agent's draft beside its source (the fax, the payer rule, the doctor's notes, the conversation) and one action.
+- **Referrals:** every patient, the stage, who holds the next move, and the next step.
+- **Patient record:** a timeline of what each agent did, with the Meta model it ran on, and the full run on click.
+- **Agents:** 13 agents with their runs, how often they finished on their own, waited for staff, or handed to a nurse, and their guardrails.
+- **New referral:** receive a fax from the fax line and watch intake, coverage, and prior auth work on it.
+
+The patient app is separate: one plan, the next step, and a way to write or send a voice note to the clinic. One referral, Maria's, end to end:
 
 - **Before the visit.** Spark vision reads the faxed referral. The member ID is smudged, so Throughline asks the coordinator instead of guessing. It checks her insurance and drafts the approval request; the coordinator sends it. When the insurer approves, it books five appointments into one morning on a day her daughter can drive her. Maria answers with a voice note, which Voice Transcribe and Spark turn into "confirmed, and she needs a wheelchair".
 - **The visit day.** SAM 3.1 counts people in the waiting rooms, and Maria's page shows her next stop, how many people are ahead of her, and a step-free route. At 9:40 a CT scanner breaks down. The Rust engine simulates the rest of the day 20 times for each possible fix. Muse Spark Open, an open-weight model on Baseten, reads the results and writes one proposal. The manager approves it, and Maria's plan moves to CT 2 on its own. Later she gets lost; she photographs a sign, and Spark reads it to direct her back. When she asks whether dizziness is normal, Throughline doesn't answer; a nurse calls her.
