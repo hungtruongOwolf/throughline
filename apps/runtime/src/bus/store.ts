@@ -1,5 +1,5 @@
 import type Database from "better-sqlite3";
-import type { DomainEvent, HumanReview, ModelCallRecord } from "@throughline/shared";
+import type { AgentRun, DomainEvent, HumanReview, ModelCallRecord } from "@throughline/shared";
 
 export interface StoredEvent {
   seq: number;
@@ -100,10 +100,56 @@ export class RuntimeStore {
     ).map((r) => JSON.parse(r.json) as ModelCallRecord);
   }
 
-  /** Demo reset: clears the log, aggregates, reviews, and telemetry (not the model cache). */
+  modelCallCount(): number {
+    return (this.sqlite.prepare("SELECT COUNT(*) AS n FROM model_calls").get() as { n: number }).n;
+  }
+
+  /** Model calls recorded after the first `skip` rows (the calls one run made). */
+  modelCallsAfter(skip: number): ModelCallRecord[] {
+    return (
+      this.sqlite
+        .prepare("SELECT json FROM model_calls ORDER BY rowid LIMIT -1 OFFSET ?")
+        .all(skip) as { json: string }[]
+    ).map((r) => JSON.parse(r.json) as ModelCallRecord);
+  }
+
+  saveRun(run: AgentRun): void {
+    this.sqlite
+      .prepare(
+        "INSERT OR REPLACE INTO agent_runs (id, agent, journey_id, at, json) VALUES (?, ?, ?, ?, ?)",
+      )
+      .run(run.id, run.agent, run.journey_id ?? null, run.at, JSON.stringify(run));
+  }
+
+  runs(filter: { agent?: string; journeyId?: string } = {}): AgentRun[] {
+    const rows = filter.journeyId
+      ? this.sqlite
+          .prepare("SELECT json FROM agent_runs WHERE journey_id = ? ORDER BY seq")
+          .all(filter.journeyId)
+      : filter.agent
+        ? this.sqlite
+            .prepare("SELECT json FROM agent_runs WHERE agent = ? ORDER BY seq")
+            .all(filter.agent)
+        : this.sqlite.prepare("SELECT json FROM agent_runs ORDER BY seq").all();
+    return (rows as { json: string }[]).map((r) => JSON.parse(r.json) as AgentRun);
+  }
+
+  run(id: string): AgentRun | undefined {
+    const row = this.sqlite.prepare("SELECT json FROM agent_runs WHERE id = ?").get(id) as
+      { json: string } | undefined;
+    return row && (JSON.parse(row.json) as AgentRun);
+  }
+
+  modelCall(id: string): ModelCallRecord | undefined {
+    const row = this.sqlite.prepare("SELECT json FROM model_calls WHERE id = ?").get(id) as
+      { json: string } | undefined;
+    return row && (JSON.parse(row.json) as ModelCallRecord);
+  }
+
+  /** Clears the log, aggregates, reviews, runs, and telemetry (not the model cache). */
   reset(): void {
     this.sqlite.exec(
-      "DELETE FROM events; DELETE FROM aggregates; DELETE FROM reviews; DELETE FROM model_calls; DELETE FROM runtime_log;",
+      "DELETE FROM events; DELETE FROM aggregates; DELETE FROM reviews; DELETE FROM model_calls; DELETE FROM agent_runs; DELETE FROM runtime_log;",
     );
   }
 

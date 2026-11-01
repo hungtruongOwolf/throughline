@@ -34,3 +34,28 @@ export const ModelCallRecord = z
   })
   .strict();
 export type ModelCallRecord = z.infer<typeof ModelCallRecord>;
+
+/**
+ * One agent run: an agent handling one capability for one event. The product's agent views
+ * (roster metrics, patient timelines, run detail) are built from these rows.
+ */
+export const AgentRun = z.object({
+  id: Id,
+  agent: z.string(),
+  capability: Capability,
+  journey_id: Id.optional(),
+  station_id: z.string().optional(),
+  trigger: z.object({ event_id: Id, type: z.string() }),
+  at: IsoTime,
+  duration_ms: z.number().nonnegative(),
+  /** applied: done on its own; parked: waits for staff; handoff: sent to a nurse; blocked: message screened. */
+  outcome: z.enum(["applied", "parked", "handoff", "blocked"]),
+  /** The deterministic path ran (approved template / rule) instead of a model answer. */
+  used_template: z.boolean(),
+  summary: z.string(),
+  emitted: z.array(z.object({ id: Id, type: z.string() })),
+  model_call_ids: z.array(Id),
+  review_id: Id.optional(),
+  approved_by: z.string().optional(),
+});
+export type AgentRun = z.infer<typeof AgentRun>;

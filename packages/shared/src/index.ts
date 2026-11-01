@@ -14,3 +14,4 @@ export * from "./copy";
 export * from "./synthetic";
 export * from "./people";
 export * from "./api";
+export * from "./platform";

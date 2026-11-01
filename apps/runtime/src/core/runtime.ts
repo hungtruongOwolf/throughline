@@ -6,6 +6,7 @@ import {
   nextState,
   phaseOf,
   TERMINAL_STATES,
+  type AgentRun,
   type Capability,
   type DomainEvent,
   type HumanReview,
@@ -134,11 +135,18 @@ export class Runtime {
     return event;
   }
 
-  private emit(events: NewEvent[], depth: number, publish: (e: DomainEvent) => boolean): void {
+  private emit(
+    events: NewEvent[],
+    depth: number,
+    publish: (e: DomainEvent) => boolean,
+  ): DomainEvent[] {
+    const out: DomainEvent[] = [];
     for (const e of events) {
       const stored = this.append(e, depth);
+      if (stored) out.push(stored);
       if (stored && publish(stored)) this.deps.bus.enqueue({ event: stored, depth });
     }
+    return out;
   }
 
   // ---- handling ---------------------------------------------------------------------------
@@ -149,7 +157,14 @@ export class Runtime {
       return;
     }
     if (event.type === "HumanReviewResolved") {
-      await this.resolve(event.payload.review_id, event.payload.decision, event.payload.by, depth);
+      const note = (event.payload as { note?: string }).note;
+      await this.resolve(
+        event.payload.review_id,
+        event.payload.decision,
+        event.payload.by,
+        depth,
+        note,
+      );
       return;
     }
     if (event.type === "OpsActionApproved" || event.type === "OpsActionRejected") {
@@ -164,7 +179,8 @@ export class Runtime {
         );
       if (review) {
         const decision = event.type === "OpsActionApproved" ? "approved" : "rejected";
-        await this.resolve(review.id, decision, event.payload.by, depth);
+        const note = event.type === "OpsActionRejected" ? event.payload.note : undefined;
+        await this.resolve(review.id, decision, event.payload.by, depth, note);
       }
       return;
     }
@@ -230,7 +246,20 @@ export class Runtime {
       return;
     }
     if (gate.verdict === "requires_human_approval") {
-      this.park(inv, agent, event, gate.reason, depth);
+      const review = this.park(inv, agent, event, gate.reason, depth);
+      this.recordRun({
+        agent: agent.name,
+        capability: inv.capability,
+        event,
+        journeyId: inv.journey_id ?? event.journey_id,
+        started: performance.now(),
+        callsBefore: this.deps.store.modelCallCount(),
+        outcome: "parked",
+        usedTemplate: false,
+        summary: `waiting for staff: ${gate.reason}`,
+        emitted: [],
+        reviewId: review.id,
+      });
       return;
     }
 
@@ -246,9 +275,62 @@ export class Runtime {
       ...scope,
       ...(approvedBy ? { approved_by: approvedBy } : {}),
     };
-    let { result } = await this.deps.runner.run(agent, ctx);
-    result = await this.screenOutbound(result, agent, ctx);
-    this.apply(result, inv.capability, agent, event, depth, inv.journey_id);
+    const started = performance.now();
+    const callsBefore = this.deps.store.modelCallCount();
+    const ran = await this.deps.runner.run(agent, ctx);
+    const result = await this.screenOutbound(ran.result, agent, ctx);
+    const blocked = result.next_events.some((e) => e.type === "ContentBlocked");
+    const applied = this.apply(result, inv.capability, agent, event, depth, inv.journey_id);
+    this.recordRun({
+      agent: agent.name,
+      capability: inv.capability,
+      event,
+      journeyId: inv.journey_id ?? event.journey_id,
+      started,
+      callsBefore,
+      outcome: blocked ? "blocked" : applied.handoff ? "handoff" : "applied",
+      usedTemplate: ran.usedFallback || blocked,
+      summary: result.summary,
+      emitted: applied.emitted,
+      ...(applied.reviewId ? { reviewId: applied.reviewId } : {}),
+      ...(approvedBy ? { approvedBy } : {}),
+    });
+  }
+
+  /** One row per agent run, for the product's agent views (roster, timeline, run detail). */
+  private recordRun(r: {
+    agent: string;
+    capability: Capability;
+    event: DomainEvent;
+    journeyId?: string | undefined;
+    started: number;
+    callsBefore: number;
+    outcome: AgentRun["outcome"];
+    usedTemplate: boolean;
+    summary: string;
+    emitted: DomainEvent[];
+    reviewId?: string;
+    approvedBy?: string;
+  }): void {
+    const run: AgentRun = {
+      id: randomUUID(),
+      agent: r.agent,
+      capability: r.capability,
+      ...(r.journeyId ? { journey_id: r.journeyId } : {}),
+      ...(r.event.station_id ? { station_id: r.event.station_id } : {}),
+      trigger: { event_id: r.event.id, type: r.event.type },
+      at: this.deps.clock.now(),
+      duration_ms: Math.max(0, performance.now() - r.started),
+      outcome: r.outcome,
+      used_template: r.usedTemplate,
+      summary: r.summary,
+      emitted: r.emitted.map((e) => ({ id: e.id, type: e.type })),
+      model_call_ids: this.deps.store.modelCallsAfter(r.callsBefore).map((c) => c.id),
+      ...(r.reviewId ? { review_id: r.reviewId } : {}),
+      ...(r.approvedBy ? { approved_by: r.approvedBy } : {}),
+    };
+    this.deps.store.saveRun(run);
+    this.deps.bus.telemetry({ type: "AgentRun", run });
   }
 
   /** Spec 6.2: generated patient text with clinical content is blocked; the fallback is sent. */
@@ -278,7 +360,7 @@ export class Runtime {
     event: DomainEvent,
     depth: number,
     journeyId = event.journey_id,
-  ): void {
+  ): { emitted: DomainEvent[]; handoff: boolean; reviewId?: string } {
     const scoped = (e: NewEvent): NewEvent =>
       isOpsEventType(e.type)
         ? { ...e, station_id: e.station_id ?? event.station_id }
@@ -297,7 +379,7 @@ export class Runtime {
     const handoff = result.next_events.some((e) => e.type === "HandoffRequested");
     if (BLOCKING.has(capability) || handoff) {
       // Logged for audit, not propagated; only the review request goes out (spec 4.3 step 7).
-      this.emit(next, depth + 1, () => false);
+      const emitted = this.emit(next, depth + 1, () => false);
       const review = this.openReview({
         kind: "handoff",
         capability,
@@ -310,9 +392,10 @@ export class Runtime {
         if (journey) this.saveJourney({ ...journey, handoff_open: true });
       }
       this.requestReview(review, depth);
-      return;
+      return { emitted, handoff: true, reviewId: review.id };
     }
-    this.emit(next, depth + 1, () => true);
+    const emitted = this.emit(next, depth + 1, () => true);
+    let taskId: string | undefined;
     for (const reason of result.tasks ?? []) {
       const review = this.openReview({
         kind: "task",
@@ -321,8 +404,10 @@ export class Runtime {
         reason,
         event,
       });
+      taskId ??= review.id;
       this.requestReview(review, depth);
     }
+    return { emitted, handoff: false, ...(taskId ? { reviewId: taskId } : {}) };
   }
 
   // ---- human gates ------------------------------------------------------------------------
@@ -416,7 +501,13 @@ export class Runtime {
   }
 
   /** PRE_APPROVAL: park the event verbatim and hold the aggregate (spec 4.3 step 5). */
-  private park(inv: Invocation, agent: Agent, event: DomainEvent, reason: string, depth: number) {
+  private park(
+    inv: Invocation,
+    agent: Agent,
+    event: DomainEvent,
+    reason: string,
+    depth: number,
+  ): HumanReview {
     const review = this.openReview({
       kind: "approval",
       capability: inv.capability,
@@ -432,6 +523,7 @@ export class Runtime {
       this.saveStation({ ...this.station(event.station_id), paused_for_review: true });
     }
     this.requestReview(review, depth);
+    return review;
   }
 
   /** Approve → replay the parked event with approved_by; reject → discard and record. */
@@ -440,6 +532,7 @@ export class Runtime {
     decision: "approved" | "rejected",
     by: string,
     depth = 0,
+    note?: string,
   ): Promise<void> {
     const review = this.deps.store.review(reviewId);
     if (!review || review.status !== "pending") {
@@ -451,6 +544,7 @@ export class Runtime {
       status: decision === "approved" ? "resolved" : "rejected",
       resolved_by: by,
       resolved_at: this.deps.clock.now(),
+      ...(note ? { note } : {}),
     });
     if (review.journey_id) {
       const journey = this.journey(review.journey_id);

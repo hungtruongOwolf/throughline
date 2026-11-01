@@ -16,6 +16,7 @@ import { buildBoard, type SimBackground } from "./board";
 import { buildOverview } from "./ops-overview";
 import { locateFromPhoto } from "./locate";
 import { transcribe } from "./models/voice";
+import { agentRuns, agentStats, inbox, journeyRows, overview, runView, timeline } from "./platform";
 import { loadEngine } from "@throughline/engine/node";
 import { VisitDayScenario } from "./sim/scenario";
 import type { ModelCache } from "./models/cache";
@@ -125,6 +126,27 @@ export function createApp(ctx?: AppContext) {
     return c.json(store.review(review.id));
   });
 
+  // ---- the staff platform (docs/PLATFORM-DESIGN.md) ----------------------------------------
+  const Role = z.enum(["coordinator", "nurse", "clinician", "ops"]).optional();
+  app.get("/api/overview", (c) =>
+    c.json(overview(store, buildOverview(store, runtime, clock, background).in_house)),
+  );
+  app.get("/api/inbox", (c) => {
+    const role = Role.safeParse(c.req.query("role") || undefined);
+    const status = c.req.query("status") === "done" ? "done" : "pending";
+    return c.json(
+      inbox(store, { ...(role.success && role.data ? { role: role.data } : {}), status }),
+    );
+  });
+  app.get("/api/referrals", (c) => c.json(journeyRows(store)));
+  app.get("/api/agents", (c) => c.json(agentStats(store)));
+  app.get("/api/agents/:name/runs", (c) => c.json(agentRuns(store, c.req.param("name"))));
+  app.get("/api/journeys/:id/timeline", (c) => c.json(timeline(store, c.req.param("id"))));
+  app.get("/api/runs/:id", (c) => {
+    const run = store.run(c.req.param("id"));
+    return run ? c.json(runView(store, run)) : c.json({ error: "not found" }, 404);
+  });
+
   /** Proof panel data (spec 8.6): every model call, never message content. */
   app.get("/api/proof", (c) => {
     const { config, cache } = ctx.models;
@@ -168,7 +190,13 @@ export function createApp(ctx?: AppContext) {
       const unsubscribe = bus.subscribe("*", async ({ event }) => {
         await stream.writeSSE({ event: "domain", id: event.id, data: JSON.stringify(event) });
       });
-      stream.onAbort(unsubscribe);
+      const unwatch = bus.onTelemetry((t) => {
+        void stream.writeSSE({ event: "run", data: JSON.stringify(t.run) });
+      });
+      stream.onAbort(() => {
+        unsubscribe();
+        unwatch();
+      });
       await stream.writeSSE({ event: "hello", data: JSON.stringify({ now: clock.now() }) });
       while (!stream.aborted) {
         await stream.sleep(15_000);

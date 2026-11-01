@@ -8,6 +8,9 @@ export interface Envelope {
 
 export type Subscriber = (envelope: Envelope) => Promise<void> | void;
 
+/** Telemetry about the runtime itself (agent runs), streamed to screens but not logged as events. */
+export type Telemetry = { type: "AgentRun"; run: import("@throughline/shared").AgentRun };
+
 /**
  * In-process bus (spec 4.3 step 2). Delivery is sequential through a queue, so a handler
  * that publishes never re-enters another handler mid-flight and the log order is stable.
@@ -16,6 +19,17 @@ export class EventBus {
   private subscribers: { types: ReadonlySet<string> | "*"; fn: Subscriber }[] = [];
   private queue: Envelope[] = [];
   private draining: Promise<void> | undefined;
+  private watchers = new Set<(t: Telemetry) => void>();
+
+  /** Listens to telemetry; returns the unsubscribe function. */
+  onTelemetry(fn: (t: Telemetry) => void): () => void {
+    this.watchers.add(fn);
+    return () => this.watchers.delete(fn);
+  }
+
+  telemetry(t: Telemetry): void {
+    for (const fn of this.watchers) fn(t);
+  }
 
   subscribe(types: readonly string[] | "*", fn: Subscriber): () => void {
     const entry = { types: types === "*" ? ("*" as const) : new Set(types), fn };

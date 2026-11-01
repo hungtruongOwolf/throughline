@@ -102,8 +102,15 @@ describe("runtime HTTP API", () => {
       journey_id: "maria-001",
       payload: { channel: "sms_sim", text: "Sí, confirmo", language: "es" },
     });
-    while (!text.includes("ReplyHandled")) text += decoder.decode((await reader.read()).value);
+    const seen = () =>
+      text
+        .split("event: domain")
+        .slice(1)
+        .some((chunk) => chunk.includes("ReplyHandled")) && text.includes("event: run");
+    while (!seen()) text += decoder.decode((await reader.read()).value);
     expect(text).toContain("event: domain");
+    // Agent runs stream alongside the events, for the live activity views.
+    expect(text).toContain("event: run");
     await reader.cancel();
   });
 });
