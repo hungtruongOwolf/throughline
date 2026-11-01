@@ -7,3 +7,4 @@ packages/engine/pkg-web
 packages/engine/pkg-node
 packages/engine/target
 .claude/skills/
+fixtures/documents/maria-truth.json
