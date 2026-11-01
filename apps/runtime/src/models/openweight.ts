@@ -140,8 +140,7 @@ export class BrainRouter implements ModelGateway {
   ) {}
 
   respond(request: ModelRequest): Promise<ModelResponse> {
-    const useOpen =
-      this.open && this.brain() === "open" && request.capability === "ops_action.propose";
-    return (useOpen ? this.open : this.meta)!.respond(request);
+    const open = this.brain() === "open" && request.capability === "ops_action.propose";
+    return (open && this.open ? this.open : this.meta).respond(request);
   }
 }
