@@ -39,7 +39,7 @@ test.describe("command center (D2-8)", () => {
 
     await page.goto("/ops");
     await page.getByRole("button", { name: "Approve" }).click();
-    await expect(page.getByText("Approved by manager.demo")).toBeVisible();
+    await expect(page.getByText("Approved by Operations manager")).toBeVisible();
 
     // No reload: the phone hears ItineraryReplanned on the event stream.
     await expect(phone.getByRole("heading", { name: "CT 2" })).toBeVisible();

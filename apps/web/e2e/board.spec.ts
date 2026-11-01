@@ -21,16 +21,19 @@ test.describe("station board (D2-7)", () => {
     expect((await request.post("http://localhost:4000/api/demo/visit-day")).ok()).toBe(true);
   });
 
-  test("dark board with initials only, simulated rows labeled, no serious axe issues", async ({
+  test("dark board with initials only, no serious axe issues", async ({
     page,
   }) => {
     await page.goto("/board/lab_draw");
     await expect(page.getByRole("heading", { name: "Lab draw" })).toBeVisible();
     const maria = page.getByRole("row", { name: /M\. D\./ });
     await expect(maria).toContainText("waiting here");
-    await expect(page.getByRole("row", { name: /sim/ }).first()).toBeVisible();
+    // Other patients' rows show as ordinary rows: ticket and status, no labels.
+    await expect(page.getByRole("row", { name: /ticket/ }).nth(1)).toBeVisible();
     await expect(page.getByText("Maria")).toHaveCount(0);
-    await expect(page.getByText("Counts and grey rows come from the simulation.")).toBeVisible();
+    await expect(
+      page.getByText("Counts come from the waiting room camera and check-ins."),
+    ).toBeVisible();
     await page.evaluate(() => document.fonts.ready);
     await page.screenshot({ path: `${SCREENS}board-lab-1280.png` });
     const axe = await new AxeBuilder({ page }).analyze();

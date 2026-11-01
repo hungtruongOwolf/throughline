@@ -11,7 +11,7 @@ import { clockTime } from "../../lib/format";
 import { clockCommand, fetchOverview, resolveReview, subscribeAll } from "../../lib/runtime";
 import { stationName } from "../../lib/stations";
 
-const MANAGER = "manager.demo";
+const MANAGER = "Operations manager";
 const DAY = day as SimRequest;
 const DAY_START = Date.parse(DAY.start);
 const DAY_END = Date.parse(DAY.end);
@@ -151,7 +151,6 @@ export function CommandCenter() {
           >
             {t("en", "ops.pause")}
           </button>
-          <span className="ml-4 text-[13px] text-ink-soft">{t("en", "footer.synthetic")}</span>
         </div>
       </header>
 

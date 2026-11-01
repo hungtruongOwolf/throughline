@@ -1,8 +1,6 @@
-import { JourneyControl } from "./journey-control";
+import { redirect } from "next/navigation";
 
-export const metadata = { title: "Journey Control · Throughline" };
-
-export default async function JourneyPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-  return <JourneyControl journeyId={id} />;
+/** The old Journey Control page; Maria's journey is now one story. */
+export default function JourneyPage() {
+  redirect("/story");
 }

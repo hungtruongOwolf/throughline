@@ -117,11 +117,6 @@ export function StationBoard({ stationId }: { stationId: string }) {
                     <span className="ml-4 text-[24px]">
                       {t(LANG, "board.ticket", { number: row.ticket })}
                     </span>
-                    {row.simulated && (
-                      <span className="ml-3 text-[18px] tracking-normal">
-                        {t(LANG, "board.simulated")}
-                      </span>
-                    )}
                   </td>
                   <td className="py-2 tabular-nums">{clockTime(row.eta)}</td>
                   <td className="py-2">{statusWords(row)}</td>
