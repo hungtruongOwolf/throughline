@@ -203,7 +203,7 @@ function Sidebar() {
   return (
     <nav
       aria-label="Workspace"
-      className="flex h-full w-[232px] shrink-0 flex-col bg-ink text-white"
+      className="flex h-full w-[232px] shrink-0 flex-col overflow-y-auto bg-ink text-white"
     >
       <WorkspaceSwitcher />
       <GettingStarted />
@@ -257,7 +257,7 @@ function Search() {
     return rows.filter((r) => r.patient.toLowerCase().includes(t) || r.mrn.includes(t)).slice(0, 7);
   }, [q, rows]);
   return (
-    <div className="relative w-full max-w-[360px]">
+    <div className="relative w-full min-w-0 max-w-[360px]">
       <input
         ref={input}
         value={q}
@@ -277,7 +277,7 @@ function Search() {
         aria-label="Search patients"
         className="h-9 w-full rounded-[6px] border border-rule bg-canvas px-3 pr-8 text-[14px] placeholder:text-ink-soft"
       />
-      <kbd className="absolute top-2 right-2 rounded-[4px] border border-rule px-1 text-[11px] text-ink-soft">
+      <kbd className="absolute top-2 right-2 hidden rounded-[4px] border border-rule px-1 text-[11px] text-ink-soft sm:block">
         /
       </kbd>
       {open && hits.length > 0 && (
@@ -347,7 +347,7 @@ function ActivityDrawer({ open, onClose }: { open: boolean; onClose: () => void 
   );
 }
 
-function TopBar() {
+function TopBar({ onMenu }: { onMenu: () => void }) {
   const { data } = useLive(fetchHospital);
   const { runs } = useStream();
   const [activity, setActivity] = useState(false);
@@ -357,9 +357,19 @@ function TopBar() {
   );
   const working = new Set(recent.map((r) => r.agent)).size;
   return (
-    <header className="sticky top-0 z-20 flex h-14 shrink-0 items-center gap-4 border-b border-rule bg-panel/85 px-5 backdrop-blur-md">
+    <header className="sticky top-0 z-20 flex h-14 shrink-0 items-center gap-2 border-b border-rule bg-panel/85 px-3 backdrop-blur-md sm:gap-4 sm:px-5">
+      <button
+        type="button"
+        onClick={onMenu}
+        aria-label="Open the menu"
+        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[6px] hover:bg-canvas lg:hidden"
+      >
+        <svg aria-hidden viewBox="0 0 24 24" className="h-5 w-5" fill="none">
+          <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" strokeWidth="2.2" />
+        </svg>
+      </button>
       <Search />
-      <span className="ml-auto font-figure text-[15px] text-ink-soft tabular-nums">
+      <span className="ml-auto hidden font-figure text-[15px] text-ink-soft tabular-nums md:inline">
         {data?.now ? `${shortDate(data.now)}, ${hhmm(data.now)}` : ""}
       </span>
       <button
@@ -371,12 +381,14 @@ function TopBar() {
           aria-hidden
           className={`h-2 w-2 rounded-full ${working > 0 ? "bg-agent agent-working" : "bg-rule"}`}
         />
-        {working > 0 ? `${working} agents working` : "Agent activity"}
+        <span className="hidden sm:inline">
+          {working > 0 ? `${working} agents working` : "Agent activity"}
+        </span>
       </button>
       <button
         type="button"
         onClick={() => setNewRef(true)}
-        className="min-h-9 rounded-[6px] bg-agent px-3 text-[14px] font-bold text-white"
+        className="min-h-9 shrink-0 rounded-[6px] bg-agent px-3 text-[14px] font-bold whitespace-nowrap text-white"
       >
         New referral
       </button>
@@ -392,15 +404,37 @@ function TopBar() {
 export function AppShell({ children }: { children: ReactNode }) {
   const { user, ready } = useUser();
   const router = useRouter();
+  const path = usePathname();
+  const [menu, setMenu] = useState(false);
   useEffect(() => {
     if (ready && !user) router.replace("/");
   }, [ready, user, router]);
+  // A page change closes the phone menu.
+  useEffect(() => setMenu(false), [path]);
   if (!ready || !user) return <div className="min-h-dvh bg-canvas" />;
   return (
     <div className="flex h-dvh bg-canvas text-ink">
-      <Sidebar />
+      <div className="hidden lg:flex">
+        <Sidebar />
+      </div>
+      {menu && (
+        <div
+          className="fixed inset-0 z-50 flex lg:hidden"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Menu"
+        >
+          <Sidebar />
+          <button
+            type="button"
+            aria-label="Close the menu"
+            onClick={() => setMenu(false)}
+            className="flex-1 bg-ink/40"
+          />
+        </div>
+      )}
       <div className="flex min-w-0 flex-1 flex-col">
-        <TopBar />
+        <TopBar onMenu={() => setMenu(true)} />
         <main className="min-h-0 flex-1 overflow-y-auto">{children}</main>
       </div>
     </div>

@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { loadEngine, type Engine } from "@throughline/engine/web";
 import { t, type OpsOverview, type SimRequest, type StationId } from "@throughline/shared";
 import day from "../../../../fixtures/day-2026-11-17.json";
-import { IsoMap, type MapRoute } from "../../components/IsoMap";
+import { CampusHero } from "../../components/CampusHero";
 import { Proposal } from "../../components/Proposal";
 import { WaitCurve } from "../../components/WaitCurve";
 import { clockTime } from "../../lib/format";
@@ -48,10 +48,8 @@ export function CommandCenter({
 }: { by?: string; onApproved?: () => void } = {}) {
   const [overview, setOverview] = useState<OpsOverview | undefined>();
   const [offline, setOffline] = useState(false);
-  const [selectedJourney, setSelectedJourney] = useState<string | undefined>();
   const [station, setStation] = useState<StationId>("imaging_ct");
   const [engine, setEngine] = useState<Engine | undefined>();
-  const [route, setRoute] = useState<MapRoute | undefined>();
   const [extra, setExtra] = useState(0);
   const [busy, setBusy] = useState(false);
 
@@ -74,27 +72,6 @@ export function CommandCenter({
       clearInterval(timer);
     };
   }, [refresh]);
-
-  const journey = overview?.journeys.find(
-    (j) => j.id === (selectedJourney ?? overview.journeys[0]?.id),
-  );
-
-  // The selected journey's line: from where the patient is, through the stops still ahead.
-  useEffect(() => {
-    if (!engine || !journey) return;
-    const ahead = journey.stops.filter((s) => s.status !== "done" && s.status !== "skipped");
-    const waypoints = [journey.last_node, ...ahead.map((s) => s.node_id)];
-    const nodes: string[] = [];
-    for (let i = 1; i < waypoints.length; i++) {
-      const r = engine.walkingRoute({
-        from: waypoints[i - 1] as string,
-        to: waypoints[i] as string,
-        mobility: journey.mobility,
-      });
-      nodes.push(...(i === 1 ? r.nodes : r.nodes.slice(1)));
-    }
-    setRoute({ nodes, here: journey.last_node });
-  }, [engine, journey]);
 
   const now = overview?.now ?? DAY.start;
   const baseline = useMemo(
@@ -128,52 +105,29 @@ export function CommandCenter({
   }
 
   return (
-    <div className="grid h-full min-h-[760px] grid-cols-[240px_1fr_360px] grid-rows-[56px_1fr_190px] bg-canvas text-ink">
-      <header className="col-span-3 flex items-center justify-between gap-6 px-6">
+    <div className="grid min-h-full grid-cols-1 bg-canvas text-ink lg:grid-cols-[minmax(0,1fr)_380px] lg:grid-rows-[auto_1fr_auto]">
+      <header className="flex flex-wrap items-baseline gap-x-6 gap-y-1 px-6 pt-5 lg:col-span-2">
         <h1 className="font-figure text-[22px] font-semibold">Today on the floor</h1>
-        <span className="font-figure text-[15px] text-ink-soft tabular-nums">
+        <p className="text-[15px] text-ink-soft">
+          {overview.in_house} people in the building.{" "}
+          {(() => {
+            const worst = [...overview.stations].sort((a, b) => b.est_wait_min - a.est_wait_min)[0];
+            return worst && worst.est_wait_min >= 10
+              ? `Longest wait: ${worst.name}, about ${Math.round(worst.est_wait_min)} minutes.`
+              : "Waits are short everywhere.";
+          })()}{" "}
+          Select a station to forecast it.
+        </p>
+        <span className="ml-auto font-figure text-[15px] text-ink-soft tabular-nums">
           {dateLabel(now)}, {clockTime(now)}
         </span>
       </header>
 
-      <nav aria-label={t("en", "ops.journeys_label")} className="overflow-y-auto px-6 pt-2">
-        <p className="text-[13px] text-ink-soft">{t("en", "ops.in_house")}</p>
-        <p className="font-display text-[64px] leading-none font-bold tabular-nums">
-          {overview.in_house}
-        </p>
-        <ul className="mt-6 space-y-1">
-          {overview.journeys.map((j) => (
-            <li key={j.id}>
-              <button
-                type="button"
-                aria-pressed={journey?.id === j.id}
-                onClick={() => setSelectedJourney(j.id)}
-                className={`flex min-h-12 w-full flex-col items-start rounded-[12px] px-3 py-2 text-left ${journey?.id === j.id ? "bg-ink/5" : ""}`}
-              >
-                <span className="font-display text-[22px] font-semibold">
-                  {j.initials} <span className="text-[16px] text-ink-soft">{j.ticket}</span>
-                </span>
-                <span className="text-[13px]">
-                  {j.current ? `${j.current}, ` : ""}
-                  {j.minutes_behind > 0
-                    ? t("en", "ops.minutes_behind", { minutes: j.minutes_behind })
-                    : t("en", "ops.on_plan")}
-                </span>
-              </button>
-            </li>
-          ))}
-        </ul>
-      </nav>
-
-      <main className="min-h-0">
-        <IsoMap
-          stations={overview.stations}
-          {...(route ? { route } : {})}
-          onSelectStation={setStation}
-        />
+      <main className="min-h-0 px-2">
+        <CampusHero stations={overview.stations} selected={station} onSelect={setStation} />
       </main>
 
-      <aside aria-label={t("en", "ops.proposals")} className="overflow-y-auto px-6 pt-2">
+      <aside aria-label={t("en", "ops.proposals")} className="px-6 pt-2 lg:overflow-y-auto">
         <h2 className="font-display text-[28px] font-bold">{t("en", "ops.proposals")}</h2>
         {overview.proposals.length === 0 && (
           <p className="mt-2 text-ink-soft">{t("en", "ops.no_proposals")}</p>
@@ -190,7 +144,7 @@ export function CommandCenter({
         </div>
       </aside>
 
-      <footer className="col-span-3 grid grid-cols-[1fr_auto] items-start gap-10 bg-ink/5 px-6 pt-4">
+      <footer className="grid items-start gap-8 border-t border-rule bg-panel px-6 py-4 lg:col-span-2 lg:grid-cols-[1fr_minmax(0,560px)]">
         <section aria-label={t("en", "ops.timeline")}>
           <p className="text-[13px] text-ink-soft">{t("en", "ops.timeline")}</p>
           <div className="relative mt-2 h-6 bg-paper">
@@ -220,7 +174,7 @@ export function CommandCenter({
           <p className="mt-3 text-[13px] text-ink-soft">{t("en", "ops.source_sim")}</p>
         </section>
 
-        <section className="w-[560px]">
+        <section className="min-w-0">
           <label htmlFor="whatif" className="block text-[15px] font-bold">
             {t("en", "ops.whatif_label", { station: stationName(station) })}: {extra}
           </label>

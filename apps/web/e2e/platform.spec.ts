@@ -86,7 +86,7 @@ test.describe("the staff platform", () => {
   }) => {
     await page.addInitScript(() => window.localStorage.setItem("tl_user", "sam"));
     await page.goto("/agents");
-    await expect(page.getByText(/13 agents ran/)).toBeVisible();
+    await expect(page.getByText(/steps so far for \d+ referrals/)).toBeVisible();
     await expect(page.locator("tbody tr[tabindex]")).toHaveCount(13);
     await page.getByRole("row", { name: /Ops planner/ }).click();
     await expect(

@@ -118,7 +118,7 @@ export default function FrontDoor() {
       <header className="mx-auto flex max-w-[1360px] items-center gap-3 px-6 pt-6">
         <span aria-hidden className="block h-[6px] w-7 bg-agent" />
         <span className="font-display text-[28px] font-bold">Throughline</span>
-        <span className="text-[15px] text-ink-soft">Halden Medical Center</span>
+        <span className="hidden text-[15px] text-ink-soft sm:inline">Halden Medical Center</span>
         <span className="ml-auto font-figure text-[15px] text-ink-soft tabular-nums">
           {data?.now ? `${shortDate(data.now)}, ${hhmm(data.now)}` : ""}
         </span>
@@ -225,18 +225,21 @@ export default function FrontDoor() {
 
           <h2 className="mt-8 text-[13px] font-bold text-ink-soft">What the agents just did</h2>
           <ul className="mt-2 divide-y divide-rule border-y border-rule">
-            {(data?.feed ?? []).slice(0, 5).map((f) => (
-              <li key={f.run_id} className="flex items-center gap-3 py-2 text-[13px]">
-                <span className="w-14 shrink-0 font-figure text-ink-soft tabular-nums">
-                  {hhmm(f.at)}
-                </span>
-                <AgentGlyph name={f.agent} size={20} />
-                <span className="min-w-0 flex-1 truncate">
-                  <span className="font-bold">{agentProfile(f.agent)?.label}</span> {f.summary}
-                  {f.patient ? `, ${f.patient}` : ""}
-                </span>
-              </li>
-            ))}
+            {(data?.feed ?? [])
+              .filter((f) => f.outcome !== "parked")
+              .slice(0, 5)
+              .map((f) => (
+                <li key={f.run_id} className="flex items-center gap-3 py-2 text-[13px]">
+                  <span className="w-14 shrink-0 font-figure text-ink-soft tabular-nums">
+                    {hhmm(f.at)}
+                  </span>
+                  <AgentGlyph name={f.agent} size={20} />
+                  <span className="min-w-0 flex-1 truncate">
+                    <span className="font-bold">{agentProfile(f.agent)?.label}</span> {f.summary}
+                    {f.patient ? `, ${f.patient}` : ""}
+                  </span>
+                </li>
+              ))}
           </ul>
         </section>
       </div>

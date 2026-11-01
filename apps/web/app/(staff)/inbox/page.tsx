@@ -276,7 +276,7 @@ function Detail({
   if (item.capability === "prior_auth.submit") {
     const packet = journey?.auth_packets.at(-1);
     return (
-      <article className="flex h-full flex-col">
+      <article className="flex min-h-0 flex-1 flex-col">
         {header}
         <div className="grid min-h-0 flex-1 overflow-y-auto md:grid-cols-2 md:divide-x md:divide-rule">
           <Pane title="Source: the faxed referral">
@@ -311,7 +311,7 @@ function Detail({
   if (item.capability === "summary.send") {
     const draft = journey?.summary?.draft ?? [];
     return (
-      <article className="flex h-full flex-col">
+      <article className="flex min-h-0 flex-1 flex-col">
         {header}
         <div className="min-h-0 flex-1 overflow-y-auto">
           <div className="grid border-b border-rule md:grid-cols-2 md:divide-x md:divide-rule">
@@ -350,7 +350,7 @@ function Detail({
     const action = (item.review?.pending_event as { payload?: { action?: OpsAction } } | undefined)
       ?.payload?.action;
     return (
-      <article className="flex h-full flex-col">
+      <article className="flex min-h-0 flex-1 flex-col">
         {header}
         <div className="grid min-h-0 flex-1 overflow-y-auto md:grid-cols-2 md:divide-x md:divide-rule">
           <Pane title="Source: what the floor shows">
@@ -394,7 +394,7 @@ function Detail({
     const thread = (journey?.outreach_log ?? []).slice(-6);
     const script = /symptom|clinical/i.test(item.reason) ? PROTOCOL.symptom : PROTOCOL.default;
     return (
-      <article className="flex h-full flex-col">
+      <article className="flex min-h-0 flex-1 flex-col">
         {header}
         <div className="grid min-h-0 flex-1 overflow-y-auto md:grid-cols-2 md:divide-x md:divide-rule">
           <Pane title="Source: the conversation">
@@ -454,7 +454,7 @@ function Detail({
   // Intake question
   if (item.kind === "question") {
     return (
-      <article className="flex h-full flex-col">
+      <article className="flex min-h-0 flex-1 flex-col">
         {header}
         <div className="grid min-h-0 flex-1 overflow-y-auto md:grid-cols-2 md:divide-x md:divide-rule">
           <Pane title="Source: the fax and the insurance card">
@@ -503,7 +503,7 @@ function Detail({
 
   // Task
   return (
-    <article className="flex h-full flex-col">
+    <article className="flex min-h-0 flex-1 flex-col">
       {header}
       <div className="min-h-0 flex-1 overflow-y-auto p-5">
         <p className="text-[15px]">{item.reason}</p>
@@ -543,6 +543,8 @@ function Inbox() {
   );
   const { data: hospital } = useLive(fetchHospital);
   const [selected, setSelected] = useState<string | undefined>(params.get("item") ?? undefined);
+  // On a phone the list and the item take turns; a deep link opens the item.
+  const [reading, setReading] = useState(params.get("item") !== null);
   const list = useMemo(() => items ?? [], [items]);
   useEffect(() => {
     if (list.length > 0 && !list.some((i) => i.id === selected)) setSelected(list[0]?.id);
@@ -556,7 +558,7 @@ function Inbox() {
     <div className="flex h-full">
       <section
         aria-label="Items"
-        className="flex w-[360px] shrink-0 flex-col border-r border-rule bg-panel"
+        className={`${reading ? "hidden lg:flex" : "flex"} w-full shrink-0 flex-col border-r border-rule bg-panel lg:w-[360px]`}
       >
         <div className="border-b border-rule px-4 pt-4 pb-3">
           <h1 className="font-figure text-[22px] font-semibold">Inbox</h1>
@@ -599,12 +601,25 @@ function Inbox() {
               item={i}
               now={now}
               selected={i.id === selected}
-              onSelect={() => setSelected(i.id)}
+              onSelect={() => {
+                setSelected(i.id);
+                setReading(true);
+              }}
             />
           ))}
         </ul>
       </section>
-      <section aria-label="Detail" className="min-w-0 flex-1 bg-panel">
+      <section
+        aria-label="Detail"
+        className={`${reading ? "flex" : "hidden lg:flex"} min-w-0 flex-1 flex-col bg-panel`}
+      >
+        <button
+          type="button"
+          onClick={() => setReading(false)}
+          className="border-b border-rule px-4 py-2 text-left text-[14px] text-agent lg:hidden"
+        >
+          All items
+        </button>
         {item ? (
           scope === "done" ? (
             <div className="p-6 text-[14px]">

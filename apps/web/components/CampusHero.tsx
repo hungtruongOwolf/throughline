@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react";
 import type { CampusNode } from "@throughline/hospital";
 import type { OpsStation } from "@throughline/shared";
 import { campus, node } from "../lib/campus";
@@ -98,7 +98,16 @@ function heat(minutes: number): { top: string; side: string } {
   return { top: "#5fb3a9", side: "#0f766e" };
 }
 
-export function CampusHero({ stations }: { stations: OpsStation[] }) {
+export function CampusHero({
+  stations,
+  selected,
+  onSelect,
+}: {
+  stations: OpsStation[];
+  /** With onSelect, columns are buttons (Today: pick the station for the what-if). */
+  selected?: string;
+  onSelect?: (stationId: OpsStation["id"]) => void;
+}) {
   const box = useRef<HTMLDivElement>(null);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [reduced, setReduced] = useState(false);
@@ -114,7 +123,7 @@ export function CampusHero({ stations }: { stations: OpsStation[] }) {
           const n = node(s.node_id);
           if (!n) return undefined;
           const base = iso(n.x, n.y, n.floor);
-          const h = Math.min(90, 10 + s.count * 5);
+          const h = Math.min(110, 16 + s.count * 6);
           return { s, base, h, color: heat(s.est_wait_min) };
         })
         .filter((c): c is NonNullable<typeof c> => !!c)
@@ -135,7 +144,7 @@ export function CampusHero({ stations }: { stations: OpsStation[] }) {
     return `${(x0 - 90).toFixed(0)} ${(y0 - 90).toFixed(0)} ${(x1 - x0 + 290).toFixed(0)} ${(y1 - y0 + 110).toFixed(0)}`;
   }, [layers]);
   const busiest = [...columns]
-    .filter((c) => c.s.est_wait_min >= 5)
+    .filter((c) => c.s.est_wait_min >= 5 || c.s.id === selected)
     .sort((a, b) => b.s.est_wait_min - a.s.est_wait_min)
     .slice(0, 3);
   return (
@@ -155,7 +164,7 @@ export function CampusHero({ stations }: { stations: OpsStation[] }) {
     >
       <svg
         viewBox={view}
-        role="img"
+        role={onSelect ? "group" : "img"}
         aria-label={`Halden Medical Center in 3D: ${stations.length} stations, the busiest ${busiest.map((b) => `${b.s.name} ${Math.round(b.s.est_wait_min)} minutes`).join(", ")}`}
         className="w-full transition-transform duration-300 ease-out"
         style={{
@@ -215,7 +224,23 @@ export function CampusHero({ stations }: { stations: OpsStation[] }) {
           const r = `${pt({ x: base.x, y: base.y })} ${pt({ x: base.x + w, y: base.y - w / 2 })} ${pt({ x: top.x + w, y: top.y - w / 2 })} ${pt({ x: top.x, y: top.y })}`;
           const cap = `${pt({ x: top.x, y: top.y })} ${pt({ x: top.x + w, y: top.y - w / 2 })} ${pt({ x: top.x, y: top.y - w })} ${pt({ x: top.x - w, y: top.y - w / 2 })}`;
           return (
-            <g key={s.id} className="campus-column" style={{ ["--h" as string]: `${h}px` }}>
+            <g
+              key={s.id}
+              className={`campus-column ${onSelect ? "cursor-pointer" : ""}`}
+              {...(onSelect
+                ? {
+                    role: "button",
+                    tabIndex: 0,
+                    "aria-label": `${s.name}, ${s.count} waiting, about ${Math.round(s.est_wait_min)} minutes`,
+                    "aria-pressed": selected === s.id,
+                    onClick: () => onSelect(s.id),
+                    onKeyDown: (e: KeyboardEvent) => {
+                      if (e.key === "Enter" || e.key === " ") onSelect(s.id);
+                    },
+                  }
+                : {})}
+              opacity={selected && selected !== s.id ? 0.55 : 1}
+            >
               <title>{`${s.name}: ${s.count} waiting, about ${Math.round(s.est_wait_min)} min`}</title>
               <polygon points={l} fill={color.side} opacity="0.9" />
               <polygon points={r} fill={color.side} />

@@ -117,9 +117,9 @@ export default function AgentsPage() {
       <h1 className="font-figure text-[22px] font-semibold">Agents</h1>
       {agents && (
         <p className="mt-1 max-w-[80ch] text-[15px]">
-          Since the referrals in progress arrived, 13 agents ran {total.toLocaleString()} steps for{" "}
-          {hospital?.referrals_in_progress ?? "the"} patients in progress. {alone.toLocaleString()}{" "}
-          finished on their own, {waited} waited for staff, and {nurse} were handed to a nurse.
+          {total.toLocaleString()} steps so far for {hospital?.referrals_in_progress ?? "the"}{" "}
+          referrals in progress: {alone.toLocaleString()} finished on their own, {waited} waited for
+          a person to approve, and {nurse} {nurse === 1 ? "was" : "were"} handed to a nurse.
         </p>
       )}
       <div className="mt-5 overflow-x-auto elevated rounded-[6px] border border-rule bg-panel">
