@@ -21,9 +21,7 @@ test.describe("station board (D2-7)", () => {
     expect((await request.post("http://localhost:4000/api/demo/visit-day")).ok()).toBe(true);
   });
 
-  test("dark board with initials only, no serious axe issues", async ({
-    page,
-  }) => {
+  test("dark board with initials only, no serious axe issues", async ({ page }) => {
     await page.goto("/board/lab_draw");
     await expect(page.getByRole("heading", { name: "Lab draw" })).toBeVisible();
     const maria = page.getByRole("row", { name: /M\. D\./ });
