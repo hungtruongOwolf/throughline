@@ -7,7 +7,8 @@ export const en = {
     "You're texting with Throughline, an AI assistant at Halden Medical Center. For medical questions reply NURSE and a person will call you.",
   "disclosure.summary_unreviewed":
     "This summary was prepared with AI from your care team's notes and has not been reviewed by a clinician. For questions about your care, call the clinic at 555-0100 or reply NURSE.",
-  "ops.proposal_footer": "Forecast from the rest of the day, run with and without the change; a manager decides.",
+  "ops.proposal_footer":
+    "Forecast from the rest of the day, run with and without the change; a manager decides.",
   "patient.show_way": "Show me the way",
   "patient.im_here": "I'm here",
   "patient.talk_to_person": "Talk to a person",
