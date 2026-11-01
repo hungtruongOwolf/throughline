@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { loadEngine, type Engine } from "@throughline/engine/web";
 import { t, type OpsOverview, type SimRequest, type StationId } from "@throughline/shared";
 import day from "../../../../fixtures/day-2026-11-17.json";
-import { CampusHero } from "../../components/CampusHero";
+import { Hospital3D } from "../../components/Hospital3DLazy";
 import { Proposal } from "../../components/Proposal";
 import { WaitCurve } from "../../components/WaitCurve";
 import { clockTime } from "../../lib/format";
@@ -124,7 +124,12 @@ export function CommandCenter({
       </header>
 
       <main className="min-h-0 px-2">
-        <CampusHero stations={overview.stations} selected={station} onSelect={setStation} />
+        <Hospital3D
+          stations={overview.stations}
+          selected={station}
+          onSelect={setStation}
+          height={560}
+        />
       </main>
 
       <aside aria-label={t("en", "ops.proposals")} className="px-6 pt-2 lg:overflow-y-auto">

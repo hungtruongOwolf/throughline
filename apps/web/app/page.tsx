@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, type ReactNode } from "react";
 import { agentProfile, STAFF } from "@throughline/shared";
-import { CampusHero } from "../components/CampusHero";
+import { Hospital3D } from "../components/Hospital3DLazy";
 import { AgentGlyph, hhmm, shortDate, StageRail } from "../components/ui";
 import { fetchHospital, fetchReferrals } from "../lib/platform";
 import { fetchOverview } from "../lib/runtime";
@@ -137,7 +137,7 @@ export default function FrontDoor() {
               : "connecting."}
           </p>
           <div className="mt-2 -mb-4">
-            <CampusHero stations={floor?.stations ?? []} />
+            <Hospital3D stations={floor?.stations ?? []} height={500} />
           </div>
           <div className="overflow-x-auto rounded-[4px] border border-rule bg-panel px-4 pt-4 pb-2 shadow-[0_10px_30px_-20px_rgba(24,34,58,0.5)]">
             <div className="min-w-[560px]">
