@@ -1,4 +1,4 @@
-import { t, type OpsProposal } from "@throughline/shared";
+import { OPS_AUTOPILOT, t, type OpsProposal } from "@throughline/shared";
 import { stationName } from "../lib/stations";
 
 /**
@@ -80,7 +80,9 @@ export function Proposal({
             ✓
           </span>
           {proposal.status === "resolved"
-            ? t("en", "ops.approved_by", { name: proposal.resolved_by ?? "" })
+            ? proposal.resolved_by === OPS_AUTOPILOT
+              ? t("en", "ops.applied_auto")
+              : t("en", "ops.approved_by", { name: proposal.resolved_by ?? "" })
             : t("en", "ops.rejected_by", { name: proposal.resolved_by ?? "" })}
         </p>
       )}

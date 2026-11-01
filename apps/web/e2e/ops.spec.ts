@@ -8,16 +8,16 @@ test.describe("command center (D2-8)", () => {
   test.use({ viewport: { width: 1536, height: 960 } });
 
   test.beforeEach(async ({ request, context }) => {
-    // The hospital as it opens: CT 1 down, the change held for the operations lead.
+    // The hospital as it opens: CT 1 down, and the planner has already moved patients to CT 2.
     expect((await request.post("http://localhost:4000/api/admin/restore")).ok()).toBe(true);
     await context.addInitScript(() => window.localStorage.setItem("tl_user", "sam"));
   });
 
-  test("shows the CT outage proposal on the map view, held for a manager", async ({ page }) => {
+  test("shows the CT fix the planner applied on its own, within policy", async ({ page }) => {
     await page.goto("/today");
     const proposal = page.getByRole("article", { name: /CT 2/ });
     await expect(proposal).toBeVisible();
-    await expect(proposal.getByText("Held for a manager")).toBeVisible();
+    await expect(proposal.getByText(/Applied automatically, within policy/)).toBeVisible();
     await expect(page.getByText(/Predicted peak wait \d+ min/)).toBeVisible();
     await page.evaluate(() => document.fonts.ready);
     await page.waitForTimeout(300);
@@ -28,21 +28,12 @@ test.describe("command center (D2-8)", () => {
     );
   });
 
-  test("approving re-plans Maria live: her phone swaps CT 1 for CT 2 over SSE", async ({
-    page,
-    context,
-  }) => {
+  test("the planner's change re-plans Maria: her phone already shows CT 2", async ({ context }) => {
     const phone = await context.newPage();
     await phone.setViewportSize({ width: 390, height: 844 });
     await phone.goto("/p/maria-001");
-    await expect(phone.getByRole("heading", { name: "CT 1" })).toBeVisible();
-
-    await page.goto("/today");
-    await page.getByRole("button", { name: "Approve" }).click();
-    await expect(page.getByText("Approved by Sam Whitfield")).toBeVisible();
-
-    // No reload: the phone hears ItineraryReplanned on the event stream.
     await expect(phone.getByRole("heading", { name: "CT 2" })).toBeVisible();
+    await expect(phone.getByText("Your plan changed").first()).toBeVisible();
     await phone.screenshot({ path: `${SCREENS}patient-replanned-390.png` });
   });
 

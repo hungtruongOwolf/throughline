@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { CommandCenter } from "../../ops/command-center";
 import { markStep } from "../../../components/shell";
 import { useUser } from "../../../lib/session";
@@ -7,6 +8,8 @@ import { useUser } from "../../../lib/session";
 /** The visit-day command center (section 4.6), signed in as whoever is at the desk. */
 export default function TodayPage() {
   const { user } = useUser();
+  // the planner applies changes within policy on its own; seeing one here completes the step
+  useEffect(() => markStep("floor"), []);
   return (
     <CommandCenter by={user?.name ?? "Operations lead"} onApproved={() => markStep("floor")} />
   );

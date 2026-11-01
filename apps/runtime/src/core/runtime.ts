@@ -2,6 +2,8 @@ import { randomUUID } from "node:crypto";
 import {
   BLOCKING,
   isOpsEventType,
+  OPS_AUTOPILOT,
+  withinOpsPolicy,
   Journey,
   nextState,
   phaseOf,
@@ -44,6 +46,8 @@ export interface RuntimeDeps {
   runner: AgentRunner;
   agents: Agent[];
   providerReviewOn: boolean;
+  /** Apply floor changes that are within policy without waiting for the operations lead. */
+  opsAutopilot?: boolean;
 }
 
 /**
@@ -260,6 +264,15 @@ export class Runtime {
         emitted: [],
         reviewId: review.id,
       });
+      // A floor change within policy goes ahead at once; the operations lead sees it on Today.
+      if (
+        this.deps.opsAutopilot &&
+        inv.capability === "ops_action.apply" &&
+        event.type === "OpsActionProposed"
+      ) {
+        if (withinOpsPolicy(event.payload.action.predicted_effect))
+          await this.resolve(review.id, "approved", OPS_AUTOPILOT, depth);
+      }
       return;
     }
 

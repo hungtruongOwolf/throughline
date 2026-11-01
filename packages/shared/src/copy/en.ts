@@ -88,6 +88,7 @@ export const en = {
   "ops.reject": "Reject",
   "ops.held": "Held for a manager",
   "ops.approved_by": "Approved by {name}",
+  "ops.applied_auto": "Applied automatically, within policy. The operations lead can see it here.",
   "ops.rejected_by": "Rejected by {name}",
   "ops.wait_change": "{station} wait {before} to {after} min",
   "ops.affected": "{count} journeys affected",

@@ -22,7 +22,7 @@ export type StartStep = "fax" | "insurance" | "floor" | "patient";
 const STEPS: { id: StartStep; text: string }[] = [
   { id: "fax", text: "Receive a referral" },
   { id: "insurance", text: "Approve an insurance submission" },
-  { id: "floor", text: "Approve a change on today's floor" },
+  { id: "floor", text: "See a change on today's floor" },
   { id: "patient", text: "See what the patient sees" },
 ];
 

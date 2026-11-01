@@ -91,6 +91,8 @@ export const es: Record<CopyKey, string> = {
   "ops.reject": "Rechazar",
   "ops.held": "En espera de un gerente",
   "ops.approved_by": "Aprobado por {name}",
+  "ops.applied_auto":
+    "Aplicado automáticamente, dentro de las reglas. El responsable de operaciones lo ve aquí.",
   "ops.rejected_by": "Rechazado por {name}",
   "ops.wait_change": "Espera en {station} de {before} a {after} min",
   "ops.affected": "{count} recorridos afectados",

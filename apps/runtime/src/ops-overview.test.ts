@@ -5,7 +5,7 @@ import { createContext } from "./context";
 
 describe("ops overview", () => {
   it("reports the CT outage, Maria, and the pending proposal", async () => {
-    const ctx = createContext({}, { databasePath: ":memory:" });
+    const ctx = createContext({ OPS_AUTOPILOT: "off" }, { databasePath: ":memory:" });
     const app = createApp(ctx);
     await app.request("/api/demo/visit-day?beat=ct_outage", { method: "POST" });
     const o = OpsOverview.parse(await (await app.request("/api/ops/overview")).json());

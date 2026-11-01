@@ -4,7 +4,7 @@ import { createApp } from "../../app";
 import { createContext } from "../../context";
 
 async function outage() {
-  const ctx = createContext({}, { databasePath: ":memory:" });
+  const ctx = createContext({ OPS_AUTOPILOT: "off" }, { databasePath: ":memory:" });
   const app = createApp(ctx);
   await app.request("/api/demo/visit-day?beat=ct_outage", { method: "POST" });
   return { ctx, app };

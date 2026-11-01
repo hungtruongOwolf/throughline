@@ -49,6 +49,25 @@ export const PRE_APPROVAL: ReadonlySet<Capability> = new Set<Capability>([
 /** Execute, open a review, and suppress downstream events except HumanReviewRequested. */
 export const BLOCKING: ReadonlySet<Capability> = new Set<Capability>(["handoff.request"]);
 
+/**
+ * Who approves a floor change the Ops planner applies on its own. A change is applied without
+ * waiting when it is within policy: it moves few patients and clearly shortens the wait.
+ */
+export const OPS_AUTOPILOT = "Ops planner (within policy)";
+export const OPS_POLICY = { maxAffected: 10, minGain: 0.3 };
+
+export function withinOpsPolicy(effect: {
+  wait_before_min: number;
+  wait_after_min: number;
+  affected_journeys: number;
+}): boolean {
+  const gain =
+    effect.wait_before_min > 0
+      ? (effect.wait_before_min - effect.wait_after_min) / effect.wait_before_min
+      : 0;
+  return effect.affected_journeys <= OPS_POLICY.maxAffected && gain >= OPS_POLICY.minGain;
+}
+
 export function requiresPreApproval(
   capability: Capability,
   opts: { providerReviewOn: boolean },

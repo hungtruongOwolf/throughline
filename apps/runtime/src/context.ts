@@ -71,6 +71,7 @@ export function createContext(
             : "Muse Spark 1.3",
       }),
     providerReviewOn: env.PROVIDER_REVIEW_ON !== "false",
+    opsAutopilot: env.OPS_AUTOPILOT !== "off",
   });
   runtime.start();
   const world: World = {};

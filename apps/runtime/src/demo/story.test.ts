@@ -12,7 +12,7 @@ const post = (body: unknown = {}) => ({
 
 describe("Maria's story: one journey, one data set", () => {
   it("plays the referral to checkout on the same journey, with the visit booked as one morning", async () => {
-    const ctx = createContext({}, { databasePath: ":memory:" });
+    const ctx = createContext({ OPS_AUTOPILOT: "off" }, { databasePath: ":memory:" });
     const app = createApp(ctx);
     await app.request("/api/story/goto", post({ step: "fax" }));
     const states: Record<string, Journey> = {};
@@ -63,7 +63,7 @@ describe("Maria's story: one journey, one data set", () => {
   }, 60_000);
 
   it("goes straight to a step by replaying the actions before it", async () => {
-    const ctx = createContext({}, { databasePath: ":memory:" });
+    const ctx = createContext({ OPS_AUTOPILOT: "off" }, { databasePath: ":memory:" });
     const app = createApp(ctx);
     const res = await app.request("/api/story/goto", post({ step: "decide" }));
     expect(((await res.json()) as { step: string }).step).toBe("decide");

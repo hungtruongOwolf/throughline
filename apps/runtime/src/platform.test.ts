@@ -1,3 +1,4 @@
+import { OPS_AUTOPILOT } from "@throughline/shared";
 import { describe, expect, it } from "vitest";
 import { createApp } from "./app";
 import { createContext } from "./context";
@@ -74,8 +75,13 @@ describe("staff platform read models", () => {
         waiting_by_role: Record<string, number>;
       }
     ).waiting_by_role;
-    for (const role of ["coordinator", "nurse", "clinician", "ops"])
+    for (const role of ["coordinator", "nurse", "clinician"])
       expect(roles[role]).toBeGreaterThan(0);
+    // The CT fix is within policy, so the planner applied it without waiting for the ops lead.
+    const ops = (await (await app.request("/api/ops/overview")).json()) as {
+      proposals: { status: string; resolved_by?: string }[];
+    };
+    expect(ops.proposals[0]).toMatchObject({ status: "resolved", resolved_by: OPS_AUTOPILOT });
 
     const line = (await (await app.request("/api/fax-line")).json()) as { id: string }[];
     expect(line).toHaveLength(3);
