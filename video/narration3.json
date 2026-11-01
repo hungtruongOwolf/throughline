@@ -3,36 +3,36 @@
   "id": 1,
   "part": "problem",
   "kind": "anim",
-  "text": "Every year, Americans make about a hundred and fifty-five million emergency visits, and hundreds of millions more to clinics.",
-  "sec": 8.21
+  "text": "Every year, millions of people go to a hospital, for a checkup, a scan, or an emergency.",
+  "sec": 6.84
  },
  {
   "id": 2,
   "part": "problem",
   "kind": "anim",
-  "text": "Behind each visit is a chain of work. Someone reads the referral, someone checks the insurance, and the insurer often has to approve the tests in advance. That's called prior authorization.",
-  "sec": 13.3
+  "text": "If you've gone with someone you love, you know the hardest part often isn't the medicine. It's not knowing where to go, who to ask, or what comes next.",
+  "sec": 10.25
  },
  {
   "id": 3,
   "part": "problem",
   "kind": "anim",
-  "text": "Then someone books the visit, and afterwards someone explains the results and books the follow-up.",
-  "sec": 6.07
+  "text": "My family has lived this. With no one on the inside, we lost track of a referral, waited weeks for an insurance approval, and never knew if anyone would call with the results.",
+  "sec": 11.73
  },
  {
   "id": 4,
   "part": "problem",
   "kind": "anim",
-  "text": "Each step belongs to a different person in a different system, and the first step often still arrives by fax.",
-  "sec": 6.97
+  "text": "Each of those steps sits with a different person in a different system, and the first one often still arrives by fax.",
+  "sec": 7.1
  },
  {
   "id": 5,
   "part": "problem",
   "kind": "anim",
-  "text": "So things slip through the gaps. About a quarter of US health spending is estimated to be waste, and doctors and their staff spend around thirteen hours a week on prior authorization alone.",
-  "sec": 11.96
+  "text": "The cost is real. About a quarter of US health spending is estimated to be waste, and doctors' offices spend around thirteen hours a week on prior authorization, getting insurers to approve tests.",
+  "sec": 13.18
  },
  {
   "id": 6,
@@ -43,24 +43,24 @@
  },
  {
   "id": 7,
-  "part": "idea",
+  "part": "problem",
   "kind": "anim",
-  "text": "We built Throughline to be the thread that holds this whole chain together.",
-  "sec": 4.23
+  "text": "None of this takes harder work. It takes connected steps, and routine work that happens on its own.",
+  "sec": 7.14
  },
  {
   "id": 8,
   "part": "idea",
   "kind": "anim",
-  "text": "It's thirteen AI agents, each owning one job in the patient's journey, from the faxed referral to the follow-up.",
-  "sec": 7.45
+  "text": "So we built Throughline: thirteen AI agents, each owning one step of the patient's journey, from referral to follow-up.",
+  "sec": 8.38
  },
  {
   "id": 9,
   "part": "idea",
   "kind": "anim",
-  "text": "The agents pass the work to each other on their own. A person steps in when an agent isn't sure, or when a decision needs a human, like approving an insurance request or a schedule change.",
-  "sec": 12.29
+  "text": "They pass the work along themselves, and bring in a person when they're unsure, or when a human has to decide, like sending a request to an insurer.",
+  "sec": 9.44
  },
  {
   "id": 10,
@@ -136,8 +136,8 @@
   "id": 20,
   "part": "day",
   "kind": "product",
-  "text": "The planner simulates the next ninety minutes with each possible fix and recommends one: an extra slot on the second scanner.",
-  "sec": 7.77
+  "text": "The planner simulates the next ninety minutes under each possible fix and picks the best: an extra slot on the second scanner.",
+  "sec": 7.81
  },
  {
   "id": 21,
@@ -150,8 +150,8 @@
   "id": 22,
   "part": "day",
   "kind": "product",
-  "text": "Sam, the operations lead, approves it, and Maria's plan updates right away: her scan moves to the second scanner.",
-  "sec": 8.47
+  "text": "The change is small and clearly helps, so the planner applies it on its own, within policy. Sam, the operations lead, sees what changed and why, and bigger changes still wait for Sam. Maria's scan moves to the second scanner right away.",
+  "sec": 17.12
  },
  {
   "id": 23,
@@ -220,14 +220,14 @@
   "id": 32,
   "part": "close",
   "kind": "anim",
-  "text": "So the fax gets read, the prior authorization gets drafted, and no test result goes untracked, with a person at every decision that matters.",
-  "sec": 9.64
+  "text": "In the end, families like mine shouldn't need someone on the inside just to find their way.",
+  "sec": 5.73
  },
  {
   "id": 33,
   "part": "close",
   "kind": "anim",
-  "text": "Thirteen agents, one thread, and nobody holding it together by hand. That's Throughline.",
-  "sec": 6.56
+  "text": "When AI agents carry the routine work and the steps connect, care gets easier for patients, lighter for staff, and reaches more people.",
+  "sec": 9.01
  }
 ]

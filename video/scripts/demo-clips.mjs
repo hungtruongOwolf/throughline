@@ -107,15 +107,16 @@ export const CLIPS = [
     user: "sam",
     open: "/today",
     settle: 3500,
-    async run({ page, sleep, click, mark, to }) {
+    async run({ page, sleep, mark, to }) {
+      // The planner already applied the CT fix on its own; the operations lead reads what changed.
       await sleep(3000);
       await to(page.getByText(/Open extra CT 2 slot/).first()).catch(() => undefined);
       await sleep(3000);
       await to(page.getByText(/CT wait 17 to 5 min/).first()).catch(() => undefined);
-      await sleep(3000);
-      mark("approve");
-      await click(page.getByRole("button", { name: "Approve" }).first());
-      await sleep(3500);
+      await sleep(2500);
+      mark("applied");
+      await to(page.getByText(/Applied automatically/).first()).catch(() => undefined);
+      await sleep(4500);
     },
   },
   {

@@ -20,13 +20,13 @@ clip_len = lambda name: json.load(open(f"public/demo/{name}.json"))["duration"]
 # anim: a v2 scene by beat; clip: a recording [from, to] seconds; still: a screenshot.
 PLAN = {
     1: [("anim", "COLD-OPEN")],
-    2: [("anim", "PROBLEM-1")],
-    3: [("anim", "PROBLEM-2")],
+    2: [("anim", "PROBLEM-2")],
+    3: [("anim", "PROBLEM-1")],
     4: [("anim", "PROBLEM-3")],
     5: [("anim", "PRICE-1"), ("anim", "PRICE-2")],
     6: [("anim", "PRICE-3")],
-    7: [("anim", "TITLE")],
-    8: [("anim", "IDEA")],
+    7: [("anim", "DROP")],
+    8: [("anim", "TITLE"), ("anim", "IDEA")],
     9: [("new", "Gates")],
     10: [("new", "Stages")],
     11: [("clip", "c01-fax-arrives", 0.8, 8.4)],
@@ -38,9 +38,9 @@ PLAN = {
     17: [("phone", "c05-maria-phone", 6.6, 12.5)],
     18: [("clip", "c06-today-approve", 0.0, 8.0)],
     19: [("anim", "DAY-2")],
-    20: [("still", "proposal")],
+    20: [("clip", "c06-today-approve", 5.0, 13.5)],
     21: [("anim", "DAY-4")],
-    22: [("clip", "c06-today-approve", 13.0, 18.5), ("phone", "c07-maria-changed", 0.0, 5.0)],
+    22: [("clip", "c06-today-approve", 13.5, 21.0), ("phone", "c07-maria-changed", 0.0, 6.0)],
     23: [("clip", "c08-sign-summary", 0.0, 4.5)],
     24: [("clip", "c08-sign-summary", 4.5, 12.2)],
     25: [("clip", "c09-nurse-task", 0.5, 7.0)],
@@ -64,7 +64,7 @@ for i in sorted(PLAN):
     prev_part = line["part"]
     vo = round(line["sec"] * FPS)
     start = up(at, BEAT)
-    if i == 7:
+    if i == 8:
         start = up(at, BAR); marks["D1"] = start // BAR
     if i == 20:
         marks["BRK"] = up(at, BAR) // BAR

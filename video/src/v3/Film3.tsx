@@ -44,6 +44,7 @@ const FOCUS: Record<string, Rect> = {
   "14": { x: 120, y: 40, w: 1300, h: 731 },
   "15": { x: 360, y: 50, w: 1560, h: 878 },
   "18": { x: 140, y: 70, w: 1460, h: 821 },
+  "20": { x: 900, y: 60, w: 1020, h: 574 },
   "22": { x: 900, y: 60, w: 1020, h: 574 },
   "23": { x: 360, y: 30, w: 1560, h: 878 },
   "24": { x: 360, y: 30, w: 1560, h: 878 },
@@ -143,6 +144,9 @@ function Proposal({ row }: { row: Row3 }) {
   );
 }
 
+/** Scenes whose last frame is a transition, and the settled frame to hold instead. */
+const HOLD_AT: Record<string, number> = { "PROBLEM-1": 95, "PROBLEM-3": 100, "PRICE-3": 62, DROP: 60 };
+
 /** A held frame keeps drifting a little, so it never looks paused. */
 function Hold({ frames, children }: { frames: number; children: React.ReactNode }) {
   const f = useCurrentFrame();
@@ -160,6 +164,8 @@ function Visual({ row }: { row: Row3 }) {
   const stretches = row.name === "CLOSE-1";
   const len = stretches ? row.dur : Math.min(row.dur, BUILT[row.name] ?? row.dur);
   const scene = <Scene dur={len} vo={row.vo} start={row.start} text={TEXT[row.line] ?? ""} />;
+  // the frame a scene rests on: its last frame, unless that one is mid-transition
+  const rest = Math.min(len - 1, HOLD_AT[row.name] ?? len - 1);
   if (row.dur <= len) return scene;
   // the scene plays at the length it was animated for, then its last frame holds under the voice
   return (
@@ -167,7 +173,7 @@ function Visual({ row }: { row: Row3 }) {
       <Sequence durationInFrames={len}>{scene}</Sequence>
       <Sequence from={len}>
         <Hold frames={row.dur - len}>
-          <Freeze frame={len - 1}>{scene}</Freeze>
+          <Freeze frame={rest}>{scene}</Freeze>
         </Hold>
       </Sequence>
     </>
@@ -178,7 +184,7 @@ const VO_SPANS = SHOTS3.filter((s) => s.vo > 0).map((s) => [s.start, s.start + s
 const ducked = (f: number) => {
   let g = 1;
   for (const [s, e] of VO_SPANS)
-    g = Math.min(g, interpolate(f, [s - 6, s, e, e + 12], [1, 0.28, 0.28, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }));
+    g = Math.min(g, interpolate(f, [s - 6, s, e, e + 12], [1, 0.32, 0.32, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }));
   return g;
 };
 
@@ -193,7 +199,8 @@ export function Film3() {
         </Sequence>
       ))}
       <AgentLayer3 shots={SHOTS3} />
-      <Audio src={staticFile("audio/music3/music.wav")} volume={(f) => 0.75 * ducked(f)} />
+      {/* "Mountains" by Andrew Ev (Mixkit License), a middle section repeated to fit */}
+      <Audio src={staticFile("audio/mountains-ext.wav")} volume={(f) => 0.6 * ducked(f)} />
     </AbsoluteFill>
   );
 }

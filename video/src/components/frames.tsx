@@ -7,7 +7,8 @@ import { useEnter } from "./kit";
 export function Sfx({ at, name, volume = 0.6 }: { at: number; name: string; volume?: number }) {
   return (
     <Sequence from={Math.max(0, Math.round(at))} layout="none">
-      <Audio src={staticFile(`audio/sfx/${name}.wav`)} volume={volume} />
+      {/* sound effects sit well under the voice and the music */}
+      <Audio src={staticFile(`audio/sfx/${name}.wav`)} volume={volume * 0.7} />
     </Sequence>
   );
 }

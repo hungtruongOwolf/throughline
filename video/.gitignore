@@ -5,3 +5,5 @@ public/audio/bed-*.wav
 public/audio/music2/
 public/audio/music3/
 public/demo/*.json.tmp
+public/audio/lib/
+public/audio/mountains-ext.wav
