@@ -1,4 +1,4 @@
-# Demo video script (about 4:20)
+# Demo video script (about 4:40)
 
 This is meant to be spoken, not read. It follows one patient, Maria, from the fax to the follow-up, so every part leads into the next. Read it out loud once; where a sentence is hard to say, change it to how you would say it.
 
@@ -52,23 +52,29 @@ _Screen: sign in as Jordan, open the new referral's patient record so the timeli
 >
 > And when Maria answers her plan with a voice note, saying she's going to need a wheelchair, the messaging agent hears that, and the Itinerary agent redraws her route to use elevators. Nobody typed that in.
 
-## 4. The visit day (2:50 to 3:30)
+## 4. The visit day (2:50 to 3:50)
 
 _Screen: Today, then the patient app in a phone-sized window._
 
-> Now it's the day of the visit. This is the hospital, live. And one of the two CT scanners is down, and nobody's told anyone.
+> Now it's the day of the visit. Maria's day is a string of stops: labs, a scan, the clinic, then the infusion. Each stop is its own queue, and nobody sees the whole day. So when one of them backs up, everybody behind it just waits.
 >
-> But there's an agent that counts the people in each waiting room, from the camera frames. It sees the CT line growing, and tells the Ops planner. And the planner does something I really like. Before it bothers anybody, it runs the rest of the day with every possible fix, and comes back with one. Move three patients to the other scanner.
+> And right now, one of the two CT scanners is down, and nobody's told anyone. But there's an agent that counts the people in each waiting room, from the camera frames. It sees the CT line growing, and tells the Ops planner.
+>
+> And before it bothers anybody, the planner plays the rest of the day out, twenty times over, with every fix it can think of. It comes back with one. Open an extra slot on the other scanner, and move the CT patients over.
+>
+> Look at the numbers. The average wait at CT goes from seventeen minutes to five. That's twelve and a half minutes back for each of seven patients. About an hour and a half of people's time, from one decision, made before anyone had to complain.
 >
 > _(click Approve)_
 >
-> Sam, the operations lead, approves it. And right away Maria's phone tells her what changed, and why. She never asked.
+> Sam, the operations lead, approves it. And right away every patient it touches, Maria included, gets a message on her phone saying what changed, and why. She never asked.
+>
+> Now picture that at the scanner, the lab, the clinic, a few times a day. That's where the hours come from.
 >
 > _(on the phone view)_
 >
 > And if she gets lost anyway, she takes a photo of a sign, and it tells her where she is, and the way to the elevator.
 
-## 5. After the visit (3:30 to 3:50)
+## 5. After the visit (3:50 to 4:10)
 
 _Screen: the patient record, the after-visit part of the timeline._
 
@@ -76,7 +82,7 @@ _Screen: the patient record, the after-visit part of the timeline._
 >
 > Another agent watches her test result until the doctor has signed off. And Follow-up books her next visit and sends the report back to the doctor who sent the fax.
 
-## 6. What it runs on (3:50 to 4:10)
+## 6. What it runs on (4:10 to 4:30)
 
 _Screen: the Agents page, then the hospital picker and Northgate in 3D._
 
@@ -84,7 +90,7 @@ _Screen: the Agents page, then the hospital picker and Northgate in 3D._
 >
 > And it isn't one hospital. _(pick Northgate)_ This one has five buildings and a fourteen-floor tower, and a new hospital can add itself.
 
-## 7. Close (4:10 to 4:20)
+## 7. Close (4:30 to 4:40)
 
 _Screen: Today, Northgate._
 
@@ -94,17 +100,18 @@ _Screen: Today, Northgate._
 
 ## Numbers, and where they come from
 
-| You say                                                    | Source                           |
-| ---------------------------------------------------------- | -------------------------------- |
-| About 155 million emergency visits a year                  | CDC NHAMCS, 2022                 |
-| Outpatient visits in the hundreds of millions              | CDC Health, United States        |
-| 2 primary doctors and 5 specialists, in 4 practices        | Pham et al., NEJM 2007           |
-| A quarter of US health spending is waste (estimated)       | Shrank et al., JAMA 2019         |
-| 1 in 14 abnormal results never reaches the patient         | Casalino et al., 2009            |
-| Staff spend about 13 hours a week on prior authorization   | AMA survey, 2024                 |
-| About 2 hours of the day, about 20 minutes with the doctor | Ray et al., JAMA Intern Med 2015 |
-| Most older patients miss at least one medication change    | J Gen Intern Med, 2012           |
-| Doing a prior auth by hand takes about 24 minutes          | CAQH Index, 2024                 |
+| You say                                                     | Source                                                           |
+| ----------------------------------------------------------- | ---------------------------------------------------------------- |
+| About 155 million emergency visits a year                   | CDC NHAMCS, 2022                                                 |
+| Outpatient visits in the hundreds of millions               | CDC Health, United States                                        |
+| 2 primary doctors and 5 specialists, in 4 practices         | Pham et al., NEJM 2007                                           |
+| A quarter of US health spending is waste (estimated)        | Shrank et al., JAMA 2019                                         |
+| 1 in 14 abnormal results never reaches the patient          | Casalino et al., 2009                                            |
+| Staff spend about 13 hours a week on prior authorization    | AMA survey, 2024                                                 |
+| About 2 hours of the day, about 20 minutes with the doctor  | Ray et al., JAMA Intern Med 2015                                 |
+| Most older patients miss at least one medication change     | J Gen Intern Med, 2012                                           |
+| Doing a prior auth by hand takes about 24 minutes           | CAQH Index, 2024                                                 |
+| CT wait 17.4 to 4.9 minutes, 12.5 minutes saved, 7 patients | The Ops proposal on the site (20 simulated runs over 90 minutes) |
 
 Everything else you say about the product is from the repo: 13 agents, five buildings and a fourteen-floor tower at Northgate. "Thirty referrals, ten minutes each, five hours" is arithmetic, not a measurement.
 
