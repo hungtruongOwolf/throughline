@@ -26,8 +26,10 @@ test.describe("the staff platform", () => {
     page,
   }) => {
     await page.goto("/");
-    await expect(page.getByRole("heading", { name: "Referrals in progress" })).toBeVisible();
-    await expect(page.getByText(/people in the building today/)).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Every referral, from the fax to the follow-up." }),
+    ).toBeVisible();
+    await expect(page.getByText(/people in the building, \d+ referrals in progress/)).toBeVisible();
     await page.evaluate(() => document.fonts.ready);
     await page.screenshot({ path: `${SCREENS}platform-home.png` });
     await noSeriousAxe(page);
@@ -114,5 +116,34 @@ test.describe("the staff platform", () => {
     await expect(page.getByText(/Found you/)).toBeVisible();
     await expect(page.getByText(/Directions to CT 2/).first()).toBeVisible();
     await page.screenshot({ path: `${SCREENS}patient-sign-photo.png`, fullPage: true });
+  });
+
+  test("a patient books a visit in six steps, with an example for every field", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    await page.getByRole("button", { name: /I'm a patient/ }).click();
+    await page.getByRole("link", { name: /Book a visit/ }).click();
+    await expect(page.getByRole("heading", { name: "Book a visit with Oncology" })).toBeVisible();
+    const next = page.getByRole("button", { name: "Continue" });
+    await page.getByRole("button", { name: /A first visit with a cancer specialist/ }).click();
+    await next.click();
+    await page.getByRole("button", { name: /Yes, my doctor faxed it/ }).click();
+    await page.getByRole("button", { name: "Use an example referral" }).click();
+    await next.click();
+    await page.getByRole("button", { name: "Fill with example details" }).click();
+    await next.click();
+    await page.getByRole("button", { name: "Use this example card" }).click();
+    await next.click();
+    await page.getByRole("button", { name: "Pick example days" }).click();
+    await next.click();
+    await expect(page.getByRole("heading", { name: "Check and send" })).toBeVisible();
+    await page.screenshot({ path: `${SCREENS}visit-check.png` });
+    await noSeriousAxe(page);
+    await page.getByRole("button", { name: "Send request" }).click();
+    await expect(page.getByRole("heading", { name: "Request sent" })).toBeVisible();
+    await expect(page.getByText("read the faxed referral")).toBeVisible();
+    await expect(page.getByText(/A person at the hospital is checking it now/)).toBeVisible();
+    await page.screenshot({ path: `${SCREENS}visit-sent.png`, fullPage: true });
   });
 });

@@ -9,6 +9,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { createPortal } from "react-dom";
 import { agentProfile, STAGES, type Stage, type StaffRole, STAFF } from "@throughline/shared";
 
 // ---- time ---------------------------------------------------------------------------------
@@ -63,11 +64,21 @@ export function AgentGlyph({ name, size = 22 }: { name: string; size?: number })
   );
 }
 
-export function Avatar({ initials, size = 24 }: { initials: string; size?: number }) {
+export function Avatar({
+  initials,
+  size = 24,
+  light = false,
+}: {
+  initials: string;
+  size?: number;
+  light?: boolean;
+}) {
   return (
     <span
       aria-hidden
-      className="inline-flex shrink-0 items-center justify-center rounded-full bg-ink font-figure font-semibold text-white"
+      className={`inline-flex shrink-0 items-center justify-center rounded-full font-figure font-semibold ${
+        light ? "bg-white text-ink" : "bg-ink text-white"
+      }`}
       style={{ width: size, height: size, fontSize: Math.round(size * 0.42) }}
     >
       {initials}
@@ -234,8 +245,9 @@ export function Drawer({
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [open, onClose]);
-  if (!open) return null;
-  return (
+  if (!open || typeof document === "undefined") return null;
+  // Portaled to <body>: a blurred sticky header would otherwise trap a fixed drawer inside it.
+  return createPortal(
     <div className="fixed inset-0 z-40" role="dialog" aria-modal="true" aria-labelledby={titleId}>
       <button
         type="button"
@@ -261,7 +273,8 @@ export function Drawer({
         </header>
         <div className="min-h-0 flex-1 overflow-y-auto">{children}</div>
       </aside>
-    </div>
+    </div>,
+    document.body,
   );
 }
 

@@ -67,12 +67,12 @@ function GettingStarted() {
     setState({ ...state, hidden: true });
   };
   return (
-    <section className="mx-3 mb-4 rounded-[6px] border border-rule bg-panel p-3">
+    <section className="mx-3 mb-4 rounded-[6px] border border-white/10 bg-white/5 p-3">
       <div className="flex items-center justify-between">
         <h2 className="text-[13px] font-bold">
           Getting started {state.done.length}/{STEPS.length}
         </h2>
-        <button type="button" onClick={hide} className="text-[12px] text-ink-soft hover:text-ink">
+        <button type="button" onClick={hide} className="text-[12px] text-white/60 hover:text-white">
           Hide
         </button>
       </div>
@@ -84,12 +84,14 @@ function GettingStarted() {
               <span
                 aria-hidden
                 className={`mt-0.5 inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full text-[10px] font-bold ${
-                  done ? "bg-agent text-white" : "border border-ink/30 text-ink-soft"
+                  done ? "bg-[#5fb3a9] text-ink" : "border border-white/40 text-white/70"
                 }`}
               >
                 {done ? "✓" : i + 1}
               </span>
-              <span className={done ? "text-ink-soft line-through" : ""}>{s.text}</span>
+              <span className={done ? "text-white/50 line-through" : "text-white/90"}>
+                {s.text}
+              </span>
             </li>
           );
         })}
@@ -111,19 +113,19 @@ function WorkspaceSwitcher() {
         type="button"
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
-        className="flex w-full items-center gap-2.5 rounded-[6px] px-2 py-2 text-left hover:bg-canvas"
+        className="flex w-full items-center gap-2.5 rounded-[6px] px-2 py-2 text-left hover:bg-white/10"
       >
-        <Avatar initials={user.initials} size={32} />
+        <Avatar initials={user.initials} size={32} light />
         <span className="min-w-0 flex-1">
           <span className="block truncate text-[14px] font-bold">{user.name}</span>
-          <span className="block truncate text-[12px] text-ink-soft">{user.title}</span>
+          <span className="block truncate text-[12px] text-white/65">{user.title}</span>
         </span>
-        <span aria-hidden className="text-ink-soft">
+        <span aria-hidden className="text-white/65">
           ▾
         </span>
       </button>
       {open && (
-        <ul className="absolute right-3 left-3 z-30 mt-1 rounded-[8px] border border-rule bg-panel py-1 shadow-lg">
+        <ul className="absolute right-3 left-3 z-30 mt-1 rounded-[8px] border border-rule bg-panel py-1 text-ink shadow-lg">
           {STAFF.map((s) => (
             <li key={s.id}>
               <button
@@ -173,15 +175,17 @@ function NavItem({
     <Link
       href={href}
       aria-current={active ? "page" : undefined}
-      className={`flex items-center justify-between rounded-[6px] px-3 py-2 text-[14px] ${
-        active ? "bg-ink font-bold text-white" : "text-ink hover:bg-canvas"
+      className={`relative flex items-center justify-between rounded-[6px] px-3 py-2 text-[14px] ${
+        active
+          ? "bg-white/15 font-bold text-white before:absolute before:inset-y-1.5 before:left-0 before:w-[3px] before:rounded-full before:bg-[#5fb3a9]"
+          : "text-white/80 hover:bg-white/10 hover:text-white"
       }`}
     >
       {label}
       {count !== undefined && (
         <span
           className={`min-w-6 rounded-full px-1.5 text-center font-figure text-[13px] tabular-nums ${
-            alert ? "bg-urgent text-white" : active ? "text-white" : "text-ink-soft"
+            alert ? "bg-urgent text-white" : "text-white/60"
           }`}
         >
           {count}
@@ -199,7 +203,7 @@ function Sidebar() {
   return (
     <nav
       aria-label="Workspace"
-      className="flex h-full w-[232px] shrink-0 flex-col border-r border-rule bg-panel"
+      className="flex h-full w-[232px] shrink-0 flex-col bg-ink text-white"
     >
       <WorkspaceSwitcher />
       <GettingStarted />
@@ -214,13 +218,13 @@ function Sidebar() {
         <NavItem href="/today" label="Today" />
         <NavItem href="/agents" label="Agents" count={13} />
       </div>
-      <p className="mt-6 px-6 text-[12px] font-bold text-ink-soft">Patient-facing</p>
+      <p className="mt-6 px-6 text-[12px] font-bold text-white/50">Patient-facing</p>
       <div className="mt-1 space-y-0.5 px-3">
         <NavItem href="/p/maria-001" label="Patient app" />
         <NavItem href="/map" label="Wayfinding map" />
         <NavItem href="/board/imaging_ct" label="Station displays" />
       </div>
-      <p className="mt-auto px-6 pb-4 text-[12px] text-ink-soft">Halden Medical Center</p>
+      <p className="mt-auto px-6 pb-4 text-[12px] text-white/50">Halden Medical Center</p>
     </nav>
   );
 }
@@ -353,7 +357,7 @@ function TopBar() {
   );
   const working = new Set(recent.map((r) => r.agent)).size;
   return (
-    <header className="flex h-14 shrink-0 items-center gap-4 border-b border-rule bg-panel px-5">
+    <header className="sticky top-0 z-20 flex h-14 shrink-0 items-center gap-4 border-b border-rule bg-panel/85 px-5 backdrop-blur-md">
       <Search />
       <span className="ml-auto font-figure text-[15px] text-ink-soft tabular-nums">
         {data?.now ? `${shortDate(data.now)}, ${hhmm(data.now)}` : ""}

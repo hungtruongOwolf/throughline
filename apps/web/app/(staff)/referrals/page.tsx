@@ -58,7 +58,7 @@ export default function ReferralsPage() {
   return (
     <div className="p-6">
       <h1 className="font-figure text-[22px] font-semibold">Referrals</h1>
-      <div className="mt-5 rounded-[6px] border border-rule bg-panel px-4 pt-4 pb-2">
+      <div className="mt-5 elevated rounded-[6px] border border-rule bg-panel px-4 pt-4 pb-2">
         <StageRail counts={counts} size="hospital" onPick={setStage} picked={stage} />
       </div>
       <div className="mt-4 flex flex-wrap items-center gap-1" role="tablist">
@@ -93,7 +93,7 @@ export default function ReferralsPage() {
           </button>
         )}
       </div>
-      <div className="mt-3 overflow-x-auto rounded-[6px] border border-rule bg-panel">
+      <div className="mt-3 overflow-x-auto elevated rounded-[6px] border border-rule bg-panel">
         <table className="w-full min-w-[980px] text-left text-[13px]">
           <thead className="border-b border-rule text-[12px] text-ink-soft">
             <tr>

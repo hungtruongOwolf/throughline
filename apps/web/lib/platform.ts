@@ -46,6 +46,10 @@ export interface FaxLineItem {
   arrived_at: string;
   pages: number;
   fax: string;
+  card: string;
+  dob: string;
+  phone: string;
+  member_id: string;
 }
 export const fetchFaxLine = () => get<FaxLineItem[]>("/api/fax-line");
 export const receiveFax = (fax: string) => post<{ id: string }>("/api/referrals", { fax });
@@ -67,3 +71,20 @@ export const sendReply = (journeyId: string, text: string) =>
 export function documentUrl(uri: string): string {
   return uri.startsWith("http") ? uri : `${RUNTIME_URL}${uri}`;
 }
+
+export interface VisitRequest {
+  service: "new_patient" | "second_opinion" | "follow_up";
+  referral_fax?: string;
+  doctor?: string;
+  patient: {
+    name: string;
+    dob: string;
+    phone: string;
+    mobility: "walking" | "wheelchair";
+    companion: boolean;
+  };
+  member_id?: string;
+  days: { date: string; part: "morning" | "afternoon" | "any" }[];
+}
+export const requestVisit = (body: VisitRequest) =>
+  post<{ id: string; visit_code: string }>("/api/visit-requests", body);

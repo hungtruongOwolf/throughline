@@ -18,8 +18,9 @@ import { locateFromPhoto } from "./locate";
 import { transcribe } from "./models/voice";
 import type { World } from "./sim/pre-visit";
 import { agentRuns, agentStats, inbox, journeyRows, overview, runView, timeline } from "./platform";
-import { faxLine, populate, receiveReferral } from "./demo/population";
-import { referralSpec } from "@throughline/synthetic";
+import { documentsFor, faxLine, populate, receiveReferral } from "./demo/population";
+import { createJourney } from "./core/journeys";
+import { REFERRAL_AVAILABILITY, referralSpec } from "@throughline/synthetic";
 import { loadEngine } from "@throughline/engine/node";
 import { VisitDayScenario } from "./sim/scenario";
 import type { ModelCache } from "./models/cache";
@@ -37,6 +38,8 @@ export interface AppContext {
   world: World;
   /** Fax-line referrals received since the last restore. */
   received: Set<string>;
+  /** Visit requests patients made since the last restore. */
+  requests: number;
   /** Last visitor change (POST) and whether the hospital differs from the restored one. */
   activity: { dirty: boolean; at: number };
 }
@@ -179,6 +182,11 @@ export function createApp(ctx?: AppContext) {
         arrived_at: s.receivedAt,
         pages: 1,
         fax: `/api/documents/${s.id}-referral-fax.png`,
+        card: `/api/documents/${s.id}-insurance-card.png`,
+        // What the patient on this referral would type (the visit form's example data).
+        dob: s.patient.dob,
+        phone: s.patient.phone_sim,
+        member_id: s.memberId,
       })),
     ),
   );
@@ -191,6 +199,88 @@ export function createApp(ctx?: AppContext) {
       specId === "maria" ? referralSpec("maria-001") : specId ? referralSpec(specId) : undefined;
     if (!card || !spec) return c.json({ error: "not found" }, 404);
     return c.json({ image: card.uri, member_id: spec.memberId, payer: "Lonestar Health Plan" });
+  });
+
+  /**
+   * A patient books a visit themselves (/visit): who they are, their doctor's referral (or the
+   * doctor to ask for one), insurance, and when they can come. The journey opens and the same
+   * agents take it from there; the visit code is the patient's MRN.
+   */
+  const VisitRequest = z.object({
+    service: z.enum(["new_patient", "second_opinion", "follow_up"]),
+    referral_fax: z.string().optional(),
+    doctor: z.string().max(120).optional(),
+    patient: z.object({
+      name: z.string().min(2).max(80),
+      dob: z.iso.date(),
+      phone: z.string().min(7).max(30),
+      mobility: z.enum(["walking", "wheelchair"]),
+      companion: z.boolean(),
+    }),
+    member_id: z.string().max(40).optional(),
+    days: z
+      .array(z.object({ date: z.iso.date(), part: z.enum(["morning", "afternoon", "any"]) }))
+      .min(1)
+      .max(15),
+  });
+  app.post("/api/visit-requests", async (c) => {
+    const body = VisitRequest.safeParse(await c.req.json().catch(() => ({})));
+    if (!body.success) return c.json({ error: body.error.issues }, 400);
+    const req = body.data;
+    const n = ctx.received.size + 1 + ctx.requests;
+    ctx.requests += 1;
+    const patientId = `pt-${900 + n}`;
+    const id = `ref-v${100 + n}`;
+    REFERRAL_AVAILABILITY[patientId] = req.days.map((d) => ({
+      date: d.date,
+      from: d.part === "afternoon" ? "12:00" : "07:30",
+      to: d.part === "morning" ? "12:00" : "17:30",
+    }));
+    const spec = req.referral_fax ? faxLine(ctx).find((s) => s.id === req.referral_fax) : undefined;
+    if (spec) ctx.received.add(spec.id);
+    const patient = {
+      id: patientId,
+      display_name: req.patient.name,
+      dob: req.patient.dob,
+      language: "en" as const,
+      mobility: req.patient.mobility,
+      phone_sim: req.patient.phone,
+    };
+    const base = createJourney({
+      id,
+      patient,
+      referring_provider: spec?.practice.provider ?? req.doctor ?? "Self-referred",
+      service_requested:
+        req.service === "follow_up"
+          ? "Follow-up visit, medical oncology"
+          : req.service === "second_opinion"
+            ? "Second opinion, medical oncology"
+            : "New patient consult, medical oncology",
+      now: clock.now(),
+    });
+    const documents = spec ? documentsFor(spec) : [];
+    runtime.saveJourney({
+      ...base,
+      referral: { ...base.referral, documents },
+      memory: {
+        ...base.memory,
+        preferred_language: "en",
+        mobility: req.patient.mobility,
+        companion_present: req.patient.companion ? "true" : "false",
+      },
+    });
+    if (spec) {
+      await runtime.ingest({ type: "ReferralReceived", journey_id: id, payload: { documents } });
+    } else {
+      // No referral yet: the coordinator asks the patient's doctor for one.
+      runtime.openTask(
+        id,
+        `Ask ${req.doctor?.trim() || "the patient's doctor"} to fax a referral for ${req.patient.name}`,
+        { agent: "referral_intake", capability: "referral.clarify" },
+      );
+    }
+    await bus.idle();
+    return c.json({ id, visit_code: patientId.replace(/\D/g, "").padStart(6, "0") });
   });
 
   /** Receives a fax from the fax line: a new journey opens and the agents start on it. */

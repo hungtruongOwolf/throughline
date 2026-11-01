@@ -1,21 +1,55 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { agentProfile, STAFF, type StaffRole } from "@throughline/shared";
-import { AgentGlyph, Avatar, hhmm, StageRail } from "../components/ui";
+import { useState, type ReactNode } from "react";
+import { agentProfile, STAFF } from "@throughline/shared";
+import { CampusHero } from "../components/CampusHero";
+import { AgentGlyph, hhmm, shortDate, StageRail } from "../components/ui";
 import { fetchHospital, fetchReferrals } from "../lib/platform";
+import { fetchOverview } from "../lib/runtime";
 import { useLive, useUser } from "../lib/session";
 
-const ROLE_WORD: Record<StaffRole, string> = {
-  coordinator: "waiting",
-  nurse: "waiting",
-  clinician: "waiting",
-  ops: "waiting",
-};
+function Arrow() {
+  return (
+    <svg aria-hidden viewBox="0 0 24 24" className="sign-arrow h-6 w-6 shrink-0" fill="none">
+      <path
+        d="M4 12h14M13 6l6 6-6 6"
+        stroke="currentColor"
+        strokeWidth="2.6"
+        strokeLinecap="square"
+      />
+    </svg>
+  );
+}
 
-function PatientEntry() {
-  const [open, setOpen] = useState(false);
+/** A wayfinding sign blade: the hospital's own way of saying "this way". */
+function Blade({
+  onClick,
+  href,
+  tone = "ink",
+  children,
+}: {
+  onClick?: () => void;
+  href?: string;
+  tone?: "ink" | "agent";
+  children: ReactNode;
+}) {
+  const cls = `sign-blade flex w-full items-center gap-4 rounded-[4px] px-5 py-4 text-left text-white shadow-[0_1px_0_rgba(255,255,255,0.12)_inset,0_8px_20px_-10px_rgba(24,34,58,0.6)] ${
+    tone === "agent" ? "bg-agent hover:bg-[#0c645d]" : "bg-ink hover:bg-[#222e4a]"
+  }`;
+  return href ? (
+    <Link href={href} className={cls}>
+      {children}
+    </Link>
+  ) : (
+    <button type="button" onClick={onClick} className={cls}>
+      {children}
+    </button>
+  );
+}
+
+function VisitCode() {
   const [code, setCode] = useState("");
   const [missing, setMissing] = useState(false);
   const router = useRouter();
@@ -26,20 +60,9 @@ function PatientEntry() {
     if (hit) router.push(`/p/${hit.id}`);
     else setMissing(true);
   };
-  if (!open) {
-    return (
-      <button
-        type="button"
-        onClick={() => setOpen(true)}
-        className="mt-3 w-full rounded-[8px] border border-dashed border-rule px-4 py-3 text-left text-[14px] text-ink-soft hover:bg-canvas"
-      >
-        I&apos;m a patient
-      </button>
-    );
-  }
   return (
     <form
-      className="mt-3 rounded-[8px] border border-rule bg-panel p-4"
+      className="rounded-[4px] border border-rule bg-panel p-4"
       onSubmit={(e) => {
         e.preventDefault();
         void go();
@@ -58,11 +81,11 @@ function PatientEntry() {
             setMissing(false);
           }}
           inputMode="numeric"
-          className="h-10 min-w-0 flex-1 rounded-[6px] border border-rule px-3 text-[15px] tabular-nums"
+          className="h-10 min-w-0 flex-1 rounded-[4px] border border-rule px-3 text-[15px] tabular-nums"
         />
         <button
           type="submit"
-          className="h-10 rounded-[6px] bg-agent px-4 text-[14px] font-bold text-white"
+          className="h-10 rounded-[4px] bg-agent px-4 text-[14px] font-bold text-white"
         >
           Open my visit
         </button>
@@ -80,130 +103,143 @@ function PatientEntry() {
 }
 
 /**
- * The front door (section 4.1): the hospital as it is right now on the left, and who you are
- * on the right. Staff sign in by picking themselves; patients use their visit code.
+ * The front door (section 4.1): the hospital as it is right now, in 3D, and the way in for
+ * each person. Staff sign in by picking themselves; patients book a visit or open theirs.
  */
-export default function SignIn() {
+export default function FrontDoor() {
   const { signIn } = useUser();
   const router = useRouter();
   const { data } = useLive(fetchHospital);
+  const { data: floor } = useLive(fetchOverview);
+  const [patient, setPatient] = useState<"closed" | "open" | "code">("closed");
   const counts = Object.fromEntries((data?.stages ?? []).map((s) => [s.stage, s.count]));
   return (
     <div className="min-h-dvh bg-canvas text-ink">
-      <div className="mx-auto grid max-w-[1320px] gap-10 px-6 py-10 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:py-16">
-        <section
-          aria-label="The hospital right now"
-          className="min-w-0 rounded-[8px] border border-rule bg-panel p-6"
-        >
-          <div className="flex items-baseline justify-between">
-            <h2 className="font-figure text-[20px] font-semibold">Referrals in progress</h2>
-            <span className="font-figure text-[14px] text-ink-soft tabular-nums">
-              {data?.now ? `Tue, Nov 17, ${hhmm(data.now)}` : ""}
-            </span>
+      <header className="mx-auto flex max-w-[1360px] items-center gap-3 px-6 pt-6">
+        <span aria-hidden className="block h-[6px] w-7 bg-agent" />
+        <span className="font-display text-[28px] font-bold">Throughline</span>
+        <span className="text-[15px] text-ink-soft">Halden Medical Center</span>
+        <span className="ml-auto font-figure text-[15px] text-ink-soft tabular-nums">
+          {data?.now ? `${shortDate(data.now)}, ${hhmm(data.now)}` : ""}
+        </span>
+      </header>
+
+      <div className="mx-auto grid max-w-[1360px] gap-8 px-6 py-6 lg:grid-cols-[minmax(0,1.6fr)_minmax(320px,1fr)]">
+        <section aria-label="The hospital right now" className="min-w-0">
+          <h1 className="max-w-[24ch] font-display text-[44px] leading-[1.02] font-bold sm:text-[56px]">
+            Every referral, from the fax to the follow-up.
+          </h1>
+          <p className="mt-3 max-w-[60ch] text-[17px] text-ink-soft">
+            Thirteen agents do the routine work for every patient in flight. Your staff approve what
+            matters. This is Halden right now:{" "}
+            {data
+              ? `${data.in_building} people in the building, ${data.referrals_in_progress} referrals in progress, ${data.waiting_on_staff} decisions waiting on staff.`
+              : "connecting."}
+          </p>
+          <div className="mt-2 -mb-4">
+            <CampusHero stations={floor?.stations ?? []} />
           </div>
-          <div className="mt-6 overflow-x-auto">
+          <div className="overflow-x-auto rounded-[4px] border border-rule bg-panel px-4 pt-4 pb-2 shadow-[0_10px_30px_-20px_rgba(24,34,58,0.5)]">
             <div className="min-w-[560px]">
               <StageRail counts={counts} size="hospital" />
             </div>
           </div>
-          <h3 className="mt-8 text-[13px] font-bold text-ink-soft">What the agents just did</h3>
+        </section>
+
+        <section aria-label="Sign in" className="min-w-0 lg:pt-4">
+          <h2 className="font-figure text-[20px] font-semibold">Staff, this way</h2>
+          <ul className="mt-3 space-y-2.5">
+            {STAFF.map((s) => {
+              const waiting = data?.waiting_by_role[s.role];
+              return (
+                <li key={s.id}>
+                  <Blade
+                    onClick={() => {
+                      signIn(s.id);
+                      router.push(s.home);
+                    }}
+                  >
+                    <span className="min-w-0 flex-1">
+                      <span className="block font-figure text-[22px] leading-tight font-semibold">
+                        {s.name}
+                      </span>
+                      <span className="block text-[13px] text-white/75">{s.title}</span>
+                    </span>
+                    {waiting !== undefined && waiting > 0 && (
+                      <span className="rounded-[3px] bg-staff-bg px-2 py-0.5 text-[13px] font-bold text-staff tabular-nums">
+                        {waiting} waiting
+                      </span>
+                    )}
+                    <Arrow />
+                  </Blade>
+                </li>
+              );
+            })}
+          </ul>
+
+          <h2 className="mt-8 font-figure text-[20px] font-semibold">Patients, this way</h2>
+          <div className="mt-3 space-y-2.5">
+            {patient === "closed" ? (
+              <Blade tone="agent" onClick={() => setPatient("open")}>
+                <span className="min-w-0 flex-1">
+                  <span className="block font-figure text-[22px] leading-tight font-semibold">
+                    I&apos;m a patient
+                  </span>
+                  <span className="block text-[13px] text-white">
+                    Book a visit, or see the plan for yours
+                  </span>
+                </span>
+                <Arrow />
+              </Blade>
+            ) : (
+              <>
+                <Blade tone="agent" href="/visit">
+                  <span className="min-w-0 flex-1">
+                    <span className="block font-figure text-[22px] leading-tight font-semibold">
+                      Book a visit
+                    </span>
+                    <span className="block text-[13px] text-white">
+                      Six short steps, about 3 minutes
+                    </span>
+                  </span>
+                  <Arrow />
+                </Blade>
+                {patient === "code" ? (
+                  <VisitCode />
+                ) : (
+                  <Blade tone="agent" onClick={() => setPatient("code")}>
+                    <span className="min-w-0 flex-1">
+                      <span className="block font-figure text-[22px] leading-tight font-semibold">
+                        I have a visit code
+                      </span>
+                      <span className="block text-[13px] text-white">
+                        See your times, where to go, and what to bring
+                      </span>
+                    </span>
+                    <Arrow />
+                  </Blade>
+                )}
+              </>
+            )}
+          </div>
+
+          <h2 className="mt-8 text-[13px] font-bold text-ink-soft">What the agents just did</h2>
           <ul className="mt-2 divide-y divide-rule border-y border-rule">
-            {(data?.feed ?? []).slice(0, 6).map((f) => (
-              <li key={f.run_id} className="row-in flex items-center gap-3 py-2.5 text-[14px]">
-                <span className="w-16 shrink-0 font-figure text-ink-soft tabular-nums">
+            {(data?.feed ?? []).slice(0, 5).map((f) => (
+              <li key={f.run_id} className="flex items-center gap-3 py-2 text-[13px]">
+                <span className="w-14 shrink-0 font-figure text-ink-soft tabular-nums">
                   {hhmm(f.at)}
                 </span>
-                <AgentGlyph name={f.agent} />
+                <AgentGlyph name={f.agent} size={20} />
                 <span className="min-w-0 flex-1 truncate">
                   <span className="font-bold">{agentProfile(f.agent)?.label}</span> {f.summary}
                   {f.patient ? `, ${f.patient}` : ""}
                 </span>
               </li>
             ))}
-            {!data && (
-              <li className="py-2.5 text-[14px] text-ink-soft">Connecting to the hospital.</li>
-            )}
           </ul>
-          {data && (
-            <p className="mt-5 text-[15px]">
-              {data.in_building} people in the building today, {data.referrals_in_progress}{" "}
-              referrals in progress, {data.waiting_on_staff} waiting on staff.
-            </p>
-          )}
-        </section>
-
-        <section aria-label="Sign in" className="min-w-0">
-          <p className="flex items-center gap-2">
-            <span aria-hidden className="block h-[6px] w-7 bg-agent" />
-            <span className="font-display text-[30px] font-bold">Throughline</span>
-          </p>
-          <p className="mt-1 text-[15px] text-ink-soft">Halden Medical Center</p>
-          <h1 className="mt-6 max-w-[30ch] text-[22px] leading-snug">
-            Referrals, visit days and follow-up, run by 13 agents and approved by your staff.
-          </h1>
-          <h2 className="mt-8 text-[13px] font-bold text-ink-soft">Sign in as</h2>
-          <ul className="mt-2 space-y-2">
-            {STAFF.map((s) => {
-              const waiting = data?.waiting_by_role[s.role];
-              return (
-                <li key={s.id}>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      signIn(s.id);
-                      router.push(s.home);
-                    }}
-                    className="flex w-full items-center gap-3 rounded-[8px] border border-rule bg-panel px-4 py-3 text-left hover:border-agent"
-                  >
-                    <Avatar initials={s.initials} size={36} />
-                    <span className="min-w-0 flex-1">
-                      <span className="block text-[15px] font-bold">{s.name}</span>
-                      <span className="block text-[13px] text-ink-soft">{s.title}</span>
-                    </span>
-                    {waiting !== undefined && (
-                      <span
-                        className={`rounded-full px-2 py-0.5 text-[13px] tabular-nums ${
-                          waiting > 0 ? "bg-staff-bg text-staff" : "text-ink-soft"
-                        }`}
-                      >
-                        {waiting} {ROLE_WORD[s.role]}
-                      </span>
-                    )}
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-          <PatientEntry />
         </section>
       </div>
-
-      <section className="border-t border-rule bg-panel">
-        <div className="mx-auto grid max-w-[1320px] gap-8 px-6 py-10 md:grid-cols-3">
-          <div>
-            <h2 className="font-figure text-[18px] font-semibold">Agents do the routine work</h2>
-            <p className="mt-2 text-[14px] text-ink-soft">
-              Reading faxes, checking coverage, drafting prior auths, booking every test in the
-              right order, guiding patients through the building, and closing the loop with the
-              referring doctor.
-            </p>
-          </div>
-          <div>
-            <h2 className="font-figure text-[18px] font-semibold">People approve what matters</h2>
-            <p className="mt-2 text-[14px] text-ink-soft">
-              Nothing goes to a payer, changes the floor, or reaches a patient as a summary without
-              a person. Every decision shows the agent&apos;s draft beside its source.
-            </p>
-          </div>
-          <div>
-            <h2 className="font-figure text-[18px] font-semibold">Patients get one plan</h2>
-            <p className="mt-2 text-[14px] text-ink-soft">
-              One page with the next step, how long the wait is, and the way there. Medical
-              questions always go to a nurse.
-            </p>
-          </div>
-        </div>
-      </section>
     </div>
   );
 }

@@ -483,7 +483,14 @@ export class Runtime {
   }
 
   /** A staff task on a journey (spec V7: a lost patient becomes a task on the station board). */
-  openTask(journeyId: string, reason: string) {
+  openTask(
+    journeyId: string,
+    reason: string,
+    owner: { agent: Agent["name"]; capability: Capability } = {
+      agent: "companion",
+      capability: "patient.message",
+    },
+  ) {
     const journey = this.journey(journeyId);
     if (!journey) return undefined;
     const review: HumanReview = {
@@ -491,8 +498,8 @@ export class Runtime {
       kind: "task",
       journey_id: journeyId,
       reason,
-      capability: "patient.message",
-      agent: "companion",
+      capability: owner.capability,
+      agent: owner.agent,
       status: "pending",
     };
     this.deps.store.saveReview(review);

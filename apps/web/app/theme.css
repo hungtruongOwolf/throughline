@@ -102,3 +102,46 @@ html {
 .row-in {
   animation: row-in 0.25s ease-out;
 }
+
+/* Front door: the patient's thread draws itself through the building once, on load. */
+@keyframes thread-draw {
+  from {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0;
+  }
+}
+.thread-draw {
+  stroke-dasharray: 1;
+  animation: thread-draw 2.4s cubic-bezier(0.65, 0, 0.35, 1) 0.3s both;
+}
+/* Station columns rise to their queue height with the thread. */
+@keyframes column-rise {
+  from {
+    transform: scaleY(0);
+  }
+}
+.campus-column {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: column-rise 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+/* Wayfinding sign blades: the arrow slides when you point at one. */
+.sign-blade .sign-arrow {
+  transition: transform 0.2s ease-out;
+}
+.sign-blade:hover .sign-arrow,
+.sign-blade:focus-visible .sign-arrow {
+  transform: translateX(4px);
+}
+
+/* Surfaces sit on the canvas: a light top edge and a long soft shadow below. */
+.elevated {
+  box-shadow:
+    0 1px 0 rgb(255 255 255 / 0.9) inset,
+    0 1px 2px rgb(24 34 58 / 0.06),
+    0 14px 32px -22px rgb(24 34 58 / 0.45);
+}

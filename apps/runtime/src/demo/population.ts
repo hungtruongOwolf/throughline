@@ -299,6 +299,7 @@ export async function populate(ctx: AppContext): Promise<void> {
   await clock.advanceTo(POPULATION_END);
   await bus.idle();
   ctx.received.clear();
+  ctx.requests = 0;
 }
 
 /** The faxes on the fax line that have not been received since the last restore. */

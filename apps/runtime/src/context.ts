@@ -114,6 +114,7 @@ export function createContext(
     models: { config, cache, brain },
     world,
     received: new Set<string>(),
+    requests: 0,
     activity: { dirty: false, at: 0 },
   };
 }

@@ -122,7 +122,7 @@ export default function AgentsPage() {
           finished on their own, {waited} waited for staff, and {nurse} were handed to a nurse.
         </p>
       )}
-      <div className="mt-5 overflow-x-auto rounded-[6px] border border-rule bg-panel">
+      <div className="mt-5 overflow-x-auto elevated rounded-[6px] border border-rule bg-panel">
         <table className="w-full min-w-[1040px] text-left text-[13px]">
           <thead className="border-b border-rule text-[12px] text-ink-soft">
             <tr>
