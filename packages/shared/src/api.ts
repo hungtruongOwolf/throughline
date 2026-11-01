@@ -92,6 +92,8 @@ export const OpsProposal = z.object({
       replicates: z.number().int(),
       horizon_min: z.number().int(),
     }),
+    rationale: z.string().optional(),
+    written_by: z.string().optional(),
   }),
 });
 export type OpsProposal = z.infer<typeof OpsProposal>;

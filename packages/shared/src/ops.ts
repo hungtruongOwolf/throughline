@@ -35,6 +35,10 @@ export const OpsAction = z.object({
   }),
   evidence: SimRunRef,
   status: z.enum(["proposed", "approved", "rejected", "applied"]),
+  /** Why this option, in the words of the model that chose it (the numbers are the engine's). */
+  rationale: z.string().optional(),
+  /** Which model wrote the proposal, or "rule" for the deterministic fallback. */
+  written_by: z.string().optional(),
 });
 export type OpsAction = z.infer<typeof OpsAction>;
 

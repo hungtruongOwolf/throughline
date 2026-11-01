@@ -1,4 +1,5 @@
 import type { CacheMode } from "./cache";
+import type { OpenWeightConfig } from "./openweight";
 import type { TierMode } from "./router";
 
 export interface ModelConfig {
@@ -10,6 +11,9 @@ export interface ModelConfig {
   voiceModel: string;
   tierMode: TierMode;
   cacheMode: CacheMode;
+  /** Muse Spark Open on Baseten (D4-4); the ops brain when `opsBrain` is "open". */
+  openWeight?: OpenWeightConfig;
+  opsBrain: "cloud" | "open";
   /** OpenAI-compatible private tier (Glimmer on Modal or vLLM); absent until D4-3. */
   glimmer?: { baseURL: string; apiKey: string; model: string };
 }
@@ -31,6 +35,18 @@ export function modelConfig(env: Record<string, string | undefined>): ModelConfi
     voiceModel: env.VOICE_MODEL ?? "muse-voice-transcribe-1.0",
     tierMode: tier === "cloud_only" || tier === "private_only" ? tier : "auto",
     cacheMode: cache === "off" || cache === "replay" ? cache : "record",
+    opsBrain: env.OPS_BRAIN === "open" ? "open" : "cloud",
+    // Replay needs no key: recorded Spark Open outputs are served from the cache.
+    ...(env.BASETEN_API_KEY || cache === "replay"
+      ? {
+          openWeight: {
+            provider: "baseten" as const,
+            baseURL: env.BASETEN_BASE_URL ?? "https://inference.baseten.co/v1",
+            ...(env.BASETEN_API_KEY ? { apiKey: env.BASETEN_API_KEY } : {}),
+            model: env.BASETEN_SPARK_OPEN_MODEL ?? "meta-models/muse-spark-open",
+          },
+        }
+      : {}),
     ...(env.GLIMMER_BASE_URL && env.GLIMMER_API_KEY
       ? {
           glimmer: {

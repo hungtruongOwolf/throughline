@@ -43,7 +43,8 @@ test.describe("Maria's journey, step by step", () => {
     await page.goto("/story?step=review");
     await expect(
       page.getByRole("heading", { name: "The doctor checks the summary" }),
-    ).toBeVisible();
+      // Going straight to step 13 replays the twelve steps before it.
+    ).toBeVisible({ timeout: 30_000 });
     await expect(page.getByText("What we did today, as written")).toBeVisible();
     await page.evaluate(() => document.fonts.ready);
     await page.screenshot({ path: `${SCREENS}story-review.png`, fullPage: true });

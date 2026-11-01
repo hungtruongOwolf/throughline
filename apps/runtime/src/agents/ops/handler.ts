@@ -1,4 +1,5 @@
 import type { Engine } from "@throughline/engine/node";
+import { z } from "zod";
 import type {
   DomainEvent,
   Journey,
@@ -8,7 +9,8 @@ import type {
   StationId,
 } from "@throughline/shared";
 import { campus } from "@throughline/hospital";
-import type { DeterministicAgent, HandlerContext, HandlerResult } from "../../core/agent";
+import type { HandlerContext, HandlerResult, ModelAgent } from "../../core/agent";
+import { PREAMBLE, requiredToolLine } from "../../safety/preamble";
 import { opsDescriptor } from "./descriptor";
 
 /** Clinic pods are siblings: a divert moves waiting patients to the other pod. */
@@ -90,27 +92,47 @@ export interface OpsDeps {
   /** The simulated day the what-if replays (fixtures/day-2026-11-17.json). */
   day: SimRequest;
   journeys: () => Journey[];
+  /** Which model writes proposals right now (OPS_BRAIN), for the proposal's byline. */
+  brainLabel?: () => string;
 }
 
-/**
- * The ops agent, deterministic path (spec 6, fallback "rule"): the engine's what-if ranks the
- * candidates and the best one becomes a proposal with its evidence. D4-4 adds the Spark /
- * Spark Open brain that writes the proposal; the numbers stay the engine's.
- */
-export function createOpsAgent(deps: OpsDeps): DeterministicAgent {
-  return {
-    ...opsDescriptor,
-    kind: "deterministic",
-    handle: (ctx) =>
-      ctx.capability === "ops_action.apply" ? apply(ctx, deps) : propose(ctx, deps),
+const PROPOSE_TOOL = "propose_ops_action";
+
+const Choice = z.object({
+  candidate_id: z.string().min(1),
+  title: z.string().min(1).max(120),
+  rationale: z.string().min(1).max(400),
+});
+type Choice = z.infer<typeof Choice>;
+
+const SYSTEM = `${PREAMBLE} You are the operations brain of a hospital outpatient campus. A station has a bottleneck. You get candidate actions, each with a simulated effect: the engine ran the rest of the day ${REPLICATES} times with and without it. Choose the one action a manager should approve. Prefer the largest wait reduction; weigh how many patients it moves and how disruptive it is. Use the engine's numbers as given and never invent numbers. Write a short title in plain words (an instruction to staff) and a two-sentence rationale for the manager. ${requiredToolLine(PROPOSE_TOOL)}`;
+
+interface Ranked {
+  option: Candidate;
+  effect: {
+    station_id: StationId;
+    mean_wait_min: number;
+    delta_min: number;
+    affected_journeys: number;
   };
 }
 
-function propose(ctx: HandlerContext, deps: OpsDeps): HandlerResult {
+interface Analysis {
+  station: StationId;
+  ranked: Ranked[];
+  baseline: number;
+}
+
+/** The engine's what-if for a bottleneck, memoized per event so input and apply agree. */
+function analyze(
+  ctx: HandlerContext,
+  deps: OpsDeps,
+  memo: Map<string, Analysis>,
+): Analysis | undefined {
   const event = ctx.event;
-  if (event.type !== "BottleneckDetected" || !event.station_id) {
-    return { summary: "not a bottleneck", next_events: [] };
-  }
+  if (event.type !== "BottleneckDetected" || !event.station_id) return undefined;
+  const hit = memo.get(event.id);
+  if (hit) return hit;
   const station = event.station_id;
   const options = candidates(station, ctx.now);
   const result = deps.engine.whatIf({
@@ -120,36 +142,136 @@ function propose(ctx: HandlerContext, deps: OpsDeps): HandlerResult {
     horizon_min: HORIZON_MIN,
   });
   const ranked = result.per_action
-    .map((effect, i) => ({ effect, option: options[i] }))
+    .map((effect, i) => ({ effect, option: options[i] as Candidate }))
     .filter((x) => x.option && x.effect.delta_min > 0)
     .sort((a, b) => b.effect.delta_min - a.effect.delta_min);
-  const best = ranked[0];
-  if (!best?.option) return { summary: "no candidate improves the wait", next_events: [] };
+  const baseline =
+    result.baseline.find((b) => b.station_id === (ranked[0]?.effect.station_id ?? station))
+      ?.mean_wait_min ?? 0;
+  const analysis = { station, ranked, baseline };
+  memo.set(event.id, analysis);
+  if (memo.size > 50) memo.delete(memo.keys().next().value as string);
+  return analysis;
+}
 
-  const baseline = result.baseline.find((b) => b.station_id === best.effect.station_id);
+function proposal(
+  ctx: HandlerContext,
+  deps: OpsDeps,
+  a: Analysis,
+  pick: Ranked,
+  words: { title: string; rationale?: string; written_by: string },
+): HandlerResult {
   const action: OpsAction = {
-    id: best.option.lite.id,
-    kind: best.option.lite.kind,
-    params: best.option.params,
-    title: best.option.title,
+    id: pick.option.lite.id,
+    kind: pick.option.lite.kind,
+    params: pick.option.params,
+    title: words.title,
     predicted_effect: {
-      station_id: best.effect.station_id,
-      wait_before_min: baseline?.mean_wait_min ?? 0,
-      wait_after_min: best.effect.mean_wait_min,
-      affected_journeys: best.effect.affected_journeys,
+      station_id: pick.effect.station_id,
+      wait_before_min: a.baseline,
+      wait_after_min: pick.effect.mean_wait_min,
+      affected_journeys: pick.effect.affected_journeys,
     },
     evidence: {
-      run_id: `whatif-${station}-${ctx.now}`,
+      run_id: `whatif-${a.station}-${ctx.now}`,
       seed: deps.day.seed,
       replicates: REPLICATES,
       horizon_min: HORIZON_MIN,
     },
     status: "proposed",
+    ...(words.rationale ? { rationale: words.rationale } : {}),
+    written_by: words.written_by,
   };
   return {
-    summary: `proposed: ${action.title}`,
+    summary: `proposed: ${action.title} (${words.written_by})`,
     station_patch: (s) => ({ ...s, ops_actions: [...s.ops_actions, action] }),
-    next_events: [{ type: "OpsActionProposed", station_id: station, payload: { action } }],
+    next_events: [{ type: "OpsActionProposed", station_id: a.station, payload: { action } }],
+  };
+}
+
+/** The rule (spec 6 fallback): the engine's best option with its fixed title. */
+function rule(ctx: HandlerContext, deps: OpsDeps, memo: Map<string, Analysis>): HandlerResult {
+  const a = analyze(ctx, deps, memo);
+  if (!a) return { summary: "not a bottleneck", next_events: [] };
+  const best = a.ranked[0];
+  if (!best) return { summary: "no candidate improves the wait", next_events: [] };
+  return proposal(ctx, deps, a, best, { title: best.option.title, written_by: "rule" });
+}
+
+function situation(ctx: HandlerContext, a: Analysis): string {
+  const event = ctx.event as Extract<DomainEvent, { type: "BottleneckDetected" }>;
+  return [
+    `Station: ${stationName(a.station)} (${a.station}), at ${ctx.now}`,
+    `Bottleneck: ${event.payload.severity}, predicted wait about ${Math.round(event.payload.minutes)} minutes`,
+    `Mean wait without action (engine): ${a.baseline.toFixed(1)} minutes`,
+    `Candidates:`,
+    ...a.ranked.map(
+      (r) =>
+        `- id ${r.option.lite.id}: ${r.option.title}. Mean wait after: ${r.effect.mean_wait_min.toFixed(1)} min (saves ${r.effect.delta_min.toFixed(1)}). Patients re-planned: ${r.effect.affected_journeys}.`,
+    ),
+  ].join("\n");
+}
+
+/**
+ * The ops agent (spec 6, V8): the engine's what-if ranks the candidates with its numbers; the
+ * ops brain (Muse Spark Open on Baseten, or Spark 1.3, by OPS_BRAIN) picks one and explains it
+ * to the manager. The rule is the fallback. Applying waits for a manager (PRE_APPROVAL).
+ */
+export function createOpsAgent(deps: OpsDeps): ModelAgent<Choice> {
+  const memo = new Map<string, Analysis>();
+  return {
+    ...opsDescriptor,
+    kind: "model",
+    modelCapabilities: ["ops_action.propose"],
+    model: {
+      system: SYSTEM,
+      input: (ctx) => {
+        const a = analyze(ctx, deps, memo);
+        if (!a || a.ranked.length === 0) throw new Error("nothing to propose");
+        return situation(ctx, a);
+      },
+      tools: [
+        {
+          type: "function",
+          name: PROPOSE_TOOL,
+          description: "Propose one candidate action to the operations manager.",
+          strict: true,
+          parameters: {
+            type: "object",
+            additionalProperties: false,
+            required: ["candidate_id", "title", "rationale"],
+            properties: {
+              candidate_id: { type: "string", description: "The id of the chosen candidate" },
+              title: { type: "string", description: "Short instruction to staff, plain words" },
+              rationale: { type: "string", description: "Two sentences for the manager" },
+            },
+          },
+        },
+      ],
+      readTools: {},
+      readSchemas: {},
+      requiredTool: PROPOSE_TOOL,
+      requiredSchema: Choice,
+      effort: "low",
+      maxSteps: 2,
+      maxOutputTokens: 2000,
+      apply: (args, ctx) => {
+        const a = analyze(ctx, deps, memo);
+        const pick = a?.ranked.find((r) => r.option.lite.id === args.candidate_id);
+        // An id that is not a candidate is a failed call: retry, then the rule.
+        if (!a || !pick) throw new Error(`unknown candidate ${args.candidate_id}`);
+        return proposal(ctx, deps, a, pick, {
+          title: args.title,
+          rationale: args.rationale,
+          written_by: deps.brainLabel?.() ?? "Muse Spark",
+        });
+      },
+    },
+    fallback: (ctx) => rule(ctx, deps, memo),
+    handle: (ctx) =>
+      ctx.capability === "ops_action.apply"
+        ? apply(ctx, deps)
+        : { summary: `not handled: ${ctx.capability}`, next_events: [] },
   };
 }
 

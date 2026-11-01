@@ -29,7 +29,7 @@ export interface AppContext {
   runtime: Runtime;
   background: SimBackground;
   sensing: SensingLoop;
-  models: { config: ModelConfig; cache: ModelCache };
+  models: { config: ModelConfig; cache: ModelCache; brain: { current: "cloud" | "open" } };
 }
 
 const Resolve = z.object({
@@ -399,6 +399,19 @@ export function createApp(ctx?: AppContext) {
     } catch {
       return c.json({ error: "not found" }, 404);
     }
+  });
+
+  /** The ops brain switch (spec 8.5): Muse Spark Open on Baseten, or Spark 1.3. */
+  app.get("/api/ops/brain", (c) =>
+    c.json({ brain: ctx.models.brain.current, open_available: !!ctx.models.config.openWeight }),
+  );
+  app.post("/api/ops/brain", async (c) => {
+    const body = z
+      .object({ brain: z.enum(["cloud", "open"]) })
+      .safeParse(await c.req.json().catch(() => ({})));
+    if (!body.success) return c.json({ error: body.error.issues }, 400);
+    ctx.models.brain.current = body.data.brain;
+    return c.json({ brain: ctx.models.brain.current });
   });
 
   /** Recorded patient voice notes (WAV) the story sends to Voice Transcribe. */

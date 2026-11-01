@@ -9,6 +9,7 @@ import type { ModelGateway } from "./models/types";
 import { ModelCache } from "./models/cache";
 import { modelConfig, modelsAvailable } from "./models/config";
 import { MetaGateway, metaClient } from "./models/meta";
+import { BrainRouter, OpenWeightGateway } from "./models/openweight";
 import { samCount } from "./models/sam";
 import { CameraBank } from "./sim/cameras";
 import { SensingLoop, type PersonCounter } from "./sim/sensing-loop";
@@ -45,9 +46,10 @@ export function createContext(
   // fresh in-memory event store still replays the recorded run.
   const cacheDb = env.MODEL_CACHE_PATH ? openDatabase(env.MODEL_CACHE_PATH).sqlite : sqlite;
   const cache = new ModelCache(cacheDb, config.cacheMode);
-  const gateway =
-    opts.gateway ??
-    (modelsAvailable(config) ? new MetaGateway(config, cache) : unconfiguredGateway);
+  const brain = { current: config.opsBrain };
+  const meta = modelsAvailable(config) ? new MetaGateway(config, cache) : unconfiguredGateway;
+  const open = config.openWeight ? new OpenWeightGateway(config.openWeight, cache) : undefined;
+  const gateway = opts.gateway ?? new BrainRouter(meta, open, () => brain.current);
   const runner = new AgentRunner(gateway, (r) => store.recordModelCall(r));
   const runtime = new Runtime({
     store,
@@ -63,6 +65,10 @@ export function createContext(
         station: (id) =>
           store.loadAggregate<StationState>("station", id)?.value ?? createStation(id),
         onApplied: (action) => background.apply(action),
+        brainLabel: () =>
+          brain.current === "open" && config.openWeight
+            ? "Muse Spark Open (open weights, on Baseten)"
+            : "Muse Spark 1.3",
       }),
     providerReviewOn: env.PROVIDER_REVIEW_ON !== "false",
   });
@@ -97,5 +103,5 @@ export function createContext(
     engine,
     ...(count ? { count } : {}),
   });
-  return { store, bus, clock, runtime, background, sensing, models: { config, cache } };
+  return { store, bus, clock, runtime, background, sensing, models: { config, cache, brain } };
 }

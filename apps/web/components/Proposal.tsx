@@ -21,6 +21,7 @@ export function Proposal({
   return (
     <article aria-label={action.title} className="border-l-4 border-held bg-paper py-1 pl-4">
       <h3 className="font-display text-[22px] leading-tight font-bold">{action.title}</h3>
+      {action.rationale && <p className="mt-2 max-w-[60ch] text-[16px]">{action.rationale}</p>}
       <p className="mt-2 text-[15px]">
         {t("en", "ops.wait_change", {
           station,
@@ -43,7 +44,12 @@ export function Proposal({
           seed: action.evidence.seed,
         })}
       </p>
-      <p className="mt-1 text-[13px] text-ink-soft">{t("en", "ops.proposal_footer")}</p>
+      <p className="mt-1 text-[13px] text-ink-soft">
+        {t("en", "ops.proposal_footer")}
+        {action.written_by && action.written_by !== "rule"
+          ? ` Written by ${action.written_by}.`
+          : ""}
+      </p>
       {proposal.status === "pending" ? (
         <div className="mt-3">
           <p className="inline-block bg-held-bg px-2 py-0.5 text-[13px] font-bold text-held">

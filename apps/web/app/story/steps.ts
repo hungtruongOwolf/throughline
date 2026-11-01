@@ -118,7 +118,7 @@ export const STEPS: StoryStepCopy[] = [
     when: "Tue, Nov 17, 9:53 am",
     who: "Operations manager",
     happened:
-      "Throughline ran the rest of the day 20 times with and without a fix. Opening a slot on CT scanner 2 cuts the wait the most. It changes nothing until a person approves.",
+      "Throughline ran the rest of the day 20 times with each possible fix. Muse Spark Open, an open-weight model, read the results and wrote one proposal. It changes nothing until a person approves.",
     screen: { kind: "ops" },
     action: "Approve: open CT 2",
     next: "Every patient affected gets a new plan, including Maria.",

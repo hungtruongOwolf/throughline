@@ -21,6 +21,7 @@ export interface AgentDeps {
   journeys: () => Journey[];
   station: (id: StationId) => StationState;
   onApplied?: OpsDeps["onApplied"];
+  brainLabel?: OpsDeps["brainLabel"];
 }
 
 /** The registry's agents (spec 6). */
@@ -31,7 +32,7 @@ export function createAgents(deps: AgentDeps): Agent[] {
     createAuthorizationAgent() as unknown as Agent,
     createSchedulerAgent(deps),
     createPrepAgent(),
-    createOpsAgent(deps),
+    createOpsAgent(deps) as unknown as Agent,
     createItineraryAgent(deps),
     createSensingAgent(),
     createCompanionAgent(deps) as unknown as Agent,
