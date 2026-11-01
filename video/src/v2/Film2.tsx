@@ -1,6 +1,7 @@
 import { AbsoluteFill, Audio, interpolate, Sequence, staticFile } from "remotion";
 import timeline from "./timeline.json";
 import { Finish } from "./fx";
+import { AgentLayer } from "./overlay";
 import type { Scene, SceneProps } from "./types";
 import { scenes as a } from "./scenes/a";
 import { scenes as b } from "./scenes/b";
@@ -45,6 +46,7 @@ export function Film2() {
           <ShotView shot={s} />
         </Sequence>
       ))}
+      <AgentLayer shots={SHOTS} />
       <Audio src={staticFile("audio/music2/music.wav")} volume={(f) => 0.85 * ducked(f)} />
     </AbsoluteFill>
   );

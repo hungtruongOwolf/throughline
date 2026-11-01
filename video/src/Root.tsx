@@ -18,6 +18,8 @@ export const Root = () => (
         height={H}
       />
     ))}
+    {/* the agent overlay over a short stretch of the film, for previewing */}
+    <Composition id="Overlay" component={Film2} durationInFrames={TOTAL2} fps={FPS} width={W} height={H} />
     <Composition id="Throughline" component={Film} durationInFrames={TOTAL} fps={FPS} width={W} height={H} />
   </>
 );

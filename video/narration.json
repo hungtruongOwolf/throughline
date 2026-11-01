@@ -2,37 +2,37 @@
  {
   "id": 1,
   "beat": "COLD-OPEN",
-  "text": "A hundred and fifty-five million US emergency visits a year. Each one's a chain."
+  "text": "Every year, Americans make about a hundred and fifty-five million emergency visits, and every one of them sets off a chain of work."
  },
  {
   "id": 2,
   "beat": "PROBLEM-1",
-  "text": "Before the visit, it's referrals, insurers, and a fight for a time slot."
+  "text": "Before the visit, there are referrals to read, insurers to call, and appointments to find."
  },
  {
   "id": 3,
   "beat": "PROBLEM-2",
-  "text": "During, it's hallways and waiting rooms. After, it's results and phone tag."
+  "text": "During the visit there are hallways and waiting rooms, and afterwards there are results and phone calls that nobody returns."
  },
  {
   "id": 4,
   "beat": "PROBLEM-3",
-  "text": "Every link is a different person. Nobody holds the whole line."
+  "text": "Each link in that chain belongs to a different person, and nobody holds the whole line."
  },
  {
   "id": 5,
   "beat": "PRICE-1",
-  "text": "The price? About a quarter of US health spending is waste."
+  "text": "Those gaps are expensive, because about a quarter of US health spending is estimated to be waste."
  },
  {
   "id": 6,
   "beat": "PRICE-2",
-  "text": "Doctors and their staff lose thirteen hours a week to prior auth."
+  "text": "Doctors and their staff lose around thirteen hours a week to prior authorization alone."
  },
  {
   "id": 7,
   "beat": "PRICE-3",
-  "text": "And one abnormal test result in fourteen never reaches the patient."
+  "text": "And one abnormal test result in fourteen never reaches the patient at all."
  },
  {
   "id": 8,
@@ -42,52 +42,52 @@
  {
   "id": 9,
   "beat": "MARIA-1",
-  "text": "Meet Maria. Seventy-one. Her doctor spotted something on a scan."
+  "text": "Take Maria, who is seventy-one and whose doctor has just found something on a scan."
  },
  {
   "id": 10,
   "beat": "MARIA-2",
-  "text": "So Dr. Whitcombe faxes a referral to Halden Medical Center. Yes, a fax."
+  "text": "Dr. Whitcombe refers her to Halden Medical Center the way most offices still do, by fax."
  },
  {
   "id": 11,
   "beat": "DROP",
-  "text": "That fax is where Throughline grabs the thread."
+  "text": "That fax is where Throughline picks up the thread."
  },
  {
   "id": 12,
   "beat": "IDEA",
-  "text": "Thirteen agents pass Maria's case hand to hand. People sign off at the gates."
+  "text": "Thirteen agents pass Maria's case from one to the next, and people sign off at the moments that matter."
  },
  {
   "id": 13,
   "beat": "HANDOFF-1",
-  "text": "Intake reads the fax. Smudged member ID? It asks the coordinator instead of guessing."
+  "text": "The Intake agent reads the fax, and when it can't make out the member number, it asks the coordinator instead of guessing."
  },
  {
   "id": 14,
   "beat": "HANDOFF-2",
-  "text": "One answer wakes Coverage, which flags the scan and tosses it to Prior auth."
+  "text": "That one answer wakes up Coverage, which sees that the scan needs approval and hands it to Prior auth."
  },
  {
   "id": 15,
   "beat": "HANDOFF-3",
-  "text": "Prior auth drafts the whole request, with a source next to every line."
+  "text": "Prior auth drafts the whole request and shows the source of every line."
  },
  {
   "id": 16,
   "beat": "GATE-1",
-  "text": "The coordinator approves. By hand, that's twenty-four minutes. Here, it's already written."
+  "text": "The coordinator only has to read it and approve, instead of spending twenty-four minutes writing it by hand."
  },
  {
   "id": 17,
   "beat": "HANDOFF-4",
-  "text": "Scheduling takes the baton. It's a Rust engine, because schedules should be exact."
+  "text": "Scheduling then fits every appointment into as few trips as possible, using an exact engine written in Rust."
  },
  {
   "id": 18,
   "beat": "HANDOFF-5",
-  "text": "Maria's voice note says wheelchair. Messaging hears it, Itinerary reroutes around the stairs."
+  "text": "Visit prep sends Maria her plan, and when she replies with a voice note about a wheelchair, Messaging understands it and Itinerary routes her around the stairs."
  },
  {
   "id": 19,
@@ -97,62 +97,62 @@
  {
   "id": 20,
   "beat": "DAY-1",
-  "text": "Visit day. One of two CT scanners is down, and nobody's said a word."
+  "text": "On the day of her visit, one of the two CT scanners breaks down, and nobody raises the alarm."
  },
  {
   "id": 21,
   "beat": "DAY-2",
-  "text": "Waiting-room sensing counts heads in the camera frames and sees the line swell."
+  "text": "The waiting-room agent counts the people in the camera frames and sees the line growing."
  },
  {
   "id": 22,
   "beat": "HANDOFF-6",
-  "text": "It hands the problem straight to the Ops planner."
+  "text": "It passes the problem straight to the Ops planner."
  },
  {
   "id": 23,
   "beat": "DAY-3",
-  "text": "The planner plays out the next ninety minutes twenty different ways."
+  "text": "The planner plays out the next ninety minutes twenty times to compare every fix it knows."
  },
  {
   "id": 24,
   "beat": "DAY-4",
-  "text": "Best fix? Average CT wait drops from seventeen minutes to five."
+  "text": "The best option brings the average CT wait down from seventeen minutes to five."
  },
  {
   "id": 25,
   "beat": "GATE-2",
-  "text": "The operations lead approves. Seven patients re-planned, and every phone gets the why."
+  "text": "The operations lead approves it, seven patients are re-planned, and the Visit companion tells each of them what changed and why."
  },
  {
   "id": 26,
   "beat": "AFTER-1",
-  "text": "Once Maria's home, Discharge puts the doctor's notes in plain words, and the doctor signs off."
+  "text": "When Maria gets home, the Discharge agent puts the doctor's notes into plain words, and the doctor signs off."
  },
  {
   "id": 27,
   "beat": "AFTER-2",
-  "text": "Still unsure the next day? Discharge hands her to a nurse."
+  "text": "If she is still unsure the next day, Discharge hands her to a nurse."
  },
  {
   "id": 28,
   "beat": "AFTER-3",
-  "text": "Results watch guards her test. Follow-up books the next visit and closes the loop."
+  "text": "Results watch makes sure her test is acknowledged, and Follow-up books her next visit to close the loop."
  },
  {
   "id": 29,
   "beat": "TECH-1",
-  "text": "Muse Spark reads and drafts. Voice Transcribe listens. SAM counts."
+  "text": "The agents that read, write, and listen run on Muse Spark and Voice Transcribe, and SAM does the counting."
  },
  {
   "id": 30,
   "beat": "TECH-2",
-  "text": "The planner runs on Muse Spark Open, open weights, on Baseten."
+  "text": "The Ops planner runs on Muse Spark Open, an open-weights model hosted on Baseten."
  },
  {
   "id": 31,
   "beat": "SCALE",
-  "text": "And it's not one hospital. Northgate alone: five buildings, a fourteen-floor tower."
+  "text": "And it is built for more than one hospital, because Northgate alone has five buildings and a fourteen-floor tower."
  },
  {
   "id": 32,
@@ -162,11 +162,11 @@
  {
   "id": 33,
   "beat": "CLOSE-1",
-  "text": "Nobody had to hold Maria's thread."
+  "text": "Nobody had to hold Maria's thread by hand."
  },
  {
   "id": 34,
   "beat": "CLOSE-2",
-  "text": "This time, Throughline held it."
+  "text": "This time, Throughline held it for her."
  }
 ]
