@@ -1,0 +1,371 @@
+{
+ "fps": 30,
+ "total": 9660,
+ "marks": {
+  "D1": 29,
+  "BRK": 93,
+  "D2": 106,
+  "OUT": 151,
+  "LOGO": 158
+ },
+ "shots": [
+  {
+   "line": 1,
+   "kind": "anim",
+   "name": "COLD-OPEN",
+   "start": 30,
+   "dur": 258,
+   "vo": 246,
+   "part": "problem"
+  },
+  {
+   "line": 2,
+   "kind": "anim",
+   "name": "PROBLEM-1",
+   "start": 300,
+   "dur": 411,
+   "vo": 399,
+   "part": "problem"
+  },
+  {
+   "line": 3,
+   "kind": "anim",
+   "name": "PROBLEM-2",
+   "start": 720,
+   "dur": 194,
+   "vo": 182,
+   "part": "problem"
+  },
+  {
+   "line": 4,
+   "kind": "anim",
+   "name": "PROBLEM-3",
+   "start": 915,
+   "dur": 221,
+   "vo": 209,
+   "part": "problem"
+  },
+  {
+   "line": 5,
+   "kind": "anim",
+   "name": "PRICE-1",
+   "start": 1140,
+   "dur": 209,
+   "vo": 359,
+   "part": "problem"
+  },
+  {
+   "line": 5,
+   "kind": "anim",
+   "name": "PRICE-2",
+   "start": 1349,
+   "dur": 162,
+   "vo": 0,
+   "part": "problem"
+  },
+  {
+   "line": 6,
+   "kind": "anim",
+   "name": "PRICE-3",
+   "start": 1515,
+   "dur": 172,
+   "vo": 160,
+   "part": "problem"
+  },
+  {
+   "line": 7,
+   "kind": "anim",
+   "name": "TITLE",
+   "start": 1740,
+   "dur": 139,
+   "vo": 127,
+   "part": "idea"
+  },
+  {
+   "line": 8,
+   "kind": "anim",
+   "name": "IDEA",
+   "start": 1890,
+   "dur": 236,
+   "vo": 224,
+   "part": "idea"
+  },
+  {
+   "line": 9,
+   "kind": "new",
+   "name": "Gates",
+   "start": 2130,
+   "dur": 381,
+   "vo": 369,
+   "part": "idea"
+  },
+  {
+   "line": 10,
+   "kind": "new",
+   "name": "Stages",
+   "start": 2520,
+   "dur": 176,
+   "vo": 164,
+   "part": "idea"
+  },
+  {
+   "line": 11,
+   "kind": "clip",
+   "name": "c01-fax-arrives",
+   "start": 2730,
+   "dur": 302,
+   "vo": 290,
+   "part": "before",
+   "from": 0.8,
+   "to": 8.4
+  },
+  {
+   "line": 12,
+   "kind": "clip",
+   "name": "c01-fax-arrives",
+   "start": 3045,
+   "dur": 280,
+   "vo": 268,
+   "part": "before",
+   "from": 8.4,
+   "to": 14.5
+  },
+  {
+   "line": 13,
+   "kind": "clip",
+   "name": "c02-answer",
+   "start": 3330,
+   "dur": 300,
+   "vo": 137,
+   "part": "before",
+   "from": 1.0,
+   "to": 11.0
+  },
+  {
+   "line": 14,
+   "kind": "clip",
+   "name": "c03-record-after",
+   "start": 3630,
+   "dur": 295,
+   "vo": 283,
+   "part": "before",
+   "from": 0.0,
+   "to": 5.787604093551636
+  },
+  {
+   "line": 15,
+   "kind": "clip",
+   "name": "c04-approve-auth",
+   "start": 3930,
+   "dur": 357,
+   "vo": 345,
+   "part": "before",
+   "from": 0.5,
+   "to": 11.8
+  },
+  {
+   "line": 16,
+   "kind": "phone",
+   "name": "c05-maria-phone",
+   "start": 4320,
+   "dur": 316,
+   "vo": 304,
+   "part": "day",
+   "from": 0.0,
+   "to": 6.6
+  },
+  {
+   "line": 17,
+   "kind": "phone",
+   "name": "c05-maria-phone",
+   "start": 4650,
+   "dur": 343,
+   "vo": 331,
+   "part": "day",
+   "from": 6.6,
+   "to": 12.5
+  },
+  {
+   "line": 18,
+   "kind": "clip",
+   "name": "c06-today-approve",
+   "start": 4995,
+   "dur": 330,
+   "vo": 318,
+   "part": "day",
+   "from": 0.0,
+   "to": 8.0
+  },
+  {
+   "line": 19,
+   "kind": "anim",
+   "name": "DAY-2",
+   "start": 5325,
+   "dur": 230,
+   "vo": 218,
+   "part": "day"
+  },
+  {
+   "line": 20,
+   "kind": "still",
+   "name": "proposal",
+   "start": 5565,
+   "dur": 245,
+   "vo": 233,
+   "part": "day"
+  },
+  {
+   "line": 21,
+   "kind": "anim",
+   "name": "DAY-4",
+   "start": 5820,
+   "dur": 184,
+   "vo": 172,
+   "part": "day"
+  },
+  {
+   "line": 22,
+   "kind": "clip",
+   "name": "c06-today-approve",
+   "start": 6015,
+   "dur": 165,
+   "vo": 254,
+   "part": "day",
+   "from": 13.0,
+   "to": 18.5
+  },
+  {
+   "line": 22,
+   "kind": "phone",
+   "name": "c07-maria-changed",
+   "start": 6180,
+   "dur": 150,
+   "vo": 0,
+   "part": "day",
+   "from": 0.0,
+   "to": 5.0
+  },
+  {
+   "line": 23,
+   "kind": "clip",
+   "name": "c08-sign-summary",
+   "start": 6360,
+   "dur": 265,
+   "vo": 253,
+   "part": "after",
+   "from": 0.0,
+   "to": 4.5
+  },
+  {
+   "line": 24,
+   "kind": "clip",
+   "name": "c08-sign-summary",
+   "start": 6630,
+   "dur": 280,
+   "vo": 268,
+   "part": "after",
+   "from": 4.5,
+   "to": 12.2
+  },
+  {
+   "line": 25,
+   "kind": "clip",
+   "name": "c09-nurse-task",
+   "start": 6915,
+   "dur": 242,
+   "vo": 230,
+   "part": "after",
+   "from": 0.5,
+   "to": 7.0
+  },
+  {
+   "line": 26,
+   "kind": "clip",
+   "name": "c10-results-followup",
+   "start": 7170,
+   "dur": 168,
+   "vo": 342,
+   "part": "after",
+   "from": 2.0,
+   "to": 7.6
+  },
+  {
+   "line": 26,
+   "kind": "clip",
+   "name": "c10-results-followup",
+   "start": 7338,
+   "dur": 192,
+   "vo": 0,
+   "part": "after",
+   "from": 10.0,
+   "to": 16.4
+  },
+  {
+   "line": 27,
+   "kind": "clip",
+   "name": "c11-agents",
+   "start": 7530,
+   "dur": 228,
+   "vo": 153,
+   "part": "after",
+   "from": 1.5,
+   "to": 9.1
+  },
+  {
+   "line": 28,
+   "kind": "anim",
+   "name": "TECH-1",
+   "start": 7785,
+   "dur": 352,
+   "vo": 340,
+   "part": "tech"
+  },
+  {
+   "line": 29,
+   "kind": "anim",
+   "name": "TECH-2",
+   "start": 8145,
+   "dur": 304,
+   "vo": 292,
+   "part": "tech"
+  },
+  {
+   "line": 30,
+   "kind": "anim",
+   "name": "HANDOFF-4",
+   "start": 8460,
+   "dur": 237,
+   "vo": 225,
+   "part": "tech"
+  },
+  {
+   "line": 31,
+   "kind": "clip",
+   "name": "c12-northgate",
+   "start": 8700,
+   "dur": 326,
+   "vo": 314,
+   "part": "tech",
+   "from": 2.5,
+   "to": 12.9
+  },
+  {
+   "line": 32,
+   "kind": "anim",
+   "name": "CLOSE-1",
+   "start": 9060,
+   "dur": 301,
+   "vo": 289,
+   "part": "close"
+  },
+  {
+   "line": 33,
+   "kind": "anim",
+   "name": "CLOSE-2",
+   "start": 9375,
+   "dur": 285,
+   "vo": 197,
+   "part": "close"
+  }
+ ]
+}

@@ -3,3 +3,5 @@ out/
 public/clips/*.webm
 public/audio/bed-*.wav
 public/audio/music2/
+public/audio/music3/
+public/demo/*.json.tmp

@@ -72,7 +72,7 @@ const STAGES = [
   { label: "After the visit", from: "DROP2", to: "TECH-1" },
 ];
 
-const CARD_LEN = 78; // frames a card stays (about 2.6 s)
+export const CARD_LEN = 78; // frames a card stays (about 2.6 s)
 
 export function cueFrames(shots: ShotRow[]) {
   const by = Object.fromEntries(shots.map((s) => [s.beat, s]));
@@ -82,7 +82,7 @@ export function cueFrames(shots: ShotRow[]) {
   });
 }
 
-function Chip({ label, kind }: { label: string; kind: Kind }) {
+export function Chip({ label, kind }: { label: string; kind: Kind }) {
   const meta = kind === "meta";
   return (
     <span
@@ -107,7 +107,7 @@ function Chip({ label, kind }: { label: string; kind: Kind }) {
   );
 }
 
-function Card({ agent, local, n }: { agent: Agent; local: number; n: number }) {
+export function Card({ agent, local, n }: { agent: Agent; local: number; n: number }) {
   const { fps } = useVideoConfig();
   const inP = spring({ frame: local, fps, config: { damping: 18, stiffness: 160 } });
   const outP = interpolate(local, [CARD_LEN - 10, CARD_LEN], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: EZ.in });
@@ -183,7 +183,7 @@ function Card({ agent, local, n }: { agent: Agent; local: number; n: number }) {
   );
 }
 
-function Rail({ stage, worked, show }: { stage: number; worked: number; show: number }) {
+export function Rail({ stage, worked, show }: { stage: number; worked: number; show: number }) {
   return (
     <div
       style={{
@@ -227,10 +227,14 @@ function Rail({ stage, worked, show }: { stage: number; worked: number; show: nu
           {i < STAGES.length - 1 && <span style={{ width: 26, height: 2, background: "rgba(244,246,242,.25)" }} />}
         </div>
       ))}
-      <span style={{ width: 1, height: 26, background: "rgba(244,246,242,.2)", marginLeft: 6 }} />
-      <span style={{ fontFamily: F.figure, fontWeight: 600, fontSize: 21, color: C.glow, fontVariantNumeric: "tabular-nums", whiteSpace: "nowrap" }}>
-        {worked}/13 agents
-      </span>
+      {worked >= 0 && (
+        <>
+          <span style={{ width: 1, height: 26, background: "rgba(244,246,242,.2)", marginLeft: 6 }} />
+          <span style={{ fontFamily: F.figure, fontWeight: 600, fontSize: 21, color: C.glow, fontVariantNumeric: "tabular-nums", whiteSpace: "nowrap" }}>
+            {worked}/13 agents
+          </span>
+        </>
+      )}
     </div>
   );
 }
