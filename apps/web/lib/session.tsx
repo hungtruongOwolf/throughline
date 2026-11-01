@@ -11,7 +11,7 @@ import {
   type ReactNode,
 } from "react";
 import { STAFF, type AgentRun, type Hospital, type StaffMember } from "@throughline/shared";
-import { RUNTIME_URL } from "./runtime";
+import { onStream, RUNTIME_URL } from "./runtime";
 
 // ---- who is signed in --------------------------------------------------------------------
 
@@ -95,24 +95,29 @@ export function StreamProvider({ children }: { children: ReactNode }) {
       pending.current = window.setTimeout(() => {
         pending.current = undefined;
         setVersion((v) => v + 1);
-      }, 600);
+      }, 1200);
     };
-    const source = new EventSource(`${RUNTIME_URL}/events/stream`);
-    source.addEventListener("hello", () => setConnected(true));
-    source.addEventListener("domain", bump);
-    source.addEventListener("run", (e) => {
-      try {
-        const run = JSON.parse((e as MessageEvent<string>).data) as AgentRun;
-        if (run.agent === "sensing" && run.outcome === "applied") return;
-        setRuns((list) => [run, ...list].slice(0, 30));
+    const stop = onStream((name, data) => {
+      if (name === "hello") setConnected(true);
+      if (name === "error") setConnected(false);
+      if (name === "domain") {
+        // Queue counts move every simulated minute; screens that show them poll on their own.
+        if (data.includes('"type":"QueueStateUpdated"')) return;
         bump();
-      } catch {
-        // A malformed frame is skipped.
+      }
+      if (name === "run") {
+        try {
+          const run = JSON.parse(data) as AgentRun;
+          if (run.agent === "sensing" && run.outcome === "applied") return;
+          setRuns((list) => [run, ...list].slice(0, 30));
+          bump();
+        } catch {
+          // A malformed frame is skipped.
+        }
       }
     });
-    source.onerror = () => setConnected(false);
     return () => {
-      source.close();
+      stop();
       if (pending.current !== undefined) window.clearTimeout(pending.current);
     };
   }, []);
@@ -122,17 +127,23 @@ export function StreamProvider({ children }: { children: ReactNode }) {
 
 export const useStream = () => useContext(StreamContext);
 
+/** Last answer per loader, so a screen you come back to shows at once and refreshes behind. */
+const LIVE_CACHE = new Map<string, unknown>();
+
 /** Loads with `load` and reloads whenever the stream reports a change. */
 export function useLive<T>(load: () => Promise<T>, deps: unknown[] = []) {
   const { version } = useStream();
-  const [data, setData] = useState<T | undefined>();
+  const key = `${load.toString()}|${JSON.stringify(deps)}`;
+  const [data, setData] = useState<T | undefined>(() => LIVE_CACHE.get(key) as T | undefined);
   const [error, setError] = useState(false);
   const [tick, setTick] = useState(0);
   const loader = useCallback(load, deps);
   useEffect(() => {
     let alive = true;
+    if (LIVE_CACHE.has(key)) setData(LIVE_CACHE.get(key) as T);
     loader()
       .then((d) => {
+        LIVE_CACHE.set(key, d);
         if (!alive) return;
         setData(d);
         setError(false);
@@ -141,6 +152,7 @@ export function useLive<T>(load: () => Promise<T>, deps: unknown[] = []) {
     return () => {
       alive = false;
     };
+    // the cache key changes exactly when the loader does
   }, [loader, version, tick]);
   const reload = useCallback(() => setTick((t) => t + 1), []);
   return { data, error, reload };

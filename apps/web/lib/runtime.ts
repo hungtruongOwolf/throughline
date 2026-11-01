@@ -22,18 +22,46 @@ export async function postAction(journeyId: string, action: PatientAction): Prom
   return res.ok;
 }
 
-/** Calls `onEvent` for every domain event about this journey; reconnects on its own (SSE). */
+type Listener = (event: string, data: string) => void;
+const listeners = new Set<Listener>();
+let shared: EventSource | undefined;
+
+/**
+ * One EventSource per tab, shared by every screen that listens: a second connection to the same
+ * stream would only repeat the same events.
+ */
+export function onStream(listener: Listener): () => void {
+  listeners.add(listener);
+  if (!shared && typeof window !== "undefined") {
+    shared = new EventSource(`${RUNTIME_URL}/events/stream`);
+    for (const name of ["hello", "domain", "run", "ping"])
+      shared.addEventListener(name, (e) => {
+        for (const l of listeners) l(name, (e as MessageEvent<string>).data);
+      });
+    shared.onerror = () => {
+      for (const l of listeners) l("error", "");
+    };
+  }
+  return () => {
+    listeners.delete(listener);
+    if (listeners.size === 0 && shared) {
+      shared.close();
+      shared = undefined;
+    }
+  };
+}
+
+/** Calls `onEvent` for every domain event about this journey. */
 export function subscribeJourney(journeyId: string, onEvent: () => void): () => void {
-  const source = new EventSource(`${RUNTIME_URL}/events/stream`);
-  source.addEventListener("domain", (e) => {
+  return onStream((name, data) => {
+    if (name !== "domain") return;
     try {
-      const event = JSON.parse((e as MessageEvent<string>).data) as { journey_id?: string };
+      const event = JSON.parse(data) as { journey_id?: string };
       if (event.journey_id === journeyId) onEvent();
     } catch {
       // A malformed frame is ignored; the next event refreshes the view.
     }
   });
-  return () => source.close();
 }
 
 export async function fetchBoard(stationId: string): Promise<BoardView> {
@@ -60,9 +88,7 @@ export async function postStaffAction(stationId: string, action: StaffAction): P
 
 /** Any domain event: boards and the command center redraw on every change. */
 export function subscribeAll(onEvent: () => void): () => void {
-  const source = new EventSource(`${RUNTIME_URL}/events/stream`);
-  source.addEventListener("domain", () => onEvent());
-  return () => source.close();
+  return onStream((name) => name === "domain" && onEvent());
 }
 
 export async function fetchOverview(): Promise<OpsOverview> {

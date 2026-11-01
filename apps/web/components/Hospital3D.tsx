@@ -435,12 +435,15 @@ export default function Hospital3D({
   selected,
   onSelect,
   height = 520,
+  onReady,
 }: {
   site: Site;
   stations: FloorStation[];
   selected?: string | undefined;
   onSelect?: ((id: string) => void) | undefined;
   height?: number;
+  /** Called once the first frame is on screen. */
+  onReady?: () => void;
 }) {
   const hospital = useHospital();
   const [spin, setSpin] = useState(true);
@@ -511,6 +514,7 @@ export default function Hospital3D({
         camera={{ position: [38, 52, 52], fov: 30, near: 1, far: 800 }}
         gl={{ antialias: true, alpha: true }}
         onPointerDown={() => setSpin(false)}
+        onCreated={() => requestAnimationFrame(() => requestAnimationFrame(() => onReady?.()))}
       >
         <ambientLight intensity={0.75} />
         <directionalLight
