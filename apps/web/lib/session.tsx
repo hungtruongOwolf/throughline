@@ -10,7 +10,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { STAFF, type AgentRun, type StaffMember } from "@throughline/shared";
+import { STAFF, type AgentRun, type Hospital, type StaffMember } from "@throughline/shared";
 import { RUNTIME_URL } from "./runtime";
 
 // ---- who is signed in --------------------------------------------------------------------
@@ -145,3 +145,33 @@ export function useLive<T>(load: () => Promise<T>, deps: unknown[] = []) {
   const reload = useCallback(() => setTick((t) => t + 1), []);
   return { data, error, reload };
 }
+
+// ---- the hospital this workspace serves --------------------------------------------------
+
+const NO_HOSPITAL: Hospital = {
+  id: "",
+  name: "Your hospital",
+  short_name: "Your hospital",
+  city: "",
+  specialties: [],
+  phone: "",
+  phone_href: "",
+  payers: [],
+  status: "live",
+};
+
+const HospitalContext = createContext<Hospital>(NO_HOSPITAL);
+
+/** Loads the hospital's name, phone, and payers once; every screen reads them from here. */
+export function HospitalProvider({ children }: { children: ReactNode }) {
+  const [hospital, setHospital] = useState<Hospital>(NO_HOSPITAL);
+  useEffect(() => {
+    void fetch(`${RUNTIME_URL}/api/hospital`)
+      .then((r) => (r.ok ? (r.json() as Promise<Hospital>) : NO_HOSPITAL))
+      .then(setHospital)
+      .catch(() => undefined);
+  }, []);
+  return <HospitalContext.Provider value={hospital}>{children}</HospitalContext.Provider>;
+}
+
+export const useHospital = () => useContext(HospitalContext);

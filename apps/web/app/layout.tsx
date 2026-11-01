@@ -23,7 +23,7 @@ const barlow = Barlow_Condensed({
 export const metadata: Metadata = {
   title: "Throughline",
   description:
-    "Referrals, visit days and follow-up for Halden Medical Center, run by agents and approved by staff.",
+    "Referrals, visit days and follow-up for hospitals, run by agents and approved by staff.",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

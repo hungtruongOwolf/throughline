@@ -1,9 +1,13 @@
+"use client";
+
 import Link from "next/link";
+import { useHospital } from "../lib/session";
 
 export const NAV = [{ href: "/map", label: "Find your way" }] as const;
 
 /** One header for every staff and judge surface, so people always know where they are. */
 export function SiteHeader({ current }: { current?: (typeof NAV)[number]["href"] | "/" }) {
+  const hospital = useHospital();
   return (
     <header className="border-b border-ink/10 bg-paper">
       <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-8 gap-y-2 px-6 py-3">
@@ -31,7 +35,7 @@ export function SiteHeader({ current }: { current?: (typeof NAV)[number]["href"]
             </Link>
           ))}
         </nav>
-        <span className="ml-auto text-[13px] text-ink-soft">Halden Medical Center</span>
+        <span className="ml-auto text-[13px] text-ink-soft">{hospital.name}</span>
       </div>
     </header>
   );

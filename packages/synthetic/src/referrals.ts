@@ -538,3 +538,18 @@ export const REFERRAL_AVAILABILITY: Record<string, { date: string; from: string;
 export function referralSpec(journeyId: string): ReferralSpec | undefined {
   return [...REFERRALS, ...FAX_LINE].find((s) => s.id === journeyId);
 }
+
+/** The hospitals on this deployment. Halden is the one with a live floor and referral book. */
+export const HOSPITALS = [
+  {
+    id: "halden",
+    name: "Halden Medical Center",
+    short_name: "Halden",
+    city: "Halden",
+    specialties: ["Medical oncology"],
+    phone: "555-0100",
+    phone_href: "+15550100",
+    payers: ["Lonestar Health Plan"],
+    status: "live" as const,
+  },
+];

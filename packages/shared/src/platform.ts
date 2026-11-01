@@ -379,3 +379,16 @@ export interface HospitalOverview {
   runs_today: number;
   feed: FeedEntry[];
 }
+
+/** A hospital using Throughline (a tenant). Every screen takes its name and numbers from here. */
+export interface Hospital {
+  id: string;
+  name: string;
+  short_name: string;
+  city: string;
+  specialties: string[];
+  phone: string;
+  phone_href: string;
+  payers: string[];
+  status: "live" | "setting_up";
+}

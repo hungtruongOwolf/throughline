@@ -33,7 +33,7 @@ import {
   sendReply,
 } from "../../../../lib/platform";
 import { fetchJourney } from "../../../../lib/runtime";
-import { useLive } from "../../../../lib/session";
+import { useLive, useHospital } from "../../../../lib/session";
 
 const OUTCOME: Record<RunView["outcome"], string> = {
   applied: "Done on its own",
@@ -321,6 +321,7 @@ function Messages({ journey, onSent }: { journey: Journey; onSent: () => void })
 }
 
 function Plan({ journey }: { journey: Journey }) {
+  const hospital = useHospital();
   const appts = [...journey.appointments]
     .filter((a) => a.status === "booked")
     .sort((a, b) => a.start.localeCompare(b.start));
@@ -354,7 +355,7 @@ function Plan({ journey }: { journey: Journey }) {
         ) : (
           journey.auth_packets.map((p) => (
             <p key={p.id}>
-              Lonestar Health Plan: <span className="font-bold">{p.status}</span>
+              {hospital.payers[0]}: <span className="font-bold">{p.status}</span>
               {p.submitted_by ? `, submitted by ${p.submitted_by}` : ""}
             </p>
           ))
@@ -404,6 +405,7 @@ function Documents({ journey }: { journey: Journey }) {
 // ---- page ---------------------------------------------------------------------------------
 
 export default function PatientRecord({ params }: { params: Promise<{ id: string }> }) {
+  const tenant = useHospital();
   const { id } = use(params);
   const { data: journey, reload: reloadJourney } = useLive(() => fetchJourney(id), [id]);
   const { data: timeline } = useLive(() => fetchTimeline(id), [id]);
@@ -434,8 +436,8 @@ export default function PatientRecord({ params }: { params: Promise<{ id: string
             {yearsOld(journey.patient.dob, now)} years, MRN{" "}
             {journey.patient.id.replace(/\D/g, "").padStart(6, "0")},{" "}
             {journey.patient.language === "es" ? "Spanish" : "English"},{" "}
-            {journey.patient.mobility === "wheelchair" ? "uses a wheelchair" : "walks"}, Lonestar
-            Health Plan. Referred by {journey.referral.referring_provider}.
+            {journey.patient.mobility === "wheelchair" ? "uses a wheelchair" : "walks"},{" "}
+            {tenant.payers[0]}. Referred by {journey.referral.referring_provider}.
           </p>
           <div className="mt-5 max-w-[760px]">
             <StageRail current={stage} waiting={!!pending} />

@@ -146,4 +146,37 @@ test.describe("the staff platform", () => {
     await expect(page.getByText(/A person at the hospital is checking it now/)).toBeVisible();
     await page.screenshot({ path: `${SCREENS}visit-sent.png`, fullPage: true });
   });
+
+  test("a new hospital joins Throughline and appears beside Halden", async ({ page }) => {
+    await page.goto("/");
+    await page
+      .getByRole("button", { name: /Halden Medical Center/ })
+      .first()
+      .click();
+    await page.getByRole("menuitem", { name: "Add your hospital" }).click();
+    await expect(page.getByRole("heading", { name: "Add your hospital" })).toBeVisible();
+    const next = page.getByRole("button", { name: "Continue" });
+    await page.getByRole("button", { name: "Fill with an example hospital" }).click();
+    await next.click();
+    await page.getByRole("button", { name: "Use example numbers" }).click();
+    await next.click();
+    await page.getByRole("button", { name: "Pick example payers" }).click();
+    await next.click();
+    await page.getByRole("button", { name: "Use example floor plans" }).click();
+    await next.click();
+    await page.getByRole("button", { name: "Use an example contact" }).click();
+    await noSeriousAxe(page);
+    await page.getByRole("button", { name: "Set up our workspace" }).click();
+    await expect(
+      page.getByRole("heading", { name: "Riverbend Regional Hospital is being set up" }),
+    ).toBeVisible();
+    await page.getByRole("link", { name: "Back to the front page" }).click();
+    await page
+      .getByRole("button", { name: /Halden Medical Center/ })
+      .first()
+      .click();
+    await expect(page.getByRole("menuitem", { name: /Riverbend Regional Hospital/ })).toContainText(
+      "Setting up",
+    );
+  });
 });

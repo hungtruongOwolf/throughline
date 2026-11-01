@@ -2,7 +2,7 @@ import { Hono, type Context } from "hono";
 import { cors } from "hono/cors";
 import { streamSSE } from "hono/streaming";
 import { z } from "zod";
-import { SHARED_VERSION, StationId, type Journey } from "@throughline/shared";
+import { SHARED_VERSION, StationId, type Hospital, type Journey } from "@throughline/shared";
 import type { EventBus } from "./bus/event-bus";
 import type { ClockSpeed, SimClock } from "./bus/sim-clock";
 import type { RuntimeStore } from "./bus/store";
@@ -20,7 +20,7 @@ import type { World } from "./sim/pre-visit";
 import { agentRuns, agentStats, inbox, journeyRows, overview, runView, timeline } from "./platform";
 import { documentsFor, faxLine, populate, receiveReferral } from "./demo/population";
 import { createJourney } from "./core/journeys";
-import { REFERRAL_AVAILABILITY, referralSpec } from "@throughline/synthetic";
+import { HOSPITALS, REFERRAL_AVAILABILITY, referralSpec } from "@throughline/synthetic";
 import { loadEngine } from "@throughline/engine/node";
 import { VisitDayScenario } from "./sim/scenario";
 import type { ModelCache } from "./models/cache";
@@ -40,6 +40,8 @@ export interface AppContext {
   received: Set<string>;
   /** Visit requests patients made since the last restore. */
   requests: number;
+  /** Hospitals that asked to join since the last restore. */
+  setups: Hospital[];
   /** Last visitor change (POST) and whether the hospital differs from the restored one. */
   activity: { dirty: boolean; at: number };
 }
@@ -171,6 +173,36 @@ export function createApp(ctx?: AppContext) {
   });
 
   // ---- the staff platform (docs/PLATFORM-DESIGN.md) ----------------------------------------
+  /** The hospital this workspace serves, and the hospitals on this deployment. */
+  app.get("/api/hospital", (c) => c.json(HOSPITALS[0]));
+  app.get("/api/hospitals", (c) => c.json([...HOSPITALS, ...ctx.setups]));
+  /** A hospital asks to join: it gets a workspace in setup, listed beside the live ones. */
+  const Setup = z.object({
+    name: z.string().min(3).max(100),
+    city: z.string().min(2).max(60),
+    specialties: z.array(z.string().max(60)).min(1).max(8),
+    phone: z.string().min(7).max(30),
+    payers: z.array(z.string().max(80)).min(1).max(10),
+    contact: z.string().min(2).max(80),
+  });
+  app.post("/api/hospitals", async (c) => {
+    const body = Setup.safeParse(await c.req.json().catch(() => ({})));
+    if (!body.success) return c.json({ error: body.error.issues }, 400);
+    const h = {
+      id: `setup-${ctx.setups.length + 1}`,
+      name: body.data.name,
+      short_name: body.data.name.split(" ")[0] ?? body.data.name,
+      city: body.data.city,
+      specialties: body.data.specialties,
+      phone: body.data.phone,
+      phone_href: body.data.phone.replace(/[^\d+]/g, ""),
+      payers: body.data.payers,
+      status: "setting_up" as const,
+    };
+    ctx.setups.push(h);
+    return c.json(h);
+  });
+
   /** The faxes waiting on the fax line (receiving one starts a journey). */
   app.get("/api/fax-line", (c) =>
     c.json(

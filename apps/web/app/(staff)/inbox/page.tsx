@@ -32,7 +32,7 @@ import {
   resolveItem,
 } from "../../../lib/platform";
 import { fetchJourney, RUNTIME_URL } from "../../../lib/runtime";
-import { useLive, useUser } from "../../../lib/session";
+import { useLive, useUser, useHospital } from "../../../lib/session";
 
 const BAR: Record<InboxItem["kind"], string> = {
   handoff: "bg-urgent",
@@ -149,6 +149,7 @@ function Detail({
   onDone: (verb: string) => void;
 }) {
   const { user } = useUser();
+  const payer = useHospital().payers[0] ?? "the payer";
   const toast = useToast();
   const [journey, setJourney] = useState<Journey | undefined>();
   const [note, setNote] = useState("");
@@ -282,8 +283,8 @@ function Detail({
           <Pane title="Source: the faxed referral">
             {journey ? <FaxImage journey={journey} /> : <Skeleton rows={6} />}
             <p className="mt-3 rounded-[4px] bg-canvas p-3 text-[13px]">
-              <span className="font-bold">Payer rule.</span> Lonestar Health Plan requires prior
-              authorization for CT chest/abdomen/pelvis with contrast and for infusions.
+              <span className="font-bold">Payer rule.</span> {payer} requires prior authorization
+              for CT chest/abdomen/pelvis with contrast and for infusions.
             </p>
           </Pane>
           <Pane title="Draft: prior authorization request">
@@ -302,7 +303,7 @@ function Detail({
             {backBox}
           </Pane>
         </div>
-        {decisionBar("Approve and submit", "Submitted to Lonestar Health Plan")}
+        {decisionBar("Approve and submit", `Submitted to ${payer}`)}
       </article>
     );
   }

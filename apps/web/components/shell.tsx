@@ -6,6 +6,7 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { agentProfile, STAFF, type JourneyRow } from "@throughline/shared";
 import { fetchHospital, fetchReferrals } from "../lib/platform";
 import { useLive, useStream, useUser } from "../lib/session";
+import { HospitalSwitcher } from "./hospital-switcher";
 import { NewReferralDialog } from "./new-referral";
 import { AgentGlyph, Avatar, Drawer, hhmm, shortDate } from "./ui";
 
@@ -224,7 +225,9 @@ function Sidebar() {
         <NavItem href="/map" label="Wayfinding map" />
         <NavItem href="/board/imaging_ct" label="Station displays" />
       </div>
-      <p className="mt-auto px-6 pb-4 text-[12px] text-white/50">Halden Medical Center</p>
+      <div className="mt-auto px-4 pb-4">
+        <HospitalSwitcher tone="dark" />
+      </div>
     </nav>
   );
 }

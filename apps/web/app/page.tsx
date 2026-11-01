@@ -5,10 +5,11 @@ import { useRouter } from "next/navigation";
 import { useState, type ReactNode } from "react";
 import { agentProfile, STAFF } from "@throughline/shared";
 import { Hospital3D } from "../components/Hospital3DLazy";
+import { HospitalSwitcher } from "../components/hospital-switcher";
 import { AgentGlyph, hhmm, shortDate, StageRail } from "../components/ui";
 import { fetchHospital, fetchReferrals } from "../lib/platform";
 import { fetchOverview } from "../lib/runtime";
-import { useLive, useUser } from "../lib/session";
+import { useHospital, useLive, useUser } from "../lib/session";
 
 function Arrow() {
   return (
@@ -108,6 +109,7 @@ function VisitCode() {
  */
 export default function FrontDoor() {
   const { signIn } = useUser();
+  const hospital = useHospital();
   const router = useRouter();
   const { data } = useLive(fetchHospital);
   const { data: floor } = useLive(fetchOverview);
@@ -118,7 +120,9 @@ export default function FrontDoor() {
       <header className="mx-auto flex max-w-[1360px] items-center gap-3 px-6 pt-6">
         <span aria-hidden className="block h-[6px] w-7 bg-agent" />
         <span className="font-display text-[28px] font-bold">Throughline</span>
-        <span className="hidden text-[15px] text-ink-soft sm:inline">Halden Medical Center</span>
+        <span className="hidden sm:block">
+          <HospitalSwitcher />
+        </span>
         <span className="ml-auto font-figure text-[15px] text-ink-soft tabular-nums">
           {data?.now ? `${shortDate(data.now)}, ${hhmm(data.now)}` : ""}
         </span>
@@ -131,7 +135,7 @@ export default function FrontDoor() {
           </h1>
           <p className="mt-3 max-w-[60ch] text-[17px] text-ink-soft">
             Thirteen agents do the routine work for every patient in flight. Your staff approve what
-            matters. This is Halden right now:{" "}
+            matters. This is {hospital.short_name} right now:{" "}
             {data
               ? `${data.in_building} people in the building, ${data.referrals_in_progress} referrals in progress, ${data.waiting_on_staff} decisions waiting on staff.`
               : "connecting."}

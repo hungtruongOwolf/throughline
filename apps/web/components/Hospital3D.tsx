@@ -15,9 +15,10 @@ import * as THREE from "three";
 import type { CampusNode } from "@throughline/hospital";
 import type { OpsStation } from "@throughline/shared";
 import { campus, node } from "../lib/campus";
+import { useHospital } from "../lib/session";
 
 /**
- * Halden Medical Center as a real 3D model (WebGL): each building with its floors as slabs
+ * The hospital as a real 3D model (WebGL): each building with its floors as slabs
  * and glass walls, corridors and bridges on the floors, elevator shafts through them, every
  * station as a room with its name and wait, the people waiting in line, and one patient's
  * route through the day. Drag to turn it, scroll to zoom.
@@ -403,6 +404,7 @@ export default function Hospital3D({
   onSelect?: ((id: OpsStation["id"]) => void) | undefined;
   height?: number;
 }) {
+  const hospital = useHospital();
   const [spin, setSpin] = useState(true);
   // On a phone the page must scroll: the model turns by itself and leaves touches alone.
   const narrow = typeof window !== "undefined" && window.innerWidth < 768;
@@ -434,7 +436,7 @@ export default function Hospital3D({
       }}
       className="relative"
       role="img"
-      aria-label={`Halden Medical Center in 3D. Longest waits: ${summary}.`}
+      aria-label={`${hospital.name} in 3D. Longest waits: ${summary}.`}
     >
       <Canvas
         shadows
@@ -513,7 +515,7 @@ export default function Hospital3D({
         )}
       </Canvas>
       <p className="pointer-events-none absolute bottom-2 left-3 text-[12px] text-ink-soft">
-        {narrow ? "Halden Medical Center, live" : "Drag to turn, scroll to zoom"}
+        {narrow ? `${hospital.name}, live` : "Drag to turn, scroll to zoom"}
         {onSelect && !narrow ? ", select a room to forecast it" : ""}.
       </p>
     </div>

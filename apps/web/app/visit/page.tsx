@@ -12,7 +12,7 @@ import {
   type FaxLineItem,
   type VisitRequest,
 } from "../../lib/platform";
-import { useLive } from "../../lib/session";
+import { useLive, useHospital } from "../../lib/session";
 
 /**
  * Book a visit (patient-facing): one question per screen, in order, with the way ahead drawn
@@ -210,6 +210,7 @@ function Sent({ id, code }: { id: string; code: string }) {
 }
 
 export default function BookVisit() {
+  const hospital = useHospital();
   const [at, setAt] = useState(0);
   const [faxes, setFaxes] = useState<FaxLineItem[]>([]);
   const [service, setService] = useState<VisitRequest["service"] | undefined>();
@@ -276,10 +277,10 @@ export default function BookVisit() {
       <header className="mx-auto flex max-w-[860px] items-center gap-3 px-6 pt-6">
         <Link href="/" className="flex items-center gap-3">
           <span aria-hidden className="block h-[6px] w-7 bg-agent" />
-          <span className="font-display text-[24px] font-bold">Halden Medical Center</span>
+          <span className="font-display text-[24px] font-bold">{hospital.name}</span>
         </Link>
-        <a href="tel:+15550100" className="ml-auto text-[15px] text-agent underline">
-          Prefer to call? 555-0100
+        <a href={`tel:${hospital.phone_href}`} className="ml-auto text-[15px] text-agent underline">
+          Prefer to call? {hospital.phone}
         </a>
       </header>
       <main className="mx-auto max-w-[860px] px-6 pt-8 pb-16">
@@ -473,8 +474,10 @@ export default function BookVisit() {
             {at === 3 && (
               <>
                 <Field label="Insurance">
-                  <select className={input} defaultValue="Lonestar Health Plan">
-                    <option>Lonestar Health Plan</option>
+                  <select className={input} defaultValue={hospital.payers[0]}>
+                    {hospital.payers.map((p) => (
+                      <option key={p}>{p}</option>
+                    ))}
                   </select>
                 </Field>
                 <Field label="Member ID" hint="On the front of your insurance card.">
@@ -584,7 +587,9 @@ export default function BookVisit() {
                   {companion ? "Someone comes along." : "Comes alone."}
                 </dd>
                 <dt className="text-ink-soft">Insurance</dt>
-                <dd>Lonestar Health Plan, member ID {member}</dd>
+                <dd>
+                  {hospital.payers[0]}, member ID {member}
+                </dd>
                 <dt className="text-ink-soft">Days</dt>
                 <dd>
                   {Object.entries(days)

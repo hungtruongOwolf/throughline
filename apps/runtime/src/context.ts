@@ -115,6 +115,7 @@ export function createContext(
     world,
     received: new Set<string>(),
     requests: 0,
+    setups: [],
     activity: { dirty: false, at: 0 },
   };
 }

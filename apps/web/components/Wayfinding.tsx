@@ -7,6 +7,7 @@ import { node } from "../lib/campus";
 import { floorOf, FLOORS, type Floor } from "../lib/floorplan";
 import { minutes, wayfindingSteps, type WayStep } from "../lib/wayfinding";
 import { FloorMap } from "./FloorMap";
+import { useHospital } from "../lib/session";
 
 function StepIcon({ step }: { step: WayStep }) {
   const base =
@@ -54,6 +55,7 @@ export function Wayfinding({
   layout?: "phone" | "wide";
   title?: string;
 }) {
+  const hospital = useHospital();
   const [stepFree, setStepFree] = useState(true);
   const [route, setRoute] = useState<WalkingRoute | undefined>();
   const [current, setCurrent] = useState(0);
@@ -211,8 +213,8 @@ export function Wayfinding({
         </button>
         <p className="text-[15px] text-ink-soft">
           Need help? Ask at any desk or call{" "}
-          <a className="font-bold text-line" href="tel:+15550100">
-            555-0100
+          <a className="font-bold text-line" href={`tel:${hospital.phone_href}`}>
+            {hospital.phone}
           </a>
           .
         </p>

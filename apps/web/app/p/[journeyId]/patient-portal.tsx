@@ -6,7 +6,7 @@ import type { Journey, Message, Stop as ItineraryStop } from "@throughline/share
 import { PatientComposer } from "../../../components/patient-composer";
 import { SignPhoto } from "../../../components/sign-photo";
 import { Wayfinding } from "../../../components/Wayfinding";
-import { useUser } from "../../../lib/session";
+import { useUser, useHospital } from "../../../lib/session";
 import { clockTime } from "../../../lib/format";
 import {
   fetchJourney,
@@ -753,6 +753,7 @@ function ToDo({ journey, onConfirm }: { journey: Journey; onConfirm?: () => void
 }
 
 function Messages({ messages }: { messages: Message[] }) {
+  const hospital = useHospital();
   const recent = messages.slice(-4).reverse();
   if (recent.length === 0) return null;
   return (
@@ -764,8 +765,7 @@ function Messages({ messages }: { messages: Message[] }) {
         {recent.map((m) => (
           <li key={m.id} className={m.direction === "in" ? "border-l-[3px] border-line pl-3" : ""}>
             <p className="text-[14px] text-ink-soft">
-              {m.direction === "in" ? "You" : "Halden Medical Center"}, {shortDay(m.at)} at{" "}
-              {amPm(m.at)}
+              {m.direction === "in" ? "You" : hospital.name}, {shortDay(m.at)} at {amPm(m.at)}
             </p>
             <p>{m.text}</p>
           </li>
@@ -789,6 +789,7 @@ export function PatientPortal({
   embedded?: boolean;
   phase?: Phase;
 }) {
+  const hospital = useHospital();
   const [journey, setJourney] = useState<Journey | undefined>();
   const [events, setEvents] = useState<JourneyEventView[]>([]);
   const [status, setStatus] = useState<"loading" | "ok" | "offline">("loading");
@@ -818,7 +819,7 @@ export function PatientPortal({
       setNotice(
         ok
           ? "Confirmed. We'll text you a reminder the day before each trip."
-          : "That didn't go through. Call 555-0100 to confirm.",
+          : `That didn't go through. Call ${hospital.phone} to confirm.`,
       );
       refresh();
     });
@@ -835,7 +836,7 @@ export function PatientPortal({
       setNotice(
         ok
           ? "A person from the clinic will call you soon."
-          : "That didn't go through. Call 555-0100.",
+          : `That didn't go through. Call ${hospital.phone}.`,
       ),
     );
 
@@ -843,7 +844,7 @@ export function PatientPortal({
     <div className={embedded ? "bg-paper text-ink" : "min-h-dvh bg-paper text-ink"}>
       <header className="border-b border-ink/10">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-4 px-6 py-4">
-          <p className="font-display text-[24px] font-bold">Halden Medical Center</p>
+          <p className="font-display text-[24px] font-bold">{hospital.name}</p>
           {user && !embedded && (
             <Link href={`/patients/${journeyId}`} className="text-[15px] text-line underline">
               Back to staff view
@@ -874,7 +875,8 @@ export function PatientPortal({
         {status === "loading" && <p className="mt-10 text-ink-soft">Loading your plan.</p>}
         {status === "offline" && (
           <p role="alert" className="mt-10">
-            We can&apos;t reach the hospital right now. Call 555-0100 if you need your times.
+            We can&apos;t reach the hospital right now. Call {hospital.phone} if you need your
+            times.
           </p>
         )}
         {journey && (
@@ -896,8 +898,8 @@ export function PatientPortal({
                 </h2>
                 <p className="mt-2 text-[16px]">
                   About times, directions, or insurance: call{" "}
-                  <a href="tel:+15550100" className="font-bold text-line">
-                    555-0100
+                  <a href={`tel:${hospital.phone_href}`} className="font-bold text-line">
+                    {hospital.phone}
                   </a>{" "}
                   or use Talk to a person.
                 </p>
