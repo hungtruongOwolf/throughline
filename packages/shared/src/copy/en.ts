@@ -8,7 +8,7 @@ export const en = {
   "disclosure.summary_unreviewed":
     "This summary was prepared with AI from your care team's notes and has not been reviewed by a clinician. For questions about your care, call the clinic at 555-0100 or reply NURSE.",
   "ops.proposal_footer":
-    "Forecast from the rest of the day, run with and without the change; a manager decides.",
+    "Forecast from the rest of the day, run with and without the change. Small changes that clearly help apply on their own; larger ones wait for the operations lead.",
   "patient.show_way": "Show me the way",
   "patient.im_here": "I'm here",
   "patient.talk_to_person": "Talk to a person",

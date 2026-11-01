@@ -9,7 +9,8 @@ export const es: Record<CopyKey, string> = {
     "Está enviando mensajes con Throughline, un asistente de IA de Halden Medical Center. Para preguntas médicas, responda ENFERMERA y una persona le llamará.",
   "disclosure.summary_unreviewed":
     "Este resumen se preparó con IA a partir de las notas de su equipo de atención y no ha sido revisado por un profesional clínico. Para preguntas sobre su atención, llame a la clínica al 555-0100 o responda ENFERMERA.",
-  "ops.proposal_footer": "Predicción por simulación; decide un gerente.",
+  "ops.proposal_footer":
+    "Predicción por simulación. Los cambios pequeños que ayudan se aplican solos; los mayores esperan al responsable de operaciones.",
   "patient.show_way": "Muéstreme el camino",
   "patient.im_here": "Ya llegué",
   "patient.talk_to_person": "Hablar con una persona",
