@@ -155,3 +155,21 @@ export const MARIA_VISIT_NOTES = {
     },
   ],
 } as const;
+
+function notesBy(author: "Dr. Okafor" | "Dr. Brooks" | "Dr. Patel") {
+  if (author === "Dr. Okafor") return MARIA_VISIT_NOTES;
+  return {
+    author,
+    sections: MARIA_VISIT_NOTES.sections.map((s) => ({
+      heading: s.heading,
+      verbatim: s.verbatim.replace("Dr. Okafor", author),
+    })),
+  };
+}
+
+/** The visit-note template each oncologist writes after a new-patient visit (synthetic). */
+export const VISIT_NOTES = {
+  Okafor: notesBy("Dr. Okafor"),
+  Brooks: notesBy("Dr. Brooks"),
+  Patel: notesBy("Dr. Patel"),
+};

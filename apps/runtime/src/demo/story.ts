@@ -61,6 +61,24 @@ export const TEACHBACK_REPLY =
 export const CHECKIN_REPLY =
   "Yes, I picked up the prescription. My daughter will drive me. No need for a nurse call, thank you.";
 
+/** Maria answers with a voice note; if it cannot be transcribed, the same words as a text. */
+export async function mariaVoiceReply(ctx: Pick<AppContext, "models" | "store" | "clock">) {
+  const { models, store, clock } = ctx;
+  if (!modelsAvailable(models.config)) {
+    return { channel: "sms_sim" as const, text: MARIA_REPLY, language: "en" as const };
+  }
+  try {
+    const { transcript } = await transcribe(
+      { ...models, record: (r) => store.recordModelCall(r), now: () => clock.now() },
+      readFileSync(VOICE_NOTE),
+    );
+    if (transcript) return { channel: "voice_sim" as const, transcript, language: "en" as const };
+  } catch {
+    // No model available: fall through to the typed reply.
+  }
+  return { channel: "sms_sim" as const, text: MARIA_REPLY, language: "en" as const };
+}
+
 export class StoryDriver {
   private index = 0;
   private scenario: VisitDayScenario | undefined;
@@ -94,23 +112,6 @@ export class StoryDriver {
   }
 
   /** Maria answers with a voice note; if it cannot be transcribed, the same words as a text. */
-  private async mariaReply() {
-    const { models, store, clock } = this.ctx;
-    if (!modelsAvailable(models.config)) {
-      return { channel: "sms_sim" as const, text: MARIA_REPLY, language: "en" as const };
-    }
-    try {
-      const { transcript } = await transcribe(
-        { ...models, record: (r) => store.recordModelCall(r), now: () => clock.now() },
-        readFileSync(VOICE_NOTE),
-      );
-      if (transcript) return { channel: "voice_sim" as const, transcript, language: "en" as const };
-    } catch {
-      // No model available: fall through to the typed reply.
-    }
-    return { channel: "sms_sim" as const, text: MARIA_REPLY, language: "en" as const };
-  }
-
   /** Performs the current step's action and moves to the next step. */
   async act(): Promise<void> {
     const { runtime, clock, bus, store } = this.ctx;
@@ -138,7 +139,7 @@ export class StoryDriver {
         await runtime.ingest({
           type: "PatientReplied",
           journey_id: MARIA_JOURNEY_ID,
-          payload: await this.mariaReply(),
+          payload: await mariaVoiceReply(this.ctx),
         });
         await bus.idle();
         await clock.advanceTo(STORY_TIMES.dayBefore);

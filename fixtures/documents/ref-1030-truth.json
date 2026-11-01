@@ -1,0 +1,34 @@
+{
+  "synthetic": true,
+  "referral": {
+    "sent_at": "11/10/2026 14:05",
+    "from": "Riverside Internal Medicine",
+    "provider": "Tomas Brandt, MD",
+    "provider_phone": "(555) 010-0180",
+    "to": "Halden Medical Center, Oncology Intake",
+    "patient": {
+      "name": "Oscar Lindgren",
+      "dob": "08/26/1950",
+      "phone": "+1 555 0130",
+      "language": "English",
+      "address": "1210 Elm Terrace, Halden"
+    },
+    "insurance": {
+      "payer": "Lonestar Health Plan",
+      "member_id_visible": "LHP-637570-03",
+      "plan": "LHP-GOLD-PPO"
+    },
+    "reason": "New patient consult, medical oncology",
+    "diagnosis_code_as_written": "C61",
+    "urgency_as_written": "Routine, within 2 weeks",
+    "services": [
+      "CBC w/ diff",
+      "CMP",
+      "CT chest/abdomen/pelvis with contrast",
+      "New patient consult, medical oncology"
+    ],
+    "fasting_as_written": "Nothing to eat or drink except water for 8 hours before the blood draw."
+  },
+  "card_member_id": "LHP-637570-03",
+  "expected_missing_fields": []
+}

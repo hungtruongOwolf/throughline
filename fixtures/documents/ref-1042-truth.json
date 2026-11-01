@@ -1,0 +1,36 @@
+{
+  "synthetic": true,
+  "referral": {
+    "sent_at": "11/17/2026 09:12",
+    "from": "Riverside Internal Medicine",
+    "provider": "Tomas Brandt, MD",
+    "provider_phone": "(555) 010-0180",
+    "to": "Halden Medical Center, Oncology Intake",
+    "patient": {
+      "name": "Amara Nwosu",
+      "dob": "08/04/1960",
+      "phone": "+1 555 0142",
+      "language": "English",
+      "address": "1654 Quarry Street, Halden"
+    },
+    "insurance": {
+      "payer": "Lonestar Health Plan",
+      "member_id_visible": "LHP-732598-",
+      "plan": "LHP-GOLD-PPO"
+    },
+    "reason": "New patient consult, medical oncology",
+    "diagnosis_code_as_written": "C50.912",
+    "urgency_as_written": "Routine, within 2 weeks",
+    "services": [
+      "CBC w/ diff",
+      "CMP",
+      "CT chest/abdomen/pelvis with contrast",
+      "New patient consult, medical oncology"
+    ],
+    "fasting_as_written": "Nothing to eat or drink except water for 8 hours before the blood draw."
+  },
+  "card_member_id": "LHP-732598-03",
+  "expected_missing_fields": [
+    "member_id"
+  ]
+}

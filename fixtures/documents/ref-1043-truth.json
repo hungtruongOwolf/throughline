@@ -1,0 +1,34 @@
+{
+  "synthetic": true,
+  "referral": {
+    "sent_at": "11/17/2026 09:30",
+    "from": "Northgate Family Medicine",
+    "provider": "Hannah Whitcombe, MD",
+    "provider_phone": "(555) 010-0170",
+    "to": "Halden Medical Center, Oncology Intake",
+    "patient": {
+      "name": "Lionel Ferreira",
+      "dob": "11/27/1948",
+      "phone": "+1 555 0143",
+      "language": "English",
+      "address": "1691 Willow Court, Halden"
+    },
+    "insurance": {
+      "payer": "Lonestar Health Plan",
+      "member_id_visible": "LHP-740517-04",
+      "plan": "LHP-GOLD-PPO"
+    },
+    "reason": "New patient consult, medical oncology",
+    "diagnosis_code_as_written": "C61",
+    "urgency_as_written": "Routine, within 2 weeks",
+    "services": [
+      "CBC w/ diff",
+      "CMP",
+      "CT chest/abdomen/pelvis with contrast",
+      "New patient consult, medical oncology"
+    ],
+    "fasting_as_written": "Nothing to eat or drink except water for 8 hours before the blood draw."
+  },
+  "card_member_id": "LHP-740517-04",
+  "expected_missing_fields": []
+}

@@ -1,4 +1,4 @@
-import type { DomainEvent } from "@throughline/shared";
+import type { AgentRun, DomainEvent } from "@throughline/shared";
 
 export interface Envelope {
   event: DomainEvent;
@@ -9,7 +9,7 @@ export interface Envelope {
 export type Subscriber = (envelope: Envelope) => Promise<void> | void;
 
 /** Telemetry about the runtime itself (agent runs), streamed to screens but not logged as events. */
-export type Telemetry = { type: "AgentRun"; run: import("@throughline/shared").AgentRun };
+export type Telemetry = { type: "AgentRun"; run: AgentRun };
 
 /**
  * In-process bus (spec 4.3 step 2). Delivery is sequential through a queue, so a handler

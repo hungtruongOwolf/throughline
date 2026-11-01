@@ -3,6 +3,7 @@ import {
   DEFAULT_SEED,
   generateSlots,
   PATIENT_AVAILABILITY,
+  REFERRAL_AVAILABILITY,
   type Slot,
 } from "@throughline/synthetic";
 import type {
@@ -29,6 +30,22 @@ export const schedulerDescriptor: AgentDescriptor = {
 
 export interface SchedulerDeps {
   engine: Engine;
+  /** Other journeys' bookings take slot capacity (no double booking). */
+  journeys?: () => Journey[];
+}
+
+/** Booked appointments of other journeys, by station and start. */
+export function takenSlots(journeys: Journey[], except: string): Map<string, number> {
+  const taken = new Map<string, number>();
+  for (const j of journeys) {
+    if (j.id === except) continue;
+    for (const a of j.appointments) {
+      if (a.status !== "booked") continue;
+      const key = `${a.station_id}@${a.start}`;
+      taken.set(key, (taken.get(key) ?? 0) + 1);
+    }
+  }
+  return taken;
 }
 
 /** How far ahead the scheduler looks (spec B4: within the referral's two weeks, plus slack). */
@@ -71,6 +88,7 @@ function schedulable(journey: Journey): Order[] {
 export function scheduleRequest(
   journey: Journey,
   now: string,
+  taken: Map<string, number> = new Map(),
 ): {
   request: ScheduleRequest;
   groups: Map<string, string[]>;
@@ -125,13 +143,19 @@ export function scheduleRequest(
   const calendars = stations.map((station_id) => ({
     station_id,
     slots: slots()
-      .filter(
-        (s) =>
-          s.station_id === station_id && s.date >= today && s.date <= last && s.capacity > s.booked,
-      )
-      .map((s) => ({ start: `${s.date}T${s.time}:00${TZ}`, capacity: s.capacity - s.booked })),
+      .filter((s) => s.station_id === station_id && s.date >= today && s.date <= last)
+      .map((s) => {
+        const start = `${s.date}T${s.time}:00${TZ}`;
+        return {
+          start,
+          capacity: s.capacity - s.booked - (taken.get(`${station_id}@${start}`) ?? 0),
+        };
+      })
+      .filter((s) => s.capacity > 0),
   }));
-  const availability = (PATIENT_AVAILABILITY[journey.patient.id] ?? []).map((w) => ({
+  const windows =
+    PATIENT_AVAILABILITY[journey.patient.id] ?? REFERRAL_AVAILABILITY[journey.patient.id] ?? [];
+  const availability = windows.map((w) => ({
     start: `${w.date}T${w.from}:00${TZ}`,
     end: `${w.date}T${w.to}:00${TZ}`,
   }));
@@ -171,9 +195,20 @@ function appointmentsOf(
 
 function plan(ctx: HandlerContext, deps: SchedulerDeps): HandlerResult {
   const journey = ctx.journey as Journey;
-  const { request, groups } = scheduleRequest(journey, ctx.now);
+  const taken = takenSlots(deps.journeys?.() ?? [], journey.id);
+  const { request, groups } = scheduleRequest(journey, ctx.now, taken);
   if (request.orders.length === 0) return { summary: "nothing to schedule", next_events: [] };
-  const result = deps.engine.schedule(request);
+  let result: ReturnType<Engine["schedule"]>;
+  try {
+    result = deps.engine.schedule(request);
+  } catch (e) {
+    // No slot fits the dependencies and the patient's times: a coordinator books by hand.
+    return {
+      summary: `no schedule found: ${e instanceof Error ? e.message : String(e)}`,
+      tasks: [`Book ${journey.patient.display_name} by hand: no open slot fits the orders and their times`],
+      next_events: [],
+    };
+  }
   // A reschedule request takes the engine's alternative, which avoids the first plan's days.
   const rescheduling = ctx.event.type === "ReplyHandled";
   const chosen = rescheduling ? (result.alternative ?? result.primary) : result.primary;

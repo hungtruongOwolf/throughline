@@ -7,7 +7,7 @@ import type {
   HandlerContext,
   HandlerResult,
 } from "../../core/agent";
-import { scheduleRequest } from "../scheduler/handler";
+import { scheduleRequest, takenSlots } from "../scheduler/handler";
 import { outbound, whenText } from "../shared/messages";
 
 export const followupDescriptor: AgentDescriptor = {
@@ -43,14 +43,28 @@ function plusDays(iso: string, days: number): string {
 }
 
 /** A3: the engine books the repeat labs and the follow-up visit with the same rules. */
-function book(ctx: HandlerContext, engine: Engine): HandlerResult {
+function book(
+  ctx: HandlerContext,
+  deps: { engine: Engine; journeys?: () => Journey[] },
+): HandlerResult {
+  const engine = deps.engine;
   const journey = ctx.journey as Journey;
   const orders = followUpOrders();
   const { request, groups } = scheduleRequest(
     { ...journey, orders, auth_packets: [] },
     plusDays(ctx.now, FOLLOW_UP_AFTER_DAYS),
+    takenSlots(deps.journeys?.() ?? [], journey.id),
   );
-  const plan = engine.schedule(request).primary;
+  let plan: ReturnType<Engine["schedule"]>["primary"];
+  try {
+    plan = engine.schedule(request).primary;
+  } catch {
+    return {
+      summary: "no follow-up slot found",
+      tasks: [`Book follow-ups for ${journey.patient.display_name} by hand`],
+      next_events: [],
+    };
+  }
   const appointments = plan.appointments.flatMap((a) =>
     (groups.get(a.order_id) ?? [a.order_id]).map((order_id) => ({
       id: `appt-${order_id}`,
@@ -215,13 +229,16 @@ function close(ctx: HandlerContext): HandlerResult {
 }
 
 /** Follow-up (spec A3, A5, A6): engine booking, logistics check-in, loop closure. */
-export function createFollowupAgent(deps: { engine: Engine }): DeterministicAgent {
+export function createFollowupAgent(deps: {
+  engine: Engine;
+  journeys?: () => Journey[];
+}): DeterministicAgent {
   return {
     ...followupDescriptor,
     kind: "deterministic",
     handle: (ctx) => {
       if (!ctx.journey) return { summary: "no journey", next_events: [] };
-      if (ctx.capability === "followup.book") return book(ctx, deps.engine);
+      if (ctx.capability === "followup.book") return book(ctx, deps);
       if (ctx.capability === "logistics.checkin") return checkin(ctx);
       if (ctx.capability === "referral.close") return close(ctx);
       return { summary: `not handled: ${ctx.capability}`, next_events: [] };

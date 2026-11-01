@@ -1,19 +1,32 @@
-// Writes Maria's intake documents and the extraction ground truth (spec 10.1, D3-1).
+// Writes every referral's intake documents and its extraction ground truth (spec 10.1):
+// the referral book (REFERRALS) and the faxes waiting on the fax line (FAX_LINE).
 import { mkdirSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { DEFAULT_SEED } from "../src/index";
-import { generateMariaDocuments, MARIA_MEMBER_ID, MARIA_REFERRAL } from "../src/documents";
+import { DEFAULT_SEED, FAX_LINE, REFERRALS } from "../src/index";
+import { documentPrefix, generateReferralDocuments, referralAsWritten } from "../src/documents";
 
 const out = fileURLToPath(new URL("../../../fixtures/documents/", import.meta.url));
 mkdirSync(out, { recursive: true });
-const docs = await generateMariaDocuments(Number(process.env.SEED ?? DEFAULT_SEED));
-writeFileSync(`${out}maria-referral-fax.pdf`, docs.referralFaxPdf);
-writeFileSync(`${out}maria-referral-fax.png`, docs.referralFaxPng);
-writeFileSync(`${out}maria-insurance-card.png`, docs.insuranceCardPng);
-writeFileSync(
-  `${out}maria-truth.json`,
-  `${JSON.stringify({ synthetic: true, referral: MARIA_REFERRAL, card_member_id: MARIA_MEMBER_ID, expected_missing_fields: ["member_id"] }, null, 2)}\n`,
-);
-console.log(
-  `wrote 3 documents and the ground truth to fixtures/documents/ (pdf ${(docs.referralFaxPdf.length / 1024).toFixed(0)} KB)`,
-);
+const seed = Number(process.env.SEED ?? DEFAULT_SEED);
+for (const spec of [...REFERRALS, ...FAX_LINE]) {
+  const docs = await generateReferralDocuments(spec, seed);
+  const prefix = documentPrefix(spec);
+  writeFileSync(`${out}${prefix}-referral-fax.png`, docs.referralFaxPng);
+  writeFileSync(`${out}${prefix}-insurance-card.png`, docs.insuranceCardPng);
+  // The PDF is the original fax; only Maria's is kept in the repo (the PNG is what intake reads).
+  if (prefix === "maria") writeFileSync(`${out}${prefix}-referral-fax.pdf`, docs.referralFaxPdf);
+  writeFileSync(
+    `${out}${prefix}-truth.json`,
+    `${JSON.stringify(
+      {
+        synthetic: true,
+        referral: referralAsWritten(spec),
+        card_member_id: spec.memberId,
+        expected_missing_fields: spec.smudged ? ["member_id"] : [],
+      },
+      null,
+      2,
+    )}\n`,
+  );
+}
+console.log(`wrote documents for ${REFERRALS.length + FAX_LINE.length} referrals to fixtures/documents/`);

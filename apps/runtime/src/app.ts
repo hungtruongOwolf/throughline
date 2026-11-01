@@ -16,6 +16,7 @@ import { buildBoard, type SimBackground } from "./board";
 import { buildOverview } from "./ops-overview";
 import { locateFromPhoto } from "./locate";
 import { transcribe } from "./models/voice";
+import type { World } from "./sim/pre-visit";
 import { agentRuns, agentStats, inbox, journeyRows, overview, runView, timeline } from "./platform";
 import { loadEngine } from "@throughline/engine/node";
 import { VisitDayScenario } from "./sim/scenario";
@@ -31,6 +32,9 @@ export interface AppContext {
   background: SimBackground;
   sensing: SensingLoop;
   models: { config: ModelConfig; cache: ModelCache; brain: { current: "cloud" | "open" } };
+  world: World;
+  /** Fax-line referrals received since the last restore. */
+  received: Set<string>;
 }
 
 const Resolve = z.object({

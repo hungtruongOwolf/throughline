@@ -66,7 +66,7 @@ function documentsOf(ctx: HandlerContext): DocumentRef[] {
  */
 function manifestReading(ctx: HandlerContext): Extracted | undefined {
   const prefix = documentsOf(ctx)
-    .map((d) => basename(d.uri).split("-")[0])
+    .map((d) => basename(d.uri).replace(/-(referral-fax|insurance-card)\.(png|pdf)$/, ""))
     .find(Boolean);
   const path = `${DOCS}${prefix}-truth.json`;
   if (!prefix || !existsSync(path)) return undefined;
@@ -112,7 +112,7 @@ function toResult(read: Extracted, ctx: HandlerContext): HandlerResult {
             field,
             question:
               field === "member_id"
-                ? "The member ID on the fax is smudged after LHP-883201-. What is the full member ID on the insurance card?"
+                ? "The end of the member ID on the fax is unreadable. What is the full member ID on the insurance card?"
                 : `What is the ${field} on the referral?`,
           },
         },

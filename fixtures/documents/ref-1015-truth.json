@@ -1,0 +1,34 @@
+{
+  "synthetic": true,
+  "referral": {
+    "sent_at": "10/29/2026 08:47",
+    "from": "Riverside Internal Medicine",
+    "provider": "Tomas Brandt, MD",
+    "provider_phone": "(555) 010-0180",
+    "to": "Halden Medical Center, Oncology Intake",
+    "patient": {
+      "name": "Janet Lindqvist",
+      "dob": "09/09/1961",
+      "phone": "+1 555 0115",
+      "language": "English",
+      "address": "655 Kestrel Drive, Halden"
+    },
+    "insurance": {
+      "payer": "Lonestar Health Plan",
+      "member_id_visible": "LHP-518785-04",
+      "plan": "LHP-GOLD-PPO"
+    },
+    "reason": "New patient consult, medical oncology",
+    "diagnosis_code_as_written": "C50.411",
+    "urgency_as_written": "Routine, within 2 weeks",
+    "services": [
+      "CBC w/ diff",
+      "CMP",
+      "CT chest/abdomen/pelvis with contrast",
+      "New patient consult, medical oncology"
+    ],
+    "fasting_as_written": "Nothing to eat or drink except water for 8 hours before the blood draw."
+  },
+  "card_member_id": "LHP-518785-04",
+  "expected_missing_fields": []
+}

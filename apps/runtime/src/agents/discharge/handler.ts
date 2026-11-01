@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { z } from "zod";
-import { MARIA_VISIT_NOTES } from "@throughline/synthetic";
+import { referralSpec, VISIT_NOTES } from "@throughline/synthetic";
 import { t, type DomainEvent, type Journey } from "@throughline/shared";
 import type {
   AgentDescriptor,
@@ -101,14 +101,21 @@ function bookedFacts(journey: Journey): string {
   return lines.length > 0 ? lines.join("\n") : "None booked yet.";
 }
 
-function notesText(): string {
-  return MARIA_VISIT_NOTES.sections.map((s) => `${s.heading}: ${s.verbatim}`).join("\n");
+/** The treating oncologist's note template (Dr. Okafor unless the referral says otherwise). */
+function notesFor(journey: Journey) {
+  return VISIT_NOTES[referralSpec(journey.id)?.oncologist ?? "Okafor"];
+}
+
+function notesText(journey: Journey): string {
+  return notesFor(journey)
+    .sections.map((s) => `${s.heading}: ${s.verbatim}`)
+    .join("\n");
 }
 
 // ---- A1 summary --------------------------------------------------------------------------
 
-function drafted(plain: string[]): HandlerResult {
-  const draft = MARIA_VISIT_NOTES.sections.map((s, i) => ({
+function drafted(plain: string[], journey: Journey): HandlerResult {
+  const draft = notesFor(journey).sections.map((s, i) => ({
     heading: s.heading,
     verbatim: s.verbatim,
     plain: plain[i] ?? s.verbatim,
@@ -120,11 +127,14 @@ function drafted(plain: string[]): HandlerResult {
   };
 }
 
-function applySummary(args: Summary): HandlerResult {
-  const sections = MARIA_VISIT_NOTES.sections;
+function applySummary(args: Summary, journey: Journey): HandlerResult {
+  const sections = notesFor(journey).sections;
   // The restatement must line up with the notes; otherwise it is not used.
   if (args.sections.length !== sections.length) throw new Error("section count differs");
-  return drafted(args.sections.map((s) => s.plain));
+  return drafted(
+    args.sections.map((s) => s.plain),
+    journey,
+  );
 }
 
 /** Sends the "summary ready" text. Reviewed by a clinician, or else in disclaimer mode. */
@@ -133,7 +143,7 @@ function send(ctx: HandlerContext): HandlerResult {
   const lang = journey.patient.language;
   const reviewedBy = ctx.approved_by;
   const disclaimerMode = !reviewedBy;
-  const ready = t(lang, "summary.ready", { author: MARIA_VISIT_NOTES.author });
+  const ready = t(lang, "summary.ready", { author: notesFor(journey).author });
   const text = disclaimerMode ? `${ready} ${t(lang, "disclosure.summary_unreviewed")}` : ready;
   const messageId = randomUUID();
   const out = outbound(journey, text, ctx.now);
@@ -319,8 +329,8 @@ export function createDischargeAgent(): ModelAgent<Summary> {
       input: (ctx) =>
         [
           `Patient language: ${(ctx.journey as Journey).patient.language}`,
-          `Clinician notes (${MARIA_VISIT_NOTES.author}):`,
-          notesText(),
+          `Clinician notes (${notesFor(ctx.journey as Journey).author}):`,
+          notesText(ctx.journey as Journey),
           ``,
           `Booked follow-ups:`,
           bookedFacts(ctx.journey as Journey),
@@ -333,7 +343,7 @@ export function createDischargeAgent(): ModelAgent<Summary> {
       effort: "low",
       maxSteps: 2,
       maxOutputTokens: 1500,
-      apply: (args) => applySummary(args),
+      apply: (args, ctx) => applySummary(args, ctx.journey as Journey),
     },
     modelFor: (ctx) =>
       ctx.capability === "teachback.run" ? (grade as ModelSpec<unknown>) : undefined,
@@ -341,7 +351,7 @@ export function createDischargeAgent(): ModelAgent<Summary> {
       if (ctx.capability === "teachback.run") {
         return graded(keywordGrade(replyText(ctx), ctx.journey as Journey), ctx);
       }
-      return drafted([]);
+      return drafted([], ctx.journey as Journey);
     },
     handle: (ctx) => {
       if (!ctx.journey) return { summary: "no journey", next_events: [] };

@@ -11,6 +11,7 @@ import {
   type ModelCallRecord,
   type StaffRole,
 } from "@throughline/shared";
+import { campus } from "@throughline/hospital";
 import type { RuntimeStore } from "./bus/store";
 
 /**
@@ -188,7 +189,7 @@ function waitingOn(j: Journey, pending: InboxItem[]): JourneyRow["waiting_on"] {
 
 function nextStep(j: Journey, pending: InboxItem[]): string {
   const mine = pending.find((i) => i.journey_id === j.id);
-  if (mine) return mine.title;
+  if (mine) return mine.kind === "task" ? mine.reason : mine.title;
   const visit = firstVisit(j);
   const day = visit
     ? new Date(`${visit.slice(0, 10)}T12:00:00Z`).toLocaleDateString("en-US", {
@@ -219,7 +220,7 @@ function nextStep(j: Journey, pending: InboxItem[]): string {
     case "ACTIVE": {
       const stop = j.itinerary?.stops.find((s) => s.status !== "done" && s.status !== "skipped");
       return stop
-        ? `In the building, next: ${stop.station_id.replace("_", " ")}`
+        ? `In the building, next: ${campus.stations.find((x) => x.id === stop.station_id)?.name ?? stop.station_id}`
         : "In the building";
     }
     case "CHECKED_OUT":

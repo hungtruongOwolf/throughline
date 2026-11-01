@@ -1,0 +1,34 @@
+{
+  "synthetic": true,
+  "referral": {
+    "sent_at": "11/17/2026 08:40",
+    "from": "Lakeview Primary Care",
+    "provider": "Grace Lin, MD",
+    "provider_phone": "(555) 010-0185",
+    "to": "Halden Medical Center, Oncology Intake",
+    "patient": {
+      "name": "Helen Abiodun",
+      "dob": "04/13/1961",
+      "phone": "+1 555 0137",
+      "language": "English",
+      "address": "1469 Orchard Way, Halden"
+    },
+    "insurance": {
+      "payer": "Lonestar Health Plan",
+      "member_id_visible": "LHP-693003-02",
+      "plan": "LHP-GOLD-PPO"
+    },
+    "reason": "New patient consult, medical oncology",
+    "diagnosis_code_as_written": "C50.912",
+    "urgency_as_written": "Routine, within 2 weeks",
+    "services": [
+      "CBC w/ diff",
+      "CMP",
+      "CT chest/abdomen/pelvis with contrast",
+      "New patient consult, medical oncology"
+    ],
+    "fasting_as_written": "Nothing to eat or drink except water for 8 hours before the blood draw."
+  },
+  "card_member_id": "LHP-693003-02",
+  "expected_missing_fields": []
+}

@@ -2,6 +2,8 @@ import { randomUUID } from "node:crypto";
 import type { EventBus } from "../bus/event-bus";
 import type { SimClock } from "../bus/sim-clock";
 import type { Runtime } from "../core/runtime";
+import { referralSpec } from "@throughline/synthetic";
+import type { World } from "./pre-visit";
 
 const HOUR = 60;
 /** Spec A2: the teach-back goes out a day after the summary. */
@@ -29,6 +31,7 @@ export function startPostVisitSim(deps: {
   bus: EventBus;
   clock: SimClock;
   runtime: Runtime;
+  world?: World;
 }): () => void {
   return deps.bus.subscribe(["VisitCheckedOut", "SummarySent", "ResultReady"], ({ event }) => {
     const journeyId = event.journey_id;
@@ -57,12 +60,16 @@ export function startPostVisitSim(deps: {
     }
     if (event.type === "VisitCheckedOut") {
       deps.clock.at(dayAt(now, 1, ACK_AT), `ack:${journeyId}`, async () => {
+        if (deps.world?.skipAck?.(journeyId)) return;
         const journey = deps.runtime.journey(journeyId);
         for (const order of journey?.orders.filter((o) => o.status === "resulted") ?? []) {
           await deps.runtime.ingest({
             type: "ResultAcknowledged",
             journey_id: journeyId,
-            payload: { order_id: order.id, by: "Dr. Okafor" },
+            payload: {
+              order_id: order.id,
+              by: `Dr. ${referralSpec(journeyId)?.oncologist ?? "Okafor"}`,
+            },
           });
         }
       });

@@ -49,16 +49,21 @@ export function route(
       if (classifyClinical(text)) return one("handoff.request", "messenger");
       // After the visit a reply answers whatever was last asked (spec A2, A5).
       const journey = ctx.journey;
-      if (journey?.state === "TEACHBACK_PENDING") return one("teachback.run", "discharge");
       const checkin = journey?.logistics_checkin;
-      if (
-        checkin &&
+      const checkinOpen =
+        checkin !== undefined &&
         checkin.medication_picked_up === undefined &&
         checkin.ride_confirmed === undefined &&
-        checkin.wants_nurse_call === undefined
+        checkin.wants_nurse_call === undefined;
+      const teachbackOpen = journey?.state === "TEACHBACK_PENDING";
+      // Both open: the reply answers the one asked last.
+      if (
+        checkinOpen &&
+        (!teachbackOpen || checkin.sent_at >= (journey?.teachback?.sent_at ?? ""))
       ) {
         return one("logistics.checkin", "followup");
       }
+      if (teachbackOpen) return one("teachback.run", "discharge");
       return one("reply.handle", "messenger");
     }
     case "ReplyHandled":
