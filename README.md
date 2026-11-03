@@ -96,7 +96,7 @@ Hospitals already buy tools for pieces of this: wayfinding apps, queue screens, 
 
 **Vision.** Every patient journey is one connected thread, from the first referral to the last follow-up, in any hospital. Agents carry the routine work; people make the decisions that need a person; and everyone, patient and staff, can see where the thread is.
 
-**A platform, not a fixed set of agents.** Throughline is the layer that connects a hospital's steps: a shared event log, a safety gate, and one contract that every agent follows. It starts with 13 agents, from referral to follow-up. A new agent is a descriptor (what it may do and how risky that is) and a handler; it inherits the gate, the audit log, and the human approvals without new plumbing. The same goes for hospitals: each one is a workspace with its own campus, and the agents work the same way in every one.
+**A platform, not a fixed set of agents.** Throughline is the layer that connects a hospital's steps: a shared event log, a safety gate, and one contract that every agent follows. It starts with 13 agents, from referral to follow-up. A new agent is a descriptor (what it may do and how risky that is) and a handler; it inherits the gate, the audit log, and the human approvals without new plumbing. The same goes for hospitals: each one is a workspace with its own campus, and the agents work the same way in every one. Next come new abilities for every agent, such as voice calls in the patient's own language, and new agents for the steps that still fall between departments ([what's next](#10-whats-next)).
 
 **Principles we built by:**
 
@@ -271,17 +271,52 @@ The hospitals (Halden, Northgate, St. Brennan) and the insurers are fictional. A
 
 ## 10. What's next
 
-1. **A private tier** for identifiable patient data, running an open-weight model inside the hospital's own environment.
-2. **Real connections:** FHIR for the EHR, the insurer's electronic prior authorization API, and SMS.
-3. **A pilot** on one clinic's real referral queue, measuring referral completion, time to appointment, and results acknowledged.
-4. **More languages** for the patient app and voice notes, starting with the languages a hospital's patients actually speak.
-5. **More agents on the same contract,** each owning another step that falls between departments today:
-   - **Rides:** books transport for patients who can't drive, and moves it when the schedule changes.
-   - **Interpreter:** books an interpreter for every visit where the patient needs one.
-   - **Pharmacy:** checks a new prescription is filled and ready before the patient leaves.
-   - **Cost:** gives the patient a price estimate before the visit, from their plan.
-   - **Care gaps:** finds patients overdue for a screening or a follow-up and offers a slot.
-   - **Beds and transfers:** extends the same planning from outpatient waits to inpatient flow.
+Nothing in this section is built yet. Every item runs on the same contract as today's agents: granted capabilities, a risk level, the safety gate, and a person for the decisions that need one.
+
+### New abilities for every agent
+
+| Ability                       | What it unlocks                                                                                                                                                                                                                                                                                           |
+| ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Voice calls, out and in**   | Agents phone patients and take their calls, in the patient's language: confirm or move an appointment, remind them of prep, ask how they are the day after. Patients without a smartphone, or who can't read well, are no longer left out. A medical question on the call still goes straight to a nurse. |
+| **Every language, both ways** | Each message, call, and summary is translated into the patient's language and back, so staff work in English and the patient never has to.                                                                                                                                                                |
+| **More channels**             | SMS, WhatsApp, the hospital's portal, and a printed letter for patients who want paper, all from the same event, so the patient hears the same thing everywhere.                                                                                                                                          |
+| **Any document**              | Reading moves beyond faxed referrals and insurance cards to outside records, prescriptions, insurer letters, and denial notices.                                                                                                                                                                          |
+| **Caregivers in the loop**    | With the patient's consent, a daughter or a son gets the same plan, the same updates, and the same "where to meet" message.                                                                                                                                                                               |
+| **A private tier**            | Identifiable patient data stays on an open-weight model inside the hospital's own environment.                                                                                                                                                                                                            |
+| **Real connections**          | FHIR for the EHR, the insurer's electronic prior authorization API, and real messaging and telephony.                                                                                                                                                                                                     |
+
+### New agents
+
+**Before the visit**
+
+- **Records collector:** requests outside records and imaging from other hospitals, so the visit isn't wasted waiting for them.
+- **Cost:** gives the patient a price estimate from their plan before the visit, and flags financial-assistance programs they qualify for.
+- **Appeals:** when an insurance request is denied, drafts the appeal with the evidence from the chart, for staff to approve.
+- **Rides:** books transport for patients who can't drive, and moves it when the schedule changes.
+- **Interpreter:** books an interpreter for every visit where the patient needs one.
+
+**On the visit day**
+
+- **Open slots:** when someone cancels, offers the slot to the next patient on the waitlist by message or call.
+- **Equipment:** has a wheelchair, a walker, or a translator device waiting at the entrance when the plan says it's needed.
+- **Beds and transfers:** extends the same planning from outpatient waits to inpatient flow.
+
+**After the visit**
+
+- **Pharmacy:** checks the new prescription is filled and ready before the patient leaves, and calls if it isn't picked up.
+- **Home care:** arranges home health visits and equipment delivery after discharge.
+- **Care gaps:** finds patients overdue for a screening or a follow-up and offers them a slot.
+
+### For each hospital
+
+- **An agent builder:** hospital staff define a new agent by choosing what it may do, how risky that is, and who approves it, without writing code.
+- **A policy console:** each hospital sets its own limits, such as how many patients a change may move before it waits for a person.
+- **Rehearse before go-live:** a new agent or policy is replayed against a recorded day first, using the record-and-replay log we already have, so a hospital sees what it would have done before it touches a real patient.
+- **Outcomes, per hospital:** referral completion, time to appointment, missed appointments, and results acknowledged, measured before and after.
+
+### Proving it
+
+A pilot on one clinic's real referral queue, measuring referral completion, time to appointment, and results acknowledged against the months before.
 
 ---
 
