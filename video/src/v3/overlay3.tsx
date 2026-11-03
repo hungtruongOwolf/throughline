@@ -23,7 +23,7 @@ const STAGES = [
 /** Agent cards and the stage rail over the product part of the film. */
 export function AgentLayer3({ shots }: { shots: Row3[] }) {
   const f = useCurrentFrame();
-  const lineStart = (n: number) => shots.find((s) => s.line === n)!.start;
+  const lineStart = (n: number) => shots.find((s) => s.line >= n)!.start;
   const lineLen = (n: number) => shots.filter((s) => s.line === n).reduce((a, s) => a + s.dur, 0);
   const cues = CUES.map((c) => ({ ...c, frame: Math.round(lineStart(c.line) + c.at * lineLen(c.line)) }));
   const stage = STAGES.findIndex((s) => f >= lineStart(s.from) && f < lineStart(s.to));

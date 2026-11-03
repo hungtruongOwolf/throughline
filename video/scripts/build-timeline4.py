@@ -12,13 +12,13 @@ OV, LEAD = 12, 8  # crossfade length, and where the voice starts inside its shot
 TAIL = 22  # frames of picture after a line ends (the next shot's crossfade eats OV of them)
 PART_GAP = 14  # extra air between parts
 
-lines = {x["id"]: x for x in json.load(open("narration4.json", encoding="utf-8"))}
+lines = {x["id"]: x for x in json.load(open("narration5.json", encoding="utf-8"))}
 clip_len = lambda name: json.load(open(f"public/demo/{name}.json"))["duration"]
 
 # line -> visuals. v4: a v4 scene (by line); v2: a v2 scene that stretches to the shot;
 # new: a v3 scene; clip/phone: a recording [from, to] seconds.
 PLAN = {
-    **{i: [("v4", str(i))] for i in (1, 2, 3, 4, 5, 6, 7, 8, 28, 29, 30, 32, 33)},
+    **{i: [("v4", str(i))] for i in (1, 2, 3, 4, 5, 6, 8, 32, 33)},
     9: [("new", "Gates")],
     10: [("new", "Stages")],
     11: [("clip", "c01-fax-arrives", 0.8, 8.4)],
@@ -37,9 +37,10 @@ PLAN = {
     24: [("clip", "c08-sign-summary", 4.5, 12.2)],
     25: [("clip", "c09-nurse-task", 0.5, 7.0)],
     26: [("clip", "c10-results-followup", 2.0, 7.6), ("clip", "c10-results-followup", 10.0, 16.4)],
-    27: [("clip", "c11-agents", 1.5, 9.1)],
+    27: [("clip", "c11-agents", 0.5, None)],
     31: [("clip", "c12-northgate", 2.5, 12.9)],
 }
+# line ids follow the first script; lines 7 and 28-30 were folded into others
 # frames a scene needs beyond its voice (the end card, the logo)
 EXTRA = {8: 10, 10: 6, 33: 150}
 # the least a scene needs to play out
