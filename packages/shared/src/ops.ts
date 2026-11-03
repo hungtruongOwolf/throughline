@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { Id, IsoTime, StationId } from "./common";
+import { Id, IsoTime, NodeId, StationId } from "./common";
 import { AgentName, Capability } from "./capabilities";
 
 export const QueueState = z.object({
@@ -39,6 +39,8 @@ export const OpsAction = z.object({
   rationale: z.string().optional(),
   /** Which model wrote the proposal, or "rule" for the deterministic fallback. */
   written_by: z.string().optional(),
+  /** What the floor shows, in plain words: "CT 1 is down since 9:40". */
+  cause: z.string().optional(),
 });
 export type OpsAction = z.infer<typeof OpsAction>;
 
@@ -53,8 +55,26 @@ export const HumanReview = z.object({
   status: z.enum(["pending", "resolved", "rejected"]),
   /** The triggering event, parked verbatim for replay (spec 4.3 step 5). */
   pending_event: z.unknown().optional(),
+  /** When it was opened, for reviews no journey event records (station tasks). */
+  opened_at: IsoTime.optional(),
   resolved_by: z.string().optional(),
   resolved_at: IsoTime.optional(),
   note: z.string().optional(),
 });
 export type HumanReview = z.infer<typeof HumanReview>;
+
+/** What staff can report on the floor; each one changes the simulated day from its time on. */
+export const IncidentKind = z.enum(["room_down", "short_staffed", "surge"]);
+export type IncidentKind = z.infer<typeof IncidentKind>;
+
+export const Incident = z.object({
+  kind: IncidentKind,
+  station_id: StationId,
+  /** The room that is down (room_down only). */
+  node_id: NodeId.optional(),
+  from: IsoTime,
+  to: IsoTime,
+  /** Who reported it; absent for the day's scripted disruption. */
+  by: z.string().optional(),
+});
+export type Incident = z.infer<typeof Incident>;

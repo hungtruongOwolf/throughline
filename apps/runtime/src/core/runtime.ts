@@ -438,6 +438,7 @@ export class Runtime {
       kind: input.kind,
       ...(input.event.journey_id ? { journey_id: input.event.journey_id } : {}),
       ...(input.event.station_id ? { station_id: input.event.station_id } : {}),
+      ...(input.event.journey_id ? {} : { opened_at: input.event.occurred_at }),
       reason: input.reason,
       capability: input.capability,
       agent: input.agent,

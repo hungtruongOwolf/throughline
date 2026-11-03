@@ -21,6 +21,9 @@ export interface AgentDeps {
   journeys: () => Journey[];
   station: (id: StationId) => StationState;
   onApplied?: OpsDeps["onApplied"];
+  world?: OpsDeps["world"];
+  applied?: OpsDeps["applied"];
+  incidents?: OpsDeps["incidents"];
   brainLabel?: OpsDeps["brainLabel"];
 }
 

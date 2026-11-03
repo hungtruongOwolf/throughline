@@ -630,6 +630,9 @@
         "open": "06:30",
         "close": "17:00"
       },
+      "ops": {
+        "front_desk": true
+      },
       "notes": "4 kiosks + 2 desks; kiosk path is faster"
     },
     {
@@ -722,6 +725,9 @@
         "days": ["mon", "tue", "wed", "thu", "fri"],
         "open": "08:00",
         "close": "16:30"
+      },
+      "ops": {
+        "divert_to": ["clinic_2b"]
       }
     },
     {
@@ -738,6 +744,9 @@
         "days": ["mon", "tue", "wed", "thu", "fri"],
         "open": "08:00",
         "close": "16:30"
+      },
+      "ops": {
+        "divert_to": ["clinic_2a"]
       }
     },
     {
@@ -787,6 +796,9 @@
         "days": ["mon", "tue", "wed", "thu", "fri"],
         "open": "08:00",
         "close": "16:00"
+      },
+      "ops": {
+        "front_desk": true
       }
     }
   ],

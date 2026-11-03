@@ -51,6 +51,7 @@ function titleFor(r: HumanReview): string {
   if (r.kind === "handoff") return "Nurse handoff";
   if (r.capability === "prior_auth.submit") return "Approve insurance submission";
   if (r.capability === "ops_action.apply") return "Approve a change on the floor";
+  if (r.agent === "ops") return "Decide on a backed-up station";
   if (r.capability === "summary.send") return "Sign the visit summary";
   return "Task";
 }
@@ -75,6 +76,7 @@ export function inbox(
     ...(r.station_id ? { station_id: r.station_id } : {}),
     opened_at:
       opened.get(r.id) ??
+      r.opened_at ??
       (r.pending_event as DomainEvent | undefined)?.occurred_at ??
       r.resolved_at ??
       "",

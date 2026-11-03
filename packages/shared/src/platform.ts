@@ -225,7 +225,7 @@ export function roleForReview(
 ): StaffRole {
   if (review.kind === "handoff") return "nurse";
   if (review.capability === "prior_auth.submit") return "coordinator";
-  if (review.capability === "ops_action.apply") return "ops";
+  if (review.capability === "ops_action.apply" || review.agent === "ops") return "ops";
   if (review.capability === "summary.send") return "clinician";
   if (review.agent === "results_watcher") return "clinician";
   if (review.agent === "discharge") return "nurse";

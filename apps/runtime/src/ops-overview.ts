@@ -4,6 +4,7 @@ import {
   ticketNumber,
   type DomainEvent,
   type Journey,
+  type OpsEscalation,
   type OpsOverview,
   type OpsProposal,
 } from "@throughline/shared";
@@ -11,6 +12,7 @@ import type { SimBackground } from "./board";
 import type { SimClock } from "./bus/sim-clock";
 import type { RuntimeStore } from "./bus/store";
 import type { Runtime } from "./core/runtime";
+import { activeAt } from "./sim/incidents";
 
 const BOTTLENECK_MIN = 15;
 
@@ -92,6 +94,19 @@ export function buildOverview(
       ];
     });
 
+  const escalations: OpsEscalation[] = store
+    .reviews()
+    .filter((r) => r.capability === "ops_action.propose" && r.kind === "task" && r.station_id)
+    .map((r) => ({
+      review_id: r.id,
+      station_id: r.station_id as OpsEscalation["station_id"],
+      reason: r.reason,
+      status: r.status,
+    }));
+
+  const all = background.incidents();
+  const incidents = campus.stations.flatMap((s) => activeAt(all, s.id, now));
+
   const bottlenecks: OpsOverview["bottlenecks"] = [];
   for (const s of campus.stations) {
     let from: string | undefined;
@@ -124,6 +139,8 @@ export function buildOverview(
     stations,
     journeys,
     proposals,
+    escalations,
+    incidents,
     bottlenecks,
   };
 }

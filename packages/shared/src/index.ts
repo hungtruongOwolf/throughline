@@ -7,6 +7,7 @@ export * from "./journey/states";
 export * from "./journey/types";
 export * from "./journey/transitions";
 export * from "./ops";
+export * from "./incidents";
 export * from "./events";
 export * from "./telemetry";
 export * from "./engine";

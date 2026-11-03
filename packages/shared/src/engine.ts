@@ -181,6 +181,8 @@ export const SimRequest = z.object({
         from: SimTime,
         to: SimTime,
         servers_down: z.number().int().positive(),
+        /** The room that is down, when one is (CT 1). Absent: the station is short of staff. */
+        node_id: NodeId.optional(),
       }),
     )
     .optional(),

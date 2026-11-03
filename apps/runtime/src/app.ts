@@ -2,7 +2,14 @@ import { Hono, type Context } from "hono";
 import { cors } from "hono/cors";
 import { streamSSE } from "hono/streaming";
 import { z } from "zod";
-import { SHARED_VERSION, StationId, type Hospital, type Journey } from "@throughline/shared";
+import {
+  ReportIncident,
+  SHARED_VERSION,
+  StationId,
+  type Hospital,
+  type Incident,
+  type Journey,
+} from "@throughline/shared";
 import type { EventBus } from "./bus/event-bus";
 import type { ClockSpeed, SimClock } from "./bus/sim-clock";
 import type { RuntimeStore } from "./bus/store";
@@ -27,6 +34,7 @@ import { VisitDayScenario } from "./sim/scenario";
 import type { ModelCache } from "./models/cache";
 import type { ModelConfig } from "./models/config";
 import type { SensingLoop } from "./sim/sensing-loop";
+import { addMinutes } from "./sim/incidents";
 
 export interface AppContext {
   store: RuntimeStore;
@@ -602,6 +610,60 @@ export function createApp(ctx?: AppContext) {
       });
     }
     return c.json(store.review(review.id));
+  });
+
+  /**
+   * Staff report a problem at a station: a room down, a staff member short, or a surge. The
+   * simulated day changes from now on, and the ops planner forecasts the next 90 minutes at
+   * once: if the wait will cross the bottleneck line it tests its options and proposes one,
+   * or asks a manager when none helps. Sensing keeps watching the line as before.
+   */
+  app.post("/api/stations/:id/report", async (c) => {
+    const id = StationId.safeParse(c.req.param("id"));
+    if (!id.success) return c.json({ error: "unknown station" }, 404);
+    const body = ReportIncident.safeParse(await c.req.json().catch(() => ({})));
+    if (!body.success) return c.json({ error: body.error.issues }, 400);
+    const station = campus.stations.find((s) => s.id === id.data);
+    const r = body.data;
+    if (r.node_id && !station?.nodes.includes(r.node_id))
+      return c.json({ error: "that room is not part of this station" }, 400);
+    const now = clock.now();
+    const day = background.request();
+    if (Date.parse(now) < Date.parse(day.start) || Date.parse(now) >= Date.parse(day.end))
+      return c.json({ error: "the floor is closed at this time" }, 409);
+    const incident: Incident = {
+      kind: r.kind,
+      station_id: id.data,
+      ...(r.kind === "room_down" && r.node_id ? { node_id: r.node_id } : {}),
+      from: now,
+      to: addMinutes(now, r.minutes),
+      by: r.by,
+    };
+    background.report(incident);
+    const before = new Set(store.reviews().map((x) => x.id));
+    const reported = await runtime.ingest({
+      type: "IncidentReported",
+      station_id: id.data,
+      payload: { incident },
+    });
+    await bus.idle();
+    // What the planner did with it, for the person who reported it.
+    const after = store
+      .events({ stationId: id.data })
+      .map((x) => x.event)
+      .filter((e) => Date.parse(e.occurred_at) >= Date.parse(reported?.occurred_at ?? now));
+    const proposed = after.find((e) => e.type === "OpsActionProposed");
+    const action = proposed?.type === "OpsActionProposed" ? proposed.payload.action : undefined;
+    const applied =
+      action &&
+      after.some((e) => e.type === "OpsActionApplied" && e.payload.action_id === action.id);
+    const task = store.reviews().find((x) => !before.has(x.id) && x.kind === "task");
+    const outcome = action
+      ? { result: applied ? "applied" : "proposed", title: action.title }
+      : task
+        ? { result: "escalated", reason: task.reason }
+        : { result: "no_change" };
+    return c.json({ incident, now: clock.now(), ...outcome });
   });
 
   /** Command center data (spec 9.3): station waits, journeys in house, proposals. */

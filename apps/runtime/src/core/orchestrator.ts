@@ -135,6 +135,8 @@ export function route(
       return [{ capability: "bottleneck.detect", agent: "sensing" }, ...replans];
     }
     case "BottleneckDetected":
+    case "IncidentReported":
+      // A reported incident is planned for at once, before the line builds (spec V8).
       return one("ops_action.propose", "ops");
     case "OpsActionProposed":
       return one("ops_action.apply", "ops");

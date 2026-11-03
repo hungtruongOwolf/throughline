@@ -12,7 +12,7 @@ import {
   Referral,
 } from "./journey/types";
 import { MemoryKey } from "./memory";
-import { OpsAction, QueueState } from "./ops";
+import { Incident, OpsAction, QueueState } from "./ops";
 
 const Empty = z.object({});
 const By = z.string().min(1);
@@ -85,6 +85,7 @@ export const EVENT_PAYLOADS = {
     diff: z.array(StopDiff),
   }),
   PatientLost: z.object({ expected_node_id: NodeId, minutes_overdue: z.number() }),
+  IncidentReported: z.object({ incident: Incident }),
   BottleneckDetected: z.object({
     severity: z.enum(["moderate", "high"]),
     minutes: z.number(),
@@ -147,6 +148,7 @@ export const EVENT_TYPES = Object.keys(EVENT_PAYLOADS) as EventType[];
 /** Station-scoped events handled by the OpsRuntime; everything else is journey-scoped. */
 export const OPS_EVENT_TYPES = [
   "QueueStateUpdated",
+  "IncidentReported",
   "BottleneckDetected",
   "OpsActionProposed",
   "OpsActionApproved",

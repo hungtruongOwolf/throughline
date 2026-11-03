@@ -59,6 +59,17 @@ export const Station = z.object({
   }),
   result_turnaround_min: z.record(z.string(), z.number().positive()).optional(),
   lead_after_signoff_min: z.number().positive().optional(),
+  /**
+   * What the ops planner may do here besides opening another room or chair. `divert_to`: the
+   * stations that do the same work and can take waiting patients. `front_desk`: a desk where a
+   * volunteer helping people through the paperwork speeds service up.
+   */
+  ops: z
+    .object({
+      divert_to: z.array(StationId).optional(),
+      front_desk: z.boolean().optional(),
+    })
+    .optional(),
   notes: z.string().optional(),
 });
 export type Station = z.infer<typeof Station>;

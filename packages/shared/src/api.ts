@@ -1,5 +1,6 @@
 import { z } from "zod";
-import { StationId } from "./common";
+import { NodeId, StationId } from "./common";
+import { Incident, IncidentKind } from "./ops";
 
 /** API contracts between the runtime and the web app (spec 4.2: shared is the single source). */
 
@@ -94,9 +95,28 @@ export const OpsProposal = z.object({
     }),
     rationale: z.string().optional(),
     written_by: z.string().optional(),
+    cause: z.string().optional(),
   }),
 });
 export type OpsProposal = z.infer<typeof OpsProposal>;
+
+/** A bottleneck the planner could not fix within its options: a manager decides. */
+export const OpsEscalation = z.object({
+  review_id: z.string(),
+  station_id: StationId,
+  reason: z.string(),
+  status: z.enum(["pending", "resolved", "rejected"]),
+});
+export type OpsEscalation = z.infer<typeof OpsEscalation>;
+
+/** Staff report a problem at a station; the simulated day changes from now on. */
+export const ReportIncident = z.object({
+  kind: IncidentKind,
+  node_id: NodeId.optional(),
+  minutes: z.number().int().min(15).max(240).default(60),
+  by: z.string().trim().min(1).max(80),
+});
+export type ReportIncident = z.infer<typeof ReportIncident>;
 
 export const OpsOverview = z.object({
   now: z.string(),
@@ -106,6 +126,9 @@ export const OpsOverview = z.object({
   stations: z.array(OpsStation),
   journeys: z.array(OpsJourney),
   proposals: z.array(OpsProposal),
+  escalations: z.array(OpsEscalation).default([]),
+  /** Incidents under way now: the day's scripted ones and what staff reported. */
+  incidents: z.array(Incident).default([]),
   /** Stretches of the simulated day where a station's wait exceeded 15 minutes. */
   bottlenecks: z.array(z.object({ station_id: StationId, from: z.string(), to: z.string() })),
 });

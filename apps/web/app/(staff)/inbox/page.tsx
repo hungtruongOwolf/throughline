@@ -32,7 +32,23 @@ import {
   resolveItem,
 } from "../../../lib/platform";
 import { fetchJourney, RUNTIME_URL } from "../../../lib/runtime";
+import { stationDisplay, stationName } from "../../../lib/stations";
 import { useLive, useUser, useHospital } from "../../../lib/session";
+
+/** "CT, Level 2": the station and the floor it is on. */
+function stationLine(id: string): string {
+  return `${stationName(id)}, Level ${stationDisplay(id).floor}`;
+}
+
+/** The journey's orders the payer wants authorized, as written on the referral. */
+function authOrders(journey: Journey | undefined): string {
+  const names = (journey?.orders ?? [])
+    .filter((o) => o.auth_required)
+    .map((o) => o.code_as_written);
+  const last = names.pop();
+  if (last === undefined) return "this referral's orders";
+  return names.length === 0 ? last : `${names.join(", ")} and ${last}`;
+}
 
 const BAR: Record<InboxItem["kind"], string> = {
   handoff: "bg-urgent",
@@ -89,7 +105,7 @@ function ItemRow({
           <span className="mt-0.5 flex items-center gap-2 text-[13px] text-ink-soft">
             <AgentGlyph name={item.agent} size={18} />
             <span className="truncate">
-              {item.patient ?? (item.station_id ? "CT, Level 2" : "")}
+              {item.patient ?? (item.station_id ? stationLine(item.station_id) : "")}
               {item.kind === "task" ? `: ${item.reason}` : ""}
             </span>
           </span>
@@ -284,7 +300,7 @@ function Detail({
             {journey ? <FaxImage journey={journey} /> : <Skeleton rows={6} />}
             <p className="mt-3 rounded-[4px] bg-canvas p-3 text-[13px]">
               <span className="font-bold">Payer rule.</span> {payer} requires prior authorization
-              for CT chest/abdomen/pelvis with contrast and for infusions.
+              for {authOrders(journey)}.
             </p>
           </Pane>
           <Pane title="Draft: prior authorization request">
@@ -356,8 +372,14 @@ function Detail({
         <div className="grid min-h-0 flex-1 overflow-y-auto md:grid-cols-2 md:divide-x md:divide-rule">
           <Pane title="Source: what the floor shows">
             <p className="text-[14px]">
-              CT scanner 1 is down since 9:40. The CT waiting room camera shows the queue growing
-              while patients keep arriving for their booked scans.
+              {action?.cause ??
+                (item.station_id
+                  ? `The wait at ${stationName(item.station_id)} has stayed above 20 minutes`
+                  : "A station is backed up")}
+              .
+              {action
+                ? ` Without a change, the engine expects an average wait of about ${Math.round(action.predicted_effect.wait_before_min)} minutes there over the next ${action.evidence.horizon_min}.`
+                : ""}
             </p>
             <p className="mt-3 inline-flex items-center gap-2 text-[13px] text-ink-soft">
               <AgentGlyph name="sensing" size={18} /> Waiting-room sensing counts people with SAM
@@ -508,6 +530,13 @@ function Detail({
       {header}
       <div className="min-h-0 flex-1 overflow-y-auto p-5">
         <p className="text-[15px]">{item.reason}</p>
+        {item.station_id && !item.journey_id && (
+          <p className="mt-3">
+            <Link href="/today" className="text-[14px] text-agent underline">
+              Open today&apos;s floor
+            </Link>
+          </p>
+        )}
         <label htmlFor="task-note" className="mt-4 block text-[13px] font-bold">
           Note (optional)
         </label>

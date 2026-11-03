@@ -7,6 +7,7 @@ import {
   type BoardTask,
   type BoardView,
   type HumanReview,
+  type Incident,
   type Journey,
   type OpsActionLite,
   type SimRequest,
@@ -15,6 +16,7 @@ import {
 } from "@throughline/shared";
 import { generatePatients } from "@throughline/synthetic";
 import type { RuntimeStore } from "./bus/store";
+import { scriptedIncidents, withIncidents } from "./sim/incidents";
 
 const minutesBetween = (a: string, b: string) => (Date.parse(b) - Date.parse(a)) / 60_000;
 
@@ -39,6 +41,7 @@ function nodeLabel(id: string): string {
 export class SimBackground {
   private result: SimResult | undefined;
   private readonly actions: OpsActionLite[] = [];
+  private readonly reported: Incident[] = [];
   private readonly names: Map<string, string>;
 
   constructor(
@@ -50,7 +53,7 @@ export class SimBackground {
 
   get(): SimResult {
     this.result ??= this.engine.simulate({
-      ...this.day,
+      ...this.request(),
       actions: [...this.actions],
       include_visits: true,
       snapshot_every_min: 1,
@@ -64,13 +67,36 @@ export class SimBackground {
     this.result = undefined;
   }
 
-  /** Demo reset: the day without any approved actions. */
+  /** A problem staff reported on the floor changes the simulated day from its time on. */
+  report(incident: Incident): void {
+    this.reported.push(incident);
+    this.result = undefined;
+  }
+
+  /** The changes applied so far today. */
+  applied(): OpsActionLite[] {
+    return [...this.actions];
+  }
+
+  /** The day's scripted disruptions and everything reported since. */
+  incidents(): Incident[] {
+    return [...scriptedIncidents(this.day), ...this.reported];
+  }
+
+  /** The day the engine replays (without ops actions): the fixture plus reported incidents. */
+  request(): SimRequest {
+    return withIncidents(this.day, this.reported);
+  }
+
+  /** Demo reset: the day without any approved actions or reported incidents. */
   reset(): void {
     this.actions.length = 0;
+    this.reported.length = 0;
     this.result = undefined;
   }
 
   name(patientId: string): string {
+    if (patientId.startsWith("walkin-")) return "Walk-in";
     return this.names.get(patientId) ?? patientId;
   }
 }

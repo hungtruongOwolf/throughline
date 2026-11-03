@@ -76,10 +76,11 @@ export class SensingLoop {
         // ops actions approved so far.
         const live = runtime.station(id);
         const open = snapshot(id)?.open_servers ?? live.open_servers;
+        // With every room down the line does not move; one room's pace is the floor of it.
         const wait = engine.estimateWait({
           station_id: id,
           count: fused.count_fused,
-          ...(open === undefined ? {} : { open_servers: open }),
+          ...(open === undefined ? {} : { open_servers: Math.max(1, open) }),
         });
         const queue: QueueState = {
           station_id: id,

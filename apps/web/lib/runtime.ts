@@ -1,4 +1,4 @@
-import { BoardView, Journey, OpsOverview } from "@throughline/shared";
+import { BoardView, Journey, OpsOverview, type IncidentKind } from "@throughline/shared";
 
 /** The browser talks only to the runtime (spec 8: never to a model provider). */
 export const RUNTIME_URL = process.env.NEXT_PUBLIC_RUNTIME_URL ?? "http://localhost:4000";
@@ -84,6 +84,31 @@ export async function postStaffAction(stationId: string, action: StaffAction): P
     body: JSON.stringify(action),
   });
   return res.ok;
+}
+
+/** What the ops planner did with a reported problem. */
+export type ReportOutcome =
+  | { result: "applied" | "proposed"; title: string }
+  | { result: "escalated"; reason: string }
+  | { result: "no_change" }
+  | { result: "error"; error: string };
+
+/** Reports a problem at a station and returns what the planner did with it. */
+export async function reportIncident(
+  stationId: string,
+  report: { kind: IncidentKind; node_id?: string; minutes: number; by: string },
+): Promise<ReportOutcome> {
+  const res = await fetch(`${RUNTIME_URL}/api/stations/${encodeURIComponent(stationId)}/report`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(report),
+  });
+  const body = (await res.json().catch(() => ({}))) as Record<string, unknown>;
+  if (res.ok) return body as ReportOutcome;
+  return {
+    result: "error",
+    error: typeof body.error === "string" ? body.error : "The report was not accepted.",
+  };
 }
 
 /** Any domain event: boards and the command center redraw on every change. */

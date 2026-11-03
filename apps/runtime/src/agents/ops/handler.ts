@@ -1,26 +1,26 @@
 import type { Engine } from "@throughline/engine/node";
 import { z } from "zod";
-import type {
-  DomainEvent,
-  Journey,
-  OpsAction,
-  OpsActionLite,
-  SimRequest,
-  StationId,
+import {
+  OPS_POLICY,
+  type DomainEvent,
+  type Incident,
+  type Journey,
+  type OpsAction,
+  type OpsActionLite,
+  type SimRequest,
+  type StationId,
 } from "@throughline/shared";
 import { campus } from "@throughline/hospital";
-import type { HandlerContext, HandlerResult, ModelAgent } from "../../core/agent";
+import type { HandlerContext, HandlerResult, ModelAgent, StationState } from "../../core/agent";
+import { activeAt, scriptedIncidents } from "../../sim/incidents";
+import { BOTTLENECK_MIN } from "../sensing/handler";
 import { PREAMBLE, requiredToolLine } from "../../safety/preamble";
 import { opsDescriptor } from "./descriptor";
 
-/** Clinic pods are siblings: a divert moves waiting patients to the other pod. */
-const SIBLINGS: Partial<Record<StationId, StationId>> = {
-  clinic_2a: "clinic_2b",
-  clinic_2b: "clinic_2a",
-};
-
 const REPLICATES = 20;
 const HORIZON_MIN = 90;
+/** A change that saves less than this is not worth moving people for. */
+const MIN_SAVING_MIN = 2;
 
 interface Candidate {
   lite: OpsActionLite;
@@ -32,46 +32,100 @@ function stationName(id: StationId): string {
   return campus.stations.find((s) => s.id === id)?.name ?? id;
 }
 
+function roomName(nodeId: string): string {
+  return campus.nodes.find((n) => n.id === nodeId)?.label ?? nodeId;
+}
+
+/** "2026-11-17T09:40:00-06:00" → "9:40", in the sim clock's own time zone. */
+function clockTime(iso: string): string {
+  return iso.slice(11, 16).replace(/^0/, "");
+}
+
+/** What the floor shows at this station, in plain words, for the manager and the inbox. */
+function causeOf(station: StationId, active: Incident[]): string {
+  const name = stationName(station);
+  const i = active[0];
+  if (!i) return `The wait at ${name} has stayed above ${BOTTLENECK_MIN} minutes`;
+  const since = clockTime(i.from);
+  if (i.kind === "room_down")
+    return i.node_id
+      ? `${roomName(i.node_id)} is down since ${since}`
+      : `One ${name} room is out of service since ${since}`;
+  if (i.kind === "short_staffed") return `${name} is short one staff member since ${since}`;
+  return `More patients than usual have arrived at ${name} since ${since}`;
+}
+
+/** Patients to move to a sibling: half the gap between the two lines, within policy. */
+function divertCount(here: number | undefined, there: number | undefined): number {
+  if (here === undefined) return 3;
+  const gap = Math.round((here - (there ?? 0)) / 2);
+  return Math.min(OPS_POLICY.maxAffected, gap);
+}
+
 /**
- * Candidate actions for a bottleneck (spec V8): open a server, divert to a sibling, call a
- * volunteer to the lobby. For CT, "open a server" means opening a CT 2 slot and moving CT 1
- * patients there, which is how the outage is handled in the scenario.
+ * Candidate actions for a bottleneck (spec V8), from the hospital's own data rather than a
+ * list per station:
+ * - a room is down and the station has another room: move its patients to the free room;
+ *   otherwise open one more room or chair (or call in a float, when the station is short);
+ * - the stations in the station's `ops.divert_to` take some of the waiting patients;
+ * - at a front desk (`ops.front_desk`), a volunteer helps people through the paperwork.
  */
-function candidates(station: StationId, at: string): Candidate[] {
+function candidates(
+  station: StationId,
+  at: string,
+  active: Incident[],
+  queue: (id: StationId) => number | undefined,
+): Candidate[] {
   const list: Candidate[] = [];
-  if (station === "imaging_ct") {
+  const st = campus.stations.find((s) => s.id === station);
+  const name = stationName(station);
+  const down = new Set(
+    active.flatMap((i) => (i.kind === "room_down" && i.node_id ? [i.node_id] : [])),
+  );
+  const broken = [...down][0];
+  const spare = broken ? st?.nodes.find((n) => !down.has(n)) : undefined;
+  if (broken && spare) {
     list.push({
-      lite: { id: `open-ct2-${at}`, kind: "open_server", station_id: station, at },
-      title: "Open an extra CT 2 slot and move CT 1 patients to CT 2",
-      params: { from_node: "mp2.ct1", to_node: "mp2.ct2" },
+      lite: {
+        id: `open-${spare.split(".")[1] ?? spare}-${at}`,
+        kind: "open_server",
+        station_id: station,
+        at,
+      },
+      title: `Open an extra ${roomName(spare)} slot and move ${roomName(broken)} patients to ${roomName(spare)}`,
+      params: { from_node: broken, to_node: spare },
     });
   } else {
+    const short = active.some((i) => i.kind === "short_staffed");
     list.push({
       lite: { id: `open-${station}-${at}`, kind: "open_server", station_id: station, at },
-      title: `Open one more ${stationName(station)} station`,
+      title: short ? `Call in a float staff member to ${name}` : `Open one more ${name} station`,
       params: {},
     });
   }
-  const sibling = SIBLINGS[station];
-  if (sibling) {
+  for (const sibling of st?.ops?.divert_to ?? []) {
+    const count = divertCount(queue(station), queue(sibling));
+    if (count < 1) continue;
     list.push({
       lite: {
         id: `divert-${station}-${at}`,
         kind: "divert",
         station_id: station,
         to_station: sibling,
-        count: 3,
+        count,
         at,
       },
-      title: `Move 3 waiting patients to ${stationName(sibling)}`,
-      params: { to_station: sibling, count: 3 },
+      title: `Move ${count} waiting ${count === 1 ? "patient" : "patients"} to ${stationName(sibling)}`,
+      params: { to_station: sibling, count },
     });
   }
-  list.push({
-    lite: { id: `volunteer-${at}`, kind: "call_volunteer", station_id: "registration", at },
-    title: "Call a volunteer to the main lobby",
-    params: {},
-  });
+  if (st?.ops?.front_desk) {
+    list.push({
+      lite: { id: `volunteer-${station}-${at}`, kind: "call_volunteer", station_id: station, at },
+      title: `Call a volunteer to help at ${name}`,
+      params: {},
+    });
+  }
   return list;
 }
 
@@ -89,8 +143,16 @@ export interface OpsDeps {
   engine: Engine;
   /** Applying an action changes the simulated world from then on. */
   onApplied?: (action: OpsActionLite) => void;
-  /** The simulated day the what-if replays (fixtures/day-2026-11-17.json). */
+  /** The simulated day (fixtures/day-2026-11-17.json). */
   day: SimRequest;
+  /** The day the what-if replays, with any incidents staff reported. Defaults to `day`. */
+  world?: () => SimRequest;
+  /** Changes already applied today; an incident's forecast starts from them. */
+  applied?: () => OpsActionLite[];
+  /** Scripted and reported incidents. Defaults to the day's scripted disruptions. */
+  incidents?: () => Incident[];
+  /** Live station state, for the queue lengths a divert is sized from. */
+  station?: (id: StationId) => StationState;
   journeys: () => Journey[];
   /** Which model writes proposals right now (OPS_BRAIN), for the proposal's byline. */
   brainLabel?: () => string;
@@ -121,6 +183,11 @@ interface Analysis {
   station: StationId;
   ranked: Ranked[];
   baseline: number;
+  cause: string;
+  /** The engine's 90th-percentile wait over the horizon without any action. */
+  p90: number;
+  /** A reported incident the forecast says the floor absorbs: nothing to do. */
+  quiet: boolean;
 }
 
 /** The engine's what-if for a bottleneck, memoized per event so input and apply agree. */
@@ -130,25 +197,50 @@ function analyze(
   memo: Map<string, Analysis>,
 ): Analysis | undefined {
   const event = ctx.event;
-  if (event.type !== "BottleneckDetected" || !event.station_id) return undefined;
+  const trigger = event.type === "BottleneckDetected" || event.type === "IncidentReported";
+  if (!trigger || !event.station_id) return undefined;
   const hit = memo.get(event.id);
   if (hit) return hit;
   const station = event.station_id;
-  const options = candidates(station, ctx.now);
+  const active = activeAt(deps.incidents?.() ?? scriptedIncidents(deps.day), station, ctx.now);
+  const queue = (id: StationId) =>
+    id === station && ctx.station
+      ? ctx.station.queue?.count_fused
+      : deps.station?.(id).queue?.count_fused;
+  const options = candidates(station, ctx.now, active, queue);
+  const world = deps.world?.() ?? deps.day;
   const result = deps.engine.whatIf({
-    ...deps.day,
+    ...world,
+    // A reported incident is forecast from the floor as it is now, changes included. (The
+    // sensing path keeps the day as recorded, so recorded runs replay unchanged.)
+    ...(event.type === "IncidentReported" ? { actions: deps.applied?.() ?? [] } : {}),
     candidates: options.map((o) => o.lite),
     replicates: REPLICATES,
     horizon_min: HORIZON_MIN,
   });
   const ranked = result.per_action
     .map((effect, i) => ({ effect, option: options[i] as Candidate }))
-    .filter((x) => x.option && x.effect.delta_min > 0)
+    .filter((x) => x.option && x.effect.delta_min >= MIN_SAVING_MIN)
     .sort((a, b) => b.effect.delta_min - a.effect.delta_min);
-  const baseline =
-    result.baseline.find((b) => b.station_id === (ranked[0]?.effect.station_id ?? station))
-      ?.mean_wait_min ?? 0;
-  const analysis = { station, ranked, baseline };
+  const base = result.baseline.find(
+    (b) => b.station_id === (ranked[0]?.effect.station_id ?? station),
+  );
+  const baseline = base?.mean_wait_min ?? 0;
+  const p90 = base?.p90_wait_min ?? 0;
+  // A reported incident is planned for before the line builds: act only when the forecast
+  // says the wait will cross the bottleneck line, and never on top of a waiting proposal.
+  const quiet =
+    event.type === "IncidentReported" &&
+    (p90 <= BOTTLENECK_MIN ||
+      (ctx.station?.ops_actions ?? []).some((x) => x.status === "proposed"));
+  const analysis = {
+    station,
+    ranked: quiet ? [] : ranked,
+    baseline,
+    cause: causeOf(station, active),
+    p90,
+    quiet,
+  };
   memo.set(event.id, analysis);
   if (memo.size > 50) memo.delete(memo.keys().next().value as string);
   return analysis;
@@ -181,6 +273,7 @@ function proposal(
     status: "proposed",
     ...(words.rationale ? { rationale: words.rationale } : {}),
     written_by: words.written_by,
+    cause: a.cause,
   };
   return {
     summary: `proposed: ${action.title} (${words.written_by})`,
@@ -193,16 +286,39 @@ function proposal(
 function rule(ctx: HandlerContext, deps: OpsDeps, memo: Map<string, Analysis>): HandlerResult {
   const a = analyze(ctx, deps, memo);
   if (!a) return { summary: "not a bottleneck", next_events: [] };
+  if (a.quiet)
+    return {
+      summary: `forecast wait at most ${Math.round(a.p90)} min; no change needed`,
+      next_events: [],
+    };
   const best = a.ranked[0];
-  if (!best) return { summary: "no candidate improves the wait", next_events: [] };
+  if (!best) {
+    // Nothing the planner may do shortens the wait: a person decides, with the numbers.
+    const event = ctx.event;
+    const wait =
+      event.type === "BottleneckDetected"
+        ? `Wait about ${Math.round(event.payload.minutes)} min`
+        : `Forecast wait up to about ${Math.round(a.p90)} min`;
+    return {
+      summary: "no candidate improves the wait; asked the manager",
+      // The manager gets the same 30 minutes an applied change gets before the next flag.
+      station_patch: (st) => ({ ...st, last_action_at: ctx.now }),
+      next_events: [],
+      tasks: [
+        `${a.cause}. ${wait}. None of the changes the planner can make shortens it, so a manager needs to decide.`,
+      ],
+    };
+  }
   return proposal(ctx, deps, a, best, { title: best.option.title, written_by: "rule" });
 }
 
 function situation(ctx: HandlerContext, a: Analysis): string {
-  const event = ctx.event as Extract<DomainEvent, { type: "BottleneckDetected" }>;
+  const event = ctx.event;
   return [
     `Station: ${stationName(a.station)} (${a.station}), at ${ctx.now}`,
-    `Bottleneck: ${event.payload.severity}, predicted wait about ${Math.round(event.payload.minutes)} minutes`,
+    event.type === "BottleneckDetected"
+      ? `Bottleneck: ${event.payload.severity}, predicted wait about ${Math.round(event.payload.minutes)} minutes`
+      : `Reported by staff: ${a.cause}. Forecast 90th-percentile wait without action (engine): ${a.p90.toFixed(1)} minutes`,
     `Mean wait without action (engine): ${a.baseline.toFixed(1)} minutes`,
     `Candidates:`,
     ...a.ranked.map(

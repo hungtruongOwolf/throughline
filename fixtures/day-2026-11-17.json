@@ -3281,7 +3281,8 @@
       "station_id": "imaging_ct",
       "from": "2026-11-17T09:40:00-06:00",
       "to": "2026-11-17T10:25:00-06:00",
-      "servers_down": 1
+      "servers_down": 1,
+      "node_id": "mp2.ct1"
     }
   ]
 }

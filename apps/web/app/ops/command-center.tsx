@@ -2,16 +2,25 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { loadEngine, type Engine } from "@throughline/engine/web";
-import { t, type OpsOverview, type SimRequest, type StationId } from "@throughline/shared";
+import {
+  t,
+  withIncidents,
+  type Incident,
+  type OpsOverview,
+  type SimRequest,
+  type StationId,
+} from "@throughline/shared";
 import day from "../../../../fixtures/day-2026-11-17.json";
 import { Hospital3D } from "../../components/Hospital3DLazy";
 import { Proposal } from "../../components/Proposal";
 import { WaitCurve } from "../../components/WaitCurve";
+import { campus } from "../../lib/campus";
 import { clockTime } from "../../lib/format";
 import { fetchOverview, resolveReview, subscribeAll } from "../../lib/runtime";
 import { stationName } from "../../lib/stations";
 import { useHospital } from "../../lib/session";
 import { useFloor } from "../../lib/site";
+import { ReportProblem } from "./report-problem";
 
 const MANAGER = "Operations manager";
 const DAY = day as SimRequest;
@@ -28,16 +37,39 @@ function dateLabel(iso: string): string {
   });
 }
 
-/** Predicted wait at one station over the day, every 5 minutes, with `extra` servers from `now`. */
-function waitSeries(engine: Engine, station: StationId, now: string, extra: number): number[] {
+const serversOf = (id: string) => campus.stations.find((s) => s.id === id)?.servers ?? 1;
+
+/**
+ * Predicted wait at one station over the day, every 5 minutes, with `extra` servers from `now`
+ * and the incidents staff reported so far.
+ */
+function waitSeries(
+  engine: Engine,
+  station: StationId,
+  now: string,
+  extra: number,
+  reported: Incident[],
+): number[] {
   const actions = Array.from({ length: extra }, (_, i) => ({
     id: `slider-${i}`,
     kind: "open_server" as const,
     station_id: station,
     at: now,
   }));
-  const result = engine.simulate({ ...DAY, actions, snapshot_every_min: 5 });
+  const result = engine.simulate({
+    ...withIncidents(DAY, reported, serversOf),
+    actions,
+    snapshot_every_min: 5,
+  });
   return result.snapshots.filter((s) => s.station_id === station).map((s) => s.est_wait_min);
+}
+
+/** "CT 1 out of service", "Lab Draw short one staff member", "More patients at X-ray". */
+function incidentLine(i: Incident): string {
+  if (i.kind === "room_down")
+    return `${i.node_id ? (campus.nodes.find((n) => n.id === i.node_id)?.label ?? i.node_id) : stationName(i.station_id)} out of service`;
+  if (i.kind === "short_staffed") return `${stationName(i.station_id)} short one staff member`;
+  return `More patients than usual at ${stationName(i.station_id)}`;
 }
 
 /** A hospital whose schedules are not imported yet: its floor right now, without forecasts. */
@@ -135,14 +167,17 @@ export function CommandCenter({
   }, [refresh]);
 
   const now = overview?.now ?? DAY.start;
+  const reportedKey = JSON.stringify((overview?.incidents ?? []).filter((i) => i.by));
+  const reported = useMemo(() => JSON.parse(reportedKey) as Incident[], [reportedKey]);
   const baseline = useMemo(
-    () => (engine ? waitSeries(engine, station, now, 0) : []),
-    [engine, station, now],
+    () => (engine ? waitSeries(engine, station, now, 0, reported) : []),
+    [engine, station, now, reported],
   );
   const scenario = useMemo(
-    () => (engine ? waitSeries(engine, station, now, extra) : []),
-    [engine, station, now, extra],
+    () => (engine ? waitSeries(engine, station, now, extra, reported) : []),
+    [engine, station, now, extra, reported],
   );
+  const floorOpen = Date.parse(now) >= DAY_START && Date.parse(now) < DAY_END;
   const nowFraction = Math.min(
     1,
     Math.max(0, (Date.parse(now) - DAY_START) / (DAY_END - DAY_START)),
@@ -210,6 +245,41 @@ export function CommandCenter({
             />
           ))}
         </div>
+        {overview.escalations.some((e) => e.status === "pending") && (
+          <ul className="mt-6 space-y-3">
+            {overview.escalations
+              .filter((e) => e.status === "pending")
+              .map((e) => (
+                <li key={e.review_id} className="border-l-4 border-held bg-held-bg px-4 py-3">
+                  <p className="text-[14px] font-bold">
+                    Needs a manager: {stationName(e.station_id)}
+                  </p>
+                  <p className="mt-1 text-[14px]">{e.reason}</p>
+                  <a
+                    href={`/inbox?item=${encodeURIComponent(e.review_id)}`}
+                    className="mt-1 inline-block text-[14px] text-agent underline"
+                  >
+                    Open in the inbox
+                  </a>
+                </li>
+              ))}
+          </ul>
+        )}
+        {overview.incidents.length > 0 && (
+          <section aria-labelledby="incidents-heading" className="mt-6">
+            <h3 id="incidents-heading" className="text-[15px] font-bold">
+              Problems under way
+            </h3>
+            <ul className="mt-1 space-y-1 text-[14px]">
+              {overview.incidents.map((i) => (
+                <li key={`${i.station_id}-${i.from}-${i.kind}`}>
+                  {incidentLine(i)}, until {clockTime(i.to)}
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+        <ReportProblem station={station} by={by} open={floorOpen} onReported={refresh} />
       </aside>
 
       <footer className="grid items-start gap-8 border-t border-rule bg-panel px-6 py-4 lg:col-span-2 lg:grid-cols-[1fr_minmax(0,560px)]">

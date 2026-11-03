@@ -28,7 +28,13 @@ export interface VisitDay {
   start: string;
   end: string;
   patients: DayPatient[];
-  disruptions: { station_id: StationId; from: string; to: string; servers_down: number }[];
+  disruptions: {
+    station_id: StationId;
+    from: string;
+    to: string;
+    servers_down: number;
+    node_id?: string;
+  }[];
 }
 
 function clock(date: string, minutes: number): string {
@@ -78,6 +84,7 @@ export function generateVisitDay(seed: number, date = "2026-11-17"): VisitDay {
         from: clock(date, 9 * 60 + 40),
         to: clock(date, 10 * 60 + 25),
         servers_down: 1,
+        node_id: "mp2.ct1",
       },
     ],
   };

@@ -65,6 +65,9 @@ export function createContext(
         station: (id) =>
           store.loadAggregate<StationState>("station", id)?.value ?? createStation(id),
         onApplied: (action) => background.apply(action),
+        world: () => background.request(),
+        applied: () => background.applied(),
+        incidents: () => background.incidents(),
         brainLabel: () =>
           brain.current === "open" && config.openWeight
             ? "Muse Spark Open (open weights, on Baseten)"
