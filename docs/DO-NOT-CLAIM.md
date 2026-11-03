@@ -1,6 +1,6 @@
 # Do not claim
 
-Verbatim list for the README, the video, and the Devpost page (SPEC.md 11.3). Update it whenever a new simulated component is added.
+Verbatim list for the README, the video, and the submission (SPEC.md 11.3). Update it whenever a new simulated component is added.
 
 1. Throughline does not diagnose, triage, treat, or interpret results, and we do not claim it reduces clinical risk.
 2. All patients, providers, documents, payers, cameras, SMS, voice calls, lab systems, and the clock are simulated; the demo runs on synthetic data generated in this repo.

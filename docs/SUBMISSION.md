@@ -1,4 +1,4 @@
-# Devpost submission (draft)
+# Submission text (draft)
 
 **Name:** Throughline
 
@@ -78,6 +78,6 @@ The patient app is separate: one plan, the next step, and a way to write or send
 
 TypeScript · Rust · WebAssembly · Next.js · React · Hono · SQLite · Muse Spark 1.3 · Muse Spark Open · SAM 3.1 · Muse Voice Transcribe · Muse Image · Baseten · Modal · Vercel
 
-## Disclosure (keep on the page)
+## Disclosure (keep with the submission)
 
 All patients, providers, documents, the hospitals, the insurers, SMS, cameras, the lab system, and the clock are simulated with synthetic data generated in the repo. The demo replays a recorded live run of the models. Throughline does not diagnose, triage, or interpret results.

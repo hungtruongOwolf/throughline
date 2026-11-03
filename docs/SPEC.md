@@ -832,7 +832,7 @@ Throughline is administrative software. The design keeps it on that side of ever
 - Kiosk and phone footer: "Synthetic demo data. Not a real patient."
 - Ops proposals: "Predicted by simulation; a manager decides."
 
-### 11.3 DO-NOT-CLAIM.md (verbatim list for the README, the video, and the Devpost page)
+### 11.3 DO-NOT-CLAIM.md (verbatim list for the README, the video, and the submission)
 
 1. Throughline does not diagnose, triage, treat, or interpret results, and we do not claim it reduces clinical risk.
 2. All patients, providers, documents, payers, cameras, SMS, voice calls, lab systems, and the clock are simulated; the demo runs on synthetic data generated in this repo.
