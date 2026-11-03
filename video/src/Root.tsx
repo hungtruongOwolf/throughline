@@ -5,7 +5,7 @@ import { FPS, H, W } from "./theme";
 import { Film3, TOTAL3 } from "./v3/Film3";
 import { Film4, TOTAL4 } from "./v4/Film4";
 import { Film5, TOTAL5 } from "./v5/Film5";
-import { Architecture, BrokenChain, Contract, Hero, Journey, StatsUS, StatsWorld } from "./diagrams/Diagrams";
+import { Architecture, BrokenChain, Contract, Hero, Journey, StatsUS, StatsWorld, Thumbnail } from "./diagrams/Diagrams";
 
 export const Root = () => (
   <>
@@ -16,6 +16,7 @@ export const Root = () => (
     <Composition id="D-contract" component={Contract} durationInFrames={1} fps={FPS} width={1600} height={1000} />
     <Composition id="D-stats-us" component={StatsUS} durationInFrames={1} fps={FPS} width={1600} height={900} />
     <Composition id="D-stats-world" component={StatsWorld} durationInFrames={1} fps={FPS} width={1600} height={720} />
+    <Composition id="D-thumbnail" component={Thumbnail} durationInFrames={1} fps={FPS} width={1280} height={720} />
     <Composition id="D-hero" component={Hero} durationInFrames={140} fps={FPS} width={1200} height={400} />
     <Composition id="Throughline5" component={Film5} durationInFrames={TOTAL5} fps={FPS} width={W} height={H} />
     <Composition id="Throughline4" component={Film4} durationInFrames={TOTAL4} fps={FPS} width={W} height={H} />

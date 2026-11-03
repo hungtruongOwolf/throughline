@@ -420,3 +420,54 @@ export function Hero() {
     </AbsoluteFill>
   );
 }
+
+// ---- 7. YouTube thumbnail -------------------------------------------------------------------------
+
+const THUMB_SIGNS = [
+  { x: 120, y: 120, rot: -8, label: "Imaging", accent: C.zone.violet },
+  { x: 430, y: 70, rot: 6, label: "Lab", accent: C.zone.rose },
+  { x: 70, y: 400, rot: 5, label: "Billing", accent: C.zone.gold },
+  { x: 150, y: 590, rot: -5, label: "Pharmacy", accent: C.zone.green },
+  { x: 470, y: 600, rot: 4, label: "Registration", accent: C.zone.blue },
+];
+
+export function Thumbnail() {
+  return (
+    <AbsoluteFill style={{ background: C.ink, overflow: "hidden" }}>
+      <div style={{ position: "absolute", left: -260, top: -200, width: 1100, height: 1100, background: "radial-gradient(circle, rgba(45,212,191,.22), transparent 62%)" }} />
+      <div style={{ position: "absolute", right: -300, bottom: -400, width: 1100, height: 1100, background: "radial-gradient(circle, rgba(99,102,241,.2), transparent 62%)" }} />
+      {/* the maze of signs, dimmed */}
+      {THUMB_SIGNS.map((s) => (
+        <div key={s.label} style={{ position: "absolute", left: s.x, top: s.y, transform: `rotate(${s.rot}deg)`, opacity: 0.55, background: "#101a30", borderLeft: `8px solid ${s.accent}`, borderRadius: 6, padding: "12px 20px", fontFamily: F.display, fontWeight: 700, fontSize: 34, color: C.boardText, boxShadow: "0 20px 40px -20px rgba(0,0,0,.9)" }}>
+          {s.label} →
+        </div>
+      ))}
+      {/* one clear route to the right door */}
+      <svg width={1280} height={720} style={{ position: "absolute", inset: 0 }}>
+        <path d="M 300 430 C 400 430, 440 340, 500 300 S 560 255, 570 250" stroke={C.glow} strokeWidth={9} strokeLinecap="round" fill="none" style={{ filter: `drop-shadow(0 0 12px ${C.glow})` }} />
+        <circle cx={300} cy={430} r={10} fill={C.glow} />
+      </svg>
+      <div style={{ position: "absolute", left: 540, top: 196, transform: "rotate(-3deg)", background: C.agent, borderLeft: `8px solid ${C.glow}`, borderRadius: 6, padding: "14px 24px", fontFamily: F.display, fontWeight: 800, fontSize: 44, color: "#fff", boxShadow: "0 0 50px rgba(45,212,191,.7)" }}>CT 2 →</div>
+      <div style={{ position: "absolute", left: 238, top: 400 }}>
+        <svg width={120} height={170} viewBox="0 0 40 64">
+          <ellipse cx={20} cy={63} rx={12} ry={2.5} fill="#000" opacity={0.35} />
+          <rect x={15} y={38} width={5} height={24} rx={2.5} fill={C.boardText} transform="rotate(14 20 40)" />
+          <rect x={20} y={38} width={5} height={24} rx={2.5} fill={C.boardText} transform="rotate(-14 20 40)" />
+          <rect x={11} y={17} width={18} height={25} rx={8} fill={C.boardText} />
+          <circle cx={20} cy={9} r={7} fill={C.boardText} />
+        </svg>
+      </div>
+      <div style={{ position: "absolute", left: 150, top: 300, transform: "rotate(-4deg)", background: C.heldBg, color: C.held, border: `3px solid ${C.held}`, borderRadius: 999, padding: "10px 24px", fontFamily: F.text, fontWeight: 700, fontSize: 34 }}>Where do I go?</div>
+      {/* the headline */}
+      <div style={{ position: "absolute", left: 800, top: 120, width: 460 }}>
+        <div style={{ fontFamily: F.display, fontWeight: 800, fontSize: 168, lineHeight: 0.86, color: C.glow, textShadow: "0 0 40px rgba(45,212,191,.35)" }}>13 AI</div>
+        <div style={{ fontFamily: F.display, fontWeight: 800, fontSize: 168, lineHeight: 0.92, color: C.glow, textShadow: "0 0 40px rgba(45,212,191,.35)" }}>agents</div>
+        <div style={{ marginTop: 18, fontFamily: F.display, fontWeight: 800, fontSize: 54, lineHeight: 1, color: C.boardText, whiteSpace: "nowrap" }}>for one hospital visit</div>
+      </div>
+      <div style={{ position: "absolute", left: 800, top: 610, display: "flex", alignItems: "center", gap: 14 }}>
+        <span style={{ width: 40, height: 10, background: C.glow }} />
+        <span style={{ fontFamily: F.display, fontWeight: 800, fontSize: 52, color: C.boardText }}>Throughline</span>
+      </div>
+    </AbsoluteFill>
+  );
+}
