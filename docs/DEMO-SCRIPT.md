@@ -6,7 +6,7 @@ Read at a natural pace. Each line is one recording, saved as `video/public/audio
 
 1. `v01` Every year, millions of people go to a hospital. But hospitals are organized around departments, not patients. Without someone on the inside, the medical terms, or the language, the hardest part is knowing where to go, who to ask, and what comes next.
 2. `v03` My family has lived this: a lost referral, weeks waiting on insurance, and results no one called about. Each step sat with a different person in a different system, and the first one arrived by fax.
-3. `v05` About a quarter of US health spending is estimated to be waste. Doctors' offices spend thirteen hours a week getting insurers to approve tests. And one abnormal test result in fourteen never reaches the patient.
+3. `v05` Administrative costs are an estimated quarter to a third of US health spending. Doctors' offices spend thirteen hours a week getting insurers to approve tests. And in one recent study, only fifty-eight percent of tests and referrals were completed on time.
 
 ## What we built (motion graphics)
 
@@ -43,4 +43,4 @@ Read at a natural pace. Each line is one recording, saved as `video/public/audio
 19. `v32` In the end, families like mine shouldn't need someone on the inside just to find their way.
 20. `v33` When AI agents carry the routine work and the steps connect, care gets easier for patients, lighter for staff, and reaches more people.
 
-509 words, about 3.0 minutes of speech; the film runs about 3.5 minutes.
+515 words, about 3.1 minutes of speech; the film runs about 3.6 minutes.

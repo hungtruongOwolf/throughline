@@ -452,16 +452,19 @@ function Column({ at, x, active, big, caption, children }: { at: number; x: numb
 
 export function Stats({ dur, vo, text }: LineProps) {
   const f = useCurrentFrame();
-  const a = cue(text, "a quarter", vo);
+  const a = cue(text, "quarter to a third", vo);
   const b = cue(text, "thirteen hours", vo);
-  const c = cue(text, "one abnormal", vo);
+  const c = cue(text, "in one recent study", vo);
   const act = (at: number, next: number) => ramp(f, at, at + 10) * (1 - ramp(f, next, next + 14));
-  const pct = Math.round(25 * ramp(f, a + 6, a + 40, EZ.out));
+  // a quarter to a third: the arc fills to 25%, then reaches on to a third
+  const lo = Math.round(25 * ramp(f, a + 6, a + 36, EZ.out));
+  const reach = ramp(f, a + 36, a + 60, EZ.out);
+  const pct = lo + 8 * reach;
   const hrs = ramp(f, b + 4, b + 56);
-  const fall = ramp(f, c + 30, c + 64, EZ.in);
+  const done = ramp(f, c + 24, c + 60, EZ.out);
   return (
     <Stage dur={dur}>
-      <Column at={a} x={380} active={act(a, b)} big={`${pct}%`} caption="of US health spending is estimated waste">
+      <Column at={a} x={380} active={act(a, b)} big={reach > 0.5 ? "25–35%" : `${lo}%`} caption="of US health spending goes to administration">
         <svg width={280} height={280} viewBox="0 0 100 100">
           <circle cx={50} cy={50} r={40} fill="none" stroke="rgba(244,246,242,.12)" strokeWidth={11} />
           <circle cx={50} cy={50} r={40} fill="none" stroke={C.urgent} strokeWidth={11} strokeLinecap="round" strokeDasharray={`${(251 * pct) / 100} 251`} transform="rotate(-90 50 50)" style={{ filter: "drop-shadow(0 0 4px rgba(180,35,24,.8))" }} />
@@ -479,20 +482,26 @@ export function Stats({ dur, vo, text }: LineProps) {
           <circle cx={50} cy={50} r={3.5} fill={C.boardText} />
         </svg>
       </Column>
-      <Column at={c} x={1540} active={ramp(f, c, c + 10)} big="1 in 14" caption="abnormal test results never reach the patient">
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 44px)", gap: 10 }}>
-          {Array.from({ length: 14 }).map((_, i) => {
-            const lost = i === 9;
-            const red = lost && f > c + 20;
+      <Column at={c} x={1540} active={ramp(f, c, c + 10)} big={`${Math.round(58 * done)}%`} caption="of tests and referrals completed on time, in one 2023 study">
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 50px)", gap: 12 }}>
+          {Array.from({ length: 12 }).map((_, i) => {
+            // 7 of 12 is 58%: those turn teal with a check, the rest stay open
+            const ok = i < 7 && done * 7 > i;
             return (
-              <div key={i} style={{ width: 44, height: 56, borderRadius: 6, background: red ? C.urgent : C.panel, opacity: lost ? 1 - fall : 1, transform: lost ? `translateY(${fall * 260}px) rotate(${fall * 50}deg)` : undefined, boxShadow: red ? "0 0 20px rgba(180,35,24,.8)" : "none" }} />
+              <div key={i} style={{ width: 50, height: 62, borderRadius: 7, background: ok ? C.agent : "rgba(244,246,242,.14)", border: ok ? `2px solid ${C.glow}` : "2px dashed rgba(244,246,242,.35)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: ok ? "0 0 16px rgba(45,212,191,.45)" : "none" }}>
+                {ok && (
+                  <svg width={26} height={26} viewBox="0 0 24 24">
+                    <path d="M4 12l5 5L20 6" fill="none" stroke="#fff" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                )}
+              </div>
             );
           })}
         </div>
       </Column>
       <Sfx at={a + 4} name="count" volume={0.3} />
       <Sfx at={b + 4} name="count" volume={0.3} />
-      <Sfx at={c + 30} name="whoosh" volume={0.2} />
+      <Sfx at={c + 24} name="tick-a" volume={0.2} />
     </Stage>
   );
 }
@@ -665,7 +674,7 @@ export function Flow({ dur, vo, text }: LineProps) {
 
 type Plug = { label: string; note: string; to: string[]; cueText: string; x: number; dark?: boolean };
 const PLUGS: Plug[] = [
-  { label: "Muse Spark 1.3", note: "reads, writes, sees", to: ["IN", "CV", "PA", "PM", "CO", "DS"], cueText: "muse spark reads", x: 300 },
+  { label: "Muse Spark 1.3", note: "reads, writes, sees", to: ["IN", "PA", "PM", "CO", "DS"], cueText: "muse spark reads", x: 300 },
   { label: "Muse Voice Transcribe", note: "voice notes", to: ["PM"], cueText: "voice transcribe", x: 690 },
   { label: "SAM 3.1", note: "counts waiting rooms", to: ["WS"], cueText: "segment anything", x: 1040 },
   { label: "Muse Spark Open", note: "open weights, on Baseten", to: ["OP"], cueText: "muse spark open", x: 1380 },
