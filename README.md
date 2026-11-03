@@ -1,5 +1,7 @@
 # Throughline
 
+![Throughline: thirteen agents along one thread](docs/images/hero.gif)
+
 **One thread through a hospital visit.** Thirteen AI agents carry the routine work around a patient's care, from the faxed referral to the follow-up, and bring in a person whenever a human has to decide.
 
 Built for the Meta Global AI Developer Hackathon (Oct 27 to Nov 4, 2026).
@@ -30,72 +32,48 @@ Built for the Meta Global AI Developer Hackathon (Oct 27 to Nov 4, 2026).
 
 ### A hospital is organized around its departments, not around the patient
 
-A single referral for a CT scan touches a clinic, an insurer, a scheduling desk, a radiology department, a lab, and at least two doctors. Each one has its own people and its own software, and nobody owns the whole chain. The patient is the only one who walks the full path, and the patient is the one with the least information.
+A single referral for a CT scan touches a clinic, an insurer, a scheduling desk, the building itself, a lab, and at least two doctors. Each one has its own people and its own software, and nobody owns the whole chain. The patient is the only one who walks the full path, and the patient has the least information.
 
-```mermaid
-flowchart LR
-    P((Patient))
-    subgraph Clinic["Referring clinic"]
-      R[Referral]
-    end
-    subgraph Insurer["Insurer portal"]
-      A[Prior authorization]
-    end
-    subgraph Hospital["Hospital scheduling"]
-      S[Appointments]
-    end
-    subgraph Floor["Visit day"]
-      Q[Queues and directions]
-    end
-    subgraph Lab["Lab system"]
-      L[Results]
-    end
-    subgraph Doctor["Doctor's inbox"]
-      F[Follow-up]
-    end
-    R -. fax .-> A
-    A -. phone call .-> S
-    S -. letter .-> P
-    P -. "where do I go?" .-> Q
-    Q -. "who has my results?" .-> L
-    L -. "did anyone call?" .-> F
-```
+![Six steps, six systems, and every handoff done by hand](docs/images/problem.png)
 
-Every dotted arrow is a handoff done by hand: a fax, a phone call, a portal login, a sticky note. Each one is a place where a patient can fall through.
+Every dashed line is a handoff done by hand: a fax, a phone call, a letter, a portal login. Each one is a place where a patient can fall through. Fax is still a large part of it: in a 2025 industry survey, more than a third of documents sent to health care facilities still arrived by fax, and 88% of practitioners said fax delays affect patient care (Documo, 2025; vendor-sponsored).
 
 ### Who it hurts most
 
 People who have someone on the inside get through. People who don't, struggle:
 
-- **Older patients** who are managing several appointments, a wheelchair, and a ride from family.
-- **People with limited English.** About 25 million people in the US speak English "less than very well" (US Census Bureau, American Community Survey, via Migration Policy Institute).
-- **People with low health literacy.** Only 12% of US adults had proficient health literacy in the last national assessment; 36% had basic or below-basic skills (NCES, National Assessment of Adult Literacy, 2003).
+- **Older patients**, managing several appointments, a wheelchair, and a ride from family.
+- **People with limited English.** More than 25 million people in the US, over 8% of the population, speak English less than "very well" (CMS, citing the Census Bureau's American Community Survey).
+- **People who struggle with written information.** 28% of US adults now read at the lowest literacy levels, up from 19% in 2017 (NCES, PIAAC 2023 results, December 2024). Medical forms, portal messages, and discharge papers assume much more.
 
 My family has lived this: a lost referral, weeks waiting on an insurance approval, and test results nobody called about. None of it was medical. All of it was coordination.
 
-### The numbers in the US
+### By the numbers, in the US
 
-| Where it breaks                 | What the research found                                                                                                                                                                 | Source                                                                                  |
-| ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| The system as a whole           | About **25%** of US health spending is estimated to be waste, $760B to $935B a year. Administrative complexity is the single largest category, at about $266B.                          | Shrank, Rogstad, Parekh, _JAMA_ 2019                                                    |
-| Referrals                       | Only about **half** of specialty referrals were completed: 71% led to an appointment, and 70% of those appointments were kept.                                                          | Weiner, Perkins, Callahan, _J Eval Clin Pract_ 2010 (one academic center, older adults) |
-| Insurance approval              | Practices complete about **43 prior authorizations per physician per week**, and physicians and staff spend **12 to 13 hours a week** on them.                                          | AMA Prior Authorization Physician Survey (2022 and 2024 editions)                       |
-| Insurance approval, per request | A manual prior authorization (phone, fax, email) takes about **24 minutes** of staff time.                                                                                              | CAQH Index 2024                                                                         |
-| The visit day                   | A typical visit takes about **two hours** of the patient's time, of which about **20 minutes** are with the clinician.                                                                  | Ray et al., _Am J Manag Care_ 2015                                                      |
-| Directions                      | Hospital staff spend about **32 minutes a week** each giving directions; 46% say it distracts from their duties.                                                                        | Jamshidi et al., _HERD_ 2025 (n=301)                                                    |
-| After the visit                 | **79%** of older patients discharged with a medication change misunderstood at least one change.                                                                                        | Ziaeian et al., _J Gen Intern Med_ 2012                                                 |
-| Results                         | **1 in 14** clinically significant abnormal outpatient results (7.1%) was never communicated to the patient, or not documented as communicated. In some practices the rate reached 26%. | Casalino et al., _Arch Intern Med_ 2009                                                 |
-| Readmissions                    | About **1 in 5** Medicare patients is readmitted within 30 days, and half of them had no office visit in between.                                                                       | Jencks et al., _NEJM_ 2009                                                              |
+![The cost of the gaps in the US](docs/images/stats-us.png)
 
-Some of these studies are old or cover one institution. We cite them as signals of where the chain breaks, not as today's national rates.
+| Where it breaks         | What the research found                                                                                                                                                                                                                                  | Source                                                                  |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| Administration          | Administrative costs are an estimated **25% to 35%** of US health spending. On the narrow official measure (insurer and program administration only), the US spends **7.6%** of health spending on administration, against 3.8% in comparable countries. | American Hospital Association, 2025; Peterson-KFF Health System Tracker |
+| Insurance approval      | Physicians and their staff spend about **13 hours a week** on prior authorization, about **40 requests** per physician. **95%** say it delays access to care; **94%** say it adds to burnout.                                                            | AMA Prior Authorization Physician Survey, fielded December 2025         |
+| Insurance, for patients | **58%** of insured adults hit at least one problem using their coverage in a year; 18% had a claim denied.                                                                                                                                               | KFF Survey of Consumer Experiences with Health Insurance, 2023          |
+| Getting an appointment  | A new patient waits **31 days** on average for a physician appointment across 15 large metro areas, up 19% since 2022 and the longest since the survey began in 2004.                                                                                    | AMN Healthcare, Survey of Physician Appointment Wait Times, 2025        |
+| Referrals and tests     | Only **58%** of tests and referrals ordered at in-person visits, and **43%** of those ordered at video visits, were completed on time.                                                                                                                   | _JAMA Network Open_, 2023                                               |
+| Referrals, by language  | In a pediatric health system, **54%** of specialty referrals were completed; **49%** for Spanish-speaking families.                                                                                                                                      | _Journal of Pediatrics_, 2023                                           |
+| Directions              | Hospital staff spend about **32 minutes a week** each giving directions; 46% say it distracts from their duties.                                                                                                                                         | Jamshidi et al., _HERD_, 2025                                           |
+| When it goes wrong      | About **795,000** Americans a year die or are permanently disabled after a diagnostic error. Missed and delayed follow-up is one of the ways it happens.                                                                                                 | Newman-Toker et al., _BMJ Quality & Safety_, 2024                       |
 
-### The numbers worldwide
+These are surveys and studies with their own samples and definitions. We cite them as signals of where the chain breaks, not as one national rate.
 
-| What                     | Figure                                                                                                                                                         | Source                                                         |
-| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
-| Access to essential care | About **4.5 billion people**, half the world, were not fully covered by essential health services in 2021. 2025 data put it at about 4.6 billion.              | WHO and World Bank, UHC Global Monitoring Report 2023 and 2025 |
-| Harm from unsafe care    | About **1 in 10** patients is harmed in health care, and more than **3 million** people die each year from unsafe care. About half of the harm is preventable. | WHO patient safety fact sheet, 2023                            |
-| Primary and outpatient   | As many as **4 in 10** patients are harmed in primary and ambulatory care, and up to 80% of that harm may be avoidable.                                        | WHO patient safety fact sheet, 2023                            |
+### By the numbers, worldwide
+
+![Worldwide figures](docs/images/stats-world.png)
+
+| What                     | Figure                                                                                                                                                                                                                              | Source                                                          |
+| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| Access to essential care | About **4.6 billion people** lack full coverage of essential health services, and **2.1 billion** face financial hardship from health costs.                                                                                        | WHO and World Bank, UHC Global Monitoring Report, December 2025 |
+| Harm from unsafe care    | About **1 in 10** patients is harmed in health care, and more than **3 million** people die each year from unsafe care. In primary and outpatient care, up to 4 in 10 patients are harmed, and up to 80% of that harm is avoidable. | WHO patient safety fact sheet, 2023                             |
+| People to do the work    | The world is projected to be **11.1 million** health workers short by 2030, as staff and patients age together.                                                                                                                     | WHO health workforce report, 2026                               |
 
 The details differ by country, but the shape is the same everywhere: care is delivered by specialized departments, and the work of connecting them falls on staff with no time and patients with no map.
 
@@ -127,35 +105,7 @@ Throughline is a patient-access and visit-day workspace for hospitals, with a se
 
 ### The journey
 
-```mermaid
-flowchart LR
-    subgraph Before["Before the visit"]
-      direction TB
-      IN[Intake<br/>reads the fax] --> CV[Coverage<br/>checks eligibility]
-      CV --> PA[Prior auth<br/>drafts the request]
-      PA --> G1{{Coordinator<br/>approves}}
-      G1 --> SC[Scheduling<br/>books the visit]
-      SC --> VP[Visit prep<br/>plan for the day]
-      VP --> PM[Messaging<br/>confirms with the patient]
-    end
-    subgraph Day["The visit day"]
-      direction TB
-      WS[Sensing<br/>counts the waiting rooms] --> IT[Itinerary<br/>plans each patient's day]
-      IT --> CO[Companion<br/>directions and updates]
-      WS --> OP[Ops planner<br/>simulates fixes]
-      OP --> G2{{Within policy?<br/>else ops lead approves}}
-      G2 --> IT
-    end
-    subgraph After["After the visit"]
-      direction TB
-      DS[Discharge<br/>plain-language summary] --> G3{{Doctor<br/>signs}}
-      G3 --> FU[Follow-up<br/>check-in, next visit, closure]
-      RW[Results watch<br/>tracks every test] --> FU
-    end
-    Before --> Day --> After
-    CO -. medical question .-> N[[Nurse]]
-    FU -. patient unsure .-> N
-```
+![One journey, thirteen agents, and the people who decide](docs/images/journey.png)
 
 ### The thirteen agents
 
@@ -202,40 +152,7 @@ The front page lists Halden Medical Center (the live workspace), Northgate Unive
 
 ### Architecture
 
-```mermaid
-flowchart TB
-    subgraph Web["Web app, Next.js on Vercel"]
-      Staff[Staff workspace<br/>Inbox, Referrals, Record, Today, Agents]
-      PatientApp[Patient app<br/>plan, directions, voice notes]
-      Map[3D campus and wayfinding]
-      WasmWeb[Rust engine in WASM]
-    end
-    subgraph Runtime["Runtime, Node on Modal"]
-      API[HTTP API and one event stream]
-      Bus[Event log and journey state machine]
-      Agents[13 agents]
-      Gate[Safety gate<br/>capabilities, reviews, handoffs]
-      Sim[Simulated world<br/>clock, fax line, insurer, lab, cameras]
-      Cache[(Record and replay cache)]
-      WasmNode[Rust engine in WASM]
-    end
-    subgraph Models["Models"]
-      MetaAPI[Meta Model API<br/>Muse Spark 1.3, SAM 3.1,<br/>Muse Voice Transcribe, Muse Image]
-      Baseten[Baseten<br/>Muse Spark Open, open weights]
-    end
-    Staff <--> API
-    PatientApp <--> API
-    Map --- WasmWeb
-    API --> Bus
-    Sim --> Bus
-    Bus --> Agents
-    Agents --> Gate
-    Gate --> Bus
-    Agents --- WasmNode
-    Agents --> Cache
-    Cache --> MetaAPI
-    Cache --> Baseten
-```
+![How the web app, the runtime, the engine, and the models fit together](docs/images/architecture.png)
 
 - **Runtime** (`apps/runtime`): a TypeScript service. Every change is an event in an append-only log; a journey's state is derived from its events. Agents subscribe to events, act through granted capabilities, and emit new events.
 - **Engine** (`packages/engine`): Rust compiled to WebAssembly, so the same code runs in the server and in the browser. It does walking routes, scheduling with dependencies, queue estimates, and a discrete-event simulation of the day for what-if analysis.
@@ -246,34 +163,7 @@ flowchart TB
 
 Every agent, model-based or not, follows the same path. This is what makes 13 agents safe to run without someone watching each one.
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant E as Event log
-    participant G as Safety gate
-    participant A as Agent
-    participant M as Model
-    participant H as Person
-    E->>G: event (e.g. ReferralReceived)
-    G->>G: is this capability granted to this agent?
-    alt needs approval (insurance request, large ops change, summary)
-      G->>H: park the event, open a review
-      H-->>G: approve or reject
-      G->>A: replay the parked event exactly as proposed
-    else medical question
-      G->>H: blocking handoff to a nurse
-    else routine
-      G->>A: run
-    end
-    A->>M: call with one required tool
-    M-->>A: tool call
-    A->>A: validate arguments against the schema
-    alt invalid or prose
-      A->>M: one retry with the validation error
-      A->>A: still invalid: deterministic fallback
-    end
-    A->>E: new events, with the run recorded
-```
+![The contract every agent follows](docs/images/contract.png)
 
 - A **model agent must call exactly one validated tool.** It gets one retry with the validation error, and otherwise falls back to a deterministic rule. The fallback is recorded.
 - **Gated actions park and replay.** The triggering event is stored; when a person approves, the same event runs again, so what was approved is exactly what happens.
@@ -394,6 +284,7 @@ pnpm dev                # runtime on :4000, web on :3000, open http://localhost:
 - **No keys needed:** `fixtures/model-cache.sqlite` is committed and `MODEL_CACHE=replay` serves every model output from it.
 - **Re-record the live run:** `pnpm --filter @throughline/runtime record:population`.
 - **Deploy:** [`docs/DEPLOY.md`](docs/DEPLOY.md) (runtime on Modal, web on Vercel).
+- **Figures:** the images in `docs/images` are drawn in code (`video/src/diagrams`) and rendered with `cd video && node scripts/render-diagrams.mjs`.
 
 ### Repository
 
@@ -413,19 +304,21 @@ pnpm dev                # runtime on :4000, web on :3000, open http://localhost:
 
 ## Sources
 
-- Shrank WH, Rogstad TL, Parekh N. Waste in the US health care system: estimated costs and potential for savings. _JAMA_ 2019;322(15):1501-1509.
-- Weiner M, Perkins AJ, Callahan CM. Errors in completion of referrals among older urban adults in ambulatory care. _J Eval Clin Pract_ 2010.
-- American Medical Association. Prior Authorization Physician Survey (2022, 2024). https://www.ama-assn.org/practice-management/prior-authorization
-- CAQH. 2024 CAQH Index. https://www.caqh.org/explorations/caqh-index
-- Ray KN et al. Opportunity costs of ambulatory medical care in the United States. _Am J Manag Care_ 2015;21(8):567-574.
+- American Hospital Association. Report on the administrative costs of US health care, June 2025.
+- Peterson-KFF Health System Tracker. What drives health spending in the U.S. compared to other countries. https://www.healthsystemtracker.org/brief/what-drives-health-spending-in-the-u-s-compared-to-other-countries/
+- American Medical Association. 2025 AMA Prior Authorization Physician Survey (fielded December 2025). https://www.ama-assn.org/practice-management/prior-authorization/ama-prior-authorization-physician-survey
+- KFF. Survey of Consumer Experiences with Health Insurance, 2023. https://www.kff.org/private-insurance/poll-finding/kff-survey-of-consumer-experiences-with-health-insurance/
+- AMN Healthcare. 2025 Survey of Physician Appointment Wait Times. https://www.amnhealthcare.com/amn-insights/physician/whitepapers/2025-survey-of-physician-appointment-wait-times/
+- Completion of recommended tests and referrals in telehealth vs in-person visits. _JAMA Network Open_, November 2023. https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10652149/
+- Disparities in pediatric specialty referral scheduling and completion. _Journal of Pediatrics_, 2023.
 - Jamshidi S et al. _Health Environments Research & Design Journal (HERD)_, 2025; survey of hospital staff, n=301.
-- Casalino LP et al. Frequency of failure to inform patients of clinically significant outpatient test results. _Arch Intern Med_ 2009;169(12):1123-1129.
-- Jencks SF, Williams MV, Coleman EA. Rehospitalizations among patients in the Medicare fee-for-service program. _NEJM_ 2009;360:1418-1428.
-- Ziaeian B et al. Medication reconciliation accuracy and patient understanding of intended medication changes on hospital discharge. _J Gen Intern Med_ 2012;27(11):1513-1520.
-- US Census Bureau, American Community Survey; Migration Policy Institute, The Limited English Proficient Population in the United States.
-- National Center for Education Statistics. The Health Literacy of America's Adults: Results from the 2003 National Assessment of Adult Literacy (NCES 2006-483).
-- World Health Organization and World Bank. Tracking Universal Health Coverage: 2023 Global Monitoring Report; 2025 edition.
+- Newman-Toker DE et al. Burden of serious harms from diagnostic error in the USA. _BMJ Quality & Safety_ 2024;33(2):109-120.
+- Documo. Healthcare fax survey, October 2025 (vendor-sponsored).
+- Centers for Medicare & Medicaid Services. Limited English Proficiency, citing the US Census Bureau, American Community Survey.
+- National Center for Education Statistics. Highlights of the 2023 U.S. PIAAC Results (NCES 2024-202), December 2024.
+- World Health Organization and World Bank. Tracking Universal Health Coverage: 2025 Global Monitoring Report.
 - World Health Organization. Patient safety fact sheet, September 2023. https://www.who.int/news-room/fact-sheets/detail/patient-safety
+- World Health Organization. Health workforce. https://www.who.int/health-topics/health-workforce
 
 ## Team
 

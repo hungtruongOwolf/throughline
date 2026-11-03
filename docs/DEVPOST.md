@@ -14,13 +14,15 @@
 
 ## Inspiration
 
-The US has about 155 million emergency visits a year (CDC, 2022) and hundreds of millions of hospital outpatient visits on top. Each one is a chain, and nobody owns the whole chain. A typical Medicare patient sees about two primary care doctors and five specialists across four practices (Pham, NEJM 2007).
+My family has lived this: a lost referral, weeks waiting on an insurance approval, and test results nobody called about. None of it was medical. All of it was coordination.
 
-- **Before:** a referral often arrives by fax. Doctors and staff spend 12 to 13 hours a week on prior authorization (AMA surveys, 2022 and 2024); a manual one takes about 24 minutes (CAQH, 2024). In one older study about half of specialty referrals were never completed (Weiner, 2010).
-- **During:** one study put a visit at about two hours of the patient's time and about 20 minutes with the doctor (Ray, Am J Manag Care 2015). Staff give directions and patients wait without knowing why.
-- **After:** most older patients with a medication change at discharge did not understand at least one change (79%, J Gen Intern Med 2012). About 1 in 14 abnormal outpatient results is never communicated (Casalino, 2009). About 1 in 5 Medicare patients is readmitted within 30 days, and half of those had no office visit in between (Jencks, NEJM 2009).
+A hospital is organized around its departments, not around the patient. One referral touches a clinic, an insurer, a scheduling desk, the building itself, a lab, and two doctors, each with its own software, and nobody owns the whole chain. People with someone on the inside get through; people without, struggle, especially older patients, the more than 25 million people in the US with limited English (CMS, ACS), and the 28% of US adults who now read at the lowest literacy levels (NCES, PIAAC 2023).
 
-None of this is clinical work. It is the coordination around the care, and it is where people fall through the gaps. Several of these studies are old or narrow; we cite them as signals, not as today's national rates.
+- **Before:** physicians and staff spend about 13 hours a week on prior authorization, about 40 requests per physician (AMA survey, December 2025). 58% of insured adults hit a problem using their coverage in a year (KFF, 2023). A new patient waits 31 days on average for an appointment in large US cities (AMN Healthcare, 2025).
+- **Between steps:** only 58% of tests and referrals ordered at in-person visits, and 43% at video visits, were completed on time (JAMA Network Open, 2023). More than a third of documents sent to health care facilities still arrive by fax (Documo, 2025, vendor survey).
+- **The cost:** administrative costs are an estimated 25% to 35% of US health spending (American Hospital Association, 2025). Worldwide, 4.6 billion people lack full coverage of essential health services (WHO and World Bank, 2025), and the world will be 11.1 million health workers short by 2030 (WHO).
+
+None of this is clinical work. It is the coordination around the care, and it is where people fall through the gaps. Each figure comes from its own survey or study; we cite them as signals, not as one national rate.
 
 ## What it does
 
