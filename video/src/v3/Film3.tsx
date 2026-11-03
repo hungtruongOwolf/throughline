@@ -8,7 +8,7 @@ import { Gates, Stages } from "./scenes";
 import { AgentLayer3 } from "./overlay3";
 import { C } from "../theme";
 
-export type Row3 = { line: number; kind: "anim" | "clip" | "phone" | "still" | "new"; name: string; start: number; dur: number; vo: number; part: string; from?: number; to?: number };
+export type Row3 = { focus?: string; line: number; kind: "anim" | "clip" | "phone" | "still" | "new"; name: string; start: number; dur: number; vo: number; part: string; from?: number; to?: number };
 export const SHOTS3 = timeline.shots as Row3[];
 export const TOTAL3 = timeline.total;
 /** The length each v2 scene was animated for. */
@@ -61,7 +61,7 @@ export function Screen({ row }: { row: Row3 }) {
   const d = useDrift(row.name + row.line, 0.4, 8);
   const push = interpolate(f, [0, row.dur], [1, 1.035]);
   // the camera moves from the whole screen to where the action is
-  const r = FOCUS[String(row.line)];
+  const r = FOCUS[row.focus ?? String(row.line)];
   const k = useT(8, 34);
   const zoom = r ? 1 + (Math.min(1920 / r.w, 1080 / r.h) - 1) * k : 1;
   const cx = r ? (r.x + r.w / 2) * k + 960 * (1 - k) : 960;

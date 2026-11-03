@@ -3,7 +3,8 @@ import { AGENTS, Card, CARD_LEN, Rail } from "../v2/overlay";
 import type { Row3 } from "./Film3";
 
 /** Which agent's card shows when, by voice line and how far into it. */
-const CUES: { line: number; at: number; code: string }[] = [
+export type Cue = { line: number; at: number; code: string };
+const CUES: Cue[] = [
   { line: 12, at: 0.05, code: "IN" },
   { line: 14, at: 0.12, code: "CV" },
   { line: 14, at: 0.55, code: "PA" },
@@ -21,11 +22,11 @@ const STAGES = [
 ];
 
 /** Agent cards and the stage rail over the product part of the film. */
-export function AgentLayer3({ shots }: { shots: Row3[] }) {
+export function AgentLayer3({ shots, cues: list = CUES }: { shots: Row3[]; cues?: Cue[] }) {
   const f = useCurrentFrame();
   const lineStart = (n: number) => shots.find((s) => s.line >= n)!.start;
   const lineLen = (n: number) => shots.filter((s) => s.line === n).reduce((a, s) => a + s.dur, 0);
-  const cues = CUES.map((c) => ({ ...c, frame: Math.round(lineStart(c.line) + c.at * lineLen(c.line)) }));
+  const cues = list.map((c) => ({ ...c, frame: Math.round(lineStart(c.line) + c.at * lineLen(c.line)) }));
   const stage = STAGES.findIndex((s) => f >= lineStart(s.from) && f < lineStart(s.to));
   const a = lineStart(11);
   const b = lineStart(28);

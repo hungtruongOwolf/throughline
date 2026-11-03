@@ -1,56 +1,46 @@
 # Demo video script
 
-Read at a natural pace. Each line is one recording, saved as `video/public/audio/vo6/vNN.wav` (the file name is shown before each line). Put the line lengths in `video/narration6.json`, then run `python scripts/build-timeline4.py` and render `Throughline4`; the film re-times itself to the voice.
+Read at a natural pace. Each line is one recording, saved as `video/public/audio/vo7/vNN.wav` (the file name is shown before each line). Put the line lengths in `video/narration7.json`, then run `python scripts/build-timeline5.py` and render `Throughline5`; the film re-times itself to the voice.
 
 ## The problem (motion graphics)
 
-1. `v01` Every year, millions of people go to a hospital, for a checkup, a scan, or an emergency.
-2. `v02` A hospital is organized around its departments, not around the patient. So if you don't know anyone inside, don't know the medical terms, or don't speak the language well, the hardest part often isn't the medicine. It's knowing where to go, who to ask, and what comes next.
-3. `v03` My family has lived this. We lost track of a referral, waited weeks for an insurance approval, and never knew if anyone would call with the results.
-4. `v04` Each of those steps sits with a different person in a different system, and the first one often still arrives by fax.
-5. `v05` The cost is real. About a quarter of US health spending is estimated to be waste, and doctors' offices spend around thirteen hours a week getting insurers to approve tests.
-6. `v06` Worst of all, one abnormal test result in fourteen never reaches the patient.
+1. `v01` Every year, millions of people go to a hospital. But hospitals are organized around departments, not patients. Without someone on the inside, the medical terms, or the language, the hardest part is knowing where to go, who to ask, and what comes next.
+2. `v03` My family has lived this: a lost referral, weeks waiting on insurance, and results no one called about. Each step sat with a different person in a different system, and the first one arrived by fax.
+3. `v05` About a quarter of US health spending is estimated to be waste. Doctors' offices spend thirteen hours a week getting insurers to approve tests. And one abnormal test result in fourteen never reaches the patient.
 
 ## What we built (motion graphics)
 
-7. `v08` So we built Throughline: thirteen AI agents that connect those steps, each owning one part of the patient's journey, from referral to follow-up.
-8. `v09` They hand the work to each other on their own, and bring in a person only when they're unsure, or when a human has to decide.
-9. `v10` Let me show you, before, during, and after a visit.
+4. `v08` So we built Throughline: thirteen AI agents, each owning one step of the patient's journey, from referral to follow-up.
+5. `v09` They pass the work along on their own, and bring in a person when a human has to decide. Let me show you.
 
 ## Before the visit (product)
 
-10. `v11` This is Jordan's screen. Jordan is the referral coordinator at Halden Medical Center, and a referral from another clinic is waiting on the fax line.
-11. `v12` The Intake agent reads it right away, but the end of the patient's insurance ID is smudged, so instead of guessing, it asks Jordan.
-12. `v13` Jordan answers from the insurance card, and the work carries on.
-13. `v14` With the ID confirmed, the Coverage agent finds that the CT scan needs prior authorization, so the Prior auth agent drafts the request.
-14. `v15` The draft waits for Jordan's approval, right beside the original fax, so every line can be checked. By hand, a request like this takes about twenty-four minutes.
+6. `v11` Jordan coordinates referrals at Halden Medical Center. One just arrived by fax.
+7. `v12` The Intake agent reads it, but the insurance ID is smudged, so instead of guessing, it asks Jordan. Jordan answers from the card, and the work carries on.
+8. `v14` The Coverage agent finds the CT needs prior authorization, and the Prior auth agent drafts the request beside the original fax, for Jordan to approve. By hand, that takes about twenty-four minutes.
 
 ## The visit day (product)
 
-15. `v16` Now, the day of a visit, with a different patient. Maria is seventy-one, uses a wheelchair, and Throughline puts her whole day on her phone.
-16. `v17` She sees where she is, how long her wait is, and what's next. If she gets lost, she can send a photo of the nearest sign and get step-free directions.
-17. `v18` Meanwhile, here's the operations view of the same hospital. One of its two CT scanners went down this morning, and the line Maria is waiting in is growing.
-18. `v19` A waiting-room agent counts people on the cameras and alerts the Ops planner, the agent that watches the day's schedule.
-19. `v20` The planner simulates the next ninety minutes under each possible fix and picks the best: an extra slot on the second scanner.
-20. `v21` In the simulation, the average CT wait drops from about seventeen minutes to five.
-21. `v22` The change is small and clearly helps, so the planner applies it on its own, within policy. Sam, the operations lead, sees what changed and why, and bigger changes still wait for Sam. Maria's scan moves to the second scanner right away.
+9. `v16` On the day of the visit, Maria, seventy-one and in a wheelchair, has her whole day on her phone: where she is, her wait, what's next, and step-free directions from a photo of any sign.
+10. `v18` Meanwhile, one of the hospital's two CT scanners is down, and Maria's line is growing.
+11. `v19` A waiting-room agent sees it on the cameras and alerts the Ops planner.
+12. `v20` The planner simulates every possible fix and picks the best: an extra slot on the second scanner, cutting the average CT wait from seventeen minutes to five.
+13. `v22` The change is small, so the planner applies it within policy. Sam, the operations lead, sees why, and bigger changes still wait for Sam. Maria's scan moves right away.
 
 ## After the visit (product)
 
-22. `v23` The work doesn't stop when the visit ends. This is Dr. Okafor's inbox, and Lucille Barros was seen a few days ago.
-23. `v24` The Discharge agent rewrites the visit notes in plain language next to the original, and Dr. Okafor signs the summary before it goes to the patient.
-24. `v25` The next day, the Follow-up agent checks in with each patient. When someone is unsure about their care, it leaves the medical advice to a nurse: Renee gets a task to call them.
-25. `v26` Across all patients, the Results watch agent tracks every test until a doctor acknowledges it. And the Follow-up agent books the next visit and reports back to the referring doctor.
-26. `v27` The Agents page shows what each of the thirteen has done.
+14. `v24` After the visit, the Discharge agent rewrites Lucille's notes in plain language, and Dr. Okafor signs them before they go to her.
+15. `v25` The next day, the Follow-up agent checks in with each patient. If someone is unsure about their care, a nurse, Renee, gets a task to call them.
+16. `v26` Results watch tracks every test until a doctor acknowledges it, and the Follow-up agent books the next visit.
 
 ## Under the hood (motion graphics)
 
-27. `v28` Under the hood, Muse Spark reads, writes, and sees; Muse Voice Transcribe hears patients' voice notes; Segment Anything counts the waiting rooms; and the Ops planner runs on Muse Spark Open, whose open weights let a hospital host it itself. Scheduling, routing, and the simulations run on our own Rust engine.
+17. `v28` Under the hood, Muse Spark reads, writes, and sees. Muse Voice Transcribe hears voice notes, Segment Anything counts waiting rooms, and the Ops planner runs on open-weight Muse Spark Open. Scheduling and simulations run on our own Rust engine.
 
 ## Any hospital, and the close
 
-28. `v31` And Throughline isn't tied to one hospital. Here's Northgate University Hospital, with five buildings and a fourteen-floor tower, and you can add your own.
-29. `v32` In the end, families like mine shouldn't need someone on the inside just to find their way.
-30. `v33` When AI agents carry the routine work and the steps connect, care gets easier for patients, lighter for staff, and reaches more people.
+18. `v31` And Throughline isn't tied to one hospital: here's Northgate, with five buildings and a fourteen-floor tower.
+19. `v32` In the end, families like mine shouldn't need someone on the inside just to find their way.
+20. `v33` When AI agents carry the routine work and the steps connect, care gets easier for patients, lighter for staff, and reaches more people.
 
-744 words, about 4.3 minutes of speech; the film runs about 5 minutes.
+509 words, about 3.0 minutes of speech; the film runs about 3.5 minutes.

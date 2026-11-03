@@ -1,0 +1,142 @@
+[
+ {
+  "id": 1,
+  "part": "problem",
+  "kind": "line",
+  "sec": 15.45,
+  "text": "Every year, millions of people go to a hospital. But hospitals are organized around departments, not patients. Without someone on the inside, the medical terms, or the language, the hardest part is knowing where to go, who to ask, and what comes next."
+ },
+ {
+  "id": 3,
+  "part": "problem",
+  "kind": "line",
+  "sec": 12.2,
+  "text": "My family has lived this: a lost referral, weeks waiting on insurance, and results no one called about. Each step sat with a different person in a different system, and the first one arrived by fax."
+ },
+ {
+  "id": 5,
+  "part": "problem",
+  "kind": "line",
+  "sec": 13.82,
+  "text": "About a quarter of US health spending is estimated to be waste. Doctors' offices spend thirteen hours a week getting insurers to approve tests. And one abnormal test result in fourteen never reaches the patient."
+ },
+ {
+  "id": 8,
+  "part": "idea",
+  "kind": "line",
+  "sec": 7.3,
+  "text": "So we built Throughline: thirteen AI agents, each owning one step of the patient's journey, from referral to follow-up."
+ },
+ {
+  "id": 9,
+  "part": "idea",
+  "kind": "line",
+  "sec": 5.85,
+  "text": "They pass the work along on their own, and bring in a person when a human has to decide. Let me show you."
+ },
+ {
+  "id": 11,
+  "part": "before",
+  "kind": "line",
+  "sec": 5.21,
+  "text": "Jordan coordinates referrals at Halden Medical Center. One just arrived by fax."
+ },
+ {
+  "id": 12,
+  "part": "before",
+  "kind": "line",
+  "sec": 9.66,
+  "text": "The Intake agent reads it, but the insurance ID is smudged, so instead of guessing, it asks Jordan. Jordan answers from the card, and the work carries on."
+ },
+ {
+  "id": 14,
+  "part": "before",
+  "kind": "line",
+  "sec": 12.76,
+  "text": "The Coverage agent finds the CT needs prior authorization, and the Prior auth agent drafts the request beside the original fax, for Jordan to approve. By hand, that takes about twenty-four minutes."
+ },
+ {
+  "id": 16,
+  "part": "day",
+  "kind": "line",
+  "sec": 11.05,
+  "text": "On the day of the visit, Maria, seventy-one and in a wheelchair, has her whole day on her phone: where she is, her wait, what's next, and step-free directions from a photo of any sign."
+ },
+ {
+  "id": 18,
+  "part": "day",
+  "kind": "line",
+  "sec": 5.31,
+  "text": "Meanwhile, one of the hospital's two CT scanners is down, and Maria's line is growing."
+ },
+ {
+  "id": 19,
+  "part": "day",
+  "kind": "line",
+  "sec": 4.05,
+  "text": "A waiting-room agent sees it on the cameras and alerts the Ops planner."
+ },
+ {
+  "id": 20,
+  "part": "day",
+  "kind": "line",
+  "sec": 9.75,
+  "text": "The planner simulates every possible fix and picks the best: an extra slot on the second scanner, cutting the average CT wait from seventeen minutes to five."
+ },
+ {
+  "id": 22,
+  "part": "day",
+  "kind": "line",
+  "sec": 11.07,
+  "text": "The change is small, so the planner applies it within policy. Sam, the operations lead, sees why, and bigger changes still wait for Sam. Maria's scan moves right away."
+ },
+ {
+  "id": 24,
+  "part": "after",
+  "kind": "line",
+  "sec": 7.96,
+  "text": "After the visit, the Discharge agent rewrites Lucille's notes in plain language, and Dr. Okafor signs them before they go to her."
+ },
+ {
+  "id": 25,
+  "part": "after",
+  "kind": "line",
+  "sec": 8.75,
+  "text": "The next day, the Follow-up agent checks in with each patient. If someone is unsure about their care, a nurse, Renee, gets a task to call them."
+ },
+ {
+  "id": 26,
+  "part": "after",
+  "kind": "line",
+  "sec": 6.36,
+  "text": "Results watch tracks every test until a doctor acknowledges it, and the Follow-up agent books the next visit."
+ },
+ {
+  "id": 28,
+  "part": "tech",
+  "kind": "line",
+  "sec": 15.98,
+  "text": "Under the hood, Muse Spark reads, writes, and sees. Muse Voice Transcribe hears voice notes, Segment Anything counts waiting rooms, and the Ops planner runs on open-weight Muse Spark Open. Scheduling and simulations run on our own Rust engine."
+ },
+ {
+  "id": 31,
+  "part": "close",
+  "kind": "line",
+  "sec": 6.23,
+  "text": "And Throughline isn't tied to one hospital: here's Northgate, with five buildings and a fourteen-floor tower."
+ },
+ {
+  "id": 32,
+  "part": "close",
+  "kind": "line",
+  "sec": 5.14,
+  "text": "In the end, families like mine shouldn't need someone on the inside just to find their way."
+ },
+ {
+  "id": 33,
+  "part": "close",
+  "kind": "line",
+  "sec": 8.26,
+  "text": "When AI agents carry the routine work and the steps connect, care gets easier for patients, lighter for staff, and reaches more people."
+ }
+]
