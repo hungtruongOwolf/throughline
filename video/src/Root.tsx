@@ -5,7 +5,8 @@ import { FPS, H, W } from "./theme";
 import { Film3, TOTAL3 } from "./v3/Film3";
 import { Film4, TOTAL4 } from "./v4/Film4";
 import { Film5, TOTAL5 } from "./v5/Film5";
-import { Architecture, BrokenChain, Contract, Hero, Journey, StatsUS, StatsWorld, Thumbnail } from "./diagrams/Diagrams";
+import { Architecture, BrokenChain, Contract, Hero, Journey, StatsUS, StatsWorld } from "./diagrams/Diagrams";
+import { Thumbnail } from "./diagrams/Thumbnail";
 
 export const Root = () => (
   <>
