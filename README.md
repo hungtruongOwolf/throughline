@@ -2,7 +2,7 @@
 
 ![Throughline: thirteen agents along one thread](docs/images/hero.gif)
 
-**One thread through a hospital visit.** Thirteen AI agents carry the routine work around a patient's care, from the faxed referral to the follow-up, and bring in a person whenever a human has to decide.
+**One thread through a hospital visit.** Throughline is an agent platform for the patient journey: AI agents carry the routine work between a hospital's departments, from the faxed referral to the follow-up, and bring in a person whenever a human has to decide. It starts with 13 agents, and new ones join on the same contract.
 
 Built for the Meta Global AI Developer Hackathon (Oct 27 to Nov 4, 2026).
 
@@ -96,13 +96,15 @@ Hospitals already buy tools for pieces of this: wayfinding apps, queue screens, 
 
 **Vision.** Every patient journey is one connected thread, from the first referral to the last follow-up, in any hospital. Agents carry the routine work; people make the decisions that need a person; and everyone, patient and staff, can see where the thread is.
 
+**A platform, not a fixed set of agents.** Throughline is the layer that connects a hospital's steps: a shared event log, a safety gate, and one contract that every agent follows. It starts with 13 agents, from referral to follow-up. A new agent is a descriptor (what it may do and how risky that is) and a handler; it inherits the gate, the audit log, and the human approvals without new plumbing. The same goes for hospitals: each one is a workspace with its own campus, and the agents work the same way in every one.
+
 **Principles we built by:**
 
 1. **One journey, not separate tools.** The product is one state machine that runs from referral to closed loop. Each step leaves structured state the next step consumes, without anyone typing it again.
 2. **A person at every decision that matters.** An insurance request, a doctor's summary, and any large change to the day wait for a person. Medical questions always go to a nurse.
 3. **Every step can be explained.** Each agent run is recorded with its input, its source documents, the model it ran on, and what it decided.
 4. **Built for the least advantaged user.** Large type, plain words, English and Spanish, step-free routes, and voice notes instead of forms.
-5. **Not tied to one hospital.** Every hospital is a workspace with its own campus, buildings, floors, and staff.
+5. **Not tied to one hospital, or one set of agents.** Every hospital is a workspace with its own campus, buildings, floors, and staff, and new agents join on the same contract.
 
 ---
 
@@ -273,6 +275,13 @@ The hospitals (Halden, Northgate, St. Brennan) and the insurers are fictional. A
 2. **Real connections:** FHIR for the EHR, the insurer's electronic prior authorization API, and SMS.
 3. **A pilot** on one clinic's real referral queue, measuring referral completion, time to appointment, and results acknowledged.
 4. **More languages** for the patient app and voice notes, starting with the languages a hospital's patients actually speak.
+5. **More agents on the same contract,** each owning another step that falls between departments today:
+   - **Rides:** books transport for patients who can't drive, and moves it when the schedule changes.
+   - **Interpreter:** books an interpreter for every visit where the patient needs one.
+   - **Pharmacy:** checks a new prescription is filled and ready before the patient leaves.
+   - **Cost:** gives the patient a price estimate before the visit, from their plan.
+   - **Care gaps:** finds patients overdue for a screening or a follow-up and offers a slot.
+   - **Beds and transfers:** extends the same planning from outpatient waits to inpatient flow.
 
 ---
 
