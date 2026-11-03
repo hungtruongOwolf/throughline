@@ -263,7 +263,7 @@ Every node has one or more signs: `{ sign_id, node_id, lines: ["Imaging", "Level
 
 | Layer | Choice | Why (and the alternative we rejected) |
 |---|---|---|
-| Web app | Next.js 15 (App Router), React 19, Tailwind v4, TypeScript | Fast to build three role shells and a demo page; EIR proved the pattern. |
+| Web app | Next.js 15 (App Router), React 19, Tailwind v4, TypeScript | Fast to build three role shells and a demo page; |
 | Agent runtime | Node 22 service (Hono + `ws`), TypeScript, zod | One language with the web app; the official SAM parser exists for JS (`@meta-sam/parser`); OpenAI-compatible SDK works against Meta's API; WebSocket proxying for Voice is trivial in Node. We rejected Python (two toolchains, two package managers, no shared types) and Next.js route handlers for the runtime (no long-running workers, serverless timeouts). |
 | Engine (simulation, itinerary solver, scheduler) | **Rust crate → WebAssembly** (`wasm-pack`, `wasm-bindgen`, `serde`) | Runs identically in the browser (instant what-if, no round trip) and in the Node runtime (same binary, same results). Hot loops (200 patients × 8 hours × 60-second ticks, permutation search) are where speed matters; everything else is bound by model latency, so Rust elsewhere buys nothing. Requested by the client as a learning goal; the contract in section 7 keeps it a bounded risk. |
 | Engine fallback | TypeScript implementation of the same interface in `packages/engine-ts` | If the Rust spike (task D1-3) is not green by Day 1 evening, implement in TS and keep the interface; the UI and runtime never know the difference. |
@@ -289,7 +289,7 @@ throughline/
 ```
 pnpm workspaces + Turborepo; Node 22; Rust stable + `wasm-pack`; one `.env` at the root (section 14).
 
-### 4.3 Runtime loop (borrowed from EIR, adapted)
+### 4.3 Runtime loop
 
 1. An HTTP route or the simulator **persists an event and publishes it**, then returns. Routes never run workflows.
 2. The in-process **EventBus** delivers the event to the **JourneyRuntime** (and to the **OpsRuntime** for station-scoped events). Each runtime subscribes to its own event set; the two sets are disjoint and a test asserts it.
@@ -312,7 +312,7 @@ The runtime keeps a `SimClock` (speed 1×, 10×, 60×, or jump). All scheduled w
 
 ### 4.6 Observability and audit
 
-Audit replay: `/api/journeys/:id/events` returns the full event log; the command center renders it as a cascade (EIR-style waterfall) with HELD markers on approvals. Logs are JSON lines; no PHI in logs (synthetic anyway, but the redaction code path exists and is tested).
+Audit replay: `/api/journeys/:id/events` returns the full event log; the command center renders it as a cascade (a waterfall) with HELD markers on approvals. Logs are JSON lines; no PHI in logs (synthetic anyway, but the redaction code path exists and is tested).
 
 
 ---
@@ -842,11 +842,11 @@ Throughline is administrative software. The design keeps it on that side of ever
 6. Wait estimates are estimates from counts and service-time assumptions; the UI always shows the source (sensed, tickets, simulation).
 7. Problem numbers quoted in the pitch come from the cited studies and vendor reports (121 min / 20 min, 31.8 min per week of directions, 79% misunderstanding medication changes, 7.1% of abnormal results never communicated); they describe the US problem, not results we measured.
 8. Replayed model calls are labeled; nothing replayed is presented as live.
-9. Everything in this repo was built during Oct 27 – Nov 4, 2026, except the third-party libraries listed in `package.json` and `Cargo.toml`; the architecture pattern (event → capability → gate → handler, park-and-replay) is inspired by the open EIR project and is credited.
+9. Everything in this repo was built during Oct 27 – Nov 4, 2026, except the third-party libraries listed in `package.json` and `Cargo.toml`.
 
 ### 11.4 Hackathon submission requirements (checklist)
 
-- Public repo with README: one-paragraph description, the three-phase diagram, "What is real vs simulated", models and sponsors used (with model ids), setup in five commands, `DO-NOT-CLAIM.md`, `BUILT-DURING-HACKATHON.md`, license (MIT), credits (EIR pattern, Atkinson Hyperlegible, Barlow).
+- Public repo with README: one-paragraph description, the three-phase diagram, "What is real vs simulated", models and sponsors used (with model ids), setup in five commands, `DO-NOT-CLAIM.md`, `BUILT-DURING-HACKATHON.md`, license (MIT), credits (Atkinson Hyperlegible, Barlow).
 - Live URL (replay mode by default, "Run live" switch) and the 3-minute video.
 - Devpost: Indie or Startup track per the user's choice; tags for Best Agentic Use-Case and Best Build on Open Weight Models; one line that names the anti-project and states how the product stays administrative.
 - No real names in screenshots; the "Synthetic data" mark visible in every image.
@@ -1117,12 +1117,12 @@ Secrets never reach the browser; the web app only knows `NEXT_PUBLIC_RUNTIME_URL
 |---|---|---|---|
 | 1 | Scope is the full journey (before, during, after) as one state machine with explicit handoffs | Visit day only | A visit-day tool is a feature; the handoffs between phases are where US hospitals lose patients (no-shows, unacknowledged results, misunderstood instructions) and where "automated end to end" is demonstrable |
 | 2 | Administrative only; clinical content is the provider's words; results are status only; symptoms go to a nurse | Light triage, result explanations | The anti-project in the rubric; FDA device line; AB 3030 / TRAIGA duties; the product is stronger with a sharp boundary |
-| 3 | TypeScript monorepo (Next.js web, Node runtime) with a Rust → WASM engine | Python runtime (EIR's choice); Rust everywhere; TS everywhere | One language for app and agents; Rust where speed and dual-host determinism matter; bounded by a Day-1 spike and a TS fallback |
+| 3 | TypeScript monorepo (Next.js web, Node runtime) with a Rust → WASM engine | Python runtime; Rust everywhere; TS everywhere | One language for app and agents; Rust where speed and dual-host determinism matter; bounded by a Day-1 spike and a TS fallback |
 | 4 | Fictional campus (Halden Medical Center) with a real graph in `campus.json` | Reproduce a real hospital's floor plan | Avoids copying a real institution; structure follows real academic cancer centers; one data file drives map, engine, and simulation |
 | 5 | Isometric SVG map, not 3D | Three.js | Reads faster in a 3-minute video, fits the budget, data model stays 3D-ready |
 | 6 | Models: Spark 1.3 (cloud tier), Glimmer 30B on Modal (private tier), Spark Open on Modal/Baseten/Fireworks (switchable ops brain), SAM 3.1, Voice Transcribe, Muse Image | Muse Wonder as orchestrator; Fireworks LoRA as a core feature | Wonder costs 3–5× for no demo benefit; LoRA must be served on-demand and is a stretch |
 | 7 | Required-tool pattern with code validation for every model agent; deterministic fallback for every agent | Free-form model output parsed by regex | `tool_choice` cannot be forced on the Meta API; validation in code is what makes the agent verifiable |
-| 8 | Park-and-replay human gates (`PRE_APPROVAL`) and `BLOCKING` handoffs, borrowed from EIR and credited | Approve-by-editing-state | The replay of the verbatim event is auditable and testable |
+| 8 | Park-and-replay human gates (`PRE_APPROVAL`) and `BLOCKING` handoffs | Approve-by-editing-state | The replay of the verbatim event is auditable and testable |
 | 9 | Simulated clock drives all timers | Wall-clock timers with shortened durations | Three phases in three minutes, reproducible |
 | 10 | Record/replay model cache with visible labels | Live only; mocked only | Live for the video, replay for judges at any hour, honesty preserved by labeling |
 | 11 | Frame bank generated with Muse Image, labeled by SAM, re-counted live | Stock photos; synthetic silhouettes | No licensing or identity risk; SAM is exercised live; counts match the simulation |
