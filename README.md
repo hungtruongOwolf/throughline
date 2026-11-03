@@ -6,9 +6,16 @@
 
 Built for the Meta Global AI Developer Hackathon (Oct 27 to Nov 4, 2026).
 
+- **Demo video (3:00):** https://github.com/hungtruongOwolf/throughline/releases/download/demo-video/throughline-demo.mp4
 - **Live app:** https://throughline-zeta-ten.vercel.app
 - **Code:** https://github.com/hungtruongOwolf/throughline
 - **Demo script:** [`docs/DEMO-SCRIPT.md`](docs/DEMO-SCRIPT.md)
+
+### Watch the demo
+
+[![Watch the 3-minute demo](docs/images/video-thumbnail.jpg)](https://github.com/hungtruongOwolf/throughline/releases/download/demo-video/throughline-demo.mp4)
+
+_Three minutes: the problem, then one referral before, during, and after the visit, in the real app._
 
 > Throughline is administrative software. It never diagnoses, triages, interprets results, or gives medication advice. A medical question always goes to a nurse.
 
