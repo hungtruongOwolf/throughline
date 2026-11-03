@@ -13,11 +13,7 @@ Built for the Meta Global AI Developer Hackathon (Oct 27 to Nov 4, 2026).
 
 ### Watch the demo
 
-
 https://github.com/user-attachments/assets/0df4df13-b301-4292-9ae1-cbf5c98b1d8d
-
-
-[![Watch the 3-minute demo](docs/images/video-thumbnail.jpg)](https://github.com/hungtruongOwolf/throughline/releases/download/demo-video/throughline-demo.mp4)
 
 _Three minutes: the problem, then one referral before, during, and after the visit, in the real app._
 
