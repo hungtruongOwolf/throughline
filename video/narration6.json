@@ -1,0 +1,212 @@
+[
+ {
+  "id": 1,
+  "part": "problem",
+  "kind": "anim",
+  "text": "Every year, millions of people go to a hospital, for a checkup, a scan, or an emergency.",
+  "sec": 5.55
+ },
+ {
+  "id": 2,
+  "part": "problem",
+  "kind": "anim",
+  "text": "A hospital is organized around its departments, not around the patient. So if you don't know anyone inside, don't know the medical terms, or don't speak the language well, the hardest part often isn't the medicine. It's knowing where to go, who to ask, and what comes next.",
+  "sec": 15.87
+ },
+ {
+  "id": 3,
+  "part": "problem",
+  "kind": "anim",
+  "text": "My family has lived this. We lost track of a referral, waited weeks for an insurance approval, and never knew if anyone would call with the results.",
+  "sec": 8.58
+ },
+ {
+  "id": 4,
+  "part": "problem",
+  "kind": "anim",
+  "text": "Each of those steps sits with a different person in a different system, and the first one often still arrives by fax.",
+  "sec": 6.27
+ },
+ {
+  "id": 5,
+  "part": "problem",
+  "kind": "anim",
+  "text": "The cost is real. About a quarter of US health spending is estimated to be waste, and doctors' offices spend around thirteen hours a week getting insurers to approve tests.",
+  "sec": 11.26
+ },
+ {
+  "id": 6,
+  "part": "problem",
+  "kind": "anim",
+  "text": "Worst of all, one abnormal test result in fourteen never reaches the patient.",
+  "sec": 5.01
+ },
+ {
+  "id": 8,
+  "part": "idea",
+  "kind": "anim",
+  "text": "So we built Throughline: thirteen AI agents that connect those steps, each owning one part of the patient's journey, from referral to follow-up.",
+  "sec": 8.75
+ },
+ {
+  "id": 9,
+  "part": "idea",
+  "kind": "anim",
+  "text": "They hand the work to each other on their own, and bring in a person only when they're unsure, or when a human has to decide.",
+  "sec": 6.91
+ },
+ {
+  "id": 10,
+  "part": "idea",
+  "kind": "anim",
+  "text": "Let me show you, before, during, and after a visit.",
+  "sec": 2.9
+ },
+ {
+  "id": 11,
+  "part": "before",
+  "kind": "product",
+  "text": "This is Jordan's screen. Jordan is the referral coordinator at Halden Medical Center, and a referral from another clinic is waiting on the fax line.",
+  "sec": 9.05
+ },
+ {
+  "id": 12,
+  "part": "before",
+  "kind": "product",
+  "text": "The Intake agent reads it right away, but the end of the patient's insurance ID is smudged, so instead of guessing, it asks Jordan.",
+  "sec": 8.19
+ },
+ {
+  "id": 13,
+  "part": "before",
+  "kind": "product",
+  "text": "Jordan answers from the insurance card, and the work carries on.",
+  "sec": 3.65
+ },
+ {
+  "id": 14,
+  "part": "before",
+  "kind": "product",
+  "text": "With the ID confirmed, the Coverage agent finds that the CT scan needs prior authorization, so the Prior auth agent drafts the request.",
+  "sec": 8.98
+ },
+ {
+  "id": 15,
+  "part": "before",
+  "kind": "product",
+  "text": "The draft waits for Jordan's approval, right beside the original fax, so every line can be checked. By hand, a request like this takes about twenty-four minutes.",
+  "sec": 9.66
+ },
+ {
+  "id": 16,
+  "part": "day",
+  "kind": "product",
+  "text": "Now, the day of a visit, with a different patient. Maria is seventy-one, uses a wheelchair, and Throughline puts her whole day on her phone.",
+  "sec": 8.28
+ },
+ {
+  "id": 17,
+  "part": "day",
+  "kind": "product",
+  "text": "She sees where she is, how long her wait is, and what's next. If she gets lost, she can send a photo of the nearest sign and get step-free directions.",
+  "sec": 8.87
+ },
+ {
+  "id": 18,
+  "part": "day",
+  "kind": "product",
+  "text": "Meanwhile, here's the operations view of the same hospital. One of its two CT scanners went down this morning, and the line Maria is waiting in is growing.",
+  "sec": 9.34
+ },
+ {
+  "id": 19,
+  "part": "day",
+  "kind": "product",
+  "text": "A waiting-room agent counts people on the cameras and alerts the Ops planner, the agent that watches the day's schedule.",
+  "sec": 6.98
+ },
+ {
+  "id": 20,
+  "part": "day",
+  "kind": "product",
+  "text": "The planner simulates the next ninety minutes under each possible fix and picks the best: an extra slot on the second scanner.",
+  "sec": 7.45
+ },
+ {
+  "id": 21,
+  "part": "day",
+  "kind": "product",
+  "text": "In the simulation, the average CT wait drops from about seventeen minutes to five.",
+  "sec": 5.03
+ },
+ {
+  "id": 22,
+  "part": "day",
+  "kind": "product",
+  "text": "The change is small and clearly helps, so the planner applies it on its own, within policy. Sam, the operations lead, sees what changed and why, and bigger changes still wait for Sam. Maria's scan moves to the second scanner right away.",
+  "sec": 15.17
+ },
+ {
+  "id": 23,
+  "part": "after",
+  "kind": "product",
+  "text": "The work doesn't stop when the visit ends. This is Dr. Okafor's inbox, and Lucille Barros was seen a few days ago.",
+  "sec": 7.0
+ },
+ {
+  "id": 24,
+  "part": "after",
+  "kind": "product",
+  "text": "The Discharge agent rewrites the visit notes in plain language next to the original, and Dr. Okafor signs the summary before it goes to the patient.",
+  "sec": 9.28
+ },
+ {
+  "id": 25,
+  "part": "after",
+  "kind": "product",
+  "text": "The next day, the Follow-up agent checks in with each patient. When someone is unsure about their care, it leaves the medical advice to a nurse: Renee gets a task to call them.",
+  "sec": 10.52
+ },
+ {
+  "id": 26,
+  "part": "after",
+  "kind": "product",
+  "text": "Across all patients, the Results watch agent tracks every test until a doctor acknowledges it. And the Follow-up agent books the next visit and reports back to the referring doctor.",
+  "sec": 11.24
+ },
+ {
+  "id": 27,
+  "part": "after",
+  "kind": "product",
+  "text": "The Agents page shows what each of the thirteen has done.",
+  "sec": 3.26
+ },
+ {
+  "id": 28,
+  "part": "tech",
+  "kind": "anim",
+  "sec": 19.5,
+  "text": "Under the hood, Muse Spark reads, writes, and sees; Muse Voice Transcribe hears patients' voice notes; Segment Anything counts the waiting rooms; and the Ops planner runs on Muse Spark Open, whose open weights let a hospital host it itself. Scheduling, routing, and the simulations run on our own Rust engine."
+ },
+ {
+  "id": 31,
+  "part": "close",
+  "kind": "product",
+  "text": "And Throughline isn't tied to one hospital. Here's Northgate University Hospital, with five buildings and a fourteen-floor tower, and you can add your own.",
+  "sec": 9.09
+ },
+ {
+  "id": 32,
+  "part": "close",
+  "kind": "anim",
+  "text": "In the end, families like mine shouldn't need someone on the inside just to find their way.",
+  "sec": 5.14
+ },
+ {
+  "id": 33,
+  "part": "close",
+  "kind": "anim",
+  "text": "When AI agents carry the routine work and the steps connect, care gets easier for patients, lighter for staff, and reaches more people.",
+  "sec": 8.26
+ }
+]

@@ -1,6 +1,6 @@
 import { AbsoluteFill, Audio, interpolate, Sequence, staticFile, useCurrentFrame } from "remotion";
 import timeline from "./timeline.json";
-import narration from "../../narration5.json";
+import narration from "../../narration6.json";
 import { Finish } from "../v2/fx";
 import { sceneFor } from "../v2/Film2";
 import { Gates, Stages } from "../v3/scenes";
@@ -59,11 +59,11 @@ export function Film4() {
       <AgentLayer3 shots={SHOTS4 as Row3[]} />
       {VOICES.map((v) => (
         <Sequence key={v.line} from={v.at} durationInFrames={v.len + 30} layout="none">
-          <Audio src={staticFile(`audio/vo5/v${String(v.line).padStart(2, "0")}.wav`)} />
+          <Audio src={staticFile(`audio/vo6/v${String(v.line).padStart(2, "0")}.wav`)} />
         </Sequence>
       ))}
       {/* "Mountains" by Andrew Ev (Mixkit License), trimmed to fit */}
-      <Audio src={staticFile("audio/mountains-v5.wav")} volume={(f) => 0.35 * ducked(f)} />
+      <Audio src={staticFile("audio/mountains-v6.wav")} volume={(f) => 0.35 * ducked(f)} />
     </AbsoluteFill>
   );
 }
